@@ -11,10 +11,10 @@ import {
 import {getComponent} from './componentMap';
 import formStore from '../../store/formStore';
 import {useNavigation} from '@react-navigation/native';
-import { deleteField } from '../../actions/formdata';
+import { deleteField, moveDown, moveUp } from '../../actions/formdata';
 
 const Field = props => {
-  const {element, index, selected, preview, onClick, onSelect} = props;
+  const {element, index, selected, preview, onClick, onSelect, isLastField} = props;
   const {colors, size} = useTheme();
   const FieldComponent = getComponent(element.component);
   const opacity = new Animated.Value(1);
@@ -40,25 +40,55 @@ const Field = props => {
       <View
         style={styles.field(colors, selected)}
         onStartShouldSetResponder={() => {
-          onSelect();
+          onSelect(index);
         }}>
         <FieldComponent element={element} index={index} selected={selected} />
       </View>
       {selected && (
         <Animated.View style={{...styles.setIcons, opacity}}>
+          {
+            index.childIndex > 0 && (
+              <IconButton
+                icon="chevron-up"
+                size={24}
+                iconColor={'#fff'}
+                style={{margin: 3, backgroundColor: '#0A1551'}}
+                onPress={() => {
+                  onClick('moveup');
+                }}
+              />
+            )
+          }
+          {
+            !isLastField && (
+              <IconButton
+                icon="chevron-down"
+                size={24}
+                iconColor={'#fff'}
+                style={{margin: 3, backgroundColor: '#0A1551'}}
+                onPress={() => {
+                  onClick('movedown');
+                }}
+              />
+            )
+          }
           <IconButton
-            icon="chevron-up"
+            icon="play-outline"
             size={24}
             iconColor={'#fff'}
             style={{margin: 3, backgroundColor: '#0A1551'}}
-            onPress={() => {}}
+            onPress={() => {
+              onClick('action');
+            }}
           />
           <IconButton
-            icon="chevron-down"
+            icon="account-outline"
             size={24}
             iconColor={'#fff'}
             style={{margin: 3, backgroundColor: '#0A1551'}}
-            onPress={() => {}}
+            onPress={() => {
+              onClick('role');
+            }}
           />
           <IconButton
             icon="cog-outline"
@@ -84,20 +114,42 @@ const Field = props => {
   );
 };
 
-const MemoField = ({element, index, editRole, onSelect, selected}) => {
+const MemoField = ({element, index, editRole, onSelect, selected, isLastField}) => {
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
   const setSelectedField = formStore(state => state.setSelectedField);
   const setSelectedFieldIndex = formStore(state => state.setSelectedFieldIndex);
+  const setSettingType = formStore(state => state.setSettingType);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    if (selected) setSelectedField(element);
+  }, [element, selected]);
 
   const onClickAction = type => {
     if (type === 'delete') {
-      setSelectedFieldIndex(-1);
+      setSelectedFieldIndex({});
       setFormData({...formData, data: deleteField(formData, index)});
     }
     if (type === 'setting') {
-      setSelectedField(element);
+      // setSelectedField(element);
+      setSettingType('setting');
+      navigation.getParent('RightDrawer').openDrawer();
+    }
+    if (type === 'moveup') {
+      setFormData({...formData, data: moveUp(formData, index)});
+      setSelectedFieldIndex({...index, childIndex: index.childIndex - 1});
+    }
+    if (type === 'movedown') {
+      setFormData({...formData, data: moveDown(formData, index)});
+      setSelectedFieldIndex({...index, childIndex: index.childIndex + 1});
+    }
+    if (type === 'action') {
+      setSettingType('action');
+      navigation.getParent('RightDrawer').openDrawer();
+    }
+    if (type === 'role') {
+      setSettingType('role');
       navigation.getParent('RightDrawer').openDrawer();
     }
   };
@@ -110,6 +162,7 @@ const MemoField = ({element, index, editRole, onSelect, selected}) => {
         selected={selected}
         onClick={type => onClickAction(type)}
         onSelect={onSelect}
+        isLastField={isLastField}
       />
     ),
     [element, index, editRole, selected],
@@ -128,7 +181,7 @@ const styles = StyleSheet.create({
   field: (colors, visibleBorder) => ({
     borderColor: visibleBorder ? '#0087E0' : colors.background,
     borderRadius: 5,
-    borderWidth: 2,
+    borderWidth: visibleBorder ? 2 : 0,
     marginVertical: 3,
   }),
 });

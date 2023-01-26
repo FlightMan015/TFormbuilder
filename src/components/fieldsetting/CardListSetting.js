@@ -53,7 +53,6 @@ const CardListSetting = props => {
   const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
-  const setElement = formStore(state => state.setSelectedField);
   const setOpenSetting = formStore(state => state.setOpenSetting);
   const navigation = useNavigation();
   const [selectedTab, setSelectedTab] = useState('general');
@@ -106,7 +105,6 @@ const CardListSetting = props => {
                     value={element.meta.title}
                     onChangeText={newText => {
                       const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                      setElement({...element, meta: {...tempMeta, title: newText}});
                       setFormData({
                         ...formData,
                         data: updateField(
@@ -130,7 +128,6 @@ const CardListSetting = props => {
                       ios_backgroundColor="#3e3e3e"
                       onValueChange={e => {
                         const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                        setElement({...element, meta: {...tempMeta, autoplay: e}});
                         setFormData({
                           ...formData,
                           data: updateField(
@@ -156,10 +153,6 @@ const CardListSetting = props => {
                       )}
                       onPress={() => {
                         const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                        setElement({
-                          ...element,
-                          meta: {...tempMeta, cardtemplate: 'card2'},
-                        });
                         setFormData({
                           ...formData,
                           data: updateField(
@@ -179,10 +172,6 @@ const CardListSetting = props => {
                       )}
                       onPress={() => {
                         const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                        setElement({
-                          ...element,
-                          meta: {...tempMeta, cardtemplate: 'card1'},
-                        });
                         setFormData({
                           ...formData,
                           data: updateField(
@@ -234,7 +223,6 @@ const CardListSetting = props => {
                               onPress={() => {
                                 const tempElement = JSON.parse(JSON.stringify(element));
                                 tempElement.meta.cardDatas.splice(cardIndex, 1);
-                                setElement(tempElement);
                                 setFormData({
                                   ...formData,
                                   data: updateField(
@@ -257,7 +245,6 @@ const CardListSetting = props => {
                     onPress={() => {
                       const tempElement = JSON.parse(JSON.stringify(element));
                       tempElement.meta.cardDatas.push(newCard);
-                      setElement(tempElement);
                       setFormData({
                         ...formData,
                         data: updateField(
@@ -333,10 +320,6 @@ const CardListSetting = props => {
                                   const tempMeta = JSON.parse(
                                     JSON.stringify(element.meta),
                                   );
-                                  setElement({
-                                    ...element,
-                                    meta: {...tempMeta, cardBackgroundColor: color},
-                                  });
                                   setFormData({
                                     ...formData,
                                     data: updateField(
@@ -384,10 +367,6 @@ const CardListSetting = props => {
                       textStyle={styles.textButtonText('#FFFFFF')}
                       onPress={() => {
                         const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                        setElement({
-                          ...element,
-                          meta: {...tempMeta, cardCorner: 'default'},
-                        });
                         setFormData({
                           ...formData,
                           data: updateField(
@@ -410,10 +389,6 @@ const CardListSetting = props => {
                       textStyle={styles.textButtonText('#FFFFFF')}
                       onPress={() => {
                         const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                        setElement({
-                          ...element,
-                          meta: {...tempMeta, cardCorner: 'rounded'},
-                        });
                         setFormData({
                           ...formData,
                           data: updateField(
@@ -441,10 +416,6 @@ const CardListSetting = props => {
                       textStyle={styles.textButtonText('#FFFFFF')}
                       onPress={() => {
                         const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                        setElement({
-                          ...element,
-                          meta: {...tempMeta, cardWidth: 'auto'},
-                        });
                         setFormData({
                           ...formData,
                           data: updateField(
@@ -467,10 +438,6 @@ const CardListSetting = props => {
                       textStyle={styles.textButtonText('#FFFFFF')}
                       onPress={() => {
                         const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                        setElement({
-                          ...element,
-                          meta: {...tempMeta, cardWidth: 'full'},
-                        });
                         setFormData({
                           ...formData,
                           data: updateField(
@@ -679,7 +646,6 @@ const CardListSetting = props => {
                       onChangeText={newText => {
                         const tempElement = JSON.parse(JSON.stringify(element));
                         tempElement.meta.cardDatas[cardData.current].title = newText;
-                        setElement(tempElement);
                         setFormData({
                           ...formData,
                           data: updateField(
@@ -699,7 +665,6 @@ const CardListSetting = props => {
                       onChangeText={newText => {
                         const tempElement = JSON.parse(JSON.stringify(element));
                         tempElement.meta.cardDatas[cardData.current].subTitle = newText;
-                        setElement(tempElement);
                         setFormData({
                           ...formData,
                           data: updateField(
@@ -719,7 +684,6 @@ const CardListSetting = props => {
                       onChangeText={newText => {
                         const tempElement = JSON.parse(JSON.stringify(element));
                         tempElement.meta.cardDatas[cardData.current].description = newText;
-                        setElement(tempElement);
                         setFormData({
                           ...formData,
                           data: updateField(
@@ -739,7 +703,6 @@ const CardListSetting = props => {
                       onChangeText={newText => {
                         const tempElement = JSON.parse(JSON.stringify(element));
                         tempElement.meta.cardDatas[cardData.current].hyperlink = newText;
-                        setElement(tempElement);
                         setFormData({
                           ...formData,
                           data: updateField(
@@ -777,7 +740,6 @@ const CardListSetting = props => {
                             tempElement.meta.cardDatas[cardData.current].image !== result[0].uri
                           ) {
                             tempElement.meta.cardDatas[cardData.current].image = result[0].uri;
-                            setElement(tempElement);
                             setFormData({
                               ...formData,
                               data: updateField(

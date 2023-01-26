@@ -7,8 +7,12 @@ import formStore from '../store/formStore';
 const Header = props => {
   const {formName, preview, onClick} = props;
   const {colors, size} = useTheme();
+  const setIndexToAdd = formStore(state => state.setIndexToAdd);
   const openMenu = formStore(state => state.openMenu);
   const setOpenMenu = formStore(state => state.setOpenMenu);
+  const setSettingType = formStore(state => state.setSettingType);
+  const setOpenSetting = formStore(state => state.setOpenSetting);
+  const formData = formStore(state => state.formData);
 
   return (
     <View style={styles.titleBar(colors)}>
@@ -19,10 +23,11 @@ const Header = props => {
           iconColor={colors.card}
           style={styles.addFieldButton(colors)}
           onPress={() => {
+            setIndexToAdd({});
             setOpenMenu(!openMenu);
           }}
         />
-        <Text style={styles.title(colors, size)}>TForm</Text>
+        <Text style={styles.title(colors, size)}>{formData.title}</Text>
       </View>
       <View style={styles.subView}>
         <IconButton
@@ -30,7 +35,8 @@ const Header = props => {
           size={size.s20}
           iconColor={colors.text}
           onPress={() => {
-            onClick('setting');
+            setSettingType('formSetting');
+            setOpenSetting(true);
           }}
         />
         <IconButton
@@ -51,6 +57,7 @@ const styles = StyleSheet.create({
     fontSize: size.s18,
     color: colors.text,
     marginLeft: 10,
+    fontFamily: 'PublicSans-SemiBold',
   }),
   titleBar: colors => ({
     width: '100%',

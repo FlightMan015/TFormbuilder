@@ -3,8 +3,10 @@ import {useTheme} from 'react-native-paper';
 import {ScrollView, StyleSheet, Dimensions, View} from 'react-native';
 import formStore from '../store/formStore';
 import MemoField from './fields';
+import MemoGroup from './groups';
 import { useNavigation } from '@react-navigation/native';
-import { useDrawerStatus } from '@react-navigation/drawer'
+import { useDrawerStatus } from '@react-navigation/drawer';
+import { componentName } from '../constant';
 
 const ScreenHeight = Dimensions.get('window').height;
 
@@ -52,9 +54,29 @@ const Body = props => {
   return (
     <ScrollView style={styles.container(colors)}>
       <View style={{paddingBottom: 50}}>
-        {formData.data.map((field, index) => (
-          <MemoField key={index} onSelect={() => onSelect(index)} element={field} index={{childIndex: index}} selected={selectedFieldIndex === index} />
-        ))}
+        {formData.data.map((field, index) => {
+          if (field.component !== componentName.TABSECTION && field.component !== componentName.GROUP) {
+            return (
+              <MemoField
+                key={index}
+                onSelect={() => onSelect({childIndex: index})}
+                element={field}
+                index={{childIndex: index}}
+                selected={!('groupIndex' in selectedFieldIndex) && 'childIndex' in selectedFieldIndex && selectedFieldIndex.childIndex === index}
+                isLastField={(index + 1) === formData.data.length} />
+            );
+          } else {
+            return (
+              <MemoGroup
+                key={index}
+                onSelect={e => onSelect(e)}
+                element={field}
+                index={{groupIndex: index}}
+                selected={'groupIndex' in selectedFieldIndex && selectedFieldIndex.groupIndex === index}
+                isLastGroup={(index + 1) === formData.data.length} />
+            );
+          }
+        })}
       </View>
     </ScrollView>
   );

@@ -10,22 +10,22 @@ export const addField = (
   const groupIndex = indexes.groupIndex;
   const tabIndex = indexes.tabIndex;
   const tempNewFieldData = JSON.parse(JSON.stringify(newFieldData[type]));
-  if (tempNewFieldData.role) {
-    previousFormData.checkedRoles.map(e => {
-      if (e.name !== 'admin') {
-        if (type === componentName.LINECHART || type === componentName.RADARCHART) {
-          const tempRole = {name: e.name, view: true, editSeries: false, editAxes: false};
-          tempNewFieldData.role.push(tempRole);
-        } else if (type === componentName.PAYMENT) {
-          const tempRole = {name: e.name, read: true, pay: false};
-          tempNewFieldData.role.push(tempRole);
-        } else {
-          const tempRole = {name: e.name, view: true, edit: false};
-          tempNewFieldData.role.push(tempRole);
-        }
-      }
-    });
-  }
+  // if (tempNewFieldData.role) {
+  //   previousFormData.checkedRoles.map(e => {
+  //     if (e.name !== 'admin') {
+  //       if (type === componentName.LINECHART || type === componentName.RADARCHART) {
+  //         const tempRole = {name: e.name, view: true, editSeries: false, editAxes: false};
+  //         tempNewFieldData.role.push(tempRole);
+  //       } else if (type === componentName.PAYMENT) {
+  //         const tempRole = {name: e.name, read: true, pay: false};
+  //         tempNewFieldData.role.push(tempRole);
+  //       } else {
+  //         const tempRole = {name: e.name, view: true, edit: false};
+  //         tempNewFieldData.role.push(tempRole);
+  //       }
+  //     }
+  //   });
+  // }
   const newData = {
     ...tempNewFieldData,
     field_name: tempNewFieldData.field_name + '-' + Date.now() + '-0',
@@ -180,5 +180,149 @@ export const updateFieldToGridCell = (previousData, index, newData) => {
 export const deleteFieldToGridCell = (previousData, index) => {
   const tempFormData = JSON.parse(JSON.stringify(previousData));
   tempFormData.splice(index, 1);
+  return tempFormData;
+};
+
+export const moveUp = (previousFormData, indexes) => {
+  const groupIndex = indexes.groupIndex;
+  const tabIndex = indexes.tabIndex;
+  const childIndex = indexes.childIndex;
+  const tempFormData = JSON.parse(JSON.stringify(previousFormData.data));
+
+  if (
+    previousFormData.formTabIndex === undefined ||
+    previousFormData.formTabIndex === -1
+  ) {
+    if (groupIndex >= 0 && tabIndex >= 0 && childIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[groupIndex].meta.childs[tabIndex].meta.childs[childIndex]));
+      tempFormData[groupIndex].meta.childs[tabIndex].meta.childs.splice(
+        childIndex,
+        1,
+      );
+      tempFormData[groupIndex].meta.childs[tabIndex].meta.childs.splice(
+        childIndex - 1,
+        0,
+        tempItem,
+      );
+    } else if (groupIndex >= 0 && tabIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[groupIndex].meta.childs[tabIndex]));
+      tempFormData[groupIndex].meta.childs.splice(tabIndex, 1);
+      tempFormData[groupIndex].meta.childs.splice(tabIndex - 1, 0, tempItem);
+    } else if (groupIndex >= 0 && childIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[groupIndex].meta.childs[childIndex]));
+      tempFormData[groupIndex].meta.childs.splice(childIndex, 1);
+      tempFormData[groupIndex].meta.childs.splice(childIndex - 1, 0, tempItem);
+    } else if (groupIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[groupIndex]));
+      tempFormData.splice(groupIndex, 1);
+      tempFormData.splice(groupIndex - 1, 0, tempItem);
+    } else if (childIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[childIndex]));
+      tempFormData.splice(childIndex, 1);
+      tempFormData.splice(childIndex - 1, 0, tempItem);
+    }
+  } else {
+    const formTabIndex = previousFormData.formTabIndex;
+    if (groupIndex >= 0 && tabIndex >= 0 && childIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[formTabIndex].meta.data[groupIndex].meta.childs[tabIndex].meta.childs[childIndex]));
+      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs[tabIndex].meta.childs.splice(
+        childIndex,
+        1,
+      );
+      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs[tabIndex].meta.childs.splice(
+        childIndex - 1,
+        0,
+        tempItem,
+      );
+    } else if (groupIndex >= 0 && tabIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[formTabIndex].meta.data[groupIndex].meta.childs[tabIndex]));
+      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs.splice(tabIndex, 1);
+      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs.splice(tabIndex - 1, 0, tempItem);
+    } else if (groupIndex >= 0 && childIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[formTabIndex].meta.data[groupIndex].meta.childs[childIndex]));
+      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs.splice(childIndex, 1);
+      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs.splice(childIndex - 1, 0, tempItem);
+    } else if (groupIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[formTabIndex].meta.data[groupIndex]));
+      tempFormData[formTabIndex].meta.data.splice(groupIndex, 1);
+      tempFormData[formTabIndex].meta.data.splice(groupIndex - 1, 0, tempItem);
+    } else if (childIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[formTabIndex].meta.data[childIndex]));
+      tempFormData[formTabIndex].meta.data.splice(childIndex, 1);
+      tempFormData[formTabIndex].meta.data.splice(childIndex - 1, 0, tempItem);
+    }
+  }
+  return tempFormData;
+};
+
+export const moveDown = (previousFormData, indexes) => {
+  const groupIndex = indexes.groupIndex;
+  const tabIndex = indexes.tabIndex;
+  const childIndex = indexes.childIndex;
+  const tempFormData = JSON.parse(JSON.stringify(previousFormData.data));
+
+  if (
+    previousFormData.formTabIndex === undefined ||
+    previousFormData.formTabIndex === -1
+  ) {
+    if (groupIndex >= 0 && tabIndex >= 0 && childIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[groupIndex].meta.childs[tabIndex].meta.childs[childIndex]));
+      tempFormData[groupIndex].meta.childs[tabIndex].meta.childs.splice(
+        childIndex,
+        1,
+      );
+      tempFormData[groupIndex].meta.childs[tabIndex].meta.childs.splice(
+        childIndex + 1,
+        0,
+        tempItem,
+      );
+    } else if (groupIndex >= 0 && tabIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[groupIndex].meta.childs[tabIndex]));
+      tempFormData[groupIndex].meta.childs.splice(tabIndex, 1);
+      tempFormData[groupIndex].meta.childs.splice(tabIndex + 1, 0, tempItem);
+    } else if (groupIndex >= 0 && childIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[groupIndex].meta.childs[childIndex]));
+      tempFormData[groupIndex].meta.childs.splice(childIndex, 1);
+      tempFormData[groupIndex].meta.childs.splice(childIndex + 1, 0, tempItem);
+    } else if (groupIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[groupIndex]));
+      tempFormData.splice(groupIndex, 1);
+      tempFormData.splice(groupIndex + 1, 0, tempItem);
+    } else if (childIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[childIndex]));
+      tempFormData.splice(childIndex, 1);
+      tempFormData.splice(childIndex + 1, 0, tempItem);
+    }
+  } else {
+    const formTabIndex = previousFormData.formTabIndex;
+    if (groupIndex >= 0 && tabIndex >= 0 && childIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[formTabIndex].meta.data[groupIndex].meta.childs[tabIndex].meta.childs[childIndex]));
+      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs[tabIndex].meta.childs.splice(
+        childIndex,
+        1,
+      );
+      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs[tabIndex].meta.childs.splice(
+        childIndex + 1,
+        0,
+        tempItem,
+      );
+    } else if (groupIndex >= 0 && tabIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[formTabIndex].meta.data[groupIndex].meta.childs[tabIndex]));
+      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs.splice(tabIndex, 1);
+      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs.splice(tabIndex + 1, 0, tempItem);
+    } else if (groupIndex >= 0 && childIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[formTabIndex].meta.data[groupIndex].meta.childs[childIndex]));
+      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs.splice(childIndex, 1);
+      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs.splice(childIndex + 1, 0, tempItem);
+    } else if (groupIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[formTabIndex].meta.data[groupIndex]));
+      tempFormData[formTabIndex].meta.data.splice(groupIndex, 1);
+      tempFormData[formTabIndex].meta.data.splice(groupIndex + 1, 0, tempItem);
+    } else if (childIndex >= 0) {
+      const tempItem = JSON.parse(JSON.stringify(tempFormData[formTabIndex].meta.data[childIndex]));
+      tempFormData[formTabIndex].meta.data.splice(childIndex, 1);
+      tempFormData[formTabIndex].meta.data.splice(childIndex + 1, 0, tempItem);
+    }
+  }
   return tempFormData;
 };

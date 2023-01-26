@@ -76,8 +76,7 @@ const newInputTextData = {
     title: 'TextInput',
     hide_title: false,
     placeholder: 'Enter text..',
-    multiline: false,
-    numberOfLines: 1,
+    numberOfLines: '1',
   },
   role: [{name: 'admin', edit: true, view: true}],
   action: {create: false, update: false, read: false, delete: false},
@@ -421,7 +420,32 @@ const newTabSectionData = {
   meta: {
     title: 'New Tab Section',
     hide_title: false,
-    childs: [],
+    childs: [
+      {
+        component: componentName.TAB,
+        field_name: 'tab',
+        meta: {
+          title: 'Tab1',
+          childs: [],
+        },
+      },
+      {
+        component: componentName.TAB,
+        field_name: 'tab',
+        meta: {
+          title: 'Tab2',
+          childs: [],
+        },
+      },
+      {
+        component: componentName.TAB,
+        field_name: 'tab',
+        meta: {
+          title: 'Tab3',
+          childs: [],
+        },
+      }
+    ],
     option: false,
   },
   role: [{name: 'admin', view: true, edit: true}],
@@ -492,9 +516,9 @@ const newRadioButtonData = {
     title: 'Radio Button',
     hide_title: false,
     options: [
-      {label: 'option1', value: 'option1'},
-      {label: 'option2', value: 'option2'},
-      {label: 'option3', value: 'option3'},
+      'option1',
+      'option2',
+      'option3'
     ],
   },
   role: [{name: 'admin', view: true, edit: true}],

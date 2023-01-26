@@ -6,14 +6,15 @@ import {ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import formStore from '../store/formStore';
 import { useDrawerStatus } from '@react-navigation/drawer';
+import { addField } from '../actions/formdata';
 
 const MenuContent = () => {
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
   const setOpenMenu = formStore(state => state.setOpenMenu);
+  const indexToAdd = formStore(state => state.indexToAdd);
   const selectMenu = component => {
-    const newFormData = [...formData.data, newFieldData[component]];
-    setFormData({...formData, data: newFormData});
+    setFormData({...formData, data: addField(component, formData, indexToAdd)});
   };
 
   const status = useDrawerStatus();
@@ -37,28 +38,30 @@ const MenuContent = () => {
       </View>
       <ScrollView style={styles.menuBody} persistentScrollbar>
         {fieldMenuData.items.map((item, index) => {
-          return (
-            <View key={index}>
-              <Text style={styles.subHeader}>{item.name}</Text>
-              {item.items.map((subItem, subIndex) => {
-                return (
-                  <TouchableOpacity
-                    key={subIndex}
-                    style={styles.fieldListItem}
-                    onPress={() => {
-                      selectMenu(subItem.key);
-                    }}>
-                    <View style={styles.fieldIcon}>
-                      <Icon name={subItem.icon} size={18} color={'white'} />
-                    </View>
-                    <View style={styles.fieldText}>
-                      <Text style={styles.fieldNameText}>{subItem.name}</Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          );
+          if (!('groupIndex' in indexToAdd) || !('groupIndex' in indexToAdd && index == 0)) {
+            return (
+              <View key={index}>
+                <Text style={styles.subHeader}>{item.name}</Text>
+                {item.items.map((subItem, subIndex) => {
+                  return (
+                    <TouchableOpacity
+                      key={subIndex}
+                      style={styles.fieldListItem}
+                      onPress={() => {
+                        selectMenu(subItem.key);
+                      }}>
+                      <View style={styles.fieldIcon}>
+                        <Icon name={subItem.icon} size={18} color={'white'} />
+                      </View>
+                      <View style={styles.fieldText}>
+                        <Text style={styles.fieldNameText}>{subItem.name}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            );
+          }
         })}
       </ScrollView>
     </View>

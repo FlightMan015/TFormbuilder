@@ -1,9 +1,7 @@
-/* eslint-disable prettier/prettier */
-
 import React from 'react';
 import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
-import {useTheme} from '@react-navigation/native';
+import { useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Feather';
 
 const Title = ({visible, onPress, name, style}) => {

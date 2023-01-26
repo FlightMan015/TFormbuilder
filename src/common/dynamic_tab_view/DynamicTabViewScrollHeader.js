@@ -1,11 +1,10 @@
-/* eslint-disable prettier/prettier */
 import React, {useState, useRef} from 'react';
-import {Button, TouchableHighlight, Text, View} from 'react-native';
+import {Button, TouchableHighlight, Text, View, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
 import {IconButton} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {ScreenWidth} from 'react-native-elements/dist/helpers';
 import { FlatList } from 'react-native-gesture-handler';
+const ScreenWidth = Dimensions.get('window').width;
 class DynamicTabViewScrollHeader extends React.Component {
   constructor(props) {
     super(props);
@@ -33,9 +32,6 @@ class DynamicTabViewScrollHeader extends React.Component {
     return (
       <TouchableHighlight
         onPress={this._onPressHeader.bind(this, index)}
-        onLongPress={() => {
-          this.handleChangeTab('edit', index);
-        }}
         style={[
           this.defaultStyle.tabItemContainer,
           {
@@ -84,17 +80,6 @@ class DynamicTabViewScrollHeader extends React.Component {
             </Text>
           </View>
           {/* </View> */}
-          {isTabActive && (
-            <IconButton
-              icon="close"
-              size={13}
-              color={fontColor}
-              style={{margin: 0, marginLeft: 5, alignSelf: 'center'}}
-              onPress={() => {
-                this.handleChangeTab('deleteTab', index);
-              }}
-            />
-          )}
         </View>
       </TouchableHighlight>
     );
@@ -124,10 +109,6 @@ class DynamicTabViewScrollHeader extends React.Component {
     this.headerView.scrollToIndex({index, animated: true});
   };
 
-  handleChangeTab = (type, data) => {
-    this.props.onHandleTab(type, data);
-  };
-
   render() {
     return (
       <View
@@ -151,142 +132,10 @@ class DynamicTabViewScrollHeader extends React.Component {
             {backgroundColor: this.props.headerBackgroundColor},
           ]}
         />
-        {!this.props.preview && (
-          <IconButton
-            icon="pencil-outline"
-            size={15}
-            onPress={e => this.handleChangeTab('editTab', this.state.selected)}
-            style={{margin: 0, alignSelf: 'center', marginRight: 5}}
-          />
-        )}
-        {!this.props.preview && (
-          <IconButton
-            icon="plus"
-            size={15}
-            onPress={e => this.handleChangeTab('addTab')}
-            style={{margin: 0, alignSelf: 'center', marginRight: 5}}
-          />
-        )}
       </View>
     );
   }
 }
-
-// const DynamicTabViewScrollHeader = props => {
-//   const {
-//     data,
-//     goToPage,
-//     selectedTab,
-//     headerBackgroundColor,
-//     headerTextStyle,
-//     highlightStyle,
-//     noHighlightStyle,
-//     headerUnderlayColor,
-//   } = props;
-
-//   const defaultStyle = DynamicdefaultStyle;
-//   const headerViewRef = useRef();
-//   const [selected, setSelected] = useState(selectedTab);
-
-//   // constructor(props) {
-//   //   super(props);
-//   //   this.defaultStyle = DynamicdefaultStyle;
-//   //   this.state = {
-//   //     selected: this.props.selectedTab,
-//   //   };
-//   // }
-
-//   const _onPressHeader = index => {
-//     goToPage(index);
-//   };
-
-//   // componentWillReceiveProps(nextProps) {
-//   //   if (nextProps.selectedTab !== this.props.selectedTab) {
-//   //     this.setState({selected: nextProps.selectedTab});
-//   //   }
-//   // }
-
-//   const _renderTitle = ({item, index}) => {
-//     let isTabActive = index === selected;
-//     let fontWeight = isTabActive ? 'bold' : 'normal';
-//     let fontColor = isTabActive ? '#44f' : 'grey';
-//     return (
-//       <TouchableHighlight
-//         onPress={_onPressHeader.bind(this, index)}
-//         style={[
-//           defaultStyle.tabItemContainer,
-//           {backgroundColor: headerBackgroundColor},
-//         ]}
-//         underlayColor={'#00000033'}>
-//         <View flexDirection="row">
-//           <View>
-//             <Text
-//               style={[
-//                 {fontWeight: fontWeight},
-//                 defaultStyle.tabItemText,
-//                 headerTextStyle,
-//                 {color: fontColor},
-//               ]}>
-//               {item.title}
-//             </Text>
-
-//             {_renderHighlight(isTabActive)}
-//           </View>
-//           {isTabActive && (
-//             <IconButton
-//               icon="close"
-//               size={13}
-//               color={fontColor}
-//               style={{margin: 0, marginLeft: 5, alignSelf: 'center'}}
-//               onPress={() => {}}
-//             />
-//           )}
-//         </View>
-//       </TouchableHighlight>
-//     );
-//   };
-
-//   const _renderHighlight = showHighlight => {
-//     if (showHighlight) {
-//       return (
-//         <View
-//           style={[
-//             defaultStyle.highlight,
-//             highlightStyle,
-//             {backgroundColor: headerUnderlayColor},
-//           ]}
-//         />
-//       );
-//     } else {
-//       return <View style={[defaultStyle.noHighlight, noHighlightStyle]} />;
-//     }
-//   };
-
-//   const scrollHeader = index => {
-//     headerViewRef.current.scrollToIndex({index, animated: true});
-//   };
-
-//   return (
-//     <View style={{backgroundColor: '#efefef', flexDirection: 'row'}}>
-//       <FlatList
-//         horizontal
-//         alwaysBounceHorizontal={false}
-//         ref={headerViewRef}
-//         bounces={false}
-//         showsHorizontalScrollIndicator={false}
-//         data={data}
-//         extraData={{selected: selected}}
-//         renderItem={_renderTitle}
-//         style={[
-//           defaultStyle.headerStyle,
-//           {backgroundColor: headerBackgroundColor},
-//           ,
-//         ]}
-//       />
-//       <IconButton icon="plus" size={15} onPress={() => {}} />
-//     </View>
-//   );
-// };
 
 const DynamicdefaultStyle = {
   headerStyle: {},

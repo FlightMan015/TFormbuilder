@@ -2,29 +2,30 @@ import {componentName} from '../../constant';
 // import Bitmap from './bitmap';
 // import DataTableBody from './DataTable';
 import InputText from './InputText';
-// import DatePicker from './DatePicker';
-// import TimePicker from './TimePicker';
-// import FilePicker from './FilePicker';
-// import Radio from './Radio';
-// import DropDown from './DropDown';
-// import BarChart from './barchart';
-// import LineChart from './linechart';
-// import PieChart from './piechart';
-// import RadarChart from './radarchart';
-// import Map from './map';
-// import Calendar from './calendar/scheduler';
+import DatePicker from './DatePicker';
+import TimePicker from './TimePicker';
+import FileUpload from './FileUpload';
+import Radio from './Radio';
+import BarChart from './barchart';
+import LineChart from './linechart';
+import PieChart from './piechart';
+import RadarChart from './radarchart';
 // import GaugeChart from './GaugeChart';
 // import Slider from './Slider';
 // import Button from './Button';
-// import Image from './Image';
+import Image from './Image';
 // import Payment from './Payment';
 // import Embedded from './Embedded';
 import CardSlider from './cardslider';
+import Dropdown from './Dropdown';
+import Map from './Map';
+import Calendar from './Calendar';
+
 
 const componentMap = {
-  // [componentName.IMAGE]: {
-  //   component: Image,
-  // },
+  [componentName.IMAGE]: {
+    component: Image,
+  },
   // // [componentName.IMAGE_WITH_LINK]: {
   // //   component: Image,
   // // },
@@ -35,51 +36,51 @@ const componentMap = {
   // // [componentName.RATING]: {
   // //   component: Rating,
   // // },
-  // [componentName.DATE_PICKER]: {
-  //   component: DatePicker,
-  // },
+  [componentName.DATE_PICKER]: {
+    component: DatePicker,
+  },
   // // [componentName.CHECKBOX]: {
   // //   component: Checkbox,
   // // },
-  // [componentName.RADIO]: {
-  //   component: Radio,
-  // },
-  // [componentName.DROPDOWN]: {
-  //   component: DropDown,
-  // },
+  [componentName.RADIO]: {
+    component: Radio,
+  },
+  [componentName.DROPDOWN]: {
+    component: Dropdown,
+  },
   // // [componentName.TEXT_AREA]: {
   // //   component: InputText,
   // // },
   // // [componentName.READ_ONLY_TEXT]: {
   // //   component: Text,
   // // },
-  // [componentName.TIME_PICKER]: {
-  //   component: TimePicker,
-  // },
-  // [componentName.FILE_UPLOAD]: {
-  //   component: FilePicker,
-  // },
+  [componentName.TIME_PICKER]: {
+    component: TimePicker,
+  },
+  [componentName.FILE_UPLOAD]: {
+    component: FileUpload,
+  },
   // // [componentName.HEADER]: {
   // //   component: Header,
   // // },
-  // [componentName.LINECHART]: {
-  //   component: LineChart,
-  // },
-  // [componentName.BARCHART]: {
-  //   component: BarChart,
-  // },
-  // [componentName.PIECHART]: {
-  //   component: PieChart,
-  // },
-  // [componentName.RADARCHART]: {
-  //   component: RadarChart,
-  // },
-  // [componentName.MAP]: {
-  //   component: Map,
-  // },
-  // [componentName.CALENDAR]: {
-  //   component: Calendar,
-  // },
+  [componentName.LINECHART]: {
+    component: LineChart,
+  },
+  [componentName.BARCHART]: {
+    component: BarChart,
+  },
+  [componentName.PIECHART]: {
+    component: PieChart,
+  },
+  [componentName.RADARCHART]: {
+    component: RadarChart,
+  },
+  [componentName.MAP]: {
+    component: Map,
+  },
+  [componentName.CALENDAR]: {
+    component: Calendar,
+  },
   // // New 2022-8-22
   // [componentName.DATA_TABLE]: {
   //   component: DataTableBody,

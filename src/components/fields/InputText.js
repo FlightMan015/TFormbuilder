@@ -1,9 +1,7 @@
-/* eslint-disable prettier/prettier */
-
-import React, {useState, useMemo} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {View, StyleSheet, TextInput, Alert, Text} from 'react-native';
-import {useTheme} from '@react-navigation/native';
+import {useTheme} from 'react-native-paper';
 import { useEffect } from 'react';
 import formStore from '../../store/formStore';
 
@@ -18,53 +16,49 @@ const InputText = props => {
     setInputValue(value);
   }, [value]);
 
-  // const InputTextComponent = useMemo(() => {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'Card List'}</Text>
-        <TextInput
-          style={{
-            ...styles.textBox(element.meta.multiline, element.meta.numberOfLines),
-            backgroundColor: colors.inputTextBackground,
-            borderColor: colors.border,
-          }}
-          value={inputValue}
-          underlineColorAndroid="transparent"
-          onChangeText={e => {
-            if (element.event.onChangeText) {
-              Alert.alert('Rule Action', `Fired onChangeText action. rule - ${element.event.onChangeText}. newText - ${e}`);
-            }
-            setInputValue(e);
-            if (onChangeValue) {
-              onChangeValue({[element.field_name]: e});
-            }
-          }}
-          editable={renderMode}
-          placeholder={element.meta.placeholder || ''}
-          placeholderTextColor={colors.placeholder}
-          multiline={element.meta.multiline || false}
-          numberOfLines={element.meta.numberOfLines || 1}
-          onSubmitEditing={() => {
-            if (element.event.onSubmitEditing) {
-              Alert.alert('Rule Action', `Fired onSubmitEditing action. rule - ${element.event.onSubmitEditing}. newText - ${inputValue}`);
-            }
-          }}
-          onBlur={() => {
-            if (element.event.onBlur) {
-              Alert.alert('Rule Action', `Fired onBlur action. rule - ${element.event.onBlur}. newText - ${inputValue}`);
-            }
-          }}
-          onFocus={() => {
-            if (element.event.onFocus) {
-              Alert.alert('Rule Action', `Fired onFocus action. rule - ${element.event.onFocus}. oldText - ${inputValue}`);
-            }
-          }}
-        />
-      </View>
-    );
-  // }, [props]);
-
-  // return InputTextComponent;
+  return (
+    <View style={styles.container}>
+      <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'TextInput'}</Text>
+      <TextInput
+        style={{
+          ...styles.textBox(parseInt(element.meta.numberOfLines, 10) > 1, parseInt(element.meta.numberOfLines, 10)),
+          backgroundColor: colors.inputTextBackground,
+          borderColor: colors.border,
+        }}
+        value={inputValue}
+        underlineColorAndroid="transparent"
+        onChangeText={e => {
+          if (element.event.onChangeText) {
+            Alert.alert('Rule Action', `Fired onChangeText action. rule - ${element.event.onChangeText}. newText - ${e}`);
+          }
+          setInputValue(e);
+          if (onChangeValue) {
+            onChangeValue({[element.field_name]: e});
+          }
+        }}
+        editable={renderMode}
+        placeholder={element.meta.placeholder || ''}
+        placeholderTextColor={colors.placeholder}
+        multiline={parseInt(element.meta.numberOfLines, 10) > 1 ? true : false}
+        numberOfLines={parseInt(element.meta.numberOfLines, 10)}
+        onSubmitEditing={() => {
+          if (element.event.onSubmitEditing) {
+            Alert.alert('Rule Action', `Fired onSubmitEditing action. rule - ${element.event.onSubmitEditing}. newText - ${inputValue}`);
+          }
+        }}
+        onBlur={() => {
+          if (element.event.onBlur) {
+            Alert.alert('Rule Action', `Fired onBlur action. rule - ${element.event.onBlur}. newText - ${inputValue}`);
+          }
+        }}
+        onFocus={() => {
+          if (element.event.onFocus) {
+            Alert.alert('Rule Action', `Fired onFocus action. rule - ${element.event.onFocus}. oldText - ${inputValue}`);
+          }
+        }}
+      />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({

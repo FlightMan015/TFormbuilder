@@ -52,7 +52,6 @@ const Card1 = (props) => {
   return useMemo(() => (
     <View style={styles.card}>
       <View style={styles.info(backgroundColor, cardCorner)}>
-        {console.log('0000000000000')}
         {!imageUri && <Image
           style={styles.image(cardCorner)}
           source={emptyImage}
