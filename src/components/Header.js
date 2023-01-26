@@ -1,6 +1,6 @@
 import React from 'react';
 import {useTheme} from 'react-native-paper';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, Platform} from 'react-native';
 import {IconButton} from 'react-native-paper';
 import formStore from '../store/formStore';
 
@@ -15,38 +15,41 @@ const Header = props => {
   const formData = formStore(state => state.formData);
 
   return (
-    <View style={styles.titleBar(colors)}>
-      <View style={styles.subView}>
-        <IconButton
-          icon="plus"
-          size={size.s22}
-          iconColor={colors.card}
-          style={styles.addFieldButton(colors)}
-          onPress={() => {
-            setIndexToAdd({});
-            setOpenMenu(!openMenu);
-          }}
-        />
-        <Text style={styles.title(colors, size)}>{formData.title}</Text>
-      </View>
-      <View style={styles.subView}>
-        <IconButton
-          icon="cog-outline"
-          size={size.s20}
-          iconColor={colors.text}
-          onPress={() => {
-            setSettingType('formSetting');
-            setOpenSetting(true);
-          }}
-        />
-        <IconButton
-          icon="menu"
-          size={size.s20}
-          iconColor={colors.text}
-          onPress={() => {
-            onClick('menu');
-          }}
-        />
+    <View>
+      <View style={{height: Platform.OS === 'ios' ? 18 : 0, backgroundColor: '#FFFFFF'}}></View>
+      <View style={styles.titleBar(colors)}>
+        <View style={styles.subView}>
+          <IconButton
+            icon="plus"
+            size={size.s22}
+            iconColor={colors.card}
+            style={styles.addFieldButton(colors)}
+            onPress={() => {
+              setIndexToAdd({});
+              setOpenMenu(!openMenu);
+            }}
+          />
+          <Text style={styles.title(colors, size)}>{formData.title}</Text>
+        </View>
+        <View style={styles.subView}>
+          <IconButton
+            icon="cog-outline"
+            size={size.s20}
+            iconColor={colors.text}
+            onPress={() => {
+              setSettingType('formSetting');
+              setOpenSetting(true);
+            }}
+          />
+          <IconButton
+            icon="menu"
+            size={size.s20}
+            iconColor={colors.text}
+            onPress={() => {
+              onClick('menu');
+            }}
+          />
+        </View>
       </View>
     </View>
   );
