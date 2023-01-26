@@ -16,7 +16,7 @@ const Header = props => {
 
   return (
     <View>
-      <View style={{height: Platform.OS === 'ios' ? 18 : 0, backgroundColor: '#FFFFFF'}}></View>
+      <View style={{height: Platform.OS === 'ios' ? 25 : 0, backgroundColor: '#FFFFFF'}}></View>
       <View style={styles.titleBar(colors)}>
         <View style={styles.subView}>
           <IconButton
