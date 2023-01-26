@@ -26,8 +26,8 @@ const App: () => Node = () => {
   async function requestPermissions() {
     if (Platform.OS === 'ios') {
       GeoLocation.setRNConfiguration({
-        skipPermissionRequests: false,
-        authorizationLevel: 'always',
+        // skipPermissionRequests: false,
+        authorizationLevel: 'whenInUse',
       });
       GeoLocation.requestAuthorization();
     }
