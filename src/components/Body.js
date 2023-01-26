@@ -1,12 +1,18 @@
 import React, {useEffect} from 'react';
-import {useTheme} from 'react-native-paper';
-import {ScrollView, StyleSheet, Dimensions, View} from 'react-native';
+import {useTheme, IconButton} from 'react-native-paper';
+import {ScrollView, StyleSheet, Dimensions, View, Text} from 'react-native';
 import formStore from '../store/formStore';
 import MemoField from './fields';
 import MemoGroup from './groups';
 import { useNavigation } from '@react-navigation/native';
 import { useDrawerStatus } from '@react-navigation/drawer';
 import { componentName } from '../constant';
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
 
 const ScreenHeight = Dimensions.get('window').height;
 
@@ -17,6 +23,8 @@ const Body = props => {
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
   const setSelectedFieldIndex = formStore(state => state.setSelectedFieldIndex);
 
+  const setIndexToAdd = formStore(state => state.setIndexToAdd);
+  const setOpenMenu = formStore(state => state.setOpenMenu);
   const openMenu = formStore(state => state.openMenu);
   const openSetting = formStore(state => state.openSetting);
   const setOpenSetting = formStore(state => state.setOpenSetting);
@@ -52,33 +60,45 @@ const Body = props => {
   };
 
   return (
-    <ScrollView style={styles.container(colors)}>
-      <View style={{paddingBottom: 50}}>
-        {formData.data.map((field, index) => {
-          if (field.component !== componentName.TABSECTION && field.component !== componentName.GROUP) {
-            return (
-              <MemoField
-                key={index}
-                onSelect={() => onSelect({childIndex: index})}
-                element={field}
-                index={{childIndex: index}}
-                selected={!('groupIndex' in selectedFieldIndex) && 'childIndex' in selectedFieldIndex && selectedFieldIndex.childIndex === index}
-                isLastField={(index + 1) === formData.data.length} />
-            );
-          } else {
-            return (
-              <MemoGroup
-                key={index}
-                onSelect={e => onSelect(e)}
-                element={field}
-                index={{groupIndex: index}}
-                selected={'groupIndex' in selectedFieldIndex && selectedFieldIndex.groupIndex === index}
-                isLastGroup={(index + 1) === formData.data.length} />
-            );
-          }
-        })}
-      </View>
-    </ScrollView>
+    <View style={{flex: 1}}>
+      <ScrollView style={styles.container(colors)}>
+        <View style={{paddingBottom: 50}}>
+          {formData.data.map((field, index) => {
+            if (field.component !== componentName.TABSECTION && field.component !== componentName.GROUP) {
+              return (
+                <MemoField
+                  key={index}
+                  onSelect={() => onSelect({childIndex: index})}
+                  element={field}
+                  index={{childIndex: index}}
+                  selected={!('groupIndex' in selectedFieldIndex) && 'childIndex' in selectedFieldIndex && selectedFieldIndex.childIndex === index}
+                  isLastField={(index + 1) === formData.data.length} />
+              );
+            } else {
+              return (
+                <MemoGroup
+                  key={index}
+                  onSelect={e => onSelect(e)}
+                  element={field}
+                  index={{groupIndex: index}}
+                  selected={'groupIndex' in selectedFieldIndex && selectedFieldIndex.groupIndex === index}
+                  isLastGroup={(index + 1) === formData.data.length} />
+              );
+            }
+          })}
+        </View>
+      </ScrollView>
+      <IconButton
+        icon="plus"
+        size={size.s30}
+        iconColor={colors.card}
+        style={styles.addFieldButton(colors)}
+        onPress={() => {
+          setIndexToAdd({});
+          setOpenMenu(!openMenu);
+        }}
+      />
+    </View>
   );
 };
 
@@ -88,6 +108,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     backgroundColor: colors.background,
     paddingBottom: 50,
+  }),
+  addFieldButton: colors => ({
+    backgroundColor: colors.colorButton,
+    margin: 10,
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
   }),
 });
 

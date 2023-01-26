@@ -6,4 +6,5 @@ export const size = {
   s18: 18,
   s20: 20,
   s25: 25,
+  s30: 30,
 };

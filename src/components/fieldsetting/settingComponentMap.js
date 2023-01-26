@@ -15,6 +15,9 @@ import BarChartSetting from './BarChartSetting';
 import RadarChartSetting from './RadarChartSetting';
 import MapSetting from './MapSetting';
 import CalendarSetting from './CalendarSetting';
+import DataTableSetting from './DataTableSetting';
+import ButtonSetting from './ButtonSetting';
+import BitmapSetting from './BitmapSetting';
 
 const componentMap = {
   [componentName.CARDSLIDER]: {
@@ -64,6 +67,15 @@ const componentMap = {
   },
   [componentName.CALENDAR]: {
     component: CalendarSetting,
+  },
+  [componentName.DATA_TABLE]: {
+    component: DataTableSetting,
+  },
+  [componentName.BUTTON]: {
+    component: ButtonSetting,
+  },
+  [componentName.BITMAP]: {
+    component: BitmapSetting,
   },
 };
 

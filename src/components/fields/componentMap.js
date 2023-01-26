@@ -1,6 +1,5 @@
 import {componentName} from '../../constant';
-// import Bitmap from './bitmap';
-// import DataTableBody from './DataTable';
+import Bitmap from './bitmap';
 import InputText from './InputText';
 import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
@@ -12,7 +11,6 @@ import PieChart from './piechart';
 import RadarChart from './radarchart';
 // import GaugeChart from './GaugeChart';
 // import Slider from './Slider';
-// import Button from './Button';
 import Image from './Image';
 // import Payment from './Payment';
 // import Embedded from './Embedded';
@@ -20,6 +18,8 @@ import CardSlider from './cardslider';
 import Dropdown from './Dropdown';
 import Map from './Map';
 import Calendar from './Calendar';
+import DataTable from './DataTable';
+import Button from './Button';
 
 
 const componentMap = {
@@ -82,21 +82,21 @@ const componentMap = {
     component: Calendar,
   },
   // // New 2022-8-22
-  // [componentName.DATA_TABLE]: {
-  //   component: DataTableBody,
-  // },
-  // [componentName.BITMAP]: {
-  //   component: Bitmap,
-  // },
+  [componentName.DATA_TABLE]: {
+    component: DataTable,
+  },
+  [componentName.BITMAP]: {
+    component: Bitmap,
+  },
   // [componentName.GAUGECHART]: {
   //   component: GaugeChart,
   // },
   // [componentName.SLIDER]: {
   //   component: Slider,
   // },
-  // [componentName.BUTTON]: {
-  //   component: Button,
-  // },
+  [componentName.BUTTON]: {
+    component: Button,
+  },
   // [componentName.PAYMENT]: {
   //   component: Payment,
   // },

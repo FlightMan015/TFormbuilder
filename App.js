@@ -20,6 +20,7 @@ import {
   PermissionsAndroid,
   Platform,
 } from 'react-native';
+import { MenuProvider } from 'react-native-popup-menu';
 
 const App: () => Node = () => {
   const scheme = useColorScheme();
@@ -47,10 +48,12 @@ const App: () => Node = () => {
   }, []);
   return (
     <PaperProvider theme={scheme === 'dark' ? darkTheme : lightTheme}>
-      <NavigationContainer>
-        <Header />
-        <FieldMenu />
-      </NavigationContainer>
+      <MenuProvider>
+        <NavigationContainer>
+          <Header />
+          <FieldMenu />
+        </NavigationContainer>
+      </MenuProvider>
     </PaperProvider>
   );
 };
