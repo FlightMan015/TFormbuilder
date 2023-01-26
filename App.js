@@ -25,11 +25,11 @@ const App: () => Node = () => {
   const scheme = useColorScheme();
   async function requestPermissions() {
     if (Platform.OS === 'ios') {
-      GeoLocation.requestAuthorization();
       GeoLocation.setRNConfiguration({
         skipPermissionRequests: false,
-        authorizationLevel: 'whenInUse',
+        authorizationLevel: 'always',
       });
+      GeoLocation.requestAuthorization();
     }
 
     if (Platform.OS === 'android') {
