@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-
 import {Canvas, Path, Skia, ImageSVG} from '@shopify/react-native-skia';
 import React, {
   useCallback,
@@ -27,7 +25,7 @@ import {IconButton, useTheme} from 'react-native-paper';
 import {color} from '../../../theme/styles';
 import useDrawingStore from '../../../store/bitmapStore';
 import utils from './utils';
-import {CustomButton} from '../../../common/CustomButton';
+import CustomButton from '../../../common/CustomButton';
 import Title from '../../../common/Title';
 import formStore from '../../../store/formStore';
 
@@ -54,6 +52,8 @@ const Bitmap = ({element, index, editRole}) => {
     state => state.setVisibleBitmapDrawingDlg,
   );
   const setBitmapImageData = useDrawingStore(state => state.setBitmapImageData);
+  const visibleDlg = useDrawingStore(state => state.visibleDlg);
+  const setVisibleDlg = useDrawingStore(state => state.setVisibleDlg);
   // We need to provide absolute height to the canvas as percentages/flex won't work.
   // Therefore when the `View` renders, we get the height and keep it in state. This
   // height will be the height of Canvas & SkiaView components.
@@ -127,14 +127,14 @@ const Bitmap = ({element, index, editRole}) => {
               color={colors.icon}
               size={15}
               onPress={() => {
-                // setVisibleDlg({
-                //   ...visibleDlg,
-                //   editBitmapLink: true,
-                //   bitmapIndex: index,
-                //   bitmapLinkIndex: linkIndex,
-                //   bitmapElement: element,
-                //   bitmapLinkData: {name: name, link: url},
-                // });
+                setVisibleDlg({
+                  ...visibleDlg,
+                  editBitmapLink: true,
+                  bitmapIndex: index,
+                  bitmapLinkIndex: linkIndex,
+                  bitmapElement: element,
+                  bitmapLinkData: {name: name, link: url},
+                });
               }}
               style={styles.actionButton}
             />
@@ -227,7 +227,7 @@ const Bitmap = ({element, index, editRole}) => {
             icon="folder"
             iconSize={18}
           />
-          {editRole && imageData.imageName && (
+          {/* {editRole && imageData.imageName && ( */}
             <CustomButton
               onPress={() => {
                 setVisibleDrawingDlg(true);
@@ -249,7 +249,7 @@ const Bitmap = ({element, index, editRole}) => {
               icon="edit"
               iconSize={18}
             />
-          )}
+          {/* )} */}
         </View>
 
         <View

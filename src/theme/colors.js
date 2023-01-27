@@ -24,6 +24,9 @@ export const darkColors = {
   borderIconButtonBackground: '#282C36',
   label: '#8A8B9D',
   buttonTextColor: '#000000',
+  elevation: {
+    level3: '#FFFFFF',
+  }
 };
 
 export const lightColors = {
@@ -52,4 +55,7 @@ export const lightColors = {
   borderIconButtonBackground: '#FAFAFF',
   label: '#8A8B9D',
   buttonTextColor: '#FFFFFF',
+  elevation: {
+    level3: '#FFFFFF',
+  }
 };

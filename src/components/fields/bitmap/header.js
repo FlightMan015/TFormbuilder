@@ -9,8 +9,7 @@ import CustomButton from '../../../common/CustomButton';
 import {Skia, ImageSVG, Canvas} from '@shopify/react-native-skia';
 import {color} from '../../../theme/styles';
 
-
-const Header = ({onSave}) => {
+const BitmapHeader = ({onSave}) => {
   /**
    * Reset the canvas & draw state
    */
@@ -81,4 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Header;
+export default BitmapHeader;

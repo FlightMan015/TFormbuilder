@@ -22,8 +22,9 @@ import {
 } from 'react-native';
 import useDrawingStore from '../../../store/bitmapStore';
 import history from './history';
-import Header from './header';
+import Header from './Header';
 import formStore from '../../../store/formStore';
+import utils from './utils';
 
 const DrawingPanel = ({svgPosition}) => {
   // Is user touching the screen
@@ -214,7 +215,7 @@ const DrawingPanel = ({svgPosition}) => {
             height: imageData.height,
             width: imageData.width,
           }}>
-          {completedPaths.length > 0
+          {/* {completedPaths.length > 0
             ? completedPaths.map((path, index) => (
                 <Path
                   key={index}
@@ -223,7 +224,20 @@ const DrawingPanel = ({svgPosition}) => {
                   paint={{current: path.paint}}
                 />
               ))
-            : null}
+            : null} */}
+          {completedPaths.length > 0 && (
+            <ImageSVG
+              svg={Skia.SVG.MakeFromString(
+                utils.makeImageSvgFromPaths(completedPaths, {
+                  minPosition: {x: 0, y: 0},
+                  maxPosition: {x: imageData.width, y: imageData.height},
+                }))}
+              x={0}
+              y={0}
+              width={imageData.width}
+              height={imageData.height}
+            />
+          )}
         </Canvas>
       </View>
     </SafeAreaView>

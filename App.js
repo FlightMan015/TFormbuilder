@@ -14,13 +14,15 @@ import {NavigationContainer} from '@react-navigation/native';
 import FieldMenu from './src/components/FieldMenu';
 import Header from './src/components/Header';
 import {darkTheme, lightTheme} from './src/theme';
-import {Provider as PaperProvider} from 'react-native-paper';
+import {Provider as PaperProvider, MD3LightTheme as DefaultTheme, MD3DarkTheme as DefaultDarkTheme} from 'react-native-paper';
 import GeoLocation from 'react-native-geolocation-service';
 import {
   PermissionsAndroid,
   Platform,
 } from 'react-native';
 import { MenuProvider } from 'react-native-popup-menu';
+import BitmapDrawingDlg from './src/dialogs/BitmapDrawingDlg';
+import BitmapEditLinkDlg from './src/dialogs/BitmapEditLinkDlg';
 
 const App: () => Node = () => {
   const scheme = useColorScheme();
@@ -52,6 +54,8 @@ const App: () => Node = () => {
         <NavigationContainer>
           <Header />
           <FieldMenu />
+          <BitmapDrawingDlg />
+          <BitmapEditLinkDlg />
         </NavigationContainer>
       </MenuProvider>
     </PaperProvider>

@@ -19,6 +19,8 @@ const useDrawingStore = create(set => ({
     set(() => ({visibleBitmapDrawingDlg: newValue})),
   bitmapImageData: {},
   setBitmapImageData: data => set(() => ({bitmapImageData: data})),
+  visibleDlg: {},
+  setVisibleDlg: newValue => set(() => ({visibleDlg: newValue})),
 }));
 
 export default useDrawingStore;

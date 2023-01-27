@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 
-export const CustomButton = props => {
+const CustomButton = props => {
   const {onPress, style, text, textStyle, icon, iconSize, iconColor} = props;
 
   return (
@@ -38,3 +38,5 @@ export const CustomButton = props => {
     </TouchableOpacity>
   );
 };
+
+export default CustomButton;
