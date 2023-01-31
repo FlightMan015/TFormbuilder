@@ -1,8 +1,9 @@
 import React from 'react';
 import {useTheme} from 'react-native-paper';
-import {ScrollView, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {getSettingComponent} from './settingComponentMap';
 import formStore from '../../store/formStore';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const FieldSetting = props => {
   const {colors, size} = useTheme();

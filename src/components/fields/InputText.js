@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {View, StyleSheet, TextInput, Alert, Text} from 'react-native';
 import {useTheme} from 'react-native-paper';
 import { useEffect } from 'react';
 import formStore from '../../store/formStore';
+import FieldLabel from '../../common/FieldLabel';
 
 const InputText = props => {
-
   const {element, value, onChangeValue, userRole} = props;
-  const {colors} = useTheme();
+  const {colors, fonts} = useTheme();
   const [inputValue, setInputValue] = useState('');
   const renderMode = formStore(state => state.renderMode);
 
@@ -18,12 +18,13 @@ const InputText = props => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'TextInput'}</Text>
+      <FieldLabel label={element.meta.title || 'TextInput'} visible={!element.meta.hide_title} />
       <TextInput
         style={{
           ...styles.textBox(parseInt(element.meta.numberOfLines, 10) > 1, parseInt(element.meta.numberOfLines, 10)),
           backgroundColor: colors.inputTextBackground,
           borderColor: colors.border,
+          ...fonts.values,
         }}
         value={inputValue}
         underlineColorAndroid="transparent"
@@ -65,16 +66,10 @@ const styles = StyleSheet.create({
   container: {
     padding: 5,
   },
-  carouselTitle: colors => ({
-    fontSize: 16,
-    padding: 5,
-    color: colors.text,
-  }),
   textBox: (multiline, numberOfLines) => ({
     height: !multiline ? 35 : 35 * numberOfLines,
     borderWidth: 1,
     borderRadius: 5,
-    fontSize: 14,
     padding: 0,
     paddingLeft: 5,
   }),
@@ -84,4 +79,4 @@ InputText.propTypes = {
   element: PropTypes.object.isRequired,
 };
 
-export default React.memo(InputText);
+export default InputText;

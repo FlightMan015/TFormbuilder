@@ -18,6 +18,8 @@ import CalendarSetting from './CalendarSetting';
 import DataTableSetting from './DataTableSetting';
 import ButtonSetting from './ButtonSetting';
 import BitmapSetting from './BitmapSetting';
+import GridSectionSetting from './GridSectionSetting';
+import TwitterSetting from './TwitterSetting';
 
 const componentMap = {
   [componentName.CARDSLIDER]: {
@@ -76,6 +78,12 @@ const componentMap = {
   },
   [componentName.BITMAP]: {
     component: BitmapSetting,
+  },
+  [componentName.GRID]: {
+    component: GridSectionSetting,
+  },
+  [componentName.TWITTER]: {
+    component: TwitterSetting,
   },
 };
 

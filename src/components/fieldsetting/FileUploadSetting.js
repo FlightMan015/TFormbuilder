@@ -28,6 +28,13 @@ const FileUploadSetting = ({element, index, onClick}) => {
     <>
       <SettingHeader title={'File Upload Settings'} />
       <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
+      <SettingSwitch
+        title={'Hide label'}
+        value={element.meta.hide_title}
+        onChange={onChange}
+        keyName={'hide_title'}
+        description={'Make sure to show label.'}
+      />
       <SettingSwitch title={'Multiple selection'} value={element.meta.multi_select} onChange={onChange} keyName={'multi_select'} />
       <SettingDuplicate index={index} element={element} />
     </>

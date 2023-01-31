@@ -60,7 +60,7 @@ const FontSetting = ({label, fontType, fontSize, fontColor, onChange}) => {
       <SelectDropdown
         data={fontTypes}
         onSelect={e => {
-					onChange('fontType', e);
+					onChange('fontFamily', e);
         }}
         dropdownStyle={{...styles.dropdown, backgroundColor: colors.inputTextBackground}}
         rowStyle={styles.rowStyle}
@@ -131,7 +131,7 @@ const FontSetting = ({label, fontType, fontSize, fontColor, onChange}) => {
                     text={colorstyle}
                     textStyle={styles.colorElementText(colorstyle)}
                     onPress={() => {
-                      onChange('fontColor', colorstyle);
+                      onChange('color', colorstyle);
                     }}
                   />
                 ))}
@@ -155,7 +155,7 @@ const FontSetting = ({label, fontType, fontSize, fontColor, onChange}) => {
                   visibleColorPicker && (
                     <ColorPicker
                       onColorSelected={e => {
-												onChange('fontColor', e);
+												onChange('color', e);
                         setVisibleColorPicker(false);
                       }}
                       style={{width: '100%', height: 200}}

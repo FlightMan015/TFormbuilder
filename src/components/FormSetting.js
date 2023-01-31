@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {StyleSheet, Text, View, Animated, TextInput, Image, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, Animated, TextInput, Image} from 'react-native';
 import {Avatar, IconButton, Checkbox, useTheme} from 'react-native-paper';
 import { globalStyles } from '../theme/styles';
 import { componentName } from '../constant';
@@ -7,7 +7,7 @@ import DraggableFlatList, {
   ScaleDecorator,
   RenderItemParams,
 } from 'react-native-draggable-flatlist';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {GestureHandlerRootView, ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import formStore from '../store/formStore';
 import TextButton from '../common/TextButton';
@@ -19,6 +19,8 @@ import { invertColor } from '../utils';
 import ColorPicker from '../common/ColorPicker';
 import FontSetting from '../common/FontSetting';
 import ResizedImage from '../common/ResizedImage';
+import SettingSwitch from './fieldsetting/common/SettingSwitch';
+import SelectDropdown from 'react-native-select-dropdown';
 
 const colorStyles = [
   '#0A1551',
@@ -37,6 +39,10 @@ const colorStyles = [
   '#02357D',
 ];
 
+const defaultThemes = [
+  'Default',
+];
+
 const FormSetting = () => {
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
@@ -51,6 +57,8 @@ const FormSetting = () => {
   const previousRoles = useRef(roles || []);
   const [selectedTab, setSelectedTab] = useState('general');
   const [imageSelectTab, setImageSelectTab] = useState('upload');
+  const [open, setOpen] = useState(true);
+
 
   useEffect(() => {
     if (formData.checkedRoles) {
@@ -400,6 +408,7 @@ const FormSetting = () => {
             <Text style={styles.titleLabel}>Roles</Text>
             <GestureHandlerRootView style={styles.dragItem}>
               <DraggableFlatList
+                nestedScrollEnabled
                 data={roleDatas}
                 onDragBegin={() => {
                   animate1();
@@ -417,42 +426,87 @@ const FormSetting = () => {
       )}
       {selectedTab === 'style' && (
         <>
-          <ColorPicker
-            color={formData.style.formBackgroundColor}
-            label={'Background'}
-            selectColor={e => {
-              const newStyle = {...formData.style, formBackgroundColor: e};
-              setFormData({...formData, style: newStyle});
+          <SettingSwitch
+            title={'Use Theme'}
+            value={formData.useTheme === 'true'}
+            onChange={(keyname, e) => {
+              setFormData({...formData, [keyname]: e.toString()});
             }}
+            keyName={'useTheme'}
+            description={'Make sure to use default theme.'}
           />
-          <ColorPicker
-            color={formData.style.foregroundColor}
-            label={'Foreground'} selectColor={e => {
-              const newStyle = {...formData.style, foregroundColor: e};
-              setFormData({...formData, style: newStyle});
-            }}
-          />
-          <FontSetting
-            label={'Headings'}
-            fontColor={formData.style.headings.fontColor}
-            fontSize={formData.style.headings.fontSize}
-            fontType={formData.style.headings.fontType}
-            onChange={(type, e) => {onChange('headings', type, e);}}
-          />
-          <FontSetting
-            label={'Labels'}
-            fontColor={formData.style.labels.fontColor}
-            fontSize={formData.style.labels.fontSize}
-            fontType={formData.style.labels.fontType}
-            onChange={(type, e) => {onChange('labels', type, e);}}
-          />
-          <FontSetting
-            label={'Values'}
-            fontColor={formData.style.values.fontColor}
-            fontSize={formData.style.values.fontSize}
-            fontType={formData.style.values.fontType}
-            onChange={(type, e) => {onChange('values', type, e);}}
-          />
+          {
+            formData.useTheme === 'true' && (
+              <View style={styles.settingView}>
+                <Text style={styles.titleLabel}>Themes</Text>
+                <SelectDropdown
+                  data={defaultThemes}
+                  onSelect={e => {
+                    onChange('defaultTheme', e);
+                  }}
+                  dropdownStyle={{...styles.dropdown, backgroundColor: colors.inputTextBackground}}
+                  rowStyle={styles.rowStyle}
+                  rowTextStyle={styles.textStyle}
+                  buttonStyle={{...styles.buttonStyle, backgroundColor: colors.inputTextBackground, borderColor: colors.border}}
+                  buttonTextStyle={{...styles.textStyle, color: colors.text}}
+                  selectedRowStyle={styles.selectedRowStyle}
+                  selectedRowTextStyle={styles.selectedRowTextStyle}
+                  renderDropdownIcon={
+                    open
+                      ? () => <Icon name="chevron-down" size={18} color={colors.text} />
+                      : () => <Icon name="chevron-up" size={18} color={colors.text} />
+                  }
+                  dropdownIconPosition="right"
+                  onFocus={() => setOpen(false)}
+                  onBlur={() => setOpen(true)}
+                  defaultButtonText="Select Option"
+                  defaultValue={formData.defaultTheme}
+                />
+              </View>
+            )
+          }
+          {
+            formData.useTheme === 'false' && (
+              <>
+                <ColorPicker
+                  color={formData.style.formBackgroundColor}
+                  label={'Background'}
+                  selectColor={e => {
+                    const newStyle = {...formData.style, formBackgroundColor: e};
+                    setFormData({...formData, style: newStyle});
+                  }}
+                />
+                <ColorPicker
+                  color={formData.style.foregroundColor}
+                  label={'Foreground'} selectColor={e => {
+                    const newStyle = {...formData.style, foregroundColor: e};
+                    setFormData({...formData, style: newStyle});
+                  }}
+                />
+                <FontSetting
+                  label={'Headings'}
+                  fontColor={formData.style.headings.color}
+                  fontSize={formData.style.headings.fontSize}
+                  fontType={formData.style.headings.fortFamily}
+                  onChange={(type, e) => {onChange('headings', type, e);}}
+                />
+                <FontSetting
+                  label={'Labels'}
+                  fontColor={formData.style.labels.color}
+                  fontSize={formData.style.labels.fontSize}
+                  fontType={formData.style.labels.fortFamily}
+                  onChange={(type, e) => {onChange('labels', type, e);}}
+                />
+                <FontSetting
+                  label={'Values'}
+                  fontColor={formData.style.values.color}
+                  fontSize={formData.style.values.fontSize}
+                  fontType={formData.style.values.fortFamily}
+                  onChange={(type, e) => {onChange('values', type, e);}}
+                />
+              </>
+            )
+          }
         </>
       )}
     </ScrollView>
@@ -590,6 +644,32 @@ const styles = StyleSheet.create({
     borderColor: '#303339',
     backgroundColor: '#555F6E',
     paddingLeft: 10,
+  },
+  textStyle: {
+    fontSize: 14,
+    color: 'grey',
+  },
+  selectedRowStyle: {
+    backgroundColor: 'grey',
+  },
+  selectedRowTextStyle: {
+    color: '#000000',
+  },
+  dropdown: {
+    borderRadius: 5,
+    borderColor: 'black',
+    borderWidth: 1,
+    maxHeight: 150,
+  },
+  buttonStyle: {
+    width: '100%',
+    height: 40,
+    borderRadius: 5,
+    borderColor: 'grey',
+    borderWidth: 1,
+  },
+  rowStyle: {
+    height: 40,
   },
 });
 

@@ -1,6 +1,5 @@
 import React from 'react';
-import {useTheme, IconButton} from 'react-native-paper';
-import {StyleSheet} from 'react-native';
+import {useTheme} from 'react-native-paper';
 import SettingHeader from './common/SettingHeader';
 import { updateField } from '../../actions/formdata';
 import formStore from '../../store/formStore';
@@ -40,9 +39,31 @@ const InputTextSetting = ({element, index, onClick}) => {
   return (
     <>
       <SettingHeader title={'TextInput Settings'} />
-      <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
-      <SettingSwitch title={'Is Mandatory'} value={element.is_mandatory} onChange={onChange} keyName={'is_mandatory'} />
-      <SettingNumber title={'Number of lines'} value={element.meta.numberOfLines} onChange={onChange} keyName={'numberOfLines'} />
+      <SettingLabel
+        title={'Label'}
+        label={element.meta.title}
+        onChange={onChange}
+        keyName={'title'}
+      />
+      <SettingSwitch
+        title={'Hide label'}
+        value={element.meta.hide_title}
+        onChange={onChange}
+        keyName={'hide_title'}
+        description={'Make sure to show label.'}
+      />
+      <SettingSwitch
+        title={'Is Mandatory'}
+        value={element.is_mandatory}
+        onChange={onChange}
+        keyName={'is_mandatory'}
+      />
+      <SettingNumber
+        title={'Number of lines'}
+        value={element.meta.numberOfLines}
+        onChange={onChange}
+        keyName={'numberOfLines'}
+      />
       <SettingDuplicate index={index} element={element} />
     </>
   );

@@ -1,12 +1,19 @@
 import {darkColors, lightColors} from './colors';
+import { darkFonts, lightFonts } from './fonts';
 import {size} from './size';
 
 export const darkTheme = {
-  colors: darkColors,
-  size: size,
+  Default: {
+    colors: darkColors,
+    fonts: darkFonts,
+    size,
+  }
 };
 
 export const lightTheme = {
-  colors: lightColors,
-  size: size,
+  Default: {
+    colors: lightColors,
+    fonts: lightFonts,
+    size,
+  }
 };

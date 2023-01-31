@@ -1,11 +1,8 @@
-import React, {useState, useContext} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import PropTypes from 'prop-types';
-import { datatypes } from '../../constant';
 import MemoField from '../fields';
 import DynamicTabView from '../../common/dynamic_tab_view/DynamicTabView';
 import {IconButton, useTheme} from 'react-native-paper';
-import { deleteField } from '../../actions/formdata';
 import formStore from '../../store/formStore';
 
 const TabSection = ({

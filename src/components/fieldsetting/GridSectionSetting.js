@@ -6,8 +6,9 @@ import formStore from '../../store/formStore';
 import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import SettingSwitch from './common/SettingSwitch';
+import GridCellFieldSetting from './GridCellFieldSetting';
 
-const MapSetting = ({element, index, onClick}) => {
+const GridSectionSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
@@ -26,8 +27,9 @@ const MapSetting = ({element, index, onClick}) => {
 
   return (
     <>
-      <SettingHeader title={'Map Settings'} />
+      <SettingHeader title={'Grid Section Settings'} />
       <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
+      <GridCellFieldSetting fields={element.meta.cellFields} changeData={onChange} />
       <SettingSwitch
         title={'Hide label'}
         value={element.meta.hide_title}
@@ -40,4 +42,4 @@ const MapSetting = ({element, index, onClick}) => {
   );
 };
 
-export default MapSetting;
+export default GridSectionSetting;

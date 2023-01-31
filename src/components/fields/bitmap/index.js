@@ -178,6 +178,7 @@ const Bitmap = ({element, index, editRole}) => {
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.bitmapContainer}>
+        <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'Bitmap'}</Text>
         <View style={styles.selectImageContainer}>
           <Text style={{
             ...styles.imageName,
@@ -348,10 +349,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   bitmapContainer: {
-    alignItems: 'center',
-    paddingTop: 10,
-    paddingHorizontal: 10,
+    padding: 5,
   },
+  carouselTitle: colors => ({
+    fontSize: 16,
+    padding: 5,
+    color: colors.text,
+  }),
   safeAreaView: {width: '100%'},
   imageContainer: {
     width: '100%',

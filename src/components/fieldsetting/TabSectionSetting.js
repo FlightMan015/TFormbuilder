@@ -8,6 +8,7 @@ import SettingLabel from './common/SettingLabel';
 import TextButton from '../../common/TextButton';
 import { componentName } from '../../constant';
 import SettingDuplicate from './common/SettingDuplicate';
+import SettingSwitch from './common/SettingSwitch';
 
 const TabSectionSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
@@ -30,6 +31,13 @@ const TabSectionSetting = ({element, index, onClick}) => {
     <>
       <SettingHeader title={'Tab Section Settings'} />
       <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
+      <SettingSwitch
+        title={'Hide label'}
+        value={element.meta.hide_title}
+        onChange={onChange}
+        keyName={'hide_title'}
+        description={'Make sure to show label.'}
+      />
       <View style={styles.settingView}>
         <Text style={styles.titleLabel}>Tabs</Text>
         {

@@ -5,6 +5,7 @@ import { updateField } from '../../actions/formdata';
 import formStore from '../../store/formStore';
 import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
+import SettingSwitch from './common/SettingSwitch';
 
 const CalendarSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
@@ -27,6 +28,13 @@ const CalendarSetting = ({element, index, onClick}) => {
     <>
       <SettingHeader title={'Calendar Settings'} />
       <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
+      <SettingSwitch
+        title={'Hide label'}
+        value={element.meta.hide_title}
+        onChange={onChange}
+        keyName={'hide_title'}
+        description={'Make sure to show label.'}
+      />
       <SettingDuplicate index={index} element={element} />
     </>
   );

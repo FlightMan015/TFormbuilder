@@ -40,6 +40,13 @@ const DropdownSetting = ({element, index, onClick}) => {
     <>
       <SettingHeader title={'Dropdown Settings'} />
       <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
+      <SettingSwitch
+        title={'Hide label'}
+        value={element.meta.hide_title}
+        onChange={onChange}
+        keyName={'hide_title'}
+        description={'Make sure to show label.'}
+      />
       <SettingSwitch title={'Is Mandatory'} value={element.is_mandatory} onChange={onChange} keyName={'is_mandatory'} />
       <SettingDropdownOptions title={'Options'} options={element.meta.options} onChange={onChange} keyName={'options'} />
       <SettingDuplicate index={index} element={element} />

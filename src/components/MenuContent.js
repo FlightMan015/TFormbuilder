@@ -2,11 +2,11 @@ import React, { useEffect, useMemo } from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {IconButton} from 'react-native-paper';
 import {fieldMenuData, newFieldData} from '../constant';
-import {ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import formStore from '../store/formStore';
 import { useDrawerStatus } from '@react-navigation/drawer';
 import { addField } from '../actions/formdata';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const MenuContent = () => {
   const formData = formStore(state => state.formData);

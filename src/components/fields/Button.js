@@ -9,7 +9,6 @@ const Button = props => {
   const {element, contents, editRole} = props;
   const {colors} = useTheme();
   const [value, setValue] = useState('');
-  console.log(editRole);
 
   return (
     <View style={styles.container}>

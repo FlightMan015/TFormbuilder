@@ -6,23 +6,25 @@ const formStore = create(set => ({
     title: 'New TForm',
     logo: '',
     data: [],
+    useTheme: 'true',
+    defaultTheme: 'Default',
     style: {
       formBackgroundColor: '#FFFFFF',
       foregroundColor: '#FFFFFF',
       headings: {
-        fontType: 'PublicSans-Bold',
+        fontFamily: 'PublicSans-Bold',
         fontSize: 16,
-        fontColor: '#000000',
+        color: '#000000',
       },
       labels: {
-        fontType: 'PublicSans-Regular',
+        fontFamily: 'PublicSans-Regular',
         fontSize: 14,
-        fontColor: '#000000',
+        color: '#000000',
       },
       values: {
-        fontType: 'PublicSans-Regular',
+        fontFamily: 'PublicSans-Regular',
         fontSize: 14,
-        fontColor: '#000000',
+        color: '#000000',
       },
     },
     checkedRoles: []

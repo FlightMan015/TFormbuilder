@@ -1,16 +1,15 @@
-import React, {useEffect, useMemo} from 'react';
-import {useTheme, IconButton} from 'react-native-paper';
+import React, { useEffect, useMemo } from 'react';
+import { useTheme, IconButton } from 'react-native-paper';
 import {
-  ScrollView,
   StyleSheet,
   View,
   Text,
   Animated,
   TouchableOpacity,
 } from 'react-native';
-import {getComponent} from './componentMap';
+import { getComponent } from './componentMap';
 import formStore from '../../store/formStore';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { deleteField, moveDown, moveUp } from '../../actions/formdata';
 
 const Group = props => {
@@ -102,12 +101,13 @@ const MemoGroup = ({element, index, editRole, onSelect, selected, isLastGroup}) 
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
   const setSelectedField = formStore(state => state.setSelectedField);
-  const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
+  // const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
   const setSelectedFieldIndex = formStore(state => state.setSelectedFieldIndex);
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (selected && !('childIndex' in selectedFieldIndex)) setSelectedField(element);
+    // if (selected && !('childIndex' in selectedFieldIndex))
+      setSelectedField(element);
   }, [element, selected]);
 
   const onClickAction = type => {
@@ -116,7 +116,7 @@ const MemoGroup = ({element, index, editRole, onSelect, selected, isLastGroup}) 
       setFormData({...formData, data: deleteField(formData, index)});
     }
     if (type === 'setting') {
-      // setSelectedField(element);
+      setSelectedField(element);
       navigation.getParent('RightDrawer').openDrawer();
     }
     if (type === 'moveup') {

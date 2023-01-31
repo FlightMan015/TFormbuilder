@@ -7,7 +7,7 @@ import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import SettingSwitch from './common/SettingSwitch';
 
-const MapSetting = ({element, index, onClick}) => {
+const TwitterSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
@@ -26,7 +26,7 @@ const MapSetting = ({element, index, onClick}) => {
 
   return (
     <>
-      <SettingHeader title={'Map Settings'} />
+      <SettingHeader title={'Date Settings'} />
       <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
       <SettingSwitch
         title={'Hide label'}
@@ -40,4 +40,4 @@ const MapSetting = ({element, index, onClick}) => {
   );
 };
 
-export default MapSetting;
+export default TwitterSetting;

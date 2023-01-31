@@ -13,6 +13,7 @@ import ResizedImage from '../../common/ResizedImage';
 import DocumentPicker, {
   types,
 } from 'react-native-document-picker';
+import SettingSwitch from './common/SettingSwitch';
 
 const colorStyles = [
   '#0A1551',
@@ -116,6 +117,13 @@ const CardListSetting = props => {
                     }}
                   />
                 </View>
+                <SettingSwitch
+                  title={'Hide label'}
+                  value={element.meta.hide_title}
+                  onChange={onChange}
+                  keyName={'hide_title'}
+                  description={'Make sure to show label.'}
+                />
                 <View style={styles.settingView}>
                   <Text style={styles.titleLabel}>Auto Play</Text>
                   <View style={styles.switchView}>

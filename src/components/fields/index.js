@@ -1,7 +1,6 @@
 import React, {useEffect, useMemo} from 'react';
 import {useTheme, IconButton} from 'react-native-paper';
 import {
-  ScrollView,
   StyleSheet,
   View,
   Text,
@@ -165,8 +164,19 @@ const MemoField = ({element, index, editRole, onSelect, selected, isLastField}) 
         isLastField={isLastField}
       />
     ),
-    [element, index, editRole, selected],
+    [element, index, editRole, selected]
   );
+
+  // return (
+  //   <Field
+  //       element={element}
+  //       index={index}
+  //       selected={selected}
+  //       onClick={type => onClickAction(type)}
+  //       onSelect={onSelect}
+  //       isLastField={isLastField}
+  //     />
+  // );
 };
 
 const styles = StyleSheet.create({
@@ -186,4 +196,4 @@ const styles = StyleSheet.create({
   }),
 });
 
-export default React.memo(MemoField);
+export default MemoField;

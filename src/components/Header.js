@@ -15,7 +15,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Header = props => {
   const {formName, preview, onClick} = props;
-  const {colors, size} = useTheme();
+  const {colors, size, fonts} = useTheme();
   // const setIndexToAdd = formStore(state => state.setIndexToAdd);
   // const openMenu = formStore(state => state.openMenu);
   // const setOpenMenu = formStore(state => state.setOpenMenu);
@@ -74,7 +74,7 @@ const Header = props => {
               })}
             </MenuOptions>
           </Menu>
-          <Text style={styles.title(colors, size)}>{formData.title}</Text>
+          <Text style={styles.title(fonts)}>{formData.title}</Text>
         </View>
         <View style={styles.subView}>
           <IconButton
@@ -94,11 +94,9 @@ const Header = props => {
 };
 
 const styles = StyleSheet.create({
-  title: (colors, size) => ({
-    fontSize: size.s18,
-    color: colors.text,
+  title: (fonts) => ({
     marginLeft: 10,
-    fontFamily: 'PublicSans-SemiBold',
+    ...fonts.headings,
   }),
   titleBar: colors => ({
     width: '100%',

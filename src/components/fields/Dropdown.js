@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {View, StyleSheet, Alert, Text} from 'react-native';
-import {useTheme} from '@react-navigation/native';
+import {useTheme} from 'react-native-paper';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/Feather';
 

@@ -39,6 +39,7 @@ export const componentName = {
   EMBEDDED: 'EMBEDDED',
   CARDSLIDER: 'CARDSLIDER',
   CARD: 'CARD',
+  TWITTER: 'TWITTER',
 };
 
 export const radioButton = {
@@ -769,6 +770,21 @@ export const newCardSlider = {
   },
 };
 
+export const newTwitterData = {
+  component: componentName.TWITTER,
+  field_name: 'twitter',
+  is_mandatory: false,
+  meta: {
+    title: 'Twitter',
+    tweetUrl: 'https://twitter.com/',
+  },
+  role: [{name: 'admin', view: true, edit: true}],
+  action: {create: false, update: false, read: false, delete: false},
+  event: {
+    onClick: '',
+  },
+};
+
 export const newCard = {
   image: '',
   title: 'Title',
@@ -807,6 +823,7 @@ export const newFieldData = {
   [componentName.EMBEDDED]: newEmbeddedData,
   [componentName.CARDSLIDER]: newCardSlider,
   [componentName.CARD]: newCard,
+  [componentName.TWITTER]: newTwitterData,
 };
 
 export const datatypes = {
@@ -899,21 +916,21 @@ export const fieldMenuData = {
           key: componentName.GRID,
           icon: 'grid',
         },
-        {
-          name: 'List',
-          key: componentName.LISTSECTION,
-          icon: 'list',
-        },
-        {
-          name: 'Composite',
-          key: componentName.COMPOSITE,
-          icon: 'sidebar',
-        },
-        {
-          name: 'Pop up',
-          key: componentName.POPUP,
-          icon: 'airplay',
-        },
+        // {
+        //   name: 'List',
+        //   key: componentName.LISTSECTION,
+        //   icon: 'list',
+        // },
+        // {
+        //   name: 'Composite',
+        //   key: componentName.COMPOSITE,
+        //   icon: 'sidebar',
+        // },
+        // {
+        //   name: 'Pop up',
+        //   key: componentName.POPUP,
+        //   icon: 'airplay',
+        // },
       ],
     },
     {
@@ -959,11 +976,11 @@ export const fieldMenuData = {
           key: componentName.DATA_TABLE,
           icon: 'layout',
         },
-        {
-          name: 'Slider',
-          key: componentName.SLIDER,
-          icon: 'sliders',
-        },
+        // {
+        //   name: 'Slider',
+        //   key: componentName.SLIDER,
+        //   icon: 'sliders',
+        // },
         {
           name: 'Image',
           key: componentName.IMAGE,
@@ -994,11 +1011,11 @@ export const fieldMenuData = {
           key: componentName.RADARCHART,
           icon: 'box',
         },
-        {
-          name: 'Gauge Chart',
-          key: componentName.GAUGECHART,
-          icon: 'compass',
-        },
+        // {
+        //   name: 'Gauge Chart',
+        //   key: componentName.GAUGECHART,
+        //   icon: 'compass',
+        // },
       ],
     },
     {
@@ -1026,7 +1043,7 @@ export const fieldMenuData = {
       items: [
         {
           name: 'Twitter',
-          key: componentName.CALENDAR,
+          key: componentName.TWITTER,
           icon: 'twitter',
         },
         {

@@ -23,9 +23,11 @@ import {
 import { MenuProvider } from 'react-native-popup-menu';
 import BitmapDrawingDlg from './src/dialogs/BitmapDrawingDlg';
 import BitmapEditLinkDlg from './src/dialogs/BitmapEditLinkDlg';
+import formStore from './src/store/formStore';
 
 const App: () => Node = () => {
   const scheme = useColorScheme();
+  const formData = formStore(state => state.formData);
   async function requestPermissions() {
     if (Platform.OS === 'ios') {
       GeoLocation.setRNConfiguration({
@@ -49,7 +51,11 @@ const App: () => Node = () => {
     requestPermissions();
   }, []);
   return (
-    <PaperProvider theme={scheme === 'dark' ? darkTheme : lightTheme}>
+    <PaperProvider
+      theme={
+        scheme === 'dark' ?
+          formData.useTheme === 'true' ?  darkTheme[formData.defaultTheme] : {...darkTheme[formData.defaultTheme], colors: {...darkTheme[formData.defaultTheme].colors, background: formData.style.formBackgroundColor, card: formData.style.foregroundColor}}
+          : formData.useTheme === 'true' ? lightTheme[formData.defaultTheme] : {...lightTheme[formData.defaultTheme], colors: {...lightTheme[formData.defaultTheme].colors, background: formData.style.formBackgroundColor, card: formData.style.foregroundColor}}}>
       <MenuProvider>
         <NavigationContainer>
           <Header />

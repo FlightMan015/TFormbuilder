@@ -20,7 +20,7 @@ import Map from './Map';
 import Calendar from './Calendar';
 import DataTable from './DataTable';
 import Button from './Button';
-
+import Twitter from './Twitter';
 
 const componentMap = {
   [componentName.IMAGE]: {
@@ -105,6 +105,9 @@ const componentMap = {
   // },
   [componentName.CARDSLIDER]: {
     component: CardSlider,
+  },
+  [componentName.TWITTER]: {
+    component: Twitter,
   },
 };
 

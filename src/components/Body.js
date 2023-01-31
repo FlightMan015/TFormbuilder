@@ -1,18 +1,13 @@
 import React, {useEffect} from 'react';
 import {useTheme, IconButton} from 'react-native-paper';
-import {ScrollView, StyleSheet, Dimensions, View, Text} from 'react-native';
+import {StyleSheet, Dimensions, View, Text} from 'react-native';
 import formStore from '../store/formStore';
 import MemoField from './fields';
 import MemoGroup from './groups';
 import { useNavigation } from '@react-navigation/native';
 import { useDrawerStatus } from '@react-navigation/drawer';
 import { componentName } from '../constant';
-import {
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-} from 'react-native-popup-menu';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const ScreenHeight = Dimensions.get('window').height;
 
@@ -64,7 +59,7 @@ const Body = props => {
       <ScrollView style={styles.container(colors)}>
         <View style={{paddingBottom: 50}}>
           {formData.data.map((field, index) => {
-            if (field.component !== componentName.TABSECTION && field.component !== componentName.GROUP) {
+            if (field.component !== componentName.TABSECTION && field.component !== componentName.GROUP && field.component !== componentName.GRID) {
               return (
                 <MemoField
                   key={index}

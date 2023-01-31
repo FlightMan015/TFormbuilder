@@ -35,6 +35,7 @@
     "react-native-svg": "^13.7.0",
     "react-native-table-component": "^1.2.2",
     "react-native-vector-icons": "^9.2.0",
+    "react-native-webview": "^11.26.1",
     "victory-native": "^36.6.8",
     "zustand": "^4.1.5"
   },

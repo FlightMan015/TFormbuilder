@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Dimensions, ScrollView} from 'react-native';
+
 var {width} = Dimensions.get('window');
 
 export default props => (

@@ -2,7 +2,7 @@ import React from 'react';
 import {useTheme} from 'react-native-paper';
 import {View, StyleSheet, Text, Switch} from 'react-native';
 
-const SettingSwitch = ({title, value, onChange, keyName}) => {
+const SettingSwitch = ({title, value, onChange, keyName, description}) => {
   const {colors, size} = useTheme();
 
   return (
@@ -10,7 +10,7 @@ const SettingSwitch = ({title, value, onChange, keyName}) => {
       <Text style={styles.titleLabel}>{title}</Text>
       <View style={styles.switchView}>
         <Text style={styles.description}>
-          Make sure to fill this field.
+          {description || 'Make sure to fill this field.'}
         </Text>
         <Switch
           trackColor={styles.switchTrackColor}
