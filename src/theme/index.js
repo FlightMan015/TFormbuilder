@@ -1,19 +1,34 @@
-import {darkColors, lightColors} from './colors';
-import { darkFonts, lightFonts } from './fonts';
+import {nativeDarkColors, nativeLightColors, trivergenceDarkColors, trivergenceLightColors} from './colors';
+import {nativeDarkFonts, nativeLightFonts, trivergenceDarkFonts, trivergenceLightFonts} from './fonts';
 import {size} from './size';
+import {radioButton} from '../constant';
 
 export const darkTheme = {
-  Default: {
-    colors: darkColors,
-    fonts: darkFonts,
+  Native: {
+    colors: nativeDarkColors,
+    fonts: nativeDarkFonts,
     size,
+    patternUri: '',
+  },
+  Trivergence: {
+    colors: trivergenceDarkColors,
+    fonts: trivergenceDarkFonts,
+    size,
+    patternUri: '',
   }
 };
 
 export const lightTheme = {
-  Default: {
-    colors: lightColors,
-    fonts: lightFonts,
+  Native: {
+    colors: nativeLightColors,
+    fonts: nativeLightFonts,
     size,
+    patternUri: '',
+  },
+  Trivergence: {
+    colors: trivergenceLightColors,
+    fonts: trivergenceLightFonts,
+    size,
+    patternUri: '',
   }
 };

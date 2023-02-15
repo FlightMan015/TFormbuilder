@@ -14,16 +14,14 @@ export const color = {
 };
 
 export const globalStyles = StyleSheet.create({
-  textBoxNewLine: {
+  textBoxNewLine: (colors, fonts) => ({
     height: 40,
     width: '75%',
-    borderColor: color.GREY,
-    borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     paddingLeft: 10,
-    fontFamily: 'PublicSans-Regular',
-    fontSize: 14,
-  },
+    backgroundColor: colors.card,
+    ...fonts.values,
+  }),
   addView: {
     flexDirection: 'row',
     marginHorizontal: 10,
@@ -36,14 +34,13 @@ export const globalStyles = StyleSheet.create({
     width: '23%',
     height: 40,
   },
-  buttonStyle: {
-    borderRadius: 5,
+  buttonStyle: (colors, fonts) => ({
+    borderRadius: 10,
     width: '60%',
-    borderColor: color.GREY,
-    borderWidth: 1,
-    backgroundColor: 'white',
+    backgroundColor: colors.card,
     height: 40,
-  },
+    ...fonts.values,
+  }),
   fieldheader: {
     flex: 1,
     flexDirection: 'row',

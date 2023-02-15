@@ -5,6 +5,7 @@ import { updateField } from '../../actions/formdata';
 import formStore from '../../store/formStore';
 import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
+import SettingSwitch from './common/SettingSwitch';
 
 const ImageSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();

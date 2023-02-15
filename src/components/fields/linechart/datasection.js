@@ -14,9 +14,9 @@ import { datatypes, string16 } from '../../../constant';
 import {Button, IconButton, Switch, useTheme} from 'react-native-paper';
 import ColorPalette from '../../../common/color_palette';
 
-const LineChartDataSection = ({data, onChangeData, userRole}) => {
+const LineChartDataSection = ({data, onChangeData, role}) => {
 
-  const {colors} = useTheme();
+  const {colors, fonts} = useTheme();
   const [openLine, setOpenLine] = useState(true);
   const [openLabel, setOpenLabel] = useState(true);
   const [lineStatus, setLineStatus] = useState({
@@ -48,9 +48,9 @@ const LineChartDataSection = ({data, onChangeData, userRole}) => {
     if (!tempEditStatus) {
       setColor({
         ...customColor,
-        red: data.datasets[lineStatus.lineIndex].red,
-        green: data.datasets[lineStatus.lineIndex].green,
-        blue: data.datasets[lineStatus.lineIndex].blue,
+        red: data.datasets[lineStatus.lineIndex]?.red,
+        green: data.datasets[lineStatus.lineIndex]?.green,
+        blue: data.datasets[lineStatus.lineIndex]?.blue,
       });
       setChangeLine(data.legend[lineStatus.lineIndex]);
     }
@@ -254,27 +254,23 @@ const LineChartDataSection = ({data, onChangeData, userRole}) => {
   return (
     <View style={{...styles.sectionContainer, borderColor: colors.border}}>
       <View>
-        <Text style={{...styles.text, color: colors.label}}>Series</Text>
+        <Text style={{...styles.text, color: fonts.labels.color}}>Series</Text>
         <View style={globalStyles.fieldheader}>
           <SelectDropdown
             data={data.legend}
             onSelect={onSelectLine}
             dropdownStyle={{...styles.dropdown, backgroundColor: colors.card}}
             rowTextStyle={{fontSize: 15, color: colors.text}}
-            buttonStyle={{
-              ...globalStyles.buttonStyle,
-              backgroundColor: colors.inputTextBackground,
-              borderColor: colors.inputTextBorder,
-            }}
-            buttonTextStyle={{color: colors.text, fontSize: 14, fontFamily: 'PublicSans-Regular'}}
+            buttonStyle={styles.buttonStyle(colors, fonts)}
+            buttonTextStyle={fonts.values}
             selectedRowStyle={{backgroundColor: '#bbf'}}
             selectedRowTextStyle={{color: 'white'}}
             renderDropdownIcon={
               openLine
                 ? () => (
-                    <Icon name="chevron-down" size={18} color={colors.text} />
+                    <Icon name="chevron-down" size={18} color={fonts.values.color} />
                   )
-                : () => <Icon name="chevron-up" size={18} color={colors.text} />
+                : () => <Icon name="chevron-up" size={18} color={fonts.values.color} />
             }
             dropdownIconPosition="right"
             onFocus={e => setOpenLine(false)}
@@ -286,27 +282,27 @@ const LineChartDataSection = ({data, onChangeData, userRole}) => {
           <View style={globalStyles.iconsContainer}>
             <IconButton
               icon={'playlist-plus'}
-              iconColor={colors.icon}
+              iconColor={fonts.values.color}
               size={18}
               onPress={onClickAddLine}
-              // disabled={!('editSeries' in userRole && userRole.editSeries)}
+              disabled={!(('editSeries' in role && role.editSeries) || preview)}
               style={globalStyles.iconButton}
             />
             <IconButton
               icon={'pencil'}
-              iconColor={colors.icon}
+              iconColor={fonts.values.color}
               size={18}
               onPress={onClickEditLine}
               style={globalStyles.iconButton}
             />
             <IconButton
               icon="delete-forever"
-              iconColor={colors.icon}
+              iconColor={fonts.values.color}
               size={18}
               onPress={onClickRemoveLine}
-              // disabled={
-              //   ('editSeries' in userRole && userRole.editSeries) ? (data.legend.length > 1 ? false : true) : true
-              // }
+              disabled={
+                (('editSeries' in role && role.editSeries) || preview) ? (data.legend.length > 1 ? false : true) : true
+              }
               style={globalStyles.iconButton}
             />
           </View>
@@ -315,11 +311,7 @@ const LineChartDataSection = ({data, onChangeData, userRole}) => {
           <View>
             <View style={globalStyles.addView}>
               <TextInput
-                style={{
-                  ...globalStyles.textBoxNewLine,
-                  backgroundColor: colors.inputTextBackground,
-                  borderColor: colors.inputTextBorder,
-                }}
+                style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeLine}
                 editable
@@ -349,45 +341,33 @@ const LineChartDataSection = ({data, onChangeData, userRole}) => {
             )}
             {isRGBcolor && (
               <View style={styles.colorContainer}>
-                <Text style={styles.RGBtext}>R</Text>
+                <Text style={styles.RGBtext(fonts)}>R</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
-                  value={customColor.red.toString()}
+                  style={styles.RGBvalue(colors, fonts)}
+                  value={customColor.red?.toString()}
                   onChangeText={onChangeRed}
                 />
-                <Text style={styles.RGBtext}>G</Text>
+                <Text style={styles.RGBtext(fonts)}>G</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
-                  value={customColor.green.toString()}
+                  style={styles.RGBvalue(colors, fonts)}
+                  value={customColor.green?.toString()}
                   onChangeText={onChangeGreen}
                 />
-                <Text style={styles.RGBtext}>B</Text>
+                <Text style={styles.RGBtext(fonts)}>B</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
-                  value={customColor.blue.toString()}
+                  style={styles.RGBvalue(colors, fonts)}
+                  value={customColor.blue?.toString()}
                   onChangeText={onChangeBlue}
                 />
                 <View style={styles.lineColorContainer}>
                   <View
                     style={styles.lineColor(
-                      customColor.red,
-                      customColor.green,
-                      customColor.blue,
+                      customColor.red || 0,
+                      customColor.green || 0,
+                      customColor.blue || 0,
                     )}
                   />
                 </View>
@@ -409,11 +389,7 @@ const LineChartDataSection = ({data, onChangeData, userRole}) => {
           <View>
             <View style={globalStyles.addView}>
               <TextInput
-                style={{
-                  ...globalStyles.textBoxNewLine,
-                  backgroundColor: colors.inputTextBackground,
-                  borderColor: colors.inputTextBorder,
-                }}
+                style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeNewLine}
                 editable
@@ -442,36 +418,24 @@ const LineChartDataSection = ({data, onChangeData, userRole}) => {
             )}
             {isRGBcolor && (
               <View style={styles.colorContainer}>
-                <Text style={styles.RGBtext}>R</Text>
+                <Text style={styles.RGBtext(fonts)}>R</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.red.toString()}
                   onChangeText={onChangeRed}
                 />
-                <Text style={styles.RGBtext}>G</Text>
+                <Text style={styles.RGBtext(fonts)}>G</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.green.toString()}
                   onChangeText={onChangeGreen}
                 />
-                <Text style={styles.RGBtext}>B</Text>
+                <Text style={styles.RGBtext(fonts)}>B</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.blue.toString()}
                   onChangeText={onChangeBlue}
                 />
@@ -500,27 +464,23 @@ const LineChartDataSection = ({data, onChangeData, userRole}) => {
         )}
       </View>
       <View>
-        <Text style={{...styles.text, color: colors.label}}>X Value</Text>
+        <Text style={{...styles.text, color: fonts.labels.color}}>X Value</Text>
         <View style={globalStyles.fieldheader}>
           <SelectDropdown
             data={data.labels}
             onSelect={onSelectLabel}
             dropdownStyle={{...styles.dropdown, backgroundColor: colors.card}}
             rowTextStyle={{fontSize: 14, color: colors.text}}
-            buttonStyle={{
-              ...globalStyles.buttonStyle,
-              backgroundColor: colors.inputTextBackground,
-              borderColor: colors.inputTextBorder,
-            }}
-            buttonTextStyle={{color: colors.text, fontSize: 14, fontFamily: 'PublicSans-Regular'}}
+            buttonStyle={styles.buttonStyle(colors, fonts)}
+            buttonTextStyle={fonts.values}
             selectedRowStyle={{backgroundColor: colors.card}}
             selectedRowTextStyle={{color: colors.text}}
             renderDropdownIcon={
               openLabel
                 ? () => (
-                    <Icon name="chevron-down" size={18} color={colors.text} />
+                    <Icon name="chevron-down" size={18} color={fonts.values.color} />
                   )
-                : () => <Icon name="chevron-up" size={18} color={colors.text} />
+                : () => <Icon name="chevron-up" size={18} color={fonts.values.color} />
             }
             dropdownIconPosition="right"
             onFocus={e => setOpenLabel(false)}
@@ -532,27 +492,27 @@ const LineChartDataSection = ({data, onChangeData, userRole}) => {
           <View style={globalStyles.iconsContainer}>
             <IconButton
               icon={'playlist-plus'}
-              iconColor={colors.icon}
+              iconColor={fonts.values.color}
               size={18}
               onPress={onClickAddLabel}
-              // disabled={!('editAxes' in userRole && userRole.editAxes)}
+              disabled={!(('editAxes' in role && role.editAxes) || preview)}
               style={globalStyles.iconButton}
             />
             <IconButton
               icon={'pencil'}
-              iconColor={colors.icon}
+              iconColor={fonts.values.color}
               size={18}
               onPress={onClickEditLabel}
               style={globalStyles.iconButton}
             />
             <IconButton
               icon="delete-forever"
-              iconColor={colors.icon}
+              iconColor={fonts.values.color}
               size={18}
               onPress={onClickRemoveLabel}
-              // disabled={
-              //   ('editAxes' in userRole && userRole.editAxes) ? (data.labels.length > 1 ? false : true) : true
-              // }
+              disabled={
+                (('editAxes' in role && role.editAxes) || preview) ? (data.labels.length > 1 ? false : true) : true
+              }
               style={globalStyles.iconButton}
             />
           </View>
@@ -560,9 +520,7 @@ const LineChartDataSection = ({data, onChangeData, userRole}) => {
         {labelStatus.editLabel && (
           <TextInput
             style={{
-              ...styles.textBox,
-              backgroundColor: colors.inputTextBackground,
-              borderColor: colors.inputTextBorder,
+              ...styles.textBox(colors, fonts)
             }}
             underlineColorAndroid="transparent"
             onChangeText={onChangeLabel}
@@ -575,11 +533,7 @@ const LineChartDataSection = ({data, onChangeData, userRole}) => {
         {labelStatus.addLabel && (
           <View style={globalStyles.addView}>
             <TextInput
-              style={{
-                ...globalStyles.textBoxNewLine,
-                backgroundColor: colors.inputTextBackground,
-                borderColor: colors.inputTextBorder,
-              }}
+              style={globalStyles.textBoxNewLine(colors, fonts)}
               underlineColorAndroid="transparent"
               onChangeText={onChangeNewLabel}
               editable
@@ -598,23 +552,21 @@ const LineChartDataSection = ({data, onChangeData, userRole}) => {
         )}
       </View>
       <View>
-        <Text style={{...styles.text, color: colors.label}}>Y Value</Text>
+        <Text style={{...styles.text, color: fonts.labels.color}}>Y Value</Text>
         <View>
           <TextInput
             keyboardType="numeric"
             style={{
-              ...styles.textBox,
-              backgroundColor: colors.inputTextBackground,
-              borderColor: colors.inputTextBorder,
+              ...styles.textBox(colors, fonts),
             }}
             underlineColorAndroid="transparent"
             onChangeText={onChangeY}
             editable
             placeholder="Please input Y value"
             value={
-              data.datasets[lineStatus.lineIndex].data[
+              data.datasets[lineStatus.lineIndex]?.data[
                 labelStatus.labelIndex
-              ] !== null
+              ]
                 ? data.datasets[lineStatus.lineIndex].data[
                     labelStatus.labelIndex
                   ].toString()
@@ -623,22 +575,6 @@ const LineChartDataSection = ({data, onChangeData, userRole}) => {
             // showSoftInputOnFocus={false}
           />
         </View>
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          onPress={() => onChangeData('changeField')}
-          color={'#FFFFFF'}
-          style={{
-            ...styles.saveBtn,
-            backgroundColor: colors.colorButton,
-            }}>Save</Button>
-        <Button
-          onPress={() => onChangeData('cancel')}
-          color={'#FFFFFF'}
-          style={{
-            ...styles.saveBtn,
-            backgroundColor: colors.colorButton,
-            }}>Cancel</Button>
       </View>
     </View>
   );
@@ -665,18 +601,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: 'space-around',
   },
-  RGBtext: {
+  RGBtext: fonts => ({
     width: '11%',
     textAlign: 'center',
     textAlignVertical: 'center',
-  },
-  RGBvalue: {
+    color: fonts.labels.color,
+    fontFamily: fonts.labels.fontFamily,
+  }),
+  RGBvalue: (colors, fonts) => ({
     width: '20%',
     height: 40,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: 'grey',
-  },
+    borderRadius: 10,
+    backgroundColor: colors.card,
+    ...fonts.values,
+  }),
   lineColorContainer: {
     width: 40,
     height: 40,
@@ -712,16 +650,22 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlignVertical: 'center',
   },
-  textBox: {
+  textBox: (colors, fonts) => ({
     height: 40,
-    borderColor: 'grey',
-    borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     marginHorizontal: 10,
     paddingLeft: 10,
     marginBottom: 10,
-    fontSize: 14,
-  },
+    backgroundColor: colors.card,
+    ...fonts.values,
+  }),
+  buttonStyle: (colors, fonts) => ({
+    borderRadius: 10,
+    width: '60%',
+    backgroundColor: colors.card,
+    height: 40,
+    ...fonts.values,
+  }),
 });
 
 LineChartDataSection.propTypes = {

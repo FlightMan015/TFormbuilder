@@ -1,5 +1,4 @@
 import React from 'react';
-import {useTheme} from 'react-native-paper';
 import SettingHeader from './common/SettingHeader';
 import { updateField } from '../../actions/formdata';
 import formStore from '../../store/formStore';
@@ -7,8 +6,7 @@ import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import SettingSwitch from './common/SettingSwitch';
 
-const RadarChartSetting = ({element, index, onClick}) => {
-  const {colors, size} = useTheme();
+const RadarChartSetting = ({element, index}) => {
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
 

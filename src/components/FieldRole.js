@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useMemo} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {DataTable, Button, useTheme, Checkbox, IconButton} from 'react-native-paper';
-import {updateField} from '../../actions/formdata';
+import {DataTable, useTheme, Checkbox, IconButton} from 'react-native-paper';
+import { updateField } from '../actions/formdata';
 import formStore from '../store/formStore';
 
 const roleTypes = {
@@ -15,29 +15,25 @@ const roleTypes = {
 };
 
 const FieldRole = () => {
-  const [changedRoles, setChangedRoles] = useState([]);
-  const element = formStore(state => state.selectedField);
-
-  useEffect(() => {
-    setChangedRoles(element.role);
-  }, []);
-
   const {colors} = useTheme();
+  const formData = formStore(state => state.formData);
+  const setFormData = formStore(state => state.setFormData);
+  const element = formStore(state => state.selectedField);
+  const setOpenSetting = formStore(state => state.setOpenSetting);
+  const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
 
   const onChangeRole = (i, type) => {
-    const tempRoles = JSON.parse(JSON.stringify(changedRoles));
+    const tempRoles = JSON.parse(JSON.stringify(element.role));
     const changedItem = tempRoles[i];
     tempRoles[i] = {
       ...changedItem,
       [type]: !changedItem[type],
     };
-    setChangedRoles(tempRoles);
+    const updatedElement = {...element, role: tempRoles};
+    setFormData({...formData, data: updateField(formData, selectedFieldIndex, updatedElement)})
   };
 
-  const saveRole = () => {
-  };
-
-  return (
+  return useMemo(() => (
     <View>
       <View style={styles.menuHeader}>
         <Text style={styles.menuTitle}>{element.meta.title + ' Roles'}</Text>
@@ -104,7 +100,7 @@ const FieldRole = () => {
           )}
         </DataTable.Header>
 
-        {changedRoles.map((e, i) => {
+        {element?.role?.map((e, i) => {
           return (
             <DataTable.Row key={i}  style={{borderBottomColor: '#FFFFFF'}}>
               <DataTable.Cell>
@@ -185,7 +181,7 @@ const FieldRole = () => {
         })}
       </DataTable>
     </View>
-  );
+  ), [JSON.stringify(element)]);
 }
 
 const styles = StyleSheet.create({
@@ -229,4 +225,4 @@ FieldRole.propTypes = {
   // element: PropTypes.object.isRequired,
 };
 
-export default React.memo(FieldRole);
+export default FieldRole;

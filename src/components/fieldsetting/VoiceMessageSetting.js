@@ -7,7 +7,8 @@ import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import SettingSwitch from './common/SettingSwitch';
 
-const LineChartSetting = ({element, index}) => {
+const VoiceMessageSetting = ({element, index, onClick}) => {
+  const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
 
@@ -25,7 +26,7 @@ const LineChartSetting = ({element, index}) => {
 
   return (
     <>
-      <SettingHeader title={'Line Chart Settings'} />
+      <SettingHeader title={'Voice Message Settings'} />
       <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
       <SettingSwitch
         title={'Hide label'}
@@ -39,4 +40,4 @@ const LineChartSetting = ({element, index}) => {
   );
 };
 
-export default LineChartSetting;
+export default VoiceMessageSetting;

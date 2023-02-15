@@ -11,13 +11,13 @@ const Section = ({
   preview,
   onSelect,
 }) => {
-  const {colors} = useTheme();
+  const {colors, fonts} = useTheme();
   const setIndexToAdd = formStore(state => state.setIndexToAdd);
   const setOpenMenu = formStore(state => state.setOpenMenu);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
   return (
     <View style={styles.container}>
-      <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'Section'}</Text>
+      <Text style={styles.carouselTitle(fonts)}>{element.meta.title || 'Section'}</Text>
       <View style={styles.tabContent(colors)}>
         {element.meta.childs.map((child, childindex) => {
           return (
@@ -34,7 +34,7 @@ const Section = ({
             />
           );
         })}
-        {!preview && (
+        {(!preview || !role.edit) && (
           <View style={styles.renderContainer}>
             <IconButton
               icon="plus"
@@ -57,10 +57,10 @@ const Section = ({
 };
 
 const styles = StyleSheet.create({
-  carouselTitle: colors => ({
+  carouselTitle: fonts => ({
     fontSize: 16,
     padding: 5,
-    color: colors.text,
+    ...fonts.labels,
   }),
   container: {
     padding: 5,
@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   tabContent: colors => ({
-    backgroundColor: colors.card,
     padding: 5,
   }),
 });

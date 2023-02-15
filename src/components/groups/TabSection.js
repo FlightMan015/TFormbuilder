@@ -4,6 +4,7 @@ import MemoField from '../fields';
 import DynamicTabView from '../../common/dynamic_tab_view/DynamicTabView';
 import {IconButton, useTheme} from 'react-native-paper';
 import formStore from '../../store/formStore';
+import { RollInLeft } from 'react-native-reanimated';
 
 const TabSection = ({
   element,
@@ -12,13 +13,13 @@ const TabSection = ({
   preview,
   onSelect,
 }) => {
-  const {colors} = useTheme();
+  const {colors, fonts} = useTheme();
   const setIndexToAdd = formStore(state => state.setIndexToAdd);
   const setOpenMenu = formStore(state => state.setOpenMenu);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
   return (
     <View style={styles.container}>
-      <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'Tab Section'}</Text>
+      <Text style={styles.carouselTitle(fonts)}>{element.meta.title || 'Tab Section'}</Text>
       <DynamicTabView
         data={element.meta.childs}
         renderTab={(item, tabIndex) => {
@@ -40,7 +41,7 @@ const TabSection = ({
                   />
                 );
               })}
-              {!preview && (
+              {(!preview || !role.edit) && (
                 <View style={styles.renderContainer}>
                   <IconButton
                     icon="plus"
@@ -75,10 +76,10 @@ const TabSection = ({
 };
 
 const styles = StyleSheet.create({
-  carouselTitle: colors => ({
+  carouselTitle: fonts => ({
     fontSize: 16,
     padding: 5,
-    color: colors.text,
+    ...fonts.labels,
   }),
   container: {
     padding: 5,
@@ -99,7 +100,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   tabContent: colors => ({
-    backgroundColor: colors.card,
     padding: 5,
   }),
 });

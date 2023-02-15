@@ -83,9 +83,12 @@ const FontSetting = ({label, fontType, fontSize, fontColor, onChange}) => {
 			<Text style={styles.titleLabel1}>Font Size</Text>
 			<TextInput
 				style={styles.title}
-				value={fontSize || '14'}
+				value={fontSize.toString() || '14'}
+        keyboardType='numeric'
 				onChangeText={newText => {
-					onChange('fontSize', newText);
+          if (newText) {
+            onChange('fontSize', parseInt(newText, 10));
+          }
 				}}
 			/>
 			<Text style={styles.titleLabel1}>Font Color</Text>

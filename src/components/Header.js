@@ -11,85 +11,78 @@ import {
 } from 'react-native-popup-menu';
 import { menuItems } from '../constant';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import PatternBackgroundView from '../common/PatternBackgroundView';
+import { radioButton } from '../constant';
 
 const Header = props => {
-  const {formName, preview, onClick} = props;
   const {colors, size, fonts} = useTheme();
-  // const setIndexToAdd = formStore(state => state.setIndexToAdd);
-  // const openMenu = formStore(state => state.openMenu);
-  // const setOpenMenu = formStore(state => state.setOpenMenu);
   const setSettingType = formStore(state => state.setSettingType);
   const setOpenSetting = formStore(state => state.setOpenSetting);
   const formData = formStore(state => state.formData);
+  const setPreview = formStore(state => state.setPreview);
 
   return (
-    <View>
-      
-      <View style={{height: Platform.OS === 'ios' ? 25 : 0, backgroundColor: '#FFFFFF'}}></View>
-      <View style={styles.titleBar(colors)}>
-        <View style={styles.subView}>
-          {/* <IconButton
-            icon="plus"
-            size={size.s22}
-            iconColor={colors.card}
-            style={styles.addFieldButton(colors)}
-            onPress={() => {
-              setIndexToAdd({});
-              setOpenMenu(!openMenu);
-            }}
-          /> */}
-          {/* <IconButton
-            icon="menu"
-            size={size.s20}
-            iconColor={colors.text}
-            onPress={() => {
-              onClick('menu');
-            }}
-          /> */}
-          <Menu>
-            <MenuTrigger>
-              <IconButton
-                icon="menu"
-                size={size.s20}
-                iconColor={colors.text}
-              />
-            </MenuTrigger>
-            <MenuOptions>
-              {menuItems.map((item, index) => {
-                return (
-                  <MenuOption key={index} style={{padding: 0}} onSelect={() => {}}>
-                    <View
-                      key={index}
-                      style={styles.fieldListItem}>
-                      <View style={styles.fieldIcon}>
-                        <Icon name={item.icon} size={18} color={'white'} />
+    <View style={{height: Platform.OS === 'ios' ? 85 : 60}}>
+      <View style={{flex: 1}}>
+        <PatternBackgroundView imageWidth={20} imageHeight={20} imageUri={formData.lightStyle.backgroundPatternImage} backgroundColor={colors.background} viewHeight={Platform.OS === 'ios' ? 85 : 60}/>
+      </View>
+      <View style={{position: 'absolute', width: '100%', height: '100%'}}>
+        <View style={{height: Platform.OS === 'ios' ? 25 : 0}}></View>
+        <View style={styles.titleBar(colors)}>
+          <View style={styles.subView}>
+            <Menu>
+              <MenuTrigger>
+                <IconButton
+                  icon="menu"
+                  size={size.s20}
+                  iconColor={fonts.headings.color}
+                />
+              </MenuTrigger>
+              <MenuOptions>
+                {menuItems.map((item, index) => {
+                  return (
+                    <MenuOption key={index} style={{padding: 0}} onSelect={() => {}}>
+                      <View
+                        key={index}
+                        style={styles.fieldListItem}>
+                        <View style={styles.fieldIcon}>
+                          <Icon name={item.icon} size={18} color={'white'} />
+                        </View>
+                        <View style={styles.fieldText}>
+                          <Text style={styles.fieldNameText}>{item.name}</Text>
+                        </View>
                       </View>
-                      <View style={styles.fieldText}>
-                        <Text style={styles.fieldNameText}>{item.name}</Text>
-                      </View>
-                    </View>
-                  </MenuOption>
-                );
-              })}
-            </MenuOptions>
-          </Menu>
-          <Text style={styles.title(fonts)}>{formData.title}</Text>
-        </View>
-        <View style={styles.subView}>
-          <IconButton
-            icon="cog-outline"
-            size={size.s20}
-            iconColor={colors.text}
-            onPress={() => {
-              setSettingType('formSetting');
-              setOpenSetting(true);
-            }}
-          />
-          <Avatar.Image size={40} style={{marginHorizontal: 5}} source={formData.logo ? {uri: formData.logo} : require('../assets/icon_images/user_avatar.png')} />
+                    </MenuOption>
+                  );
+                })}
+              </MenuOptions>
+            </Menu>
+            <Text style={styles.title(fonts)}>{formData.title}</Text>
+          </View>
+          <View style={styles.subView}>
+            <IconButton
+              icon="eye-outline"
+              size={size.s20}
+              iconColor={fonts.headings.color}
+              onPress={() => {
+                setPreview(true);
+              }}
+            />
+            <IconButton
+              icon="cog-outline"
+              size={size.s20}
+              iconColor={fonts.headings.color}
+              onPress={() => {
+                setSettingType('formSetting');
+                setOpenSetting(true);
+              }}
+            />
+            <Avatar.Image size={40} style={{marginHorizontal: 5}} source={formData.logo ? {uri: formData.logo} : require('../assets/icon_images/user_avatar.png')} />
+          </View>
         </View>
       </View>
     </View>
+    
   );
 };
 
@@ -101,7 +94,6 @@ const styles = StyleSheet.create({
   titleBar: colors => ({
     width: '100%',
     height: 60,
-    backgroundColor: colors.background,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

@@ -1,23 +1,23 @@
-import React from 'react';
-import {useTheme} from 'react-native-paper';
+import React, { useMemo } from 'react';
 import {StyleSheet} from 'react-native';
 import {getSettingComponent} from './settingComponentMap';
 import formStore from '../../store/formStore';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const FieldSetting = props => {
-  const {colors, size} = useTheme();
+const FieldSetting = () => {
   const index = formStore(state => state.selectedFieldIndex);
   const element = formStore(state => state.selectedField);
-  if (element) {
-    const FieldSettingComponent = getSettingComponent(element.component);
 
-    return (
-      <ScrollView style={styles.container}>
-        <FieldSettingComponent element={element} index={index} />
-      </ScrollView>
-    );
-  }
+  return useMemo(() => {
+    if (element) {
+      const FieldSettingComponent = getSettingComponent(element.component);
+      return (
+        <ScrollView style={styles.container}>
+          <FieldSettingComponent element={element} index={index} />
+        </ScrollView>
+      )
+    }
+  }, [JSON.stringify(element), JSON.stringify(index)]);
 };
 
 const styles = StyleSheet.create({

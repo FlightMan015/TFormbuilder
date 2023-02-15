@@ -1,63 +1,64 @@
-import React, {useState, useMemo} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {View, StyleSheet, TextInput, Alert, Text} from 'react-native';
+import {View, StyleSheet, TextInput, Alert} from 'react-native';
 import {useTheme} from 'react-native-paper';
-import { useEffect } from 'react';
 import formStore from '../../store/formStore';
 import FieldLabel from '../../common/FieldLabel';
 
 const InputText = props => {
-  const {element, value, onChangeValue, userRole} = props;
+  const {element} = props;
   const {colors, fonts} = useTheme();
-  const [inputValue, setInputValue] = useState('');
-  const renderMode = formStore(state => state.renderMode);
-
-  useEffect(() => {
-    setInputValue(value);
-  }, [value]);
-
+  const preview = formStore(state => state.preview);
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
+  console.log(formValue[element.field_name])
   return (
     <View style={styles.container}>
-      <FieldLabel label={element.meta.title || 'TextInput'} visible={!element.meta.hide_title} />
-      <TextInput
-        style={{
-          ...styles.textBox(parseInt(element.meta.numberOfLines, 10) > 1, parseInt(element.meta.numberOfLines, 10)),
-          backgroundColor: colors.inputTextBackground,
-          borderColor: colors.border,
-          ...fonts.values,
-        }}
-        value={inputValue}
-        underlineColorAndroid="transparent"
-        onChangeText={e => {
-          if (element.event.onChangeText) {
-            Alert.alert('Rule Action', `Fired onChangeText action. rule - ${element.event.onChangeText}. newText - ${e}`);
-          }
-          setInputValue(e);
-          if (onChangeValue) {
-            onChangeValue({[element.field_name]: e});
-          }
-        }}
-        editable={renderMode}
-        placeholder={element.meta.placeholder || ''}
-        placeholderTextColor={colors.placeholder}
-        multiline={parseInt(element.meta.numberOfLines, 10) > 1 ? true : false}
-        numberOfLines={parseInt(element.meta.numberOfLines, 10)}
-        onSubmitEditing={() => {
-          if (element.event.onSubmitEditing) {
-            Alert.alert('Rule Action', `Fired onSubmitEditing action. rule - ${element.event.onSubmitEditing}. newText - ${inputValue}`);
-          }
-        }}
-        onBlur={() => {
-          if (element.event.onBlur) {
-            Alert.alert('Rule Action', `Fired onBlur action. rule - ${element.event.onBlur}. newText - ${inputValue}`);
-          }
-        }}
-        onFocus={() => {
-          if (element.event.onFocus) {
-            Alert.alert('Rule Action', `Fired onFocus action. rule - ${element.event.onFocus}. oldText - ${inputValue}`);
-          }
-        }}
-      />
+      {
+        role.view && (
+          <>
+            <FieldLabel label={element.meta.title || 'TextInput'} visible={!element.meta.hide_title} />
+            <TextInput
+              style={{
+                ...styles.textBox,
+                backgroundColor: colors.card,
+                borderColor: colors.card,
+                ...fonts.values,
+              }}
+              value={formValue[element.field_name] || ''}
+              underlineColorAndroid="transparent"
+              onChangeText={e => {
+                if (element.event.onChangeText) {
+                  Alert.alert('Rule Action', `Fired onChangeText action. rule - ${element.event.onChangeText}. newText - ${e}`);
+                }
+                setFormValue({...formValue, [element.field_name]:e})
+              }}
+              editable={preview || role.edit}
+              placeholder={element.meta.placeholder || ''}
+              placeholderTextColor={colors.placeholder}
+              multiline={element.meta.multiline}
+              numberOfLines={element.meta.multiline ? 2 : 1}
+              onSubmitEditing={() => {
+                if (element.event.onSubmitEditing) {
+                  Alert.alert('Rule Action', `Fired onSubmitEditing action. rule - ${element.event.onSubmitEditing}. newText - ${formValue[element.field_name]}`);
+                }
+              }}
+              onBlur={() => {
+                if (element.event.onBlur) {
+                  Alert.alert('Rule Action', `Fired onBlur action. rule - ${element.event.onBlur}. newText - ${formValue[element.field_name]}`);
+                }
+              }}
+              onFocus={() => {
+                if (element.event.onFocus) {
+                  Alert.alert('Rule Action', `Fired onFocus action. rule - ${element.event.onFocus}. oldText - ${formValue[element.field_name]}`);
+                }
+              }}
+            />
+          </>
+        )
+      }
     </View>
   );
 };
@@ -66,13 +67,13 @@ const styles = StyleSheet.create({
   container: {
     padding: 5,
   },
-  textBox: (multiline, numberOfLines) => ({
-    height: !multiline ? 35 : 35 * numberOfLines,
+  textBox: {
+    paddingVertical: 3,
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 0,
-    paddingLeft: 5,
-  }),
+    paddingLeft: 10,
+  },
 });
 
 InputText.propTypes = {

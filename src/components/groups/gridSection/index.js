@@ -10,7 +10,7 @@ import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import FieldLabel from '../../../common/FieldLabel';
 
 const Grid = props => {
-  const {element, contents, editRole, index, preview, onChangeValue, userRole, onSelect, selected} = props;
+  const {element, index, onSelect, selected} = props;
   const onClickUpdateField = formStore(state => state.updateFormData);
   const onClickDeleteField = formStore(state => state.deleteFormData);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);

@@ -14,7 +14,7 @@ import {Button, IconButton, Switch, useTheme} from 'react-native-paper';
 import ColorPalette from '../../../common/color_palette';
 
 const PieChartDataSection = ({data, onChangeData}) => {
-  const {colors} = useTheme();
+  const {colors, fonts} = useTheme();
 
   const [openLabel, setOpenLabel] = useState(true);
   const [labelStatus, setLabelStatus] = useState({
@@ -46,10 +46,10 @@ const PieChartDataSection = ({data, onChangeData}) => {
   };
 
   const getLineColor = index => {
-    const colorString = data[index].color;
-    const redString = colorString.substring(1, 3);
-    const greenString = colorString.substring(3, 5);
-    const blueString = colorString.substring(5, 7);
+    const colorString = data[index]?.color;
+    const redString = colorString?.substring(1, 3);
+    const greenString = colorString?.substring(3, 5);
+    const blueString = colorString?.substring(5, 7);
     const redInt =
       parseInt(redString, 16) > 255 ? 255 : parseInt(redString, 16);
     const greenInt =
@@ -225,56 +225,52 @@ const PieChartDataSection = ({data, onChangeData}) => {
   return (
     <View style={{...styles.sectionContainer, borderColor: colors.border}}>
       <View>
-        <Text style={{...styles.text, color: colors.label}}>Label</Text>
-        {labels.length > 0 && (
+        <Text style={{...styles.text, color: fonts.labels.color}}>Label</Text>
+        {/* {labels.length > 0 && ( */}
           <View style={globalStyles.fieldheader}>
             <SelectDropdown
               data={labels}
               onSelect={onSelectLabel}
               dropdownStyle={{...styles.dropdown, backgroundColor: colors.inputTextBackground}}
               rowTextStyle={{fontSize: 14, color: colors.text, fontFamily: 'PublicSans-Regular'}}
-              buttonStyle={{
-                ...globalStyles.buttonStyle,
-                backgroundColor: colors.inputTextBackground,
-                borderColor: colors.inputTextBorder,
-              }}
-              buttonTextStyle={{color: colors.text, fontSize: 14, fontFamily: 'PublicSans-Regular'}}
+              buttonStyle={styles.buttonStyle(colors, fonts)}
+              buttonTextStyle={fonts.values}
               selectedRowStyle={{backgroundColor: colors.inputTextBackground}}
               selectedRowTextStyle={{color: colors.text, fontFamily: 'PublicSans-Regular'}}
               renderDropdownIcon={
                 openLabel
                   ? () => (
-                      <Icon name="chevron-down" size={18} color={colors.text} />
+                      <Icon name="chevron-down" size={18} color={fonts.values.color} />
                     )
                   : () => (
-                      <Icon name="chevron-up" size={18} color={colors.text} />
+                      <Icon name="chevron-up" size={18} color={fonts.values.color} />
                     )
               }
               dropdownIconPosition="right"
               onFocus={e => setOpenLabel(false)}
               onBlur={e => setOpenLabel(true)}
-              defaultButtonText="Select axis"
+              defaultButtonText="Select part"
               defaultValueByIndex={labelStatus.labelIndex}
               // search={true}
             />
             <View style={globalStyles.iconsContainer}>
               <IconButton
                 icon={'playlist-plus'}
-                iconColor={colors.icon}
+                iconColor={fonts.values.color}
                 size={18}
                 onPress={onClickAddLabel}
                 style={globalStyles.iconButton}
               />
               <IconButton
                 icon={'pencil'}
-                iconColor={colors.icon}
+                iconColor={fonts.values.color}
                 size={18}
                 onPress={onClickEditLabel}
                 style={globalStyles.iconButton}
               />
               <IconButton
                 icon="delete-forever"
-                iconColor={colors.icon}
+                iconColor={fonts.values.color}
                 size={18}
                 onPress={onClickRemoveLabel}
                 disabled={data.length > 1 ? false : true}
@@ -282,16 +278,12 @@ const PieChartDataSection = ({data, onChangeData}) => {
               />
             </View>
           </View>
-        )}
+        {/* )} */}
         {labelStatus.editLabel && (
           <View>
             <View style={globalStyles.addView}>
               <TextInput
-                style={{
-                  ...globalStyles.textBoxNewLine,
-                  backgroundColor: colors.inputTextBackground,
-                  borderColor: colors.inputTextBorder,
-                }}
+                style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeLabel}
                 editable
@@ -380,11 +372,7 @@ const PieChartDataSection = ({data, onChangeData}) => {
           <View>
             <View style={globalStyles.addView}>
               <TextInput
-                style={{
-                  ...globalStyles.textBoxNewLine,
-                  backgroundColor: colors.inputTextBackground,
-                  borderColor: colors.inputTextBorder,
-                }}
+                style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeNewLabel}
                 editable
@@ -470,46 +458,22 @@ const PieChartDataSection = ({data, onChangeData}) => {
         )}
       </View>
       <View>
-        <Text style={{...styles.text, color: colors.label}}>Value</Text>
+        <Text style={{...styles.text, color: fonts.labels.color}}>Value</Text>
         <View>
           <TextInput
             keyboardType="numeric"
-            style={{
-              ...styles.textBox,
-              backgroundColor: colors.inputTextBackground,
-              borderColor: colors.inputTextBorder
-            }}
+            style={styles.textBox(colors, fonts)}
             underlineColorAndroid="transparent"
             onChangeText={onChangeY}
             editable
             placeholder="Please input value"
             value={
-              data[labelStatus.labelIndex].population !== null
+              data[labelStatus.labelIndex]?.population
                 ? data[labelStatus.labelIndex].population.toString()
                 : ''
             }
           />
         </View>
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          onPress={() => onChangeData('changeField')}
-          color={color.WHITE}
-          style={{
-            ...styles.saveBtn,
-            backgroundColor: colors.colorButton,
-            }}>
-          Save
-        </Button>
-        <Button
-          onPress={() => onChangeData('cancel')}
-          color={color.WHITE}
-          style={{
-            ...styles.saveBtn,
-            backgroundColor: colors.colorButton,
-            }}>
-          Cancel
-        </Button>
       </View>
     </View>
   );
@@ -572,15 +536,22 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlignVertical: 'center',
   },
-  textBox: {
+  textBox: (colors, fonts) => ({
     height: 40,
-    borderColor: color.GREY,
-    borderWidth: 1,
-    borderRadius: 3,
+    borderRadius: 10,
     marginHorizontal: 10,
     paddingLeft: 10,
     marginBottom: 10,
-  },
+    backgroundColor: colors.card,
+    ...fonts.values,
+  }),
+  buttonStyle: (colors, fonts) => ({
+    borderRadius: 10,
+    width: '60%',
+    backgroundColor: colors.card,
+    height: 40,
+    ...fonts.values,
+  }),
   text: {
     marginLeft: 10,
     marginTop: 10,

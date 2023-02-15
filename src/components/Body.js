@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useTheme, IconButton} from 'react-native-paper';
 import {StyleSheet, Dimensions, View, Text} from 'react-native';
 import formStore from '../store/formStore';
@@ -6,10 +6,10 @@ import MemoField from './fields';
 import MemoGroup from './groups';
 import { useNavigation } from '@react-navigation/native';
 import { useDrawerStatus } from '@react-navigation/drawer';
-import { componentName } from '../constant';
-import { ScrollView } from 'react-native-gesture-handler';
-
-const ScreenHeight = Dimensions.get('window').height;
+import { componentName, radioButton } from '../constant';
+import { ScrollView, FlatList } from 'react-native-gesture-handler';
+import DraggableFlatList from 'react-native-draggable-flatlist';
+import PatternBackgroundView from '../common/PatternBackgroundView';
 
 const Body = props => {
   const {formName, preview, onClick} = props;
@@ -56,44 +56,50 @@ const Body = props => {
 
   return (
     <View style={{flex: 1}}>
-      <ScrollView style={styles.container(colors)}>
-        <View style={{paddingBottom: 50}}>
-          {formData.data.map((field, index) => {
-            if (field.component !== componentName.TABSECTION && field.component !== componentName.GROUP && field.component !== componentName.GRID) {
-              return (
-                <MemoField
-                  key={index}
-                  onSelect={() => onSelect({childIndex: index})}
-                  element={field}
-                  index={{childIndex: index}}
-                  selected={!('groupIndex' in selectedFieldIndex) && 'childIndex' in selectedFieldIndex && selectedFieldIndex.childIndex === index}
-                  isLastField={(index + 1) === formData.data.length} />
-              );
-            } else {
-              return (
-                <MemoGroup
-                  key={index}
-                  onSelect={e => onSelect(e)}
-                  element={field}
-                  index={{groupIndex: index}}
-                  selected={'groupIndex' in selectedFieldIndex && selectedFieldIndex.groupIndex === index}
-                  isLastGroup={(index + 1) === formData.data.length} />
-              );
-            }
-          })}
-        </View>
-      </ScrollView>
-      <IconButton
-        icon="plus"
-        size={size.s30}
-        iconColor={colors.card}
-        style={styles.addFieldButton(colors)}
-        onPress={() => {
-          setIndexToAdd({});
-          setOpenMenu(!openMenu);
-        }}
-      />
+      <View style={{flex: 1}}>
+        <PatternBackgroundView imageWidth={20} imageHeight={20} imageUri={formData.lightStyle.backgroundPatternImage} backgroundColor={colors.background}/>
+      </View>
+      <View style={{flex: 1, position: 'absolute', width: '100%', height: '100%'}}>
+        <ScrollView style={styles.container(colors)}>
+          <View style={{paddingBottom: 50}}>
+            {formData.data.map((field, index) => {
+              if (field.component !== componentName.TABSECTION && field.component !== componentName.GROUP && field.component !== componentName.GRID) {
+                return (
+                  <MemoField
+                    key={index}
+                    onSelect={() => onSelect({childIndex: index})}
+                    element={field}
+                    index={{childIndex: index}}
+                    selected={!('groupIndex' in selectedFieldIndex) && 'childIndex' in selectedFieldIndex && selectedFieldIndex.childIndex === index}
+                    isLastField={(index + 1) === formData.data.length} />
+                );
+              } else {
+                return (
+                  <MemoGroup
+                    key={index}
+                    onSelect={e => onSelect(e)}
+                    element={field}
+                    index={{groupIndex: index}}
+                    selected={'groupIndex' in selectedFieldIndex && selectedFieldIndex.groupIndex === index}
+                    isLastGroup={(index + 1) === formData.data.length} />
+                );
+              }
+            })}
+          </View>
+        </ScrollView>
+        <IconButton
+          icon="plus"
+          size={size.s30}
+          iconColor={colors.card}
+          style={styles.addFieldButton(colors)}
+          onPress={() => {
+            setIndexToAdd({});
+            setOpenMenu(!openMenu);
+          }}
+        />
+      </View>
     </View>
+    
   );
 };
 
@@ -101,8 +107,13 @@ const styles = StyleSheet.create({
   container: colors => ({
     flex: 1,
     paddingHorizontal: 5,
-    backgroundColor: colors.background,
     paddingBottom: 50,
+  }),
+  previewButton: colors => ({
+    backgroundColor: 'green',
+    margin: 10,
+    position: 'absolute',
+    bottom: 0,
   }),
   addFieldButton: colors => ({
     backgroundColor: colors.colorButton,

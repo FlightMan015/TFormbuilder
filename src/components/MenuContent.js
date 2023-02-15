@@ -25,7 +25,7 @@ const MenuContent = () => {
     }
   }, [status]);
 
-  return (
+  return useMemo(() => (
     <View style={styles.menuContainer}>
       <View style={styles.menuHeader}>
         <Text style={styles.menuTitle}>Form Fields</Text>
@@ -65,7 +65,7 @@ const MenuContent = () => {
         })}
       </ScrollView>
     </View>
-  );
+  ), [JSON.stringify(indexToAdd), JSON.stringify(formData)]);
 };
 
 const styles = StyleSheet.create({

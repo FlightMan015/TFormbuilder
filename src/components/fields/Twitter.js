@@ -11,7 +11,6 @@ const Twitter = props => {
     //https://twitter.com/MMKK02887216
     let tweetUrl =
       "https://publish.twitter.com/oembed?url=" + encodeURIComponent('https://twitter.com/MMKK02887216');
-    console.log('tweetUrl------------', tweetUrl);
     await fetch(tweetUrl, { method: "GET", headers: { Accepts: "application/json" } }).then(
       resp => {
         console.log('resp--------', resp);
@@ -47,7 +46,7 @@ const Twitter = props => {
   }
 
   return (     
-    <ScrollView style={{ height: 300 }}>
+    <ScrollView style={{ height: 300, width: '100%' }}>
       {renderEmbed()}
     </ScrollView>
   );
@@ -56,6 +55,9 @@ const Twitter = props => {
 const styles = StyleSheet.create({
   webviewWrap: {
     flex: 1,
+    width: 100,
+    height: 200,
+    backgroundColor: 'red',
   },
   webview: {
     flex: 1,

@@ -1,54 +1,35 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {StyleSheet, Text, View, Animated, TextInput, Image} from 'react-native';
+import {StyleSheet, Text, View, Animated, TextInput, useColorScheme} from 'react-native';
 import {Avatar, IconButton, Checkbox, useTheme} from 'react-native-paper';
-import { globalStyles } from '../theme/styles';
 import { componentName } from '../constant';
 import DraggableFlatList, {
   ScaleDecorator,
-  RenderItemParams,
 } from 'react-native-draggable-flatlist';
 import {GestureHandlerRootView, ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import formStore from '../store/formStore';
 import TextButton from '../common/TextButton';
-import { emptyImage } from '../constant';
-import DocumentPicker, {
-  types,
-} from 'react-native-document-picker';
-import { invertColor } from '../utils';
 import ColorPicker from '../common/ColorPicker';
 import FontSetting from '../common/FontSetting';
-import ResizedImage from '../common/ResizedImage';
 import SettingSwitch from './fieldsetting/common/SettingSwitch';
-import SelectDropdown from 'react-native-select-dropdown';
-
-const colorStyles = [
-  '#0A1551',
-  '#DFDFFF',
-  '#321860',
-  '#0099FF',
-  '#78BB07',
-  '#FE3945',
-  '#FB7041',
-  '#321F16',
-  '#FFFFFF',
-  '#264B67',
-  '#3C4C1E',
-  '#972D54',
-  '#11111B',
-  '#02357D',
-];
+import SettingDropdown from './fieldsetting/common/SettingDropdown';
+import SettingImage from './fieldsetting/common/SettingImage';
+import { darkTheme, lightTheme } from '../theme';
 
 const defaultThemes = [
-  'Default',
+  'Native',
+  'Trivergence',
 ];
 
 const FormSetting = () => {
+  const scheme = useColorScheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
   const roles = formStore(state => state.roles);
   const setRoles = formStore(state => state.setRoles);
   const setOpenSetting = formStore(state => state.setOpenSetting);
+  const viewMode = formStore(state => state.viewMode);
+  const setViewMode = formStore(state => state.setViewMode);
 
   const {colors} = useTheme();
   const [roleDatas, setRoleDatas] = useState(roles || []);
@@ -56,8 +37,6 @@ const FormSetting = () => {
   const opacity = new Animated.Value(1);
   const previousRoles = useRef(roles || []);
   const [selectedTab, setSelectedTab] = useState('general');
-  const [imageSelectTab, setImageSelectTab] = useState('upload');
-  const [open, setOpen] = useState(true);
 
 
   useEffect(() => {
@@ -294,8 +273,13 @@ const FormSetting = () => {
   };
 
   const onChange = (key, subkey, value) => {
-    const newStyles = {...formData.style, [key]: {...formData.style[key], [subkey]: value}};
-    setFormData({...formData, style: newStyles});
+    if (viewMode === 'light') {
+      const newStyles = {...formData.lightStyle, [key]: {...formData.lightStyle[key], [subkey]: value}};
+      setFormData({...formData, lightStyle: newStyles});
+    } else {
+      const newStyles = {...formData.darkStyle, [key]: {...formData.darkStyle[key], [subkey]: value}};
+      setFormData({...formData, darkStyle: newStyles});
+    }
   }
 
   return (
@@ -337,74 +321,15 @@ const FormSetting = () => {
               }}
             />
           </View>
-          <View style={styles.settingView}>
-            <Text style={styles.titleLabel}>Logo</Text>
-            <View style={styles.settingTab}>
-              <TextButton
-                style={{
-                  ...styles.colortab(imageSelectTab === 'upload'),
-                  borderTopLeftRadius: 7,
-                }}
-                text="Upload"
-                textStyle={styles.tabText(imageSelectTab === 'upload')}
-                onPress={() => setImageSelectTab('upload')}
-              />
-              <TextButton
-                style={{
-                  ...styles.colortab(imageSelectTab === 'url'),
-                  borderTopRightRadius: 7,
-                }}
-                text="Url"
-                textStyle={styles.tabText(imageSelectTab === 'url')}
-                onPress={() => setImageSelectTab('url')}
-              />
-            </View>
-            {
-              imageSelectTab === 'upload' && (
-                <View style={styles.settingView1}>
-                  <View style={{width: '100%', height: 170, justifyContent: 'center', backgroundColor: '#626E81', borderWidth: 1, borderColor: '#303339'}}>
-                    {formData.logo && (
-                      <ResizedImage uri={formData.logo} maxWidth={250} maxHeight={168} />
-                    )}
-                    {!formData.logo && (
-                      <Image
-                        style={{width: 100, height: 100, alignSelf: 'center'}}
-                        source={emptyImage}
-                      />
-                    )}
-                  </View>
-                  <TextButton
-                    style={styles.addCardBtn}
-                    text="Select Image"
-                    textStyle={styles.addCardText}
-                    onPress={() => {
-                      DocumentPicker.pick({
-                        type: types.images,
-                      }).then(result => {
-                        setFormData({...formData, logo: result[0].uri});
-                      }).catch({});
-                    }}
-                  />
-                </View>
-              )
-            }
-            {
-              imageSelectTab === 'url' && (
-                <View style={styles.settingView1}>
-                  <Text style={styles.titleLabel}>Image Url</Text>
-                  <TextInput
-                    style={{...styles.title, backgroundColor: '#626E81'}}
-                    value={formData.logo}
-                    placeholder='url...'
-                    onChangeText={newText => {
-                      setFormData({...formData, logo: newText});
-                    }}
-                  />
-                </View>
-              )
-            }
-          </View>
-          <View style={styles.settingView}>
+          <SettingImage
+            title={'Logo'}
+            imageUri={formData.logo}
+            keyName={'logo'}
+            onSelect={(keyname, value) => {
+              setFormData({...formData, [keyname]: value});
+            }}
+          />
+          {/* <View style={styles.settingView}>
             <Text style={styles.titleLabel}>Roles</Text>
             <GestureHandlerRootView style={styles.dragItem}>
               <DraggableFlatList
@@ -421,92 +346,96 @@ const FormSetting = () => {
                 renderItem={renderItem}
               />
             </GestureHandlerRootView>
-          </View>
+          </View> */}
         </>
       )}
       {selectedTab === 'style' && (
         <>
           <SettingSwitch
-            title={'Use Theme'}
-            value={formData.useTheme === 'true'}
-            onChange={(keyname, e) => {
-              setFormData({...formData, [keyname]: e.toString()});
+            title={'Display'}
+            value={scheme === 'dark' ? viewMode === 'light' ? true : false : viewMode === 'light' ? false : true}
+            onChange={(keyName, value) => {
+              if (scheme === 'dark') {
+                setViewMode(value ? 'light' : 'dark');
+              } else {
+                setViewMode(value ? 'dark' : 'light');
+              }
             }}
-            keyName={'useTheme'}
-            description={'Make sure to use default theme.'}
+            keyName={'darkMode'}
+            description={scheme === 'dark' ? 'Light mode' : 'Dark mode'}
           />
-          {
-            formData.useTheme === 'true' && (
-              <View style={styles.settingView}>
-                <Text style={styles.titleLabel}>Themes</Text>
-                <SelectDropdown
-                  data={defaultThemes}
-                  onSelect={e => {
-                    onChange('defaultTheme', e);
-                  }}
-                  dropdownStyle={{...styles.dropdown, backgroundColor: colors.inputTextBackground}}
-                  rowStyle={styles.rowStyle}
-                  rowTextStyle={styles.textStyle}
-                  buttonStyle={{...styles.buttonStyle, backgroundColor: colors.inputTextBackground, borderColor: colors.border}}
-                  buttonTextStyle={{...styles.textStyle, color: colors.text}}
-                  selectedRowStyle={styles.selectedRowStyle}
-                  selectedRowTextStyle={styles.selectedRowTextStyle}
-                  renderDropdownIcon={
-                    open
-                      ? () => <Icon name="chevron-down" size={18} color={colors.text} />
-                      : () => <Icon name="chevron-up" size={18} color={colors.text} />
-                  }
-                  dropdownIconPosition="right"
-                  onFocus={() => setOpen(false)}
-                  onBlur={() => setOpen(true)}
-                  defaultButtonText="Select Option"
-                  defaultValue={formData.defaultTheme}
-                />
-              </View>
-            )
-          }
-          {
-            formData.useTheme === 'false' && (
-              <>
-                <ColorPicker
-                  color={formData.style.formBackgroundColor}
-                  label={'Background'}
-                  selectColor={e => {
-                    const newStyle = {...formData.style, formBackgroundColor: e};
-                    setFormData({...formData, style: newStyle});
-                  }}
-                />
-                <ColorPicker
-                  color={formData.style.foregroundColor}
-                  label={'Foreground'} selectColor={e => {
-                    const newStyle = {...formData.style, foregroundColor: e};
-                    setFormData({...formData, style: newStyle});
-                  }}
-                />
-                <FontSetting
-                  label={'Headings'}
-                  fontColor={formData.style.headings.color}
-                  fontSize={formData.style.headings.fontSize}
-                  fontType={formData.style.headings.fortFamily}
-                  onChange={(type, e) => {onChange('headings', type, e);}}
-                />
-                <FontSetting
-                  label={'Labels'}
-                  fontColor={formData.style.labels.color}
-                  fontSize={formData.style.labels.fontSize}
-                  fontType={formData.style.labels.fortFamily}
-                  onChange={(type, e) => {onChange('labels', type, e);}}
-                />
-                <FontSetting
-                  label={'Values'}
-                  fontColor={formData.style.values.color}
-                  fontSize={formData.style.values.fontSize}
-                  fontType={formData.style.values.fortFamily}
-                  onChange={(type, e) => {onChange('values', type, e);}}
-                />
-              </>
-            )
-          }
+          <SettingDropdown
+            title={'Theme'}
+            options={defaultThemes}
+            onChange={(keyName, value) => {
+                const darkThemeStyle = {...darkTheme[value].fonts, formBackgroundColor: darkTheme[value].colors.background, foregroundColor: darkTheme[value].colors.card, backgroundPatternImage: darkTheme[value].patternUri};
+                const newDarkStyle = {...formData.darkStyle, ...darkThemeStyle};
+                const ligthThemeStyle = {...lightTheme[value].fonts, formBackgroundColor: lightTheme[value].colors.background, foregroundColor: lightTheme[value].colors.card, backgroundPatternImage: lightTheme[value].patternUri};
+                const newLightStyle = {...formData.lightStyle, ...ligthThemeStyle};
+                setFormData({...formData, [keyName]: value, darkStyle: newDarkStyle, lightStyle: newLightStyle});
+            }}
+            keyName={'theme'}
+            defaultValue={formData.theme}
+          />
+          <SettingImage
+            title={'Background Pattern'}
+            imageUri={formData.lightStyle.backgroundPatternImage}
+            keyName={'backgroundPatternImage'}
+            onSelect={(keyname, value) => {
+              console.log(value);
+              const newLightStyle = {...formData.lightStyle, [keyname]: value};
+              const newDarkStyle = {...formData.darkStyle, [keyname]: value};
+              setFormData({...formData, lightStyle: newLightStyle, darkStyle: newDarkStyle});
+            }}
+          />
+          <ColorPicker
+            color={viewMode === 'light' ? formData.lightStyle.formBackgroundColor : formData.darkStyle.formBackgroundColor}
+            label={'Background Color'}
+            selectColor={e => {
+              if (viewMode === 'light') {
+                const newStyle = {...formData.lightStyle, formBackgroundColor: e};
+                setFormData({...formData, lightStyle: newStyle});
+              }
+              if (viewMode === 'dark') {
+                const newStyle = {...formData.darkStyle, formBackgroundColor: e};
+                setFormData({...formData, darkStyle: newStyle});
+              }
+            }}
+          />
+          <ColorPicker
+            color={viewMode === 'light' ? formData.lightStyle.foregroundColor : formData.darkStyle.foregroundColor}
+            label={'Foreground'} selectColor={e => {
+              if (viewMode === 'light') {
+                const newStyle = {...formData.lightStyle, foregroundColor: e};
+                setFormData({...formData, lightStyle: newStyle});
+              }
+              if (viewMode === 'dark') {
+                const newStyle = {...formData.darkStyle, foregroundColor: e};
+                setFormData({...formData, darkStyle: newStyle});
+              }
+            }}
+          />
+          <FontSetting
+            label={'Headings'}
+            fontColor={viewMode === 'light' ? formData.lightStyle.headings.color : formData.darkStyle.headings.color}
+            fontSize={viewMode === 'light' ? formData.lightStyle.headings.fontSize : formData.darkStyle.headings.fontSize}
+            fontType={viewMode === 'light' ? formData.lightStyle.headings.fortFamily : formData.darkStyle.headings.fortFamily}
+            onChange={(type, e) => {onChange('headings', type, e);}}
+          />
+          <FontSetting
+            label={'Labels'}
+            fontColor={viewMode === 'light' ? formData.lightStyle.labels.color : formData.darkStyle.labels.color}
+            fontSize={viewMode === 'light' ? formData.lightStyle.labels.fontSize : formData.darkStyle.labels.fontSize}
+            fontType={viewMode === 'light' ? formData.lightStyle.labels.fortFamily : formData.darkStyle.labels.fortFamily}
+            onChange={(type, e) => {onChange('labels', type, e);}}
+          />
+          <FontSetting
+            label={'Values'}
+            fontColor={viewMode === 'light' ? formData.lightStyle.values.color : formData.darkStyle.values.color}
+            fontSize={viewMode === 'light' ? formData.lightStyle.values.fontSize : formData.darkStyle.values.fontSize}
+            fontType={viewMode === 'light' ? formData.lightStyle.values.fortFamily : formData.darkStyle.values.fortFamily}
+            onChange={(type, e) => {onChange('values', type, e);}}
+          />
         </>
       )}
     </ScrollView>
@@ -673,4 +602,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(FormSetting);
+export default FormSetting;

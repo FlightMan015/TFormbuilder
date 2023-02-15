@@ -20,6 +20,8 @@ import ButtonSetting from './ButtonSetting';
 import BitmapSetting from './BitmapSetting';
 import GridSectionSetting from './GridSectionSetting';
 import TwitterSetting from './TwitterSetting';
+import StripeSetting from './StripeSetting';
+import VoiceMessageSetting from './VoiceMessageSetting';
 
 const componentMap = {
   [componentName.CARDSLIDER]: {
@@ -84,6 +86,12 @@ const componentMap = {
   },
   [componentName.TWITTER]: {
     component: TwitterSetting,
+  },
+  [componentName.PAYMENT]: {
+    component: StripeSetting,
+  },
+  [componentName.VOICEMESSAGE]: {
+    component: VoiceMessageSetting,
   },
 };
 

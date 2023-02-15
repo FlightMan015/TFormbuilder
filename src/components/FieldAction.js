@@ -6,7 +6,7 @@ import TextButton from '../common/TextButton';
 import { updateField } from '../actions/formdata';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const FieldAction = props => {
+const FieldAction = () => {
   const [events, setEvents] = useState({});
   const {colors} = useTheme();
   const element = formStore(state => state.selectedField);
@@ -37,17 +37,6 @@ const FieldAction = props => {
         {
           Object.keys(events).map((e, eventIndex) => {
             return (
-              // <TouchableOpacity key={e} style={styles.eventItem} onPress={() => {}}>
-              //   <Icon name="circle-medium" size={18} iconColor={colors.text} />
-              //   <Text
-              //     style={{
-              //       color: colors.colorButton,
-              //       ...styles.eventName,
-              //     }}>
-              //     {e}
-              //   </Text>
-              //   {events[e] && <Icon name="check" size={18} color={colors.colorButton} />}
-              // </TouchableOpacity>
               <View key={eventIndex}>
                 <View style={styles.item}>
                   <TextButton

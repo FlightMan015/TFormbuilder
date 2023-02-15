@@ -28,26 +28,27 @@ import utils from './utils';
 import CustomButton from '../../../common/CustomButton';
 import Title from '../../../common/Title';
 import formStore from '../../../store/formStore';
+import FieldLabel from '../../../common/FieldLabel';
 
-const Bitmap = ({element, index, editRole}) => {
-  const {colors} = useTheme();
-  const updateFormData = formStore(state => state.updateFormData)
+const Bitmap = ({element, index}) => {
+  const {colors, fonts} = useTheme();
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const formValue = formStore(state => state.formValue);
+  console.log('123132--------', formValue[element.field_name])
+  const setFormValue = formStore(state => state.setFormValue);
   // Array of completed paths from global state
   // const completedPaths = useDrawingStore(state => state.completedPaths);
-  const completedPaths = JSON.parse(JSON.stringify(element.meta.paths));
-  const svgDatas = JSON.parse(JSON.stringify(element.meta.svgs));
+  // const completedPaths = JSON.parse(JSON.stringify(element.meta.paths));
+  const completedPaths = formValue[element.field_name]?.paths ? [...formValue[element.field_name]?.paths] : [];
+  // const svgDatas = JSON.parse(JSON.stringify(element.meta.svgs));
+  const svgDatas = formValue[element.field_name]?.svgs ? [...formValue[element.field_name]?.svgs] : [];
   const [imageData, setImageData] = useState({
-    imageUri:
-      element.meta.imageUri !== undefined && element.meta.imageUri
-        ? element.meta.imageUri
-        : '',
-    imageName:
-      element.meta.imageName !== undefined && element.meta.imageName
-        ? element.meta.imageName
-        : '',
+    imageUri: formValue[element.field_name]?.imageUri || '',
+    imageName: formValue[element.field_name]?.imageName || '',
   });
   const [visible, setVisible] = useState(false);
-  const imageScreenWidth = useRef(element.meta.imageWidth || 0);
+  const imageScreenWidth = useRef(formValue[element.field_name]?.imageWidth || 0);
   const setVisibleDrawingDlg = useDrawingStore(
     state => state.setVisibleBitmapDrawingDlg,
   );
@@ -69,13 +70,13 @@ const Bitmap = ({element, index, editRole}) => {
   const [imageSize, setImageSize] = useState({width: 0, height: 0});
 
   useEffect(() => {
-    if (element.meta.imageUri !== undefined && element.meta.imageUri) {
+    if (formValue[element.field_name]?.imageUri) {
       setImageData({
         ...imageData,
-        imageUri: element.meta.imageUri,
-        imageName: element.meta.imageName,
+        imageUri: formValue[element.field_name].imageUri,
+        imageName: formValue[element.field_name].imageName,
       });
-      Image.getSize(element.meta.imageUri, (imageWidth, imageHeight) => {
+      Image.getSize(formValue[element.field_name].imageUri, (imageWidth, imageHeight) => {
         setImageSize({
           ...imageSize,
           ...utils.handleImageSize(
@@ -87,7 +88,7 @@ const Bitmap = ({element, index, editRole}) => {
         });
       });
     }
-  }, [element]);
+  }, [JSON.stringify(formValue[element.field_name])]);
 
   const OpenURLButton = linkdata => {
     const {url, name, svg} = linkdata;
@@ -108,7 +109,7 @@ const Bitmap = ({element, index, editRole}) => {
 
     return (
       <TouchableOpacity onPress={handlePress}>
-        <View style={styles.renderItemContainer(index)}>
+        <View style={styles.renderItemContainer(colors)}>
           <View style={styles.thumbnail}>
             <Canvas style={{width: 50, height: 50}}>
               <ImageSVG
@@ -119,13 +120,13 @@ const Bitmap = ({element, index, editRole}) => {
                 height={50}
               />
             </Canvas>
-            <Text style={styles.linkName}>{name}</Text>
+            <Text style={styles.linkName(fonts)}>{name}</Text>
           </View>
           <View style={styles.itemIconsContainer}>
             <IconButton
               icon={'pencil-outline'}
-              color={colors.icon}
-              size={15}
+              iconColor={colors.colorButton}
+              size={18}
               onPress={() => {
                 setVisibleDlg({
                   ...visibleDlg,
@@ -140,8 +141,8 @@ const Bitmap = ({element, index, editRole}) => {
             />
             <IconButton
               icon={'delete-outline'}
-              color={colors.icon}
-              size={15}
+              iconColor={colors.colorButton}
+              size={18}
               onPress={() => {
                 Alert.alert(
                   'Delete link',
@@ -150,12 +151,12 @@ const Bitmap = ({element, index, editRole}) => {
                     {
                       text: 'Yes',
                       onPress: () => {
-                        const tempElement = JSON.parse(JSON.stringify(element));
-                        tempElement.meta.paths.splice(linkIndex, 1);
-                        tempElement.meta.svgs.splice(linkIndex, 1);
-                        updateFormData(index, tempElement);
+                        const tempValue = {...formValue[element.field_name]};
+                        tempValue.paths.splice(linkIndex, 1);
+                        tempValue.svgs.splice(linkIndex, 1);
+                        setFormValue({...formValue, [element.field_name]: tempValue});
                         if (element.event.onDeleteMarker) {
-                          Alert.alert('Rule Action', `Fired onDeleteMarker action. rule - ${element.event.onDeleteMarker}. newSeries - ${JSON.stringify(tempElement.meta)}`);
+                          Alert.alert('Rule Action', `Fired onDeleteMarker action. rule - ${element.event.onDeleteMarker}. newSeries - ${JSON.stringify(tempValue)}`);
                         }
                       },
                     },
@@ -178,79 +179,65 @@ const Bitmap = ({element, index, editRole}) => {
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.bitmapContainer}>
-        <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'Bitmap'}</Text>
-        <View style={styles.selectImageContainer}>
-          <Text style={{
-            ...styles.imageName,
-            color: colors.text,
-            borderColor: colors.border,
-            backgroundColor: colors.inputTextBackground,
-            }}>
-            {imageData.imageName || 'Select the image'}
-          </Text>
-          <CustomButton
-            onPress={() => {
-              DocumentPicker.pick({
-                type: types.images,
-              })
-                .then(result => {
-                  const tempElement = JSON.parse(JSON.stringify(element));
-                  if (
-                    tempElement.imageName !== result[0].name ||
-                    tempElement.imageUri !== result[0].uri
-                  ) {
-                    const tempMetaData = {
-                      ...tempElement.meta,
-                      imageName: result[0].name,
-                      imageUri: result[0].uri,
-                      imageWidth: imageScreenWidth.current,
-                      paths: [],
-                      svgs: [],
-                    };
-                    updateFormData(index, {
-                      ...tempElement,
-                      meta: tempMetaData,
-                    });
-                    if (element.event.onSelectImage) {
-                      Alert.alert('Rule Action', `Fired onSelectImage action. rule - ${element.event.onSelectImage}. newSeries - ${JSON.stringify(tempMetaData)}`);
-                    }
-                  }
-                })
-                .catch({});
-            }}
-            style={{
-              ...styles.iconButton,
-              backgroundColor: colors.borderIconButtonBackground,
-              borderColor: colors.colorIconButtonBorder,
-              borderWidth: 1,
-            }}
-            iconColor={colors.colorButton}
-            icon="folder"
-            iconSize={18}
-          />
-          {/* {editRole && imageData.imageName && ( */}
+        <FieldLabel label={element.meta.title || 'Bitmap'} visible={!element.meta.hide_title} />
+        <View style={styles.selectImageContainer(colors)}>
+          <View style={{flexDirection: 'row'}}>
             <CustomButton
               onPress={() => {
-                setVisibleDrawingDlg(true);
-                setBitmapImageData({
-                  imageUri: imageData.imageUri,
-                  width: imageSize.width,
-                  height: imageSize.height,
-                  index: index,
-                  element: element,
-                });
+                DocumentPicker.pick({
+                  type: types.images,
+                })
+                  .then(result => {
+                    if (
+                      imageData.imageName !== result[0].name ||
+                      imageData.imageUri !== result[0].uri
+                    ) {
+                      const tempMetaData = {
+                        imageName: result[0].name,
+                        imageUri: result[0].uri,
+                        imageWidth: imageScreenWidth.current,
+                        paths: [],
+                        svgs: [],
+                      };
+                      setFormValue({...formValue, [element.field_name]: tempMetaData});
+                      if (element.event.onSelectImage) {
+                        Alert.alert('Rule Action', `Fired onSelectImage action. rule - ${element.event.onSelectImage}. newSeries - ${JSON.stringify(tempMetaData)}`);
+                      }
+                    }
+                  })
+                  .catch({});
               }}
               style={{
                 ...styles.iconButton,
-                backgroundColor: colors.borderIconButtonBackground,
-                borderColor: colors.colorIconButtonBorder,
-                borderWidth: 1,
               }}
               iconColor={colors.colorButton}
-              icon="edit"
+              icon="folder"
               iconSize={18}
             />
-          {/* )} */}
+            {(role.edit || preview) && imageData.imageName && (
+              <CustomButton
+                onPress={() => {
+                  setVisibleDrawingDlg(true);
+                  setBitmapImageData({
+                    imageUri: imageData.imageUri,
+                    width: imageSize.width,
+                    height: imageSize.height,
+                    index: index,
+                    element: element,
+                  });
+                }}
+                style={{
+                  ...styles.iconButton
+                }}
+                iconColor={colors.colorButton}
+                icon="edit"
+                iconSize={18}
+              />
+            )}
+          </View>
+          <Text style={styles.imageName(fonts)}>
+            {imageData.imageName || 'Select the image'}
+          </Text>
         </View>
 
         <View
@@ -331,31 +318,27 @@ const styles = StyleSheet.create({
   iconButton: {
     width: 35,
     height: 35,
-    backgroundColor: '#FFE694',
-    borderRadius: 5,
+    marginRight: 5,
   },
-  imageName: {
-    width: '75%',
-    height: 35,
-    borderWidth: 1,
-    borderColor: color.GREY,
-    borderRadius: 5,
+  imageName: (fonts) => ({
+    height: 40,
+    borderRadius: 10,
     textAlignVertical: 'center',
-    paddingLeft: 5,
-  },
-  selectImageContainer: {
+    paddingLeft: 10,
+    ...fonts.values,
+  }),
+  selectImageContainer: colors => ({
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
+    justifyContent: 'space-between',
+    backgroundColor: colors.card,
+    borderRadius: 10,
+    alignItems: 'center',
+    flexDirection: 'row-reverse',
+  }),
   bitmapContainer: {
     padding: 5,
   },
-  carouselTitle: colors => ({
-    fontSize: 16,
-    padding: 5,
-    color: colors.text,
-  }),
   safeAreaView: {width: '100%'},
   imageContainer: {
     width: '100%',
@@ -370,22 +353,22 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: 10,
   },
-  renderItemContainer: index => ({
+  renderItemContainer: colors => ({
     flexDirection: 'row',
-    // backgroundColor: index % 2 === 1 ? color.GREY : color.WHITE,
     marginVertical: 1,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'space-between',
+    backgroundColor: colors.card,
+    borderRadius: 10,
   }),
-  linkName: {
+  linkName: fonts => ({
     height: 40,
     textAlignVertical: 'center',
     paddingLeft: 10,
     textDecorationLine: 'underline',
-    color: color.PRIMARY,
-    fontSize: 15,
-  },
+    ...fonts.values,
+  }),
 });
 
 export default Bitmap;

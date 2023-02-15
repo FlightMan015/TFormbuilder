@@ -26,7 +26,7 @@ const TwitterSetting = ({element, index, onClick}) => {
 
   return (
     <>
-      <SettingHeader title={'Date Settings'} />
+      <SettingHeader title={'Twitter Settings'} />
       <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
       <SettingSwitch
         title={'Hide label'}

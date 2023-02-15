@@ -1,68 +1,90 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {View, StyleSheet, Image, Alert, Text} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Alert, Dimensions, Text} from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';
 import DocumentPicker, {
-  DocumentPickerResponse,
-  isInprogress,
   types,
 } from 'react-native-document-picker';
+import FieldLabel from '../../common/FieldLabel';
+import formStore from '../../store/formStore';
+import ResizedImage from '../../common/ResizedImage';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-const ImageField = ({element, contents, editRole, index, onClickUpdateField, value, onChangeValue}) => {
-  const {colors} = useTheme();
-  const [imageUri, setImageUri] = useState(value || '');
-  useEffect(() => {
-    setImageUri(value);
-  }, [value]);
+const screenWidth = Dimensions.get('window').width;
+
+const ImageField = ({element}) => {
+  const {colors, fonts} = useTheme();
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
+
+  console.log(formValue);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'Image'}</Text>
-      <View>
-        <Image
-          style={{...styles.image, backgroundColor: 'grey'}}
-          source={{uri: imageUri ? imageUri : null}}
-        />
-        {<IconButton
-          icon="pencil"
-          size={18}
-          iconColor={colors.icon}
-          style={{...styles.selectIcon, borderColor: colors.icon}}
-          onPress={() =>{
-            DocumentPicker.pick({
-              type: types.images,
-            })
-              .then(result => {
-                const tempElement = JSON.parse(JSON.stringify(element));
-                if (
-                  tempElement.meta.imageName !== result[0].name ||
-                  tempElement.meta.uri !== result[0].uri
-                ) {
-                  const tempMetaData = {
-                    ...tempElement.meta,
-                    imageName: result[0].name,
-                    uri: result[0].uri,
-                  };
-
-                  setImageUri(result[0].uri);
-
-                  if (onChangeValue) {
-                    onChangeValue({[element.field_name]: result[0].uri});
-                  }
-
-                  // onClickUpdateField(index, {
-                  //   ...tempElement,
-                  //   meta: tempMetaData,
-                  // });
-                  if (element.event.onSelectImage) {
-                    Alert.alert('Rule Action', `Fired onSelectImage action. rule - ${element.event.onSelectImage}. new image - ${JSON.stringify(tempMetaData)}`);
-                  }
-                }
-              })
-              .catch({});
-          }}
-        />}
-      </View>
+      {
+        role.view && (
+          <>
+            <FieldLabel label={element.meta.title || 'Image'} visible={!element.meta.hide_title} />
+            <View>
+              {
+                formValue[element.field_name] && (
+                  <>
+                    <ResizedImage
+                      uri={formValue[element.field_name][0].uri}
+                      maxHeight={screenWidth * 9 / 16}
+                      maxWidth={screenWidth}
+                    />
+                    {<IconButton
+                      icon="pencil"
+                      size={18}
+                      iconColor={fonts.values.color}
+                      style={styles.selectIcon(colors, fonts)}
+                      disabled={!(role.edit || preview)}
+                      onPress={() =>{
+                        DocumentPicker.pick({
+                          type: types.images,
+                        })
+                          .then(result => {
+                            setFormValue({...formValue, [element.field_name]: result});
+                            if (element.event.onSelectImage) {
+                              Alert.alert('Rule Action', `Fired onSelectImage action. rule - ${element.event.onSelectImage}. new image - ${JSON.stringify(tempMetaData)}`);
+                            }
+                            
+                          })
+                          .catch({});
+                      }}
+                    />}
+                  </>
+                )
+              }
+              {
+                !formValue[element.field_name] && (
+                  <TouchableOpacity
+                    style={styles.browerBtn(fonts)}
+                    disabled={!(role.edit || preview)}
+                    onPress={() => {
+                      DocumentPicker.pick({
+                        type: types.images,
+                      })
+                        .then(result => {
+                          setFormValue({...formValue, [element.field_name]: result});
+                          if (element.event.onSelectImage) {
+                            Alert.alert('Rule Action', `Fired onSelectImage action. rule - ${element.event.onSelectImage}. new image - ${JSON.stringify(tempMetaData)}`);
+                          }
+                        })
+                        .catch({});
+                    }}>
+                    <Icon name="image" size={35} color={fonts.values.color} />
+                    <Text style={styles.browerBtnText(fonts)}>Browse image</Text>
+                  </TouchableOpacity>
+                )
+              }
+            </View>
+          </>
+        )
+      }
     </View>
   );
 };
@@ -80,18 +102,32 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 250,
   },
-  selectIcon: {
-    backgroundColor: 'white',
+  selectIcon: (colors, fonts) => ({
+    backgroundColor: colors.card,
     margin: 3,
     borderWidth: 1,
+    borderColor: fonts.values.color,
     position: 'absolute',
     right: 20,
     top: 10,
-  },
+  }),
+  browerBtn: fonts => ({
+    height: 100,
+    borderStyle: 'dashed',
+    borderWidth: 1,
+    borderColor: fonts.values.color,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 5,
+  }),
+  browerBtnText: fonts => ({
+    ...fonts.values
+  }),
 });
 
 ImageField.propTypes = {
   element: PropTypes.object.isRequired,
 };
 
-export default React.memo(ImageField);
+export default ImageField;

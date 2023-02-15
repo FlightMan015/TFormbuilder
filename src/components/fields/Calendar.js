@@ -18,10 +18,16 @@ import {
 } from 'react-native-paper';
 import {Calendar} from 'react-native-calendars';
 import formStore from '../../store/formStore';
+import FieldLabel from '../../common/FieldLabel';
 
-const SchedularSubField = ({element, index, editRole, onClickUpdateField}) => {
-  const {colors} = useTheme();
-
+const SchedularSubField = ({element, index}) => {
+  const {colors, fonts} = useTheme();
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
+  const visibleDlg = formStore(state => state.visibleDlg);
+  const setVisibleDlg = formStore(state => state.setVisibleDlg);
   const [markedDates, setMarkedDates] = useState({});
   const [visibleCalendar, setVisibleCalendar] = useState(true);
   const addType = useRef('');
@@ -32,6 +38,8 @@ const SchedularSubField = ({element, index, editRole, onClickUpdateField}) => {
   };
   const selectedDay = useRef(null);
   let opacity = new Animated.Value(1);
+  const newDayString = new Date(Date.now()).toLocaleDateString().split('/');
+  console.log('20' + newDayString[2] + '-' + newDayString[1] + '-' + newDayString[0])
 
   const animate1 = () => {
     Animated.timing(opacity, {
@@ -50,8 +58,10 @@ const SchedularSubField = ({element, index, editRole, onClickUpdateField}) => {
   };
 
   useEffect(() => {
-    setMarkedDates({...element.meta.items});
-  }, [element]);
+    if (formValue[element.field_name]) {
+      setMarkedDates(formValue[element.field_name]);
+    }
+  }, [JSON.stringify(formValue[element.field_name])]);
 
   const RenderItem = ({item}) => {
     return (
@@ -62,16 +72,16 @@ const SchedularSubField = ({element, index, editRole, onClickUpdateField}) => {
             <TouchableOpacity
               key={i}
               onPress={() => {
-                // setVisibleDlg({
-                //   ...visibleDlg,
-                //   calendarEvent: true,
-                //   eventType: addTypes.editEvent,
-                //   index: index,
-                //   selectedDay: selectedDay.current,
-                //   element: element,
-                //   eventEditIndex: i,
-                //   oldScheduleData: e,
-                // });
+                setVisibleDlg({
+                  ...visibleDlg,
+                  calendarEvent: true,
+                  eventType: addTypes.editEvent,
+                  index: index,
+                  selectedDay: selectedDay.current,
+                  element: element,
+                  eventEditIndex: i,
+                  oldScheduleData: e,
+                });
               }}
               onLongPress={() => {
                 // setDeleteDateString(e.dateString);
@@ -82,9 +92,9 @@ const SchedularSubField = ({element, index, editRole, onClickUpdateField}) => {
                     {
                       text: 'OK',
                       onPress: () => {
-                        const tempElement = JSON.parse(JSON.stringify(element));
-                        tempElement.meta.items[e.dateString].events.splice(i, 1);
-                        onClickUpdateField(index, tempElement);
+                        const tempElement = {...formValue[element.field_name]};
+                        tempElement[e.dateString].events.splice(i, 1);
+                        setFormValue({...formValue, [element.field_name]: tempElement});
                       },
                     },
                     {
@@ -134,7 +144,7 @@ const SchedularSubField = ({element, index, editRole, onClickUpdateField}) => {
             </TouchableOpacity>
           );
         })}
-        {editRole && (
+        {(role.edit  || preview) && (
           <IconButton
             icon="plus"
             size={18}
@@ -147,23 +157,23 @@ const SchedularSubField = ({element, index, editRole, onClickUpdateField}) => {
               // setAddType(addTypes.newEvent);
               addType.current = addTypes.firstEvent;
               if (markedDates[selectedDay.current.dateString] && markedDates[selectedDay.current.dateString].events) {
-                // setVisibleDlg({
-                //   ...visibleDlg,
-                //   calendarEvent: true,
-                //   eventType: addTypes.newEvent,
-                //   index: index,
-                //   selectedDay: selectedDay.current,
-                //   element: element,
-                // });
+                setVisibleDlg({
+                  ...visibleDlg,
+                  calendarEvent: true,
+                  eventType: addTypes.newEvent,
+                  index: index,
+                  selectedDay: selectedDay.current,
+                  element: element,
+                });
               } else {
-                // setVisibleDlg({
-                //   ...visibleDlg,
-                //   calendarEvent: true,
-                //   eventType: addTypes.firstEvent,
-                //   index: index,
-                //   selectedDay: selectedDay.current,
-                //   element: element,
-                // });
+                setVisibleDlg({
+                  ...visibleDlg,
+                  calendarEvent: true,
+                  eventType: addTypes.firstEvent,
+                  index: index,
+                  selectedDay: selectedDay.current,
+                  element: element,
+                });
               }
             }}
           />
@@ -210,41 +220,30 @@ const SchedularSubField = ({element, index, editRole, onClickUpdateField}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Animated.View style={{opacity: opacity}}>
-        {visibleCalendar && <Calendar
-          initialDate={'2022-09-01'}
-          minDate={'2012-05-01'}
-          maxDate={'2100-05-30'}
-          onDayPress={selectDay}
-          // onDayLongPress={day => {
-          //   setTimeout(() => {
-          //     animate1();
-          //   }, 500);
-          //   setVisibleCalendar(false);
-          // }}
-          monthFormat={'yyyy MM'}
-          onPressArrowLeft={subtractMonth => subtractMonth()}
-          onPressArrowRight={addMonth => addMonth()}
-          // renderHeader={date => {
-          //   console.log(date);
-          // }}
-          markedDates={markedDates}
-          theme={{...styles.theme(colors)}}
-        />}
-      </Animated.View>
+      <FieldLabel label={element.meta.title || 'Calendar'} visible={!element.meta.hide_title} />
+      {visibleCalendar && <Calendar
+        initialDate= {
+          '20' + newDayString[2] + '-' + newDayString[0] + '-' + newDayString[1]
+        }
+        minDate={'2012-05-01'}
+        maxDate={'2100-05-30'}
+        onDayPress={selectDay}
+        monthFormat={'yyyy MM'}
+        onPressArrowLeft={subtractMonth => subtractMonth()}
+        onPressArrowRight={addMonth => addMonth()}
+        markedDates={markedDates}
+        theme={{...styles.theme(colors, fonts)}}
+      />}
       {!visibleCalendar && (
-        <>
+        <View style={styles.schedule(colors)}>
           <View style={styles.dayHeader}>
-            <Text style={{
-              ...styles.date,
-              color: colors.icon,
-            }}>{selectedDay.current ? selectedDay.current.dateString : ''}</Text>
+            <Text style={fonts.labels}>{selectedDay.current ? selectedDay.current.dateString : ''}</Text>
             <IconButton icon="calendar" size={25} iconColor={colors.colorButton} onPress={() => setVisibleCalendar(true)} />
           </View>
           <View>
             <RenderItem item={markedDates[selectedDay.current.dateString]} />
           </View>
-        </>
+        </View>
       )}
     </SafeAreaView>
   );
@@ -257,11 +256,6 @@ const Scheduler = props => {
 };
 
 const styles = StyleSheet.create({
-  date: {
-    fontSize: 18,
-    paddingLeft: 10,
-    fontFamily: 'PublicSans-Regular',
-  },
   dayHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -337,10 +331,10 @@ const styles = StyleSheet.create({
   },
   newScheduleBtn: {
     alignSelf: 'center',
-    margin: 0,
+    marginTop: 10,
     padding: 0,
   },
-  theme: colors => ({
+  theme: (colors, fonts) => ({
     backgroundColor: colors.card,
     calendarBackground: colors.card,
     textSectionTitleColor: '#b6c1cd',
@@ -352,19 +346,19 @@ const styles = StyleSheet.create({
     textDisabledColor: colors.border,
     dotColor: '#00adf5',
     selectedDotColor: '#ffffff',
-    arrowColor: colors.colorButton,
+    arrowColor: fonts.labels.color,
     disabledArrowColor: '#d9e1e8',
-    monthTextColor: colors.colorButton,
+    monthTextColor: fonts.labels.color,
     indicatorColor: colors.colorButton,
-    textDayFontFamily: 'PublicSans-Regular',
-    textMonthFontFamily: 'PublicSans-Medium',
-    textDayHeaderFontFamily: 'PublicSans-Regular',
+    textDayFontFamily: fonts.values.fontFamily,
+    textMonthFontFamily: fonts.labels.fontFamily,
+    textDayHeaderFontFamily: fonts.labels.fontFamily,
     textDayFontWeight: '300',
     textMonthFontWeight: 'bold',
     textDayHeaderFontWeight: '300',
-    textDayFontSize: 14,
-    textMonthFontSize: 18,
-    textDayHeaderFontSize: 14,
+    textDayFontSize: fonts.values.fontSize,
+    textMonthFontSize: fonts.labels.fontSize,
+    textDayHeaderFontSize: fonts.values.fontSize,
   }),
 
   header: headerStyle => ({
@@ -411,6 +405,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 10,
   },
+  schedule: colors => ({
+    backgroundColor: colors.card,
+    padding: 10,
+    borderRadius: 10,
+  }),
 });
 
 Scheduler.propTypes = {

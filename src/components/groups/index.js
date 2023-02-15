@@ -15,7 +15,8 @@ import { deleteField, moveDown, moveUp } from '../../actions/formdata';
 const Group = props => {
   const {element, index, selected, preview, onClick, onSelect, isLastGroup} = props;
   const {colors, size} = useTheme();
-
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
   const GroupComponent = getComponent(element.component);
   const opacity = new Animated.Value(1);
 
@@ -37,62 +38,68 @@ const Group = props => {
 
   return (
     <View>
-      <View
-        style={styles.field(colors, selected)}
-        onStartShouldSetResponder={() => {
-          if(!selected) onSelect(index);
-        }}>
-        <GroupComponent element={element} index={index} selected={selected} onSelect={e => onSelect(e)} />
-      </View>
-      {selected && (
-        <Animated.View style={{...styles.setIcons, opacity}}>
-          {
-            index.groupIndex > 0 && (
-              <IconButton
-                icon="chevron-up"
-                size={24}
-                iconColor={'#fff'}
-                style={{margin: 3, backgroundColor: '#0A1551'}}
-                onPress={() => {
-                  onClick('moveup');
-                }}
-              />
-            )
-          }
-          {
-            !isLastGroup && (
-              <IconButton
-                icon="chevron-down"
-                size={24}
-                iconColor={'#fff'}
-                style={{margin: 3, backgroundColor: '#0A1551'}}
-                onPress={() => {
-                  onClick('movedown');
-                }}
-              />
-            )
-          }
-          <IconButton
-            icon="cog-outline"
-            size={24}
-            iconColor={'#fff'}
-            style={{margin: 3, backgroundColor: '#0086DE'}}
-            onPress={() => {
-              onSelect(index);
-              onClick('setting');
-            }}
-          />
-          <IconButton
-            icon="delete-outline"
-            size={24}
-            iconColor={'#fff'}
-            style={{margin: 3, backgroundColor: '#FF6150'}}
-            onPress={() => {
-              onClick('delete');
-            }}
-          />
-        </Animated.View>
-      )}
+      {
+        role.view && (
+          <>
+            <View
+              style={styles.field(colors, selected)}
+              onStartShouldSetResponder={() => {
+                if(!selected) onSelect(index);
+              }}>
+              <GroupComponent element={element} index={index} selected={selected} onSelect={e => onSelect(e)} />
+            </View>
+            {selected && (
+              <Animated.View style={{...styles.setIcons, opacity}}>
+                {
+                  index.groupIndex > 0 && (
+                    <IconButton
+                      icon="chevron-up"
+                      size={24}
+                      iconColor={'#fff'}
+                      style={{margin: 3, backgroundColor: '#0A1551'}}
+                      onPress={() => {
+                        onClick('moveup');
+                      }}
+                    />
+                  )
+                }
+                {
+                  !isLastGroup && (
+                    <IconButton
+                      icon="chevron-down"
+                      size={24}
+                      iconColor={'#fff'}
+                      style={{margin: 3, backgroundColor: '#0A1551'}}
+                      onPress={() => {
+                        onClick('movedown');
+                      }}
+                    />
+                  )
+                }
+                <IconButton
+                  icon="cog-outline"
+                  size={24}
+                  iconColor={'#fff'}
+                  style={{margin: 3, backgroundColor: '#0086DE'}}
+                  onPress={() => {
+                    onSelect(index);
+                    onClick('setting');
+                  }}
+                />
+                <IconButton
+                  icon="delete-outline"
+                  size={24}
+                  iconColor={'#fff'}
+                  style={{margin: 3, backgroundColor: '#FF6150'}}
+                  onPress={() => {
+                    onClick('delete');
+                  }}
+                />
+              </Animated.View>
+            )}
+          </>
+        )
+      }
     </View>
   );
 };
@@ -140,7 +147,7 @@ const MemoGroup = ({element, index, editRole, onSelect, selected, isLastGroup}) 
         isLastGroup={isLastGroup}
       />
     ),
-    [element, index, editRole, selected],
+    [JSON.stringify(element), JSON.stringify(index), editRole, selected],
   );
 };
 

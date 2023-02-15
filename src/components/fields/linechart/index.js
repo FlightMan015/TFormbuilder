@@ -7,27 +7,34 @@ import Title from '../../../common/Title'
 import LineChartDataSection from './datasection';
 import { datatypes } from '../../../constant';
 import formStore from '../../../store/formStore';
+import FieldLabel from '../../../common/FieldLabel';
 
-const LineChartSubField = ({element, index, userRole, onClickUpdateField}) => {
-  const {colors} = useTheme();
+const LineChartSubField = ({element, index, onClickUpdateField}) => {
+  const {colors, fonts} = useTheme();
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
   const [chartWidth, setChartWidth] = useState(0);
   const [visible, setVisible] = useState(false);
-  const [data, setData] = useState(element.meta.data);
+  const [data, setData] = useState(formValue[element.field_name] || {labels: [], datasets: [], legend: []});
 
   useEffect(() => {
-    let tempData = JSON.parse(JSON.stringify(element.meta.data.datasets));
-    const newDatasets = tempData.map(ele => {
-      const rgbColor = (opacity = 1) =>
-        `rgba(${ele.red}, ${ele.green}, ${ele.blue}, ${opacity})`;
-      return {...ele, color: rgbColor};
-    });
-    const tempdata1 = JSON.parse(JSON.stringify(element.meta.data));
-    const newData = {
-      ...tempdata1,
-      datasets: newDatasets,
-    };
-    setData(newData);
-  }, [element]);
+    if (formValue[element.field_name]) {
+      let tempData = JSON.parse(JSON.stringify(formValue[element.field_name].datasets));
+      const newDatasets = tempData.map(ele => {
+        const rgbColor = (opacity = 1) =>
+          `rgba(${ele.red}, ${ele.green}, ${ele.blue}, ${opacity})`;
+        return {...ele, color: rgbColor};
+      });
+      const tempdata1 = JSON.parse(JSON.stringify(formValue[element.field_name]));
+      const newData = {
+        ...tempdata1,
+        datasets: newDatasets,
+      };
+      setData(newData);
+    }
+  }, [JSON.stringify(formValue[element.field_name])]);
 
   const onLayout = useCallback(event => {
     setChartWidth(event.nativeEvent.layout.width - 10);
@@ -52,11 +59,11 @@ const LineChartSubField = ({element, index, userRole, onClickUpdateField}) => {
             color: rgbColor1,
           },
         ];
-        setData({
+        setFormValue({...formValue, [element.field_name]: {
           ...data,
           datasets: datasets1,
           legend: legend1,
-        });
+        }});
 
         if (element.event.onCreateNewSeries) {
           Alert.alert('Rule Action', `Fired onCreateNewSeries action. rule - ${element.event.onCreateNewSeries}. newSeries - ${JSON.stringify({
@@ -84,11 +91,12 @@ const LineChartSubField = ({element, index, userRole, onClickUpdateField}) => {
           }
           return e;
         });
-        setData({
+        setFormValue({...formValue, [element.field_name]: {
           ...data,
           datasets: tempDataSets,
           legend: legend2,
-        });
+        }});
+
 
         if (element.event.onUpdateSeries) {
           Alert.alert('Rule Action', `Fired onUpdateSeries action. rule - ${element.event.onUpdateSeries}. newSeries - ${JSON.stringify({
@@ -103,11 +111,11 @@ const LineChartSubField = ({element, index, userRole, onClickUpdateField}) => {
         legend3.splice(dataindex1, 1);
         const datasets3 = [...data.datasets];
         datasets3.splice(dataindex1, 1);
-        setData({
+        setFormValue({...formValue, [element.field_name]: {
           ...data,
           datasets: datasets3,
           legend: legend3,
-        });
+        }});
 
         if (element.event.onDeleteSeries) {
           Alert.alert('Rule Action', `Fired onDeleteSeries action. rule - ${element.event.onDeleteSeries}. newSeries - ${JSON.stringify({
@@ -120,10 +128,10 @@ const LineChartSubField = ({element, index, userRole, onClickUpdateField}) => {
       case datatypes.changeLabel:
         const labels3 = JSON.parse(JSON.stringify(data.labels));
         labels3.splice(dataindex1, 1, changedData);
-        setData({
+        setFormValue({...formValue, [element.field_name]: {
           ...data,
           labels: labels3,
-        });
+        }});
 
         if (element.event.onUpdateXValue) {
           Alert.alert('Rule Action', `Fired onUpdateXValue action. rule - ${element.event.onUpdateXValue}. newSeries - ${JSON.stringify({
@@ -138,11 +146,11 @@ const LineChartSubField = ({element, index, userRole, onClickUpdateField}) => {
           e.data.push(0);
           return e;
         });
-        setData({
+        setFormValue({...formValue, [element.field_name]: {
           ...data,
           datasets: datasets4,
           labels: labels1,
-        });
+        }});
 
         if (element.event.onCreateNewXValue) {
           Alert.alert('Rule Action', `Fired onCreateNewXValue action. rule - ${element.event.onCreateNewXValue}. newSeries - ${JSON.stringify({
@@ -159,11 +167,11 @@ const LineChartSubField = ({element, index, userRole, onClickUpdateField}) => {
           e.data.splice(dataindex1, 1);
           return e;
         });
-        setData({
+        setFormValue({...formValue, [element.field_name]: {
           ...data,
           datasets: datasets5,
           labels: labels2,
-        });
+        }});
 
         if (element.event.onDeleteXValue) {
           Alert.alert('Rule Action', `Fired onDeleteXValue action. rule - ${element.event.onDeleteXValue}. newSeries - ${JSON.stringify({
@@ -180,10 +188,10 @@ const LineChartSubField = ({element, index, userRole, onClickUpdateField}) => {
           }
           return e;
         });
-        setData({
+        setFormValue({...formValue, [element.field_name]: {
           ...data,
           datasets: datasets6,
-        });
+        }});
 
         if (element.event.onUpdateYValue) {
           Alert.alert('Rule Action', `Fired onUpdateYValue action. rule - ${element.event.onUpdateYValue}. newSeries - ${JSON.stringify({
@@ -213,7 +221,7 @@ const LineChartSubField = ({element, index, userRole, onClickUpdateField}) => {
           ...tempdata1,
           datasets: newDatasets,
         };
-        setData(newData);
+        setFormValue({...formValue, [element.field_name]: newData});
         setVisible(false);
         break;
     }
@@ -221,51 +229,66 @@ const LineChartSubField = ({element, index, userRole, onClickUpdateField}) => {
 
   return (
     <View style={styles.container} onLayout={onLayout}>
-      <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'Line Chart'}</Text>
-      <LineChart
-        data={data}
-        width={chartWidth} // from react-native
-        height={200}
-        yAxisLabel=""
-        yAxisSuffix=""
-        yAxisInterval={1} // optional, defaults to 1
-        chartConfig={styles.chartConfig(colors)}
-        bezier
-        fromZero={true}
-        style={styles.barchart}
-      />
-      <View>
-        <Title
-          name="Datas"
-          onPress={() => setVisible(!visible)}
-          visible={visible}
-        />
-        {visible && (
-          <LineChartDataSection data={data} onChangeData={onChangeData} userRole={userRole} />
-        )}
-      </View>
+      {
+        role.view && (
+          <>
+            <FieldLabel label={element.meta.title || 'Line Chart'} visible={!element.meta.hide_title} />
+            {
+              (data.labels.length === 0 || data.legend.length === 0) && (
+                <Text style={styles.noDataText(fonts)}>No data to show. Please click 'Datas' to add the data.</Text>
+              )
+            }
+            {
+              data.labels.length > 0 && data.legend.length > 0 && (
+                <LineChart
+                  data={data}
+                  width={chartWidth} // from react-native
+                  height={200}
+                  yAxisLabel=""
+                  yAxisSuffix=""
+                  yAxisInterval={1} // optional, defaults to 1
+                  chartConfig={styles.chartConfig(colors)}
+                  bezier
+                  fromZero={true}
+                  style={styles.barchart}
+                />
+              )
+            }
+            <View>
+              <Title
+                name="Datas"
+                onPress={() => setVisible(!visible)}
+                visible={visible}
+              />
+              {visible && (
+                <LineChartDataSection data={data} onChangeData={onChangeData} role={role} />
+              )}
+            </View>
+          </> 
+        )
+      }
     </View>
   );
 };
 
-const LineChartField = ({element, index, userRole}) => {
+const LineChartField = ({element, index}) => {
   const updateFormData = formStore(state => state.updateFormData);
-  return useMemo(() => <LineChartSubField  onClickUpdateField={updateFormData} element={element} index={index} userRole={userRole} />, [element, index, userRole]);
+  return useMemo(() => <LineChartSubField  onClickUpdateField={updateFormData} element={element} index={index} />, [element, index]);
 };
 
 const styles = StyleSheet.create({
   container: {
     padding: 5,
   },
-  carouselTitle: colors => ({
-    fontSize: 16,
-    padding: 5,
-    color: colors.text,
-  }),
   barchart: {
     marginVertical: 8,
     borderRadius: 16,
   },
+  noDataText: fonts => ({
+    ...fonts.values,
+    alignSelf: 'center',
+    marginVertical: 10
+  }),
   chartConfig: colors => ({
     // backgroundColor: '#e26a00',
     backgroundGradientFrom: colors.card,

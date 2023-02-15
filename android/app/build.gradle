@@ -256,6 +256,8 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
+    // implementation ":react-native-audio-recorder-player"
+
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
@@ -282,6 +284,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    
 }
 
 if (isNewArchitectureEnabled()) {

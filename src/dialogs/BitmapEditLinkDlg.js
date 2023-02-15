@@ -1,16 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, TextInput, Text, Alert} from 'react-native';
-import {Button, Dialog, useTheme} from 'react-native-paper';
+import {StyleSheet, TextInput, Text, Alert, Button, View} from 'react-native';
+import {Dialog, useTheme} from 'react-native-paper';
 import {color, globalStyles} from '../theme/styles';
 import formStore from '../store/formStore';
 import useDrawingStore from '../store/bitmapStore';
+import TextButton from '../common/TextButton';
 
 const BitmapEditLinkDlg = () => {
-  const updateFormData = formStore(state => state.updateFormData);
   const visibleDlg = useDrawingStore(state => state.visibleDlg);
   const setVisibleDlg = useDrawingStore(state => state.setVisibleDlg);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
 
-  const {colors} = useTheme();
+  const {colors, fonts} = useTheme();
   const [linkData, setLinkData] = useState({name: '', link: ''});
 
   useEffect(() => {
@@ -32,84 +34,67 @@ const BitmapEditLinkDlg = () => {
         'editBitmapLink' in visibleDlg && visibleDlg.editBitmapLink
       }
       onDismiss={cancel}
-      style={{borderRadius: 10, backgroundColor: colors.card}}>
-      <Dialog.Title
-        style={{
-          color: colors.text,
-          fontFamily: 'PublicSans-Bold',
-          fontSize: 18
-          }}>Update Marker</Dialog.Title>
-      <Dialog.Content style={{paddingBottom: 0}}>
-        <Text style={globalStyles.label}>{'Name'}</Text>
-        <TextInput
-          style={{
-            ...styles.textInput,
-            color: colors.text,
-            borderColor: colors.border,
-            backgroundColor: colors.inputTextBackground,
-          }}
-          underlineColorAndroid="transparent"
-          onChangeText={e =>
-            setLinkData({
-              ...linkData,
-              name: e,
-            })
-          }
-          editable
-          placeholder={'Marker name'}
-          placeholderTextColor={colors.placeholder}
-          value={linkData.name}
-        />
-        <Text style={globalStyles.label}>{'Link'}</Text>
-        <TextInput
-          style={{
-            ...styles.textInput,
-            color: colors.text,
-            borderColor: colors.border,
-            backgroundColor: colors.inputTextBackground,
-          }}
-          underlineColorAndroid="transparent"
-          onChangeText={e => setLinkData({...linkData, link: e})}
-          editable
-          placeholder={'Hyperlink url'}
-          placeholderTextColor={colors.placeholder}
-          value={linkData.link}
-        />
-      </Dialog.Content>
-      <Dialog.Actions>
-        <Button
-          color={colors.colorButton}
+      style={{borderRadius: 10, backgroundColor: colors.card, paddingHorizontal: 15}}>
+      <Text style={{...fonts.headings, marginBottom: 10}}>Update Marker</Text>
+      <Text style={fonts.labels}>{'Name'}</Text>
+      <TextInput
+        style={styles.textInput(colors, fonts)}
+        onChangeText={e =>
+          setLinkData({
+            ...linkData,
+            name: e,
+          })
+        }
+        editable
+        placeholder={'Marker name'}
+        placeholderTextColor={colors.placeholder}
+        value={linkData.name}
+      />
+      <Text style={fonts.labels}>{'Link'}</Text>
+      <TextInput
+        style={styles.textInput(colors, fonts)}
+        onChangeText={e => setLinkData({...linkData, link: e})}
+        editable
+        placeholder={'Hyperlink url'}
+        placeholderTextColor={colors.placeholder}
+        value={linkData.link}
+      />
+      <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
+        <TextButton
+          text='Save'
           onPress={() => {
             if (!linkData.name) {
               Alert.alert('Warning', 'Please type the name.');
             } else if (!linkData.link) {
               Alert.alert('Warning', 'Please type the link.');
             } else {
-              const tempElement = JSON.parse(
-                JSON.stringify(visibleDlg.bitmapElement),
-              );
+              const tempElement = {...visibleDlg.bitmapElement};
               const tempSVG = JSON.parse(
                 JSON.stringify(
-                  tempElement.meta.svgs[visibleDlg.bitmapLinkIndex],
+                  formValue[tempElement.field_name].svgs[visibleDlg.bitmapLinkIndex],
                 ),
               );
-              tempElement.meta.svgs.splice(visibleDlg.bitmapLinkIndex, 1, {
+              const tempValue = {...formValue[tempElement.field_name]};
+              tempValue.svgs.splice(visibleDlg.bitmapLinkIndex, 1, {
                 ...tempSVG,
                 ...linkData,
               });
-              updateFormData(visibleDlg.bitmapIndex, tempElement);
+              setFormValue({...formValue, [tempElement.field_name]: tempValue});
               if (visibleDlg.bitmapElement.event.onUpdateMarker) {
-                Alert.alert('Rule Action', `Fired onUpdateMarker action. rule - ${visibleDlg.bitmapElement.event.onUpdateMarker}. newSeries - ${JSON.stringify(tempElement.meta)}`);
+                Alert.alert('Rule Action', `Fired onUpdateMarker action. rule - ${visibleDlg.bitmapElement.event.onUpdateMarker}. newSeries - ${JSON.stringify(tempValue)}`);
               }
               cancel();
-            }
-          }}>
-          Update
-        </Button>
-        <Button
-          color={colors.colorButton}
-          onPress={cancel}>Cancel</Button>
-      </Dialog.Actions>
+          }}}
+          textStyle={styles.actionButtonText}
+          style={styles.actionButton(colors)}
+        />
+        <TextButton
+          text='Cancel'
+          onPress={cancel}
+          textStyle={styles.actionButtonText}
+          style={styles.actionButton(colors)}
+        />
+      </View>
     </Dialog>
   );
 };
@@ -118,18 +103,25 @@ const styles = StyleSheet.create({
   label: {
     color: color.GREY,
   },
-  textInput: {
-    height: 35,
-    borderColor: color.GREY,
-    borderWidth: 1,
-    borderRadius: 5,
+  textInput: (colors, fonts) => ({
+    height: 40,
+    borderRadius: 10,
     marginBottom: 10,
     marginTop: 5,
     paddingLeft: 10,
-    fontSize: 14,
-    fontFamily: 'PublicSans-Regular',
     paddingVertical: 0,
+    backgroundColor: colors.background,
+    ...fonts.values,
+  }),
+  actionButtonText: {
+    color: '#FFFFFF',
   },
+  actionButton: colors => ({
+    backgroundColor: colors.colorButton,
+    borderRadius: 10,
+    width: 100,
+    paddingVertical: 10
+  }),
 });
 
 export default BitmapEditLinkDlg;

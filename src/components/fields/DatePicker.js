@@ -3,50 +3,57 @@ import PropTypes from 'prop-types';
 import {View, StyleSheet, Text, Alert} from 'react-native';
 import {IconButton, useTheme} from 'react-native-paper';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
+import FieldLabel from '../../common/FieldLabel';
+import formStore from '../../store/formStore';
 
-const DatePicker = props => {
-  const {element, contents, editRole, value, onChangeValue} = props;
-  const {colors} = useTheme();
+const DatePicker = ({element}) => {
+  const {colors, fonts} = useTheme();
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
   const [visible, setVisible] = useState(false);
-  const [date, setDate] = useState(value ? new Date(value) : new Date(Date.now()));
 
   return (
     <View style={styles.container}>
-      <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'Date'}</Text>
-      <View style={styles.mainView}>
-        <Text style={styles.text(editRole, colors)}>{date.toLocaleDateString()}</Text>
-        {/* {editRole && ( */}
-          <IconButton
-            icon="calendar"
-            iconColor={colors.colorButton}
-            onPress={() => setVisible(true)}
-            style={{
-              ...styles.icon,
-              backgroundColor: colors.borderIconButtonBackground,
-              borderColor: colors.colorIconButtonBorder,
-            }}
-          />
-        {/* )} */}
-      </View>
-      {visible && (
-        <RNDateTimePicker
-          value={date}
-          mode={'date'}
-          display={'default'}
-          is24Hour={true}
-          onChange={(e, v) => {
-            setVisible(false);
-            setDate(v);
-            if (onChangeValue) {
-              onChangeValue({[element.field_name]: v.toLocaleDateString()});
-            }
-            if (element.event.onChangeDate) {
-              Alert.alert('Rule Action', `Fired onChangeText action. rule - ${element.event.onChangeDate}. newDate - ${v}`);
-            }
-          }}
-          style={styles.datePicker}
-        />
-      )}
+      {
+        role.view && (
+          <>
+            <FieldLabel label={element.meta.title || 'Date'} visible={!element.meta.hide_title} />
+            <View style={styles.mainView(colors)}>
+              <Text style={styles.text(fonts)}>
+                {(element.field_name in formValue  && formValue[element.field_name]) ? new Date(formValue[element.field_name]).toLocaleDateString(): new Date(Date.now()).toLocaleDateString()}
+              </Text>
+              {(role.edit  || preview) && (
+                <IconButton
+                  icon="calendar"
+                  iconColor={fonts.values.color}
+                  onPress={() => setVisible(true)}
+                  style={{
+                    ...styles.icon,
+                  }}
+                />
+              )}
+            </View>
+            {visible && (
+              <RNDateTimePicker
+                value={(element.field_name in formValue  && formValue[element.field_name]) ? new Date(formValue[element.field_name]) : new Date(Date.now())}
+                mode={'date'}
+                display={'default'}
+                is24Hour={true}
+                onChange={(e, v) => {
+                  setVisible(false);
+                  setFormValue({...formValue, [element.field_name]: v.toLocaleDateString()});
+                  if (element.event.onChangeDate) {
+                    Alert.alert('Rule Action', `Fired onChangeText action. rule - ${element.event.onChangeDate}. newDate - ${v}`);
+                  }
+                }}
+                style={styles.datePicker}
+              />
+            )}
+          </>
+        )
+      }
     </View>
   );
 };
@@ -55,32 +62,21 @@ const styles = StyleSheet.create({
   container: {
     padding: 5,
   },
-  carouselTitle: colors => ({
-    fontSize: 16,
-    padding: 5,
-    color: colors.text,
-  }),
-  mainView: {
+  mainView: (colors) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
+    backgroundColor: colors.card,
+    borderRadius: 10,
+    height: 40,
+  }),
   icon: {
     margin: 0,
-    width: '13%',
-    borderWidth: 1,
-    borderRadius: 10,
   },
-  text: (editRole, colors) => ({
-    height: 35,
+  text: (fonts) => ({
     textAlign: 'center',
-    width: editRole ? '85%' : '85%',
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: colors.border,
-    textAlignVertical: 'center',
-    backgroundColor: colors.inputTextBackground,
-    color: colors.text,
+    marginLeft: 10,
+    ...fonts.values,
   }),
   datePicker: {
     justifyContent: 'center',
@@ -95,4 +91,4 @@ DatePicker.propTypes = {
   element: PropTypes.object.isRequired,
 };
 
-export default React.memo(DatePicker);
+export default DatePicker;

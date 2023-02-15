@@ -9,11 +9,12 @@ import Icon from 'react-native-vector-icons/Feather';
 import { color } from '../../theme/styles';
 
 const TextCell = ({data, rowIndex, colIndex, actionRule}) => {
-  const {colors} = useTheme();
+  const {colors, fonts} = useTheme();
   const {tableData, setTableData, cellWidth} = useContext(DataTableContext);
+
   return (
     <TextInput
-      style={{...styles.textInput(cellWidth.current), color: colors.text}}
+      style={{...styles.textInput(cellWidth.current), ...fonts.values}}
       value={data}
       onChangeText={e => {
         const tempTableData = JSON.parse(JSON.stringify(tableData));
@@ -29,11 +30,11 @@ const TextCell = ({data, rowIndex, colIndex, actionRule}) => {
 };
 
 const NumberCell = ({data, rowIndex, colIndex, actionRule}) => {
-  const {colors} = useTheme();
+  const {colors, fonts} = useTheme();
   const {tableData, setTableData, cellWidth} = useContext(DataTableContext);
   return (
     <TextInput
-      style={{...styles.textInput(cellWidth.current), color: colors.text}}
+      style={{...styles.textInput(cellWidth.current), ...fonts.values}}
       value={data}
       onChangeText={e => {
         const tempTableData = JSON.parse(JSON.stringify(tableData));
@@ -50,13 +51,13 @@ const NumberCell = ({data, rowIndex, colIndex, actionRule}) => {
 };
 
 const DateCell = ({data, rowIndex, colIndex, actionRule}) => {
-  const {colors} = useTheme();
+  const {colors, fonts} = useTheme();
   const {tableData, setTableData, cellWidth} = useContext(DataTableContext);
   const [visible, setVisible] = useState(false);
   return (
     <View>
       <TouchableOpacity onPress={() => setVisible(true)}>
-        <Text style={{...styles.text(cellWidth.current), color: colors.text}}>
+        <Text style={{...styles.text(cellWidth.current), ...fonts.values}}>
           {data}
         </Text>
       </TouchableOpacity>
@@ -84,13 +85,13 @@ const DateCell = ({data, rowIndex, colIndex, actionRule}) => {
 };
 
 const TimeCell = ({data, rowIndex, colIndex, actionRule}) => {
-  const {colors} = useTheme();
+  const {colors, fonts} = useTheme();
   const {tableData, setTableData, cellWidth} = useContext(DataTableContext);
   const [visible, setVisible] = useState(false);
   return (
     <View>
       <TouchableOpacity onPress={() => setVisible(true)}>
-        <Text style={{...styles.text(cellWidth.current), color: colors.text}}>
+        <Text style={{...styles.text(cellWidth.current), ...fonts.values}}>
           {data ? new Date(data).toLocaleTimeString() : ''}
         </Text>
       </TouchableOpacity>
@@ -120,7 +121,7 @@ const TimeCell = ({data, rowIndex, colIndex, actionRule}) => {
 const MenuCell = ({data, rowIndex, colIndex, header, actionRule}) => {
   const options = header[colIndex].data.options;
   const {tableData, setTableData, cellWidth} = useContext(DataTableContext);
-  const {colors} = useTheme();
+  const {colors, fonts} = useTheme();
   const [open, setOpen] = useState(true);
   return (
     <View>
@@ -143,12 +144,11 @@ const MenuCell = ({data, rowIndex, colIndex, header, actionRule}) => {
         rowStyle={{height: 30}}
         buttonStyle={{
           width: cellWidth ? cellWidth.current - 2 : 68,
-          backgroundColor: colors.inputTextBackground,
+          backgroundColor: colors.card,
           height: 40,
         }}
-        buttonTextStyle={{color: colors.text, fontSize: 14}}
-        selectedRowStyle={{backgroundColor: '#bbf'}}
-        selectedRowTextStyle={{color: colors.card}}
+        buttonTextStyle={{...fonts.values}}
+        selectedRowTextStyle={{...fonts.values}}
         defaultButtonText=" "
         onFocus={() => setOpen(false)}
         onBlur={() => setOpen(true)}
@@ -158,7 +158,7 @@ const MenuCell = ({data, rowIndex, colIndex, header, actionRule}) => {
                 <Icon
                   name="chevron-down"
                   size={15}
-                  color={colors.text}
+                  color={fonts.values.color}
                   style={{margin: 0}}
                 />
               )
@@ -166,7 +166,7 @@ const MenuCell = ({data, rowIndex, colIndex, header, actionRule}) => {
                 <Icon
                   name="chevron-up"
                   size={15}
-                  color={colors.text}
+                  color={fonts.values.color}
                   style={{margin: 0}}
                 />
               )

@@ -8,7 +8,7 @@
 
 import React, { useEffect } from 'react';
 import type {Node} from 'react';
-import {useColorScheme} from 'react-native';
+import {useColorScheme, PermissionsAndroid, Platform} from 'react-native';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import FieldMenu from './src/components/FieldMenu';
@@ -16,18 +16,17 @@ import Header from './src/components/Header';
 import {darkTheme, lightTheme} from './src/theme';
 import {Provider as PaperProvider, MD3LightTheme as DefaultTheme, MD3DarkTheme as DefaultDarkTheme} from 'react-native-paper';
 import GeoLocation from 'react-native-geolocation-service';
-import {
-  PermissionsAndroid,
-  Platform,
-} from 'react-native';
 import { MenuProvider } from 'react-native-popup-menu';
 import BitmapDrawingDlg from './src/dialogs/BitmapDrawingDlg';
 import BitmapEditLinkDlg from './src/dialogs/BitmapEditLinkDlg';
 import formStore from './src/store/formStore';
+import { useMemo } from 'react';
+import CalendarDlg from './src/dialogs/CalendarDlg';
 
 const App: () => Node = () => {
   const scheme = useColorScheme();
   const formData = formStore(state => state.formData);
+  const viewMode = formStore(state => state.viewMode);
   async function requestPermissions() {
     if (Platform.OS === 'ios') {
       GeoLocation.setRNConfiguration({
@@ -42,6 +41,7 @@ const App: () => Node = () => {
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
         PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
       ]).then(e => {
         // getFormData();
       });
@@ -53,15 +53,16 @@ const App: () => Node = () => {
   return (
     <PaperProvider
       theme={
-        scheme === 'dark' ?
-          formData.useTheme === 'true' ?  darkTheme[formData.defaultTheme] : {...darkTheme[formData.defaultTheme], colors: {...darkTheme[formData.defaultTheme].colors, background: formData.style.formBackgroundColor, card: formData.style.foregroundColor}}
-          : formData.useTheme === 'true' ? lightTheme[formData.defaultTheme] : {...lightTheme[formData.defaultTheme], colors: {...lightTheme[formData.defaultTheme].colors, background: formData.style.formBackgroundColor, card: formData.style.foregroundColor}}}>
+        (viewMode === 'dark') ?
+          {...darkTheme[formData.theme], colors: {...darkTheme[formData.theme].colors, background: formData.darkStyle.formBackgroundColor, card: formData.darkStyle.foregroundColor}, fonts: {headings: formData.darkStyle.headings, labels: formData.darkStyle.labels, values: formData.darkStyle.values}}
+          : {...lightTheme[formData.theme], colors: {...lightTheme[formData.theme].colors, background: formData.lightStyle.formBackgroundColor, card: formData.lightStyle.foregroundColor}, fonts: {headings: formData.lightStyle.headings, labels: formData.lightStyle.labels, values: formData.lightStyle.values}}}>
       <MenuProvider>
         <NavigationContainer>
           <Header />
           <FieldMenu />
           <BitmapDrawingDlg />
           <BitmapEditLinkDlg />
+          <CalendarDlg />
         </NavigationContainer>
       </MenuProvider>
     </PaperProvider>

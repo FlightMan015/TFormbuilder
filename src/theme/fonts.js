@@ -1,8 +1,8 @@
-export const darkFonts = {
+export const nativeDarkFonts = {
     headings: {
         fontSize: 18,
         color: '#FFFFFF',
-        fontFamily: 'PublicSans-SemiBold',
+        fontFamily: 'PublicSans-Bold',
     },
     labels: {
         fontSize: 16,
@@ -13,23 +13,59 @@ export const darkFonts = {
         fontSize: 14,
         color: '#FFFFFF',
         fontFamily: 'PublicSans-Regular',
-    }
+    },
 }
 
-export const lightFonts = {
+export const nativeLightFonts = {
     headings: {
         fontSize: 18,
-        color: '#23262F',
-        fontFamily: 'PublicSans-SemiBold',
+        color: '#080808',
+        fontFamily: 'PublicSans-Bold',
     },
     labels: {
         fontSize: 16,
-        color: '#23262F',
+        color: '#080808',
         fontFamily: 'PublicSans-Regular',
     },
     values: {
         fontSize: 14,
-        color: '#23262F',
+        color: '#080808',
         fontFamily: 'PublicSans-Regular',
-    }
+    },
+}
+
+export const trivergenceLightFonts = {
+    headings: {
+        fontSize: 18,
+        color: '#4195B4',
+        fontFamily: 'PublicSans-Bold',
+    },
+    labels: {
+        fontSize: 16,
+        color: '#080808',
+        fontFamily: 'PublicSans-Regular',
+    },
+    values: {
+        fontSize: 14,
+        color: '#4095B3',
+        fontFamily: 'PublicSans-Regular',
+    },
+}
+
+export const trivergenceDarkFonts = {
+    headings: {
+        fontSize: 18,
+        color: '#4195B4',
+        fontFamily: 'PublicSans-Bold',
+    },
+    labels: {
+        fontSize: 16,
+        color: '#FFFFFF',
+        fontFamily: 'PublicSans-Regular',
+    },
+    values: {
+        fontSize: 14,
+        color: '#4095B3',
+        fontFamily: 'PublicSans-Regular',
+    },
 }

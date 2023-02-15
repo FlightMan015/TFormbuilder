@@ -1,54 +1,56 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import {View, StyleSheet, Alert, Text} from 'react-native';
+import {View, StyleSheet, Alert} from 'react-native';
 import {useTheme} from 'react-native-paper';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/Feather';
+import FieldLabel from '../../common/FieldLabel';
+import formStore from '../../store/formStore';
 
 const DropDown = props => {
-  const {element, contents, editRole, value, onChangeValue} = props;
-  const {colors} = useTheme();
-  const [dropdownValue, setDropDownValue] = useState(value || '');
+  const {element} = props;
+  const {colors, fonts} = useTheme();
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
   const [open, setOpen] = useState(true);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'Dropdown'}</Text>
-      <SelectDropdown
-        data={element.meta.options}
-        onSelect={e => {
-          setDropDownValue(e);
-          if (onChangeValue) {
-            onChangeValue({[element.field_name]: e});
-          }
-          if (element.event.onSelect) {
-            Alert.alert('Rule Action', `Fired onSelect action. rule - ${element.event.onSelect}. selectedItem - ${e}`);
-          }
-        }}
-        dropdownStyle={{...styles.dropdown, backgroundColor: colors.inputTextBackground}}
-        rowStyle={styles.rowStyle}
-        rowTextStyle={styles.textStyle}
-        buttonStyle={{...styles.buttonStyle, backgroundColor: colors.inputTextBackground, borderColor: colors.border}}
-        buttonTextStyle={{...styles.textStyle, color: colors.text}}
-        selectedRowStyle={styles.selectedRowStyle}
-        selectedRowTextStyle={styles.selectedRowTextStyle}
-        renderDropdownIcon={
-          open
-            ? () => <Icon name="chevron-down" size={18} color={colors.text} />
-            : () => <Icon name="chevron-up" size={18} color={colors.text} />
-        }
-        dropdownIconPosition="right"
-        onFocus={() => setOpen(false)}
-        onBlur={() => setOpen(true)}
-        disabled={editRole ? false : true}
-        defaultButtonText="Select Option"
-        defaultValue={dropdownValue}
-        // search={element.meta.search}
-        // searchInputStyle={styles.searchInput}
-        // searchInputTxtColor={colors.text}
-        // searchPlaceHolder="Search"
-        // searchPlaceHolderColor={color.GREY}
-      />
+      {
+        role.view && (
+          <>
+            <FieldLabel label={element.meta.title || 'Dropdown'} visible={!element.meta.hide_title} />
+            <SelectDropdown
+              data={element.meta.options}
+              onSelect={e => {
+                setFormValue({...formValue, [element.field_name]: e});
+                if (element.event.onSelect) {
+                  Alert.alert('Rule Action', `Fired onSelect action. rule - ${element.event.onSelect}. selectedItem - ${e}`);
+                }
+              }}
+              dropdownStyle={styles.dropdown(colors)}
+              rowStyle={styles.rowStyle}
+              rowTextStyle={styles.rowTextStyle(fonts)}
+              buttonStyle={styles.buttonStyle(colors)}
+              buttonTextStyle={{...styles.textStyle(fonts)}}
+              selectedRowTextStyle={styles.selectedRowTextStyle(fonts)}
+              renderDropdownIcon={
+                open
+                  ? () => <Icon name="chevron-down" size={18} color={fonts.values.color} />
+                  : () => <Icon name="chevron-up" size={18} color={fonts.values.color} />
+              }
+              dropdownIconPosition="right"
+              onFocus={() => setOpen(false)}
+              onBlur={() => setOpen(true)}
+              disabled={(role.edit || preview)? false : true}
+              defaultButtonText="Select Option"
+              defaultValue={formValue[element.field_name] || ''}
+            />
+          </>
+        )
+      }
     </View>
   );
 };
@@ -62,31 +64,37 @@ const styles = StyleSheet.create({
     padding: 5,
     color: colors.text,
   }),
-  textStyle: {
+  textStyle: fonts => ({
     fontSize: 14,
-    color: 'grey',
-  },
+    color: fonts.values.color,
+    textAlign: 'left',
+  }),
+  rowTextStyle: fonts => ({
+    fontSize: 14,
+    color: fonts.labels.color,
+    textAlign: 'left',
+    marginLeft: 20,
+  }),
   selectedRowStyle: {
     backgroundColor: 'grey',
   },
-  selectedRowTextStyle: {
-    color: '#000000',
-  },
-  dropdown: {
-    borderRadius: 5,
-    borderColor: 'black',
-    borderWidth: 1,
-    maxHeight: 150,
-  },
-  buttonStyle: {
+  selectedRowTextStyle: fonts => ({
+    color: fonts.values.color,
+  }),
+  dropdown: colors => ({
+    borderRadius: 15,
+    backgroundColor: colors.card,
+    maxHeight: 300,
+  }),
+  buttonStyle: colors => ({
     width: '100%',
     height: 40,
-    borderRadius: 5,
-    borderColor: 'grey',
-    borderWidth: 1,
-  },
+    borderRadius: 10,
+    backgroundColor: colors.card,
+  }),
   rowStyle: {
     height: 40,
+    borderBottomWidth: 0,
   },
   searchInput: {
     height: 40,
@@ -99,4 +107,4 @@ DropDown.propTypes = {
   element: PropTypes.object.isRequired,
 };
 
-export default React.memo(DropDown);
+export default DropDown;

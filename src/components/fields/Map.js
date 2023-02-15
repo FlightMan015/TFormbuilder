@@ -11,15 +11,13 @@ import {
   TouchableOpacity,
   Alert,
   Dimensions,
+  Button,
 } from 'react-native';
 import { globalStyles, color } from '../../theme/styles';
 import {
   IconButton,
   Switch,
   List,
-  Button,
-  Portal,
-  Provider,
   Dialog,
   useTheme,
 } from 'react-native-paper';
@@ -35,6 +33,8 @@ import Icon from 'react-native-vector-icons/Feather';
 import ColorPalette from '../../common/color_palette';
 import Title from '../../common/Title';
 import formStore from '../../store/formStore';
+import FieldLabel from '../../common/FieldLabel';
+import TextButton from '../../common/TextButton';
 
 const ScreenWidth = Dimensions.get('window').width;
 
@@ -54,17 +54,20 @@ async function requestPermissions() {
   }
 }
 
-const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
-  const {colors} = useTheme();
-
+const MapChildComponent = ({element, index, onClickUpdateField}) => {
+  const {colors, fonts} = useTheme();
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
   const [searchQuery, setSearchQuery] = useState('');
   const [visibleSetPoint, setVisibleSetPoint] = useState(false);
   const [newPointData, setNewPointData] = useState({
     title: '',
     description: '',
   });
-  const [points, setPoints] = useState([]);
-  const [geofences, setGeoFences] = useState([]);
+  const [points, setPoints] = useState(formValue[element.field_name]?.points || []);
+  const [geofences, setGeoFences] = useState(formValue[element.field_name]?.geofences || []);
   const [newFenceData, setNewFenceData] = useState({
     latitude: 0,
     longitude: 0,
@@ -115,8 +118,8 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
 
   useEffect(() => {
     requestPermissions();
-    setDisplayFenceItems(element.meta.data.geofences.slice(0, itemNum));
-    setDisplayPointItems(element.meta.data.points.slice(0, itemNum));
+    setDisplayFenceItems(geofences.slice(0, itemNum));
+    setDisplayPointItems(points.slice(0, itemNum));
     GeoLocation.getCurrentPosition(
       position => {
         setLocationInfo({
@@ -145,13 +148,14 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
   }, []);
 
   useEffect(() => {
-    setPoints(element.meta.data.points);
-    setGeoFences(element.meta.data.geofences);
+    console.log('efwfewf', formValue[element.field_name])
+    setPoints(formValue[element.field_name]?.points || []);
+    setGeoFences(formValue[element.field_name]?.geofences || []);
     const tempFencePageCount = Math.ceil(
-      element.meta.data.geofences.length / itemNum,
+      geofences.length / itemNum,
     );
     const tempPointPageCount = Math.ceil(
-      element.meta.data.points.length / itemNum,
+      points.length / itemNum,
     );
     if (geofencePageNum > tempFencePageCount) {
       setGeofencePageNum(1);
@@ -161,20 +165,20 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
     }
     setFencePageCount(tempFencePageCount === 0 ? 1 : tempFencePageCount);
     setPointPageCount(tempPointPageCount === 0 ? 1 : tempPointPageCount);
-    const pageItems1 = element.meta.data.geofences.slice(
+    const pageItems1 = geofences.slice(
       itemNum * (geofencePageNum - 1),
       itemNum * (geofencePageNum - 1) + 5,
     );
     setDisplayFenceItems(pageItems1);
-    const pageItems2 = element.meta.data.points.slice(
+    const pageItems2 = points.slice(
       itemNum * (pointPageNum - 1),
       itemNum * (pointPageNum - 1) + 5,
     );
     setDisplayPointItems(pageItems2);
-  }, [element]);
+  }, [JSON.stringify(formValue[element.field_name])]);
 
   useEffect(() => {
-    const pageItems = element.meta.data.geofences.slice(
+    const pageItems = geofences.slice(
       itemNum * (geofencePageNum - 1),
       itemNum * (geofencePageNum - 1) + 5,
     );
@@ -182,7 +186,7 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
   }, [geofencePageNum]);
 
   useEffect(() => {
-    const pageItems = element.meta.data.points.slice(
+    const pageItems = points.slice(
       itemNum * (pointPageNum - 1),
       itemNum * (pointPageNum - 1) + 5,
     );
@@ -207,14 +211,7 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
         .then(res => res.json())
         .then(resJson => {
           // the response had a deeply nested structure :/
-          if (
-            resJson &&
-            resJson.Response &&
-            resJson.Response.View &&
-            resJson.Response.View[0] &&
-            resJson.Response.View[0].Result &&
-            resJson.Response.View[0].Result[0]
-          ) {
+          if (resJson?.Response?.View[0]?.Result[0]) {
             resolve(resJson.Response.View[0].Result[0].Location.Address.Label);
           } else {
             resolve();
@@ -336,20 +333,19 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
     if (!newPointData.title) {
       Alert.alert('Warning', 'Please type the title.');
     } else {
-      const tempElement = {...element};
-      tempElement.meta.data.points.push({
+      const tempValue = [...points, {
         ...newPointData,
         latitude: locationInfomation.latitude,
         longitude: locationInfomation.longitude,
         location: searchQuery,
-      });
-      onClickUpdateField(index, tempElement);
+      }];
+      setFormValue({...formValue, [element.field_name]: {...formValue[element.field_name], points: tempValue}});
       if (element.event.onCreateNewPoint) {
         Alert.alert(
           'Rule Action',
           `Fired onCreateNewPoint action. rule - ${
             element.event.onCreateNewPoint
-          }. newData - ${JSON.stringify(tempElement.meta.data)}`,
+          }. newData - ${JSON.stringify(tempValue)}`,
         );
       }
       setVisibleSetPoint(false);
@@ -363,16 +359,15 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
     } else if (newFenceData.radius < 100) {
       Alert.alert('Warning', 'Radius value must be bigger than 100.');
     } else {
-      const tempElement = {...element};
-      tempElement.meta.data.geofences.push({
+      const tempValue = [...geofences, {
         ...newFenceData,
         type: 'circleFence',
         latitude: locationInfomation.latitude,
         longitude: locationInfomation.longitude,
         color: `rgba(${red}, ${green}, ${blue}, 0.5)`,
         location: searchQuery,
-      });
-      onClickUpdateField(index, tempElement);
+      }];
+      setFormValue({...formValue, [element.field_name]: {...formValue[element.field_name], geofences: tempValue}});
       if (element.event.onCreateNewGeofence) {
         Alert.alert(
           'Rule Action',
@@ -393,16 +388,15 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
 
   const finishDrawPolygon = () => {
     setDrawPolygon(false);
-    const tempElement = {...element};
-    tempElement.meta.data.geofences.push({
+    const tempValue = [...geofences, {
       title: polygonTitle,
       type: 'polygonFence',
       newPolygonPoints: polygonPointList,
       ...startPolygonPoint,
       color: `rgba(${red}, ${green}, ${blue}, 0.5)`,
       location: startPolygonLocation,
-    });
-    onClickUpdateField(index, tempElement);
+    }];
+    setFormValue({...formValue, [element.field_name]: {...formValue[element.field_name], geofences: tempValue}});
     setPolygonPointList([]);
     setPolygonTitle('');
   };
@@ -463,9 +457,9 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
         {
           text: 'Yes',
           onPress: () => {
-            const tempElement = {...element};
-            tempElement.meta.data.geofences.splice(geofenceIndex, 1);
-            onClickUpdateField(index, tempElement);
+            const tempgeofences = {...geofences};
+            tempgeofences.splice(geofenceIndex, 1);
+            setFormValue({...formValue, [element.field_name]: {...formValue[element.field_name], points: tempgeofences}});
             if (element.event.onDeleteGeofence) {
               Alert.alert(
                 'Rule Action',
@@ -490,9 +484,9 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
       {
         text: 'Yes',
         onPress: () => {
-          const tempElement = {...element};
-          tempElement.meta.data.points.splice(pointIndex, 1);
-          onClickUpdateField(index, tempElement);
+          const temppoints = {...points};
+          temppoints.splice(pointIndex, 1);
+          setFormValue({...formValue, [element.field_name]: {...formValue[element.field_name], points: temppoints}});
           if (element.event.onDeletePoint) {
             Alert.alert(
               'Rule Action',
@@ -556,7 +550,7 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'Map'}</Text>
+      <FieldLabel label={element.meta.title || 'Map'} visible={!element.meta.hide_title} />
       <Title
         name="Map"
         visible={visible.map}
@@ -651,345 +645,309 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
               );
             })}
           </MapView>
-          {/* <MapView
-            mapType={"standard"}
-            style={{width: '100%', height: 300}}
-            initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-          /> */}
-          <Provider>
-            <Portal>
-              <Dialog
-                visible={visibleSetPoint}
-                onDismiss={() => setVisibleSetPoint(false)}
-                style={{...styles.dialog, backgroundColor: colors.card}}>
-                <Dialog.Title style={styles.dialogTitle(colors)}>
-                  New Location
-                </Dialog.Title>
-                <Dialog.Content style={{paddingBottom: 0}}>
-                  <Text style={{...globalStyles.label, color: colors.label}}>
-                    {'Title'}
+          <Dialog
+            visible={visibleSetPoint}
+            onDismiss={() => setVisibleSetPoint(false)}
+            style={{...styles.dialog, backgroundColor: colors.card}}>
+            <Text style={{...fonts.headings, marginBottom: 10}}>New Location</Text>
+            <Text style={fonts.labels}>
+              {'Title'}
+            </Text>
+            <TextInput
+              style={styles.textBox(colors, fonts)}
+              underlineColorAndroid="transparent"
+              onChangeText={e => onChangePointData(e, 'title')}
+              editable
+              placeholder={'Point title'}
+              placeholderTextColor={colors.placeholder}
+              value={newPointData.title}
+            />
+            <Text style={fonts.labels}>
+              {'Description'}
+            </Text>
+            <TextInput
+              style={styles.textBox(colors, fonts)}
+              underlineColorAndroid="transparent"
+              onChangeText={e => onChangePointData(e, 'description')}
+              editable
+              placeholder={'Point description'}
+              placeholderTextColor={colors.placeholder}
+              value={newPointData.description}
+            />
+            <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
+              <TextButton
+                text='Add'
+                onPress={confirmPointData}
+                textStyle={styles.actionButtonText(colors)}
+                style={styles.actionButton(colors)}
+              />
+              <TextButton
+                text='Cancel'
+                onPress={() => setVisibleSetPoint(false)}
+                textStyle={styles.actionButtonText(colors)}
+                style={styles.actionButton(colors)}
+              />
+            </View>
+          </Dialog>
+          <Dialog
+              visible={visibleSetFence}
+              onDismiss={() => setVisibleSetFence(false)}
+              style={{...styles.dialog, backgroundColor: colors.card}}>
+              <Text style={{...fonts.headings, marginBottom: 10}}>New Fence</Text>
+              <Text style={fonts.labels}>
+                {'Title'}
+              </Text>
+              <TextInput
+                style={styles.textBox(colors, fonts)}
+                underlineColorAndroid="transparent"
+                onChangeText={e => onChangeFenceData(e, 'title')}
+                editable
+                placeholder={'Geofence title'}
+                placeholderTextColor={colors.placeholder}
+                value={newFenceData.title}
+              />
+              {/* <Text>{'Description'}</Text>
+              <TextInput
+                style={{
+                  ...styles.textBox(false, 1),
+                }}
+                underlineColorAndroid="transparent"
+                onChangeText={e => onChangeFenceData(e, 'description')}
+                editable
+                placeholder={'Point description'}
+                value={newFenceData.description}
+              /> */}
+              <Text style={fonts.labels}>
+                {'Radius'}
+              </Text>
+              <TextInput
+                style={styles.textBox(colors, fonts)}
+                underlineColorAndroid="transparent"
+                onChangeText={e => onChangeFenceData(e, 'radius')}
+                editable
+                placeholder={'Radius of geofence'}
+                placeholderTextColor={colors.placeholder}
+                value={newFenceData.radius.toString()}
+                keyboardType="numeric"
+                defaultValue="200"
+              />
+              <View style={styles.colorLabel}>
+                <Text style={fonts.labels}>
+                  {'Color'}
+                </Text>
+                <View style={styles.colorLabel}>
+                  <Text
+                    style={fonts.labels}>
+                    {'RGB color'}
                   </Text>
-                  <TextInput
-                    style={{
-                      ...styles.textBox(false, 1),
-                      backgroundColor: colors.inputTextBackground,
-                      borderColor: colors.inputTextBorder,
-                    }}
-                    underlineColorAndroid="transparent"
-                    onChangeText={e => onChangePointData(e, 'title')}
-                    editable
-                    placeholder={'Point title'}
-                    placeholderTextColor={colors.placeholder}
-                    value={newPointData.title}
-                  />
-                  <Text style={{...globalStyles.label, color: colors.label}}>
-                    {'Description'}
-                  </Text>
-                  <TextInput
-                    style={{
-                      ...styles.textBox(false, 1),
-                      backgroundColor: colors.inputTextBackground,
-                      borderColor: colors.inputTextBorder,
-                    }}
-                    underlineColorAndroid="transparent"
-                    onChangeText={e => onChangePointData(e, 'description')}
-                    editable
-                    placeholder={'Point description'}
-                    placeholderTextColor={colors.placeholder}
-                    value={newPointData.description}
-                  />
-                </Dialog.Content>
-                <Dialog.Actions style={styles.dialogActions}>
-                  <Button color={colors.colorButton} onPress={confirmPointData}>
-                    Add
-                  </Button>
-                  <Button
+                  <Switch
+                    value={isRGBcolor}
+                    onValueChange={() => setRGBcolor(!isRGBcolor)}
                     color={colors.colorButton}
-                    onPress={() => setVisibleSetPoint(false)}>
-                    Cancel
-                  </Button>
-                </Dialog.Actions>
-              </Dialog>
-              <Dialog
-                visible={visibleSetFence}
-                onDismiss={() => setVisibleSetFence(false)}
-                style={{...styles.dialog, backgroundColor: colors.card}}>
-                <Dialog.Title style={styles.dialogTitle(colors)}>
-                  New Fence
-                </Dialog.Title>
-                <Dialog.Content style={{paddingBottom: 0}}>
-                  <Text style={{...globalStyles.label, color: colors.label}}>
-                    {'Title'}
-                  </Text>
-                  <TextInput
-                    style={{
-                      ...styles.textBox(false, 1),
-                      backgroundColor: colors.inputTextBackground,
-                      borderColor: colors.inputTextBorder,
-                    }}
-                    underlineColorAndroid="transparent"
-                    onChangeText={e => onChangeFenceData(e, 'title')}
-                    editable
-                    placeholder={'Geofence title'}
-                    placeholderTextColor={colors.placeholder}
-                    value={newFenceData.title}
                   />
-                  {/* <Text>{'Description'}</Text>
-                  <TextInput
-                    style={{
-                      ...styles.textBox(false, 1),
-                    }}
-                    underlineColorAndroid="transparent"
-                    onChangeText={e => onChangeFenceData(e, 'description')}
-                    editable
-                    placeholder={'Point description'}
-                    value={newFenceData.description}
-                  /> */}
-                  <Text style={{...globalStyles.label, color: colors.label}}>
-                    {'Radius'}
+                </View>
+              </View>
+              {!isRGBcolor && (
+                <ColorPalette
+                  onChange={color => selectPalette(color)}
+                  // defaultColor={'#C0392B'}
+                  // colors={['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9']}
+                  title={''}
+                  titleStyles={{height: 0}}
+                  paletteStyles={{marginTop: 5}}
+                />
+              )}
+              {isRGBcolor && (
+                <View style={styles.colorContainer}>
+                  <Text style={{...styles.RGBtext, color: colors.label}}>
+                    R
                   </Text>
                   <TextInput
-                    style={{
-                      ...styles.textBox(false, 1),
-                      backgroundColor: colors.inputTextBackground,
-                      borderColor: colors.inputTextBorder,
-                    }}
-                    underlineColorAndroid="transparent"
-                    onChangeText={e => onChangeFenceData(e, 'radius')}
-                    editable
-                    placeholder={'Radius of geofence'}
-                    placeholderTextColor={colors.placeholder}
-                    value={newFenceData.radius.toString()}
                     keyboardType="numeric"
-                    defaultValue="200"
-                  />
-                  <View style={styles.colorLabel}>
-                    <Text style={{...globalStyles.label, color: colors.label}}>
-                      {'Color'}
-                    </Text>
-                    <View style={styles.colorLabel}>
-                      <Text
-                        style={{...globalStyles.label, color: colors.label}}>
-                        {'RGB color'}
-                      </Text>
-                      <Switch
-                        value={isRGBcolor}
-                        onValueChange={() => setRGBcolor(!isRGBcolor)}
-                        color={colors.colorButton}
-                      />
-                    </View>
-                  </View>
-                  {!isRGBcolor && (
-                    <ColorPalette
-                      onChange={color => selectPalette(color)}
-                      // defaultColor={'#C0392B'}
-                      // colors={['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9']}
-                      title={''}
-                      titleStyles={{height: 0}}
-                      paletteStyles={{marginTop: 5}}
-                    />
-                  )}
-                  {isRGBcolor && (
-                    <View style={styles.colorContainer}>
-                      <Text style={{...styles.RGBtext, color: colors.label}}>
-                        R
-                      </Text>
-                      <TextInput
-                        keyboardType="numeric"
-                        style={{
-                          ...styles.RGBvalue,
-                          backgroundColor: colors.inputTextBackground,
-                          borderColor: colors.inputTextBorder,
-                        }}
-                        value={red.toString()}
-                        onChangeText={onChangeRed}
-                      />
-                      <Text style={{...styles.RGBtext, color: colors.label}}>
-                        G
-                      </Text>
-                      <TextInput
-                        keyboardType="numeric"
-                        style={{
-                          ...styles.RGBvalue,
-                          backgroundColor: colors.inputTextBackground,
-                          borderColor: colors.inputTextBorder,
-                        }}
-                        value={green.toString()}
-                        onChangeText={onChangeGreen}
-                      />
-                      <Text style={{...styles.RGBtext, color: colors.label}}>
-                        B
-                      </Text>
-                      <TextInput
-                        keyboardType="numeric"
-                        style={{
-                          ...styles.RGBvalue,
-                          backgroundColor: colors.inputTextBackground,
-                          borderColor: colors.inputTextBorder,
-                        }}
-                        value={blue.toString()}
-                        onChangeText={onChangeBlue}
-                      />
-                      <View style={styles.FillColorContainer}>
-                        <View style={styles.lineColor(red, green, blue)} />
-                      </View>
-                    </View>
-                  )}
-                </Dialog.Content>
-                <Dialog.Actions style={styles.dialogActions}>
-                  <Button color={colors.colorButton} onPress={confirmFenceData}>
-                    Add
-                  </Button>
-                  <Button
-                    color={colors.colorButton}
-                    onPress={() => setVisibleSetFence(false)}>
-                    Cancel
-                  </Button>
-                </Dialog.Actions>
-              </Dialog>
-              <Dialog
-                visible={visibleSetPolygon}
-                onDismiss={() => setVisibleSetPolygon(false)}
-                style={{...styles.dialog, backgroundColor: colors.card}}>
-                <Dialog.Title style={styles.dialogTitle(colors)}>
-                  New Polygon Fence
-                </Dialog.Title>
-                <Dialog.Content style={{paddingBottom: 0}}>
-                  <Text style={{...globalStyles.label, color: colors.label}}>
-                    {'Title'}
-                  </Text>
-                  <TextInput
                     style={{
-                      ...styles.textBox(false, 1),
+                      ...styles.RGBvalue,
                       backgroundColor: colors.inputTextBackground,
                       borderColor: colors.inputTextBorder,
                     }}
-                    underlineColorAndroid="transparent"
-                    onChangeText={e => setPolygonTitle(e)}
-                    editable
-                    placeholder={'Geofence title'}
-                    placeholderTextColor={colors.placeholder}
-                    value={polygonTitle}
+                    value={red.toString()}
+                    onChangeText={onChangeRed}
                   />
-                  {/* <Text>{'Description'}</Text>
+                  <Text style={{...styles.RGBtext, color: colors.label}}>
+                    G
+                  </Text>
                   <TextInput
+                    keyboardType="numeric"
                     style={{
-                      ...styles.textBox(false, 1),
+                      ...styles.RGBvalue,
+                      backgroundColor: colors.inputTextBackground,
+                      borderColor: colors.inputTextBorder,
                     }}
-                    underlineColorAndroid="transparent"
-                    onChangeText={e => onChangeFenceData(e, 'description')}
-                    editable
-                    placeholder={'Point description'}
-                    value={newFenceData.description}
-                  /> */}
-                  <View style={styles.colorLabel}>
-                    <Text style={{...globalStyles.label, color: colors.label}}>
-                      {'Color'}
-                    </Text>
-                    <View style={styles.colorLabel}>
-                      <Text
-                        style={{...globalStyles.label, color: colors.label}}>
-                        {'RGB color'}
-                      </Text>
-                      <Switch
-                        value={isRGBcolor}
-                        onValueChange={() => setRGBcolor(!isRGBcolor)}
-                        color={colors.colorButton}
-                      />
-                    </View>
+                    value={green.toString()}
+                    onChangeText={onChangeGreen}
+                  />
+                  <Text style={{...styles.RGBtext, color: colors.label}}>
+                    B
+                  </Text>
+                  <TextInput
+                    keyboardType="numeric"
+                    style={{
+                      ...styles.RGBvalue,
+                      backgroundColor: colors.inputTextBackground,
+                      borderColor: colors.inputTextBorder,
+                    }}
+                    value={blue.toString()}
+                    onChangeText={onChangeBlue}
+                  />
+                  <View style={styles.FillColorContainer}>
+                    <View style={styles.lineColor(red, green, blue)} />
                   </View>
-                  {!isRGBcolor && (
-                    <ColorPalette
-                      onChange={color => selectPalette(color)}
-                      // defaultColor={'#C0392B'}
-                      // colors={['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9']}
-                      title={''}
-                      titleStyles={{height: 0}}
-                      paletteStyles={{marginTop: 5}}
-                    />
-                  )}
-                  {isRGBcolor && (
-                    <View style={styles.colorContainer}>
-                      <Text style={{...styles.RGBtext, color: colors.label}}>
-                        R
-                      </Text>
-                      <TextInput
-                        keyboardType="numeric"
-                        style={{
-                          ...styles.RGBvalue,
-                          backgroundColor: colors.inputTextBackground,
-                          borderColor: colors.inputTextBorder,
-                        }}
-                        value={red.toString()}
-                        onChangeText={onChangeRed}
-                      />
-                      <Text style={{...styles.RGBtext, color: colors.label}}>
-                        G
-                      </Text>
-                      <TextInput
-                        keyboardType="numeric"
-                        style={{
-                          ...styles.RGBvalue,
-                          backgroundColor: colors.inputTextBackground,
-                          borderColor: colors.inputTextBorder,
-                        }}
-                        value={green.toString()}
-                        onChangeText={onChangeGreen}
-                      />
-                      <Text style={{...styles.RGBtext, color: colors.label}}>
-                        B
-                      </Text>
-                      <TextInput
-                        keyboardType="numeric"
-                        style={{
-                          ...styles.RGBvalue,
-                          backgroundColor: colors.inputTextBackground,
-                          borderColor: colors.inputTextBorder,
-                        }}
-                        value={blue.toString()}
-                        onChangeText={onChangeBlue}
-                      />
-                      <View style={styles.FillColorContainer}>
-                        <View style={styles.lineColor(red, green, blue)} />
-                      </View>
-                    </View>
-                  )}
-                </Dialog.Content>
-                <Dialog.Actions style={styles.dialogActions}>
-                  <Button
+                </View>
+              )}
+              <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
+                <TextButton
+                  text='Add'
+                  onPress={confirmFenceData}
+                  textStyle={styles.actionButtonText(colors)}
+                  style={styles.actionButton(colors)}
+                />
+                <TextButton
+                  text='Cancel'
+                  onPress={() => setVisibleSetFence(false)}
+                  textStyle={styles.actionButtonText(colors)}
+                  style={styles.actionButton(colors)}
+                />
+              </View>
+          </Dialog>
+          <Dialog
+            visible={visibleSetPolygon}
+            onDismiss={() => setVisibleSetPolygon(false)}
+            style={{...styles.dialog, backgroundColor: colors.card}}>
+              <Text style={{...fonts.headings, marginBottom: 10}}>New Polygon Fence</Text>
+              <Text style={fonts.labels}>
+                {'Title'}
+              </Text>
+              <TextInput
+                style={styles.textBox(colors, fonts)}
+                underlineColorAndroid="transparent"
+                onChangeText={e => setPolygonTitle(e)}
+                editable
+                placeholder={'Geofence title'}
+                placeholderTextColor={colors.placeholder}
+                value={polygonTitle}
+              />
+              {/* <Text>{'Description'}</Text>
+              <TextInput
+                style={{
+                  ...styles.textBox(false, 1),
+                }}
+                underlineColorAndroid="transparent"
+                onChangeText={e => onChangeFenceData(e, 'description')}
+                editable
+                placeholder={'Point description'}
+                value={newFenceData.description}
+              /> */}
+              <View style={styles.colorLabel}>
+                <Text style={fonts.labels}>
+                  {'Color'}
+                </Text>
+                <View style={styles.colorLabel}>
+                  <Text
+                    style={fonts.labels}>
+                    {'RGB color'}
+                  </Text>
+                  <Switch
+                    value={isRGBcolor}
+                    onValueChange={() => setRGBcolor(!isRGBcolor)}
                     color={colors.colorButton}
-                    onPress={() => {
-                      if (!polygonTitle) {
-                        Alert.alert('Warning', 'Please input the title.');
-                      } else {
-                        setVisibleSetPolygon(false);
-                      }
-                    }}>
-                    Ok
-                  </Button>
-                  <Button
-                    color={colors.colorButton}
-                    onPress={() => {
-                      setDrawPolygon(false);
-                      setPolygonPointList([]);
-                      setPolygonTitle('');
+                  />
+                </View>
+              </View>
+              {!isRGBcolor && (
+                <ColorPalette
+                  onChange={color => selectPalette(color)}
+                  // defaultColor={'#C0392B'}
+                  // colors={['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9']}
+                  title={''}
+                  titleStyles={{height: 0}}
+                  paletteStyles={{marginTop: 5}}
+                />
+              )}
+              {isRGBcolor && (
+                <View style={styles.colorContainer}>
+                  <Text style={{...styles.RGBtext, color: colors.label}}>
+                    R
+                  </Text>
+                  <TextInput
+                    keyboardType="numeric"
+                    style={{
+                      ...styles.RGBvalue,
+                      backgroundColor: colors.inputTextBackground,
+                      borderColor: colors.inputTextBorder,
+                    }}
+                    value={red.toString()}
+                    onChangeText={onChangeRed}
+                  />
+                  <Text style={{...styles.RGBtext, color: colors.label}}>
+                    G
+                  </Text>
+                  <TextInput
+                    keyboardType="numeric"
+                    style={{
+                      ...styles.RGBvalue,
+                      backgroundColor: colors.inputTextBackground,
+                      borderColor: colors.inputTextBorder,
+                    }}
+                    value={green.toString()}
+                    onChangeText={onChangeGreen}
+                  />
+                  <Text style={{...styles.RGBtext, color: colors.label}}>
+                    B
+                  </Text>
+                  <TextInput
+                    keyboardType="numeric"
+                    style={{
+                      ...styles.RGBvalue,
+                      backgroundColor: colors.inputTextBackground,
+                      borderColor: colors.inputTextBorder,
+                    }}
+                    value={blue.toString()}
+                    onChangeText={onChangeBlue}
+                  />
+                  <View style={styles.FillColorContainer}>
+                    <View style={styles.lineColor(red, green, blue)} />
+                  </View>
+                </View>
+              )}
+              <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
+                <TextButton
+                  text='Ok'
+                  onPress={() => {
+                    if (!polygonTitle) {
+                      Alert.alert('Warning', 'Please input the title.');
+                    } else {
                       setVisibleSetPolygon(false);
-                    }}>
-                    Cancel
-                  </Button>
-                </Dialog.Actions>
-              </Dialog>
-            </Portal>
-          </Provider>
-          {editRole && (
+                    }
+                  }}
+                  textStyle={styles.actionButtonText(colors)}
+                  style={styles.actionButton(colors)}
+                />
+                <TextButton
+                  text='Cancel'
+                  onPress={() => {
+                    setDrawPolygon(false);
+                    setPolygonPointList([]);
+                    setPolygonTitle('');
+                    setVisibleSetPolygon(false);
+                  }}
+                  textStyle={styles.actionButtonText(colors)}
+                  style={styles.actionButton(colors)}
+                />
+              </View>
+          </Dialog>
+          {(role.edit || preview) && (
             <View style={styles.mapControlView}>
               <TouchableOpacity onPress={onClickAddPoint}>
-                <View style={styles.markerIcon(addStatus.point)}>
+                <View style={styles.markerIcon(addStatus.point, fonts)}>
                   <IconButton
                     icon={'map-marker-plus-outline'}
                     iconColor={addStatus.point ? 'white' : 'grey'}
@@ -998,7 +956,7 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={onClickAddFence}>
-                <View style={styles.circleIcon(addStatus.circle)}>
+                <View style={styles.circleIcon(addStatus.circle, fonts)}>
                   <IconButton
                     icon={'shape-circle-plus'}
                     iconColor={addStatus.circle ? 'white' : 'grey'}
@@ -1007,7 +965,7 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={onClickAddPolygon}>
-                <View style={styles.polygonIcon(addStatus.polygon)}>
+                <View style={styles.polygonIcon(addStatus.polygon, fonts)}>
                   <IconButton
                     icon={'shape-polygon-plus'}
                     iconColor={addStatus.polygon ? 'white' : 'grey'}
@@ -1019,11 +977,11 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
           )}
           {drawPolygon && (
             <Button
+              title='Finish'
               style={styles.drawPolytonBtn}
               color="white"
-              onPress={() => finishDrawPolygon()}>
-              Finish
-            </Button>
+              onPress={() => finishDrawPolygon()}
+            />
           )}
         </View>
       )}
@@ -1041,7 +999,7 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
                   <Text style={{fontSize: 18, color: '#d00'}}>{e.title}</Text>
                   <Text style={{color: color.GREY}}>{e.description}</Text>
                   <Text style={{color: color.GREY}}>{e.location}</Text>
-                  {editRole && (
+                  {(role.edit || preview) && (
                     <View style={styles.itemIconsContainer}>
                       <IconButton
                         icon={'pencil-outline'}
@@ -1125,7 +1083,7 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
                   description={e.location}
                   descriptionStyle={{color: color.GREY}}
                   right={props => {
-                    if (editRole) {
+                    if (role.edit || preview) {
                       return (
                         <View style={styles.itemIconsContainer1}>
                           <IconButton
@@ -1172,7 +1130,7 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
                   description={e.location}
                   descriptionStyle={{color: color.GREY}}
                   right={props => {
-                    if (editRole) {
+                    if (role.edit || preview) {
                       return (
                         <View style={styles.itemIconsContainer1}>
                           <IconButton
@@ -1256,9 +1214,9 @@ const MapChildComponent = ({element, index, editRole, onClickUpdateField}) => {
   );
 };
 
-const Map = ({element, index, editRole}) => {
+const Map = ({element, index}) => {
   const updateFormData = formStore(state => state.updateFormData);
-  return useMemo(() => <MapChildComponent element={element} index={index} editRole={editRole} onClickUpdateField={updateFormData} />, [element, index, editRole]);
+  return useMemo(() => <MapChildComponent element={element} index={index} onClickUpdateField={updateFormData} />, [element, index]);
 };
 
 const styles = StyleSheet.create({
@@ -1290,6 +1248,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
     alignSelf: 'center',
     marginTop: 0,
+    paddingHorizontal: 15,
   },
 
   itemIconsContainer: {
@@ -1324,20 +1283,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 10,
   },
-  markerIcon: addPoint => ({
-    backgroundColor: addPoint ? '#44f' : '#ddd',
+  markerIcon: (addPoint, fonts) => ({
+    backgroundColor: addPoint ? fonts.values.color : '#ddd',
     borderRightColor: 'white',
     borderRightWidth: 1,
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
   }),
-  circleIcon: addFence => ({
-    backgroundColor: addFence ? '#44f' : '#ddd',
+  circleIcon: (addFence, fonts) => ({
+    backgroundColor: addFence ? fonts.values.color : '#ddd',
     borderRightColor: 'white',
     borderRightWidth: 1,
   }),
-  polygonIcon: addPolygonFence => ({
-    backgroundColor: addPolygonFence ? '#44f' : '#ddd',
+  polygonIcon: (addPolygonFence, fonts) => ({
+    backgroundColor: addPolygonFence ? fonts.values.color : '#ddd',
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
   }),
@@ -1436,21 +1395,28 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
-  textBox: (multiline, numberOfLines) => ({
-    height: !multiline ? 35 : 35 * numberOfLines,
-    borderColor: color.GREY,
-    borderWidth: 1,
-    borderRadius: 5,
+  textBox: (colors, fonts) => ({
+    height: 40,
+    borderRadius: 10,
     paddingVertical: 0,
     marginBottom: 5,
-    fontSize: 14,
-    fontFamily: 'PublicSans-Regular',
+    backgroundColor: colors.background,
+    ...fonts.values,
   }),
   mapStyle: {
     // position: 'absolute',
     width: '100%',
     height: 300,
   },
+  actionButtonText: colors => ({
+    color: '#FFFFFF',
+  }),
+  actionButton: colors => ({
+    backgroundColor: colors.colorButton,
+    borderRadius: 10,
+    width: 100,
+    paddingVertical: 10
+  }),
 });
 
 Map.propTypes = {

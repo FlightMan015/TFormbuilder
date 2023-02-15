@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {useTheme} from 'react-native-paper';
 import PropTypes from 'prop-types';
 import {View, StyleSheet, Alert, Text} from 'react-native';
@@ -7,17 +7,26 @@ import Title from '../../../common/Title';
 import RadarChartDataSection from './datasection';
 import { datatypes, string16 } from '../../../constant';
 import formStore from '../../../store/formStore';
+import FieldLabel from '../../../common/FieldLabel';
 
-const RadarChartSubField = ({element, index, userRole, onClickUpdateField}) => {
-  const {colors} = useTheme();
+const RadarChartField = ({element, index}) => {
+  const {fonts} = useTheme();
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
+  const updateFormData = formStore(state => state.updateFormData);
   const [chartWidth, setChartWidth] = useState(0);
   const [visible, setVisible] = useState(false);
 
-  const [meta, setMeta] = useState(element.meta);
+  const [meta, setMeta] = useState(formValue[element.field_name] ? {...element.meta, data: formValue[element.field_name]} : {...element.meta, data: {datasets: [], lines: [], colors: []}});
 
   useEffect(() => {
-    setMeta({...element.meta});
-  }, [element]);
+    console.log(formValue[element.field_name], 'meta', meta)
+    if(formValue[element.field_name]) {
+      setMeta({...element.meta, data: formValue[element.field_name]});
+    }
+  }, [JSON.stringify(formValue[element.field_name])]);
 
   const onLayout = useCallback(event => {
     setChartWidth(event.nativeEvent.layout.width - 10);
@@ -27,7 +36,7 @@ const RadarChartSubField = ({element, index, userRole, onClickUpdateField}) => {
     switch (type) {
       case datatypes.addRadarLine:
         const tempData1 = JSON.parse(JSON.stringify(meta.data));
-        const axisArray = Object.keys(tempData1.datasets[0]);
+        const axisArray = tempData1.datasets[0] ? Object.keys(tempData1.datasets[0]) : ['axis1', 'axis2', 'axis3'];
         const newLinedata = {};
         axisArray.map((e, i) => {
           newLinedata[axisArray[i]] = 100;
@@ -40,10 +49,7 @@ const RadarChartSubField = ({element, index, userRole, onClickUpdateField}) => {
             string16(changedData.green) +
             string16(changedData.blue),
         );
-        setMeta({
-          ...meta,
-          data: tempData1,
-        });
+        setFormValue({...formValue, [element.field_name]: tempData1});
 
         if (element.event.onCreateNewSeries) {
           Alert.alert('Rule Action', `Fired onCreateNewSeries action. rule - ${element.event.onCreateNewSeries}. newSeries - ${JSON.stringify(tempData1)}`);
@@ -60,10 +66,7 @@ const RadarChartSubField = ({element, index, userRole, onClickUpdateField}) => {
             string16(changedData.green) +
             string16(changedData.blue),
         );
-        setMeta({
-          ...meta,
-          data: tempData2,
-        });
+        setFormValue({...formValue, [element.field_name]: tempData2});
 
         if (element.event.onUpdateSeries) {
           Alert.alert('Rule Action', `Fired onChangeSeries action. rule - ${element.event.onChangeSeries}. newSeries - ${JSON.stringify(tempData2)}`);
@@ -74,10 +77,8 @@ const RadarChartSubField = ({element, index, userRole, onClickUpdateField}) => {
         tempData3.datasets.splice(dataindex1, 1);
         tempData3.lines.splice(dataindex1, 1);
         tempData3.colors.splice(dataindex1, 1);
-        setMeta({
-          ...meta,
-          data: tempData3,
-        });
+        setFormValue({...formValue, [element.field_name]: tempData3});
+
 
         if (element.event.onDeleteSeries) {
           Alert.alert('Rule Action', `Fired onDeleteSeries action. rule - ${element.event.onDeleteSeries}. newSeries - ${JSON.stringify(tempData3)}`);
@@ -95,10 +96,7 @@ const RadarChartSubField = ({element, index, userRole, onClickUpdateField}) => {
           ...tempData4,
           datasets: tempDatasets,
         };
-        setMeta({
-          ...meta,
-          data: tempData5,
-        });
+        setFormValue({...formValue, [element.field_name]: tempData5});
 
         if (element.event.onCreateNewAxis) {
           Alert.alert('Rule Action', `Fired onCreateNewAxis action. rule - ${element.event.onCreateNewAxis}. newSeries - ${JSON.stringify(tempData5)}`);
@@ -118,10 +116,7 @@ const RadarChartSubField = ({element, index, userRole, onClickUpdateField}) => {
           ...tempData6,
           datasets: tempDatasets1,
         };
-        setMeta({
-          ...meta,
-          data: tempData7,
-        });
+        setFormValue({...formValue, [element.field_name]: tempData7});
 
         if (element.event.onUpdateAxis) {
           Alert.alert('Rule Action', `Fired onUpdateAxis action. rule - ${element.event.onUpdateAxis}. newSeries - ${JSON.stringify(tempData7)}`);
@@ -137,10 +132,7 @@ const RadarChartSubField = ({element, index, userRole, onClickUpdateField}) => {
           ...tempData8,
           datasets: tempDatasets2,
         };
-        setMeta({
-          ...meta,
-          data: tempData9,
-        });
+        setFormValue({...formValue, [element.field_name]: tempData9});
 
         if (element.event.onDeleteAxis) {
           Alert.alert('Rule Action', `Fired onDeleteAxis action. rule - ${element.event.onDeleteAxis}. newSeries - ${JSON.stringify(tempData9)}`);
@@ -152,10 +144,7 @@ const RadarChartSubField = ({element, index, userRole, onClickUpdateField}) => {
           ...tempData10.datasets[dataindex1],
           [dataindex2]: changedData,
         };
-        setMeta({
-          ...meta,
-          data: tempData10,
-        });
+        setFormValue({...formValue, [element.field_name]: tempData10});
 
         if (element.event.onUpdateValue) {
           Alert.alert('Rule Action', `Fired onUpdateYValue action. rule - ${element.event.onUpdateYValue}. newSeries - ${JSON.stringify(tempData10)}`);
@@ -166,11 +155,7 @@ const RadarChartSubField = ({element, index, userRole, onClickUpdateField}) => {
           ...element,
           meta: meta,
         };
-        onClickUpdateField(index, tempElement);
-        setVisible(false);
-        break;
-      case 'cancel':
-        setMeta({...element.meta});
+        updateFormData(index, tempElement);
         setVisible(false);
         break;
     }
@@ -178,9 +163,18 @@ const RadarChartSubField = ({element, index, userRole, onClickUpdateField}) => {
 
   return (
     <View style={styles.container} onLayout={onLayout}>
-      <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'Radar Chart'}</Text>
-      <VictoryRadar meta={meta} />
-      <View style={styles.titleView}>
+      <FieldLabel label={element.meta.title || 'Radar Chart'} visible={!element.meta.hide_title} />
+      {
+        !(meta.data.datasets?.length > 0) && (
+          <Text style={styles.noDataText(fonts)}>No data to show. Please click 'Datas' to add the data.</Text>
+        )
+      }
+      {
+        meta.data.datasets?.length > 0 && (
+          <VictoryRadar meta={meta} />
+        )
+      }
+      <View>
         <Title
           name="Datas"
           onPress={() => setVisible(!visible)}
@@ -188,29 +182,21 @@ const RadarChartSubField = ({element, index, userRole, onClickUpdateField}) => {
         />
       </View>
       {visible && (
-        <RadarChartDataSection meta={meta} onChangeData={onChangeData} userRole={userRole} />
+        <RadarChartDataSection meta={meta} onChangeData={onChangeData} userRole={role} />
       )}
     </View>
   );
-};
-
-const RadarChartField = ({element, index, userRole}) => {
-  const updateFormData = formStore(state => state.updateFormData);
-  return useMemo(() => <RadarChartSubField  onClickUpdateField={updateFormData} element={element} index={index} userRole={userRole} />, [element, index, userRole]);
 };
 
 const styles = StyleSheet.create({
   container: {
     padding: 5,
   },
-  carouselTitle: colors => ({
-    fontSize: 16,
-    padding: 5,
-    color: colors.text,
+  noDataText: fonts => ({
+    ...fonts.values,
+    alignSelf: 'center',
+    marginVertical: 10
   }),
-  titleView: {
-    paddingLeft: 10,
-  },
 });
 
 RadarChartField.propTypes = {

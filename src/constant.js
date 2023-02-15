@@ -40,6 +40,7 @@ export const componentName = {
   CARDSLIDER: 'CARDSLIDER',
   CARD: 'CARD',
   TWITTER: 'TWITTER',
+  VOICEMESSAGE: 'VPOCEMESSAGE',
 };
 
 export const radioButton = {
@@ -69,6 +70,13 @@ export const modes = {
   approver: 'approver',
 };
 
+export const newFormData = {
+  title: 'New TForm',
+  logo: '',
+  data: [],
+  checkedRoles: [],
+};
+
 const newInputTextData = {
   component: componentName.TEXT_INPUT,
   field_name: 'textbox',
@@ -78,6 +86,7 @@ const newInputTextData = {
     hide_title: false,
     placeholder: 'Enter text..',
     numberOfLines: '1',
+    multiline: false,
   },
   role: [{name: 'admin', edit: true, view: true}],
   action: {create: false, update: false, read: false, delete: false},
@@ -579,17 +588,14 @@ const newButtonData = {
   is_mandatory: false,
   meta: {
     title: 'Button',
-    hide_title: false,
     isText: true,
     isIcon: true,
     icon: '',
-    text: 'Button',
-    textColor: '',
+    color: '',
     iconSize: 18,
     fontSize: 14,
-    width: 150,
-    height: 40,
-    borderRadius: 10,
+    fontFamily: '',
+    isRound: true,
     backgroundColor: '',
     iconPosition: 'left',
   },
@@ -735,12 +741,29 @@ export const newCardSlider = {
   is_mandatory: false,
   meta: {
     title: 'Card List',
+    buttonText: 'Button',
     autoplay: false,
     cardtemplate: 'card1',
     cardCorner: 'default',
     cardWidth: 'auto',
     cardBackgroundColor: '#FFFFFF',
     selectedCardIndex: -1,
+    titleFont: {
+      color: '#5AB7C4',
+      fontSize: 15,
+      fontFamily: 'PublicSans-Regular',
+    },
+    descriptionFont: {
+      color: '#000000',
+      fontSize: 14,
+      fontFamily: 'PublicSans-Regular',
+    },
+    buttonBackgroundColor: '#5AB7C4',
+    buttonTextFont: {
+      color: '#FFFFFF',
+      fontSize: 14,
+      fontFamily: 'PublicSans-Regular',
+    },
     cardDatas: [
       {
         image: '',
@@ -777,6 +800,22 @@ export const newTwitterData = {
   meta: {
     title: 'Twitter',
     tweetUrl: 'https://twitter.com/',
+  },
+  role: [{name: 'admin', view: true, edit: true}],
+  action: {create: false, update: false, read: false, delete: false},
+  event: {
+    onClick: '',
+  },
+};
+
+export const newVoiceMessage = {
+  component: componentName.VOICEMESSAGE,
+  field_name: 'voice_message',
+  is_mandatory: false,
+  meta: {
+    title: 'Voice Message',
+    hide_title: false,
+    audio_uri: '',
   },
   role: [{name: 'admin', view: true, edit: true}],
   action: {create: false, update: false, read: false, delete: false},
@@ -824,6 +863,7 @@ export const newFieldData = {
   [componentName.CARDSLIDER]: newCardSlider,
   [componentName.CARD]: newCard,
   [componentName.TWITTER]: newTwitterData,
+  [componentName.VOICEMESSAGE]: newVoiceMessage,
 };
 
 export const datatypes = {
@@ -1064,7 +1104,12 @@ export const fieldMenuData = {
         {
           name: 'Card Slider',
           key: componentName.CARDSLIDER,
-          icon: 'plus',
+          icon: 'columns',
+        },
+        {
+          name: 'Voice Message',
+          key: componentName.VOICEMESSAGE,
+          icon: 'mic',
         },
       ],
     },

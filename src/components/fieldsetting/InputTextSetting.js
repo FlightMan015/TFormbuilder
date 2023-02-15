@@ -58,11 +58,24 @@ const InputTextSetting = ({element, index, onClick}) => {
         onChange={onChange}
         keyName={'is_mandatory'}
       />
+      <SettingLabel
+        title={'Placeholder'}
+        label={element.meta.placeholder}
+        onChange={onChange}
+        keyName={'placeholder'}
+      />
       <SettingNumber
         title={'Number of lines'}
         value={element.meta.numberOfLines}
         onChange={onChange}
         keyName={'numberOfLines'}
+      />
+      <SettingSwitch
+        title={'Multiline'}
+        value={element.multiline}
+        onChange={onChange}
+        keyName={'multiline'}
+        description={'Make sure to show multiline.'}
       />
       <SettingDuplicate index={index} element={element} />
     </>

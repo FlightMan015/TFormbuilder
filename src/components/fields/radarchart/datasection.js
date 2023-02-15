@@ -11,11 +11,11 @@ import { globalStyles, color } from '../../../theme/styles';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/Feather';
 import {datatypes, string16} from '../../../constant';
-import {Button, IconButton, Switch, useTheme} from 'react-native-paper';
+import {IconButton, Switch, useTheme} from 'react-native-paper';
 import ColorPalette from '../../../common/color_palette';
 
 const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
-  const {colors} = useTheme();
+  const {colors, fonts} = useTheme();
   const [openLine, setOpenLine] = useState(true);
   const [openAxis, setOpenAxis] = useState(true);
   const [customColor, setCustomColor] = useState({red: 0, green: 0, blue: 0});
@@ -26,7 +26,6 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
     newLine: '',
     newLineValid: false,
   });
-
   const [axisStatus, setAxisStatus] = useState({
     axisIndex: 0,
     addAxis: false,
@@ -45,20 +44,24 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
 
   useEffect(() => {
     const tempData = JSON.parse(JSON.stringify(meta.data));
-    const axisArray = Object.keys(tempData.datasets[0]);
+    const axisArray = Object.keys(tempData.datasets[0] || []);
     setAxes(axisArray);
     setChangeLine(meta.data.lines[lineStatus.lineIndex]);
     setChangeAxis(axisArray[axisStatus.axisIndex]);
-    const tempAxisValue =
-      meta.data.datasets[lineStatus.lineIndex][axisArray[axisStatus.axisIndex]];
+    let tempAxisValue = 0
+    if (meta.data.datasets.length > 0 && axisArray.length > 0) {
+      tempAxisValue = meta.data.datasets[lineStatus.lineIndex][axisArray[axisStatus.axisIndex]];
+    }
     setAxisValue(tempAxisValue.toString());
   }, [meta]);
 
   useEffect(() => {
     const tempData = JSON.parse(JSON.stringify(meta.data));
-    const axisArray = Object.keys(tempData.datasets[0]);
-    const tempAxisValue =
-      meta.data.datasets[lineStatus.lineIndex][axisArray[axisStatus.axisIndex]];
+    const axisArray = Object.keys(tempData.datasets[0] || []);
+    let tempAxisValue = 0
+    if (meta.data.datasets.length > 0 && axisArray.length > 0) {
+      tempAxisValue = meta.data.datasets[lineStatus.lineIndex][axisArray[axisStatus.axisIndex]];
+    }
     setAxisValue(tempAxisValue.toString());
     setChangeAxis(axisArray[axisStatus.axisIndex]);
   }, [lineStatus.lineIndex, axisStatus.axisIndex]);
@@ -351,11 +354,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
             onSelect={onSelectLine}
             dropdownStyle={{...styles.dropdown, backgroundColor: colors.card}}
             rowTextStyle={{fontSize: 14, color: colors.text, fontFamily: 'PublicSans-Regular'}}
-            buttonStyle={{
-              ...globalStyles.buttonStyle,
-              backgroundColor: colors.inputTextBackground,
-              borderColor: colors.inputTextBorder,
-            }}
+            buttonStyle={globalStyles.buttonStyle(colors, fonts)}
             buttonTextStyle={{color: colors.text, fontSize: 14, fontFamily: 'PublicSans-Regular'}}
             selectedRowStyle={{backgroundColor: colors.inputTextBackground}}
             selectedRowTextStyle={{color: colors.text}}
@@ -379,26 +378,27 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
               iconColor={colors.icon}
               size={18}
               onPress={onClickAddLine}
-              // disabled={!('editSeries' in userRole && userRole.editSeries)}
+              disabled={!('editSeries' in userRole && userRole.editSeries) || !preview}
               style={globalStyles.iconButton}
             />
             <IconButton
               icon={'pencil'}
               iconColor={colors.icon}
               size={18}
+              disabled={!('editSeries' in userRole && userRole.editSeries) || !preview}
               onPress={onClickEditLine}
               style={globalStyles.iconButton}
             />
             <IconButton
               icon="delete-forever"
               iconColor={colors.icon}
-              // disabled={
-              //   ('editSeries' in userRole && userRole.editSeries)
-              //     ? meta.data.lines.length > 1
-              //       ? false
-              //       : true
-              //     : true
-              // }
+              disabled={
+                (('editSeries' in userRole && userRole.editSeries) || preview)
+                  ? meta.data.lines.length > 1
+                    ? false
+                    : true
+                  : true
+              }
               size={18}
               onPress={onClickRemoveLine}
               style={globalStyles.iconButton}
@@ -409,11 +409,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
           <View>
             <View style={globalStyles.addView}>
               <TextInput
-                style={{
-                  ...globalStyles.textBoxNewLine,
-                  backgroundColor: colors.inputTextBackground,
-                  borderColor: colors.inputTextBorder,
-                }}
+                style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeLine}
                 editable
@@ -443,36 +439,24 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
             )}
             {isRGBcolor && (
               <View style={styles.colorContainer}>
-                <Text style={styles.RGBtext}>R</Text>
+                <Text style={styles.RGBtext(fonts)}>R</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.red.toString()}
                   onChangeText={onChangeRed}
                 />
-                <Text style={styles.RGBtext}>G</Text>
+                <Text style={styles.RGBtext(fonts)}>G</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.green.toString()}
                   onChangeText={onChangeGreen}
                 />
-                <Text style={styles.RGBtext}>B</Text>
+                <Text style={styles.RGBtext(fonts)}>B</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.blue.toString()}
                   onChangeText={onChangeBlue}
                 />
@@ -503,11 +487,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
           <View>
             <View style={globalStyles.addView}>
               <TextInput
-                style={{
-                  ...globalStyles.textBoxNewLine,
-                  backgroundColor: colors.inputTextBackground,
-                  borderColor: colors.inputTextBorder,
-                }}
+                style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeNewLine}
                 editable
@@ -539,33 +519,21 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
                 <Text style={styles.RGBtext}>R</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.red.toString()}
                   onChangeText={onChangeRed}
                 />
                 <Text style={styles.RGBtext}>G</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.green.toString()}
                   onChangeText={onChangeGreen}
                 />
                 <Text style={styles.RGBtext}>B</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.blue.toString()}
                   onChangeText={onChangeBlue}
                 />
@@ -609,11 +577,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
                   backgroundColor: colors.card,
                 }}
                 rowTextStyle={{fontSize: 14, color: colors.text}}
-                buttonStyle={{
-                  ...globalStyles.buttonStyle,
-                  backgroundColor: colors.inputTextBackground,
-                  borderColor: colors.inputTextBorder,
-                }}
+                buttonStyle={globalStyles.buttonStyle(colors, fonts)}
                 buttonTextStyle={{color: colors.text, fontSize: 14}}
                 selectedRowStyle={{backgroundColor: colors.inputTextBackground}}
                 selectedRowTextStyle={{color: colors.text}}
@@ -643,7 +607,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
                   iconColor={colors.icon}
                   size={18}
                   onPress={onClickAddAxis}
-                  // disabled={!('editAxes' in userRole && userRole.editAxes)}
+                  disabled={!('editAxes' in userRole && userRole.editAxes) || !preivew}
                   style={globalStyles.iconButton}
                 />
                 <IconButton
@@ -651,6 +615,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
                   iconColor={colors.icon}
                   size={18}
                   onPress={onClickEditAxis}
+                  disabled={!('editAxes' in userRole && userRole.editAxes) || !preivew}
                   style={globalStyles.iconButton}
                 />
                 <IconButton
@@ -658,9 +623,9 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
                   iconColor={colors.icon}
                   size={18}
                   onPress={onClickRemoveAxis}
-                  // disabled={
-                  //   ('editAxes' in userRole && userRole.editAxes) ? (axes.length > 3 ? false : true) : true
-                  // }
+                  disabled={
+                    (('editAxes' in userRole && userRole.editAxes) || preview) ? (axes.length > 3 ? false : true) : true
+                  }
                   style={globalStyles.iconButton}
                 />
               </View>
@@ -668,11 +633,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
             {axisStatus.editAxis && (
               <View style={globalStyles.addView}>
                 <TextInput
-                  style={{
-                    ...globalStyles.textBoxNewLine,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={globalStyles.textBoxNewLine(colors, fonts)}
                   underlineColorAndroid="transparent"
                   onChangeText={onChangeAxis}
                   editable
@@ -693,11 +654,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
             {axisStatus.addAxis && (
               <View style={globalStyles.addView}>
                 <TextInput
-                  style={{
-                    ...globalStyles.textBoxNewLine,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={globalStyles.textBoxNewLine(colors, fonts)}
                   underlineColorAndroid="transparent"
                   onChangeText={onChangeNewAxis}
                   editable
@@ -723,11 +680,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
             <View>
               <TextInput
                 keyboardType="numeric"
-                style={{
-                  ...styles.textBox,
-                  backgroundColor: colors.inputTextBackground,
-                  borderColor: colors.inputTextBorder,
-                }}
+                style={styles.textBox(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeY}
                 editable
@@ -739,7 +692,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
           </View>
         </View>
       )}
-      <View style={styles.buttonContainer}>
+      {/* <View style={styles.buttonContainer}>
         <Button
           onPress={() => onChangeData('changeField')}
           color={color.WHITE}
@@ -758,7 +711,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
             }}>
           Cancel
         </Button>
-      </View>
+      </View> */}
     </View>
   );
 };
@@ -778,18 +731,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: 'space-around',
   },
-  RGBtext: {
+  RGBtext: fonts => ({
     width: '11%',
     textAlign: 'center',
     textAlignVertical: 'center',
-  },
-  RGBvalue: {
+    color: fonts.labels.color,
+    fontFamily: fonts.labels.fontFamily,
+  }),
+  RGBvalue: (colors, fonts) => ({
     width: '20%',
     height: 40,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: color.GREY,
-  },
+    borderRadius: 10,
+    backgroundColor: colors.card,
+    ...fonts.values,
+  }),
   lineColorContainer: {
     width: 40,
     height: 40,
@@ -826,17 +781,15 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlignVertical: 'center',
   },
-  textBox: {
+  textBox: (colors, fonts) => ({
     height: 40,
-    borderColor: color.GREY,
-    borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     marginHorizontal: 10,
     paddingLeft: 10,
     marginBottom: 10,
-    fontFamily: 'PublicSans-Regular',
-    fontSize: 14,
-  },
+    backgroundColor: colors.card,
+    ...fonts.values,
+  }),
 });
 
 RadarChartDataSection.propTypes = {

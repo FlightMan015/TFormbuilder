@@ -7,17 +7,23 @@ import PieChartDataSection from './datasection';
 import Title from '../../../common/Title';
 import { datatypes, string16 } from '../../../constant';
 import formStore from '../../../store/formStore';
+import FieldLabel from '../../../common/FieldLabel';
 
-const PieChartSubField = ({element, index, editRole, onClickUpdateField}) => {
-  const {colors} = useTheme();
+const PieChartSubField = ({element, index, onClickUpdateField}) => {
+  const {fonts} = useTheme();
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
   const [chartWidth, setChartWidth] = useState(0);
   const [visible, setVisible] = useState(false);
-  const [data, setData] = useState(element.meta.data);
+  const [data, setData] = useState(formValue[element.field_name] || []);
 
   useEffect(() => {
-    const tempData = JSON.parse(JSON.stringify(element.meta.data));
-    setData(tempData);
-  }, [element]);
+    if (formValue[element.field_name]) {
+      setData(formValue[element.field_name]);
+    }    
+  }, [JSON.stringify(formValue[element.field_name])]);
 
   const onLayout = useCallback(event => {
     setChartWidth(event.nativeEvent.layout.width - 10);
@@ -31,7 +37,7 @@ const PieChartSubField = ({element, index, editRole, onClickUpdateField}) => {
           string16(newData.red) +
           string16(newData.green) +
           string16(newData.blue);
-        setData([
+          setFormValue({...formValue, [element.field_name]: [
           ...data,
           {
             name: newData.newLabel,
@@ -40,7 +46,7 @@ const PieChartSubField = ({element, index, editRole, onClickUpdateField}) => {
             legendFontColor: chartColor,
             legendFontSize: 15,
           },
-        ]);
+        ]});
 
         if (element.event.onCreateNewLabel) {
           Alert.alert('Rule Action', `Fired onCreateNewLabel action. rule - ${element.event.onCreateNewLabel}. newSeries - ${JSON.stringify([
@@ -72,7 +78,7 @@ const PieChartSubField = ({element, index, editRole, onClickUpdateField}) => {
           }
           return e;
         });
-        setData(tempData1);
+        setFormValue({...formValue, [element.field_name]: tempData1});
 
         if (element.event.onUpdateLabel) {
           Alert.alert('Rule Action', `Fired onUpdateLabel action. rule - ${element.event.onUpdateLabel}. newSeries - ${JSON.stringify(tempData1)}`);
@@ -81,7 +87,7 @@ const PieChartSubField = ({element, index, editRole, onClickUpdateField}) => {
       case datatypes.deletePieChartLabel:
         const tempData2 = [...data];
         tempData2.splice(dataindex, 1);
-        setData(tempData2);
+        setFormValue({...formValue, [element.field_name]: tempData2});
 
         if (element.event.onDeleteLabel) {
           Alert.alert('Rule Action', `Fired onDeleteLabel action. rule - ${element.event.onDeleteLabel}. newSeries - ${JSON.stringify(tempData2)}`);
@@ -94,7 +100,7 @@ const PieChartSubField = ({element, index, editRole, onClickUpdateField}) => {
           ...tempdata,
           population: newData,
         };
-        setData(tempData3);
+        setFormValue({...formValue, [element.field_name]: tempData3});
 
         if (element.event.onUpdateValue) {
           Alert.alert('Rule Action', `Fired onUpdateValue action. rule - ${element.event.onUpdateValue}. newSeries - ${JSON.stringify(tempData3)}`);
@@ -111,7 +117,7 @@ const PieChartSubField = ({element, index, editRole, onClickUpdateField}) => {
         break;
       case 'cancel':
         const tempData = JSON.parse(JSON.stringify(element.meta.data));
-        setData(tempData);
+        setFormValue({...formValue, [element.field_name]: tempData});
         setVisible(false);
         break;
     }
@@ -119,30 +125,45 @@ const PieChartSubField = ({element, index, editRole, onClickUpdateField}) => {
 
   return (
     <View style={styles.container} onLayout={onLayout}>
-      <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'Pie Chart'}</Text>
-      <PieChart
-        data={data}
-        width={chartWidth}
-        height={200}
-        chartConfig={styles.chartConfig}
-        accessor={'population'}
-        backgroundColor={'transparent'}
-        paddingLeft={'15'}
-        center={[10, 0]}
-        absolute
-      />
-      {editRole && (
-        <>
-          <Title
-            name="Datas"
-            onPress={() => setVisible(!visible)}
-            visible={visible}
-          />
-          {visible && (
-            <PieChartDataSection data={data} onChangeData={onChangeData} />
-          )}
-        </>
-      )}
+      {
+        role.view && (
+          <>
+            <FieldLabel label={element.meta.title || 'Pie Chart'} visible={!element.meta.hide_title} />
+            {
+              !(data.length > 0) && (
+                <Text style={styles.noDataText(fonts)}>No data to show. Please click 'Datas' to add the data.</Text>
+              )
+            }
+            {
+              data.length > 0 && (
+                <PieChart
+                  data={data}
+                  width={chartWidth}
+                  height={200}
+                  chartConfig={styles.chartConfig}
+                  accessor={'population'}
+                  backgroundColor={'transparent'}
+                  paddingLeft={'15'}
+                  center={[10, 0]}
+                  absolute
+                />
+              )
+            }
+            {(role.edit || preview) && (
+              <>
+                <Title
+                  name="Datas"
+                  onPress={() => setVisible(!visible)}
+                  visible={visible}
+                />
+                {visible && (
+                  <PieChartDataSection data={data} onChangeData={onChangeData} />
+                )}
+              </>
+            )}
+          </>
+        )
+      }
     </View>
   );
 };
@@ -156,15 +177,15 @@ const styles = StyleSheet.create({
   container: {
     padding: 5,
   },
-  carouselTitle: colors => ({
-    fontSize: 16,
-    padding: 5,
-    color: colors.text,
-  }),
   barchart: {
     marginVertical: 8,
     borderRadius: 16,
   },
+  noDataText: fonts => ({
+    ...fonts.values,
+    alignSelf: 'center',
+    marginVertical: 10
+  }),
   chartConfig: {
     // backgroundColor: "#e26a00",
     backgroundGradientFrom: 'darkgreen',

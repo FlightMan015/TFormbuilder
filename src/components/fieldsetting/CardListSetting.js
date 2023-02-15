@@ -14,6 +14,9 @@ import DocumentPicker, {
   types,
 } from 'react-native-document-picker';
 import SettingSwitch from './common/SettingSwitch';
+import SettingLabel from './common/SettingLabel';
+import ColorPicker from '../../common/ColorPicker';
+import FontSetting from '../../common/FontSetting';
 
 const colorStyles = [
   '#0A1551',
@@ -50,10 +53,11 @@ const buttonStyles = [
 ];
 
 const CardListSetting = props => {
-  const {element, index, onClick} = props;
+  const {element, index, onClick} = props;  
   const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
+  const updateFormData = formStore(state => state.updateFormData);
   const setOpenSetting = formStore(state => state.setOpenSetting);
   const navigation = useNavigation();
   const [selectedTab, setSelectedTab] = useState('general');
@@ -66,6 +70,17 @@ const CardListSetting = props => {
   const [selectedCardIndex, setSelectedCardIndex] = useState(-1);
   const [settingType, setSettingType] = useState('slider');
   const cardData = useRef(-1);
+
+  const onChange = (key, value) => {
+    const tempMeta = {...element.meta};
+    updateFormData(index, {...element, meta: {...tempMeta, [key]: value}});
+  };
+
+  const onChangeFont = (key, subkey, value) => {
+    const tempMeta = {...element.meta};
+    const subdata = {...tempMeta[key], [subkey]: value};
+    updateFormData(index, {...element, meta: {...tempMeta, [key]: subdata}});
+  };
 
   return (
     <View>
@@ -99,24 +114,18 @@ const CardListSetting = props => {
             </View>
             {selectedTab === 'general' && (
               <>
-                <View style={styles.settingView}>
-                  <Text style={styles.titleLabel}>Card List Title</Text>
-                  <TextInput
-                    style={styles.title}
-                    value={element.meta.title}
-                    onChangeText={newText => {
-                      const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                      setFormData({
-                        ...formData,
-                        data: updateField(
-                          formData,
-                          {childIndex: index},
-                          {...element, meta: {...tempMeta, title: newText}},
-                        ),
-                      });
-                    }}
-                  />
-                </View>
+                <SettingLabel
+                  title={'Card List Title'}
+                  label={element.meta.title}
+                  onChange={onChange}
+                  keyName={'title'}
+                />
+                <SettingLabel
+                  title={'Button Text'}
+                  label={element.meta.buttonText}
+                  onChange={onChange}
+                  keyName={'buttonText'}
+                />
                 <SettingSwitch
                   title={'Hide label'}
                   value={element.meta.hide_title}
@@ -124,31 +133,13 @@ const CardListSetting = props => {
                   keyName={'hide_title'}
                   description={'Make sure to show label.'}
                 />
-                <View style={styles.settingView}>
-                  <Text style={styles.titleLabel}>Auto Play</Text>
-                  <View style={styles.switchView}>
-                    <Text style={styles.description}>
-                      Make to slide automatically.
-                    </Text>
-                    <Switch
-                      trackColor={styles.switchTrackColor}
-                      thumbColor={element.meta.autoplay ? '#FFFFFF' : '#FFFFFF'}
-                      ios_backgroundColor="#3e3e3e"
-                      onValueChange={e => {
-                        const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                        setFormData({
-                          ...formData,
-                          data: updateField(
-                            formData,
-                            {childIndex: index},
-                            {...element, meta: {...tempMeta, autoplay: e}},
-                          ),
-                        });
-                      }}
-                      value={element.meta.autoplay}
-                    />
-                  </View>
-                </View>
+                <SettingSwitch
+                  title={'Auto Play'}
+                  value={element.meta.autoplay}
+                  onChange={onChange}
+                  keyName={'autoplay'}
+                  description={'Make sure to slide automatically.'}
+                />
                 <View style={styles.settingView}>
                   <Text style={styles.titleLabel}>Card Template</Text>
                   <View style={styles.cardStyle}>
@@ -160,15 +151,7 @@ const CardListSetting = props => {
                         element.meta.cardtemplate === 'card2',
                       )}
                       onPress={() => {
-                        const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                        setFormData({
-                          ...formData,
-                          data: updateField(
-                            formData,
-                            {childIndex: index},
-                            {...element, meta: {...tempMeta, cardtemplate: 'card2'}},
-                          ),
-                        });
+                        onChange('cardtemplate', 'card2');
                       }}
                     />
                     <IconButton
@@ -179,15 +162,7 @@ const CardListSetting = props => {
                         element.meta.cardtemplate === 'card1',
                       )}
                       onPress={() => {
-                        const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                        setFormData({
-                          ...formData,
-                          data: updateField(
-                            formData,
-                            {childIndex: index},
-                            {...element, meta: {...tempMeta, cardtemplate: 'card1'}},
-                          ),
-                        });
+                        onChange('cardtemplate', 'card1');
                       }}
                     />
                   </View>
@@ -231,14 +206,7 @@ const CardListSetting = props => {
                               onPress={() => {
                                 const tempElement = JSON.parse(JSON.stringify(element));
                                 tempElement.meta.cardDatas.splice(cardIndex, 1);
-                                setFormData({
-                                  ...formData,
-                                  data: updateField(
-                                    formData,
-                                    {childIndex: index},
-                                    tempElement
-                                  )
-                                })
+                                updateFormData(index, tempElement);
                               }}
                             />
                           </View>}
@@ -253,14 +221,7 @@ const CardListSetting = props => {
                     onPress={() => {
                       const tempElement = JSON.parse(JSON.stringify(element));
                       tempElement.meta.cardDatas.push(newCard);
-                      setFormData({
-                        ...formData,
-                        data: updateField(
-                          formData,
-                          {childIndex: index},
-                          tempElement
-                        )
-                      })
+                      updateFormData(index, tempElement);
                     }}
                   />
                 </View>
@@ -281,91 +242,13 @@ const CardListSetting = props => {
             )}
             {selectedTab === 'style' && (
               <>
-                <View style={styles.settingView}>
-                  <Text style={styles.titleLabel}>Card Background</Text>
-                  <TextButton
-                    style={styles.background(element.meta.cardBackgroundColor)}
-                    text="CHANGE COLOR"
-                    textStyle={styles.textButtonText(
-                      invertColor(element.meta.cardBackgroundColor),
-                    )}
-                    onPress={() => {
-                      setVisibleColors(!visibleColors);
-                    }}
-                  />
-                  {visibleColors && (
-                    <View style={styles.colorSetting}>
-                      <View style={styles.settingTab}>
-                        <TextButton
-                          style={{
-                            ...styles.colortab(colorTab === 'styles'),
-                            borderTopLeftRadius: 7,
-                          }}
-                          text="COLOR STYLES"
-                          textStyle={styles.tabText(colorTab === 'styles')}
-                          onPress={() => setColorTab('styles')}
-                        />
-                        <TextButton
-                          style={{
-                            ...styles.colortab(colorTab === 'customize'),
-                            borderTopRightRadius: 7,
-                          }}
-                          text="CUSTOMIZE"
-                          textStyle={styles.tabText(colorTab === 'customize')}
-                          onPress={() => setColorTab('customize')}
-                        />
-                      </View>
-                      <View style={styles.colorContainer}>
-                        {colorTab === 'styles' && (
-                          <>
-                            {colorStyles.map((color, colorindex) => (
-                              <TextButton
-                                key={colorindex}
-                                style={styles.colorElement}
-                                text={color}
-                                textStyle={styles.colorElementText(color)}
-                                onPress={() => {
-                                  const tempMeta = JSON.parse(
-                                    JSON.stringify(element.meta),
-                                  );
-                                  setFormData({
-                                    ...formData,
-                                    data: updateField(
-                                      formData,
-                                      {childIndex: index},
-                                      {
-                                        ...element,
-                                        meta: {
-                                          ...tempMeta,
-                                          cardBackgroundColor: color,
-                                        },
-                                      },
-                                    ),
-                                  });
-                                }}
-                              />
-                            ))}
-                          </>
-                        )}
-                        {colorTab === 'customize' && (
-                          <View style={styles.buttonCustomStyle}>
-                            <View style={styles.customizeBackground}>
-                              <View
-                                style={styles.colorView(
-                                  element.meta.cardBackgroundColor,
-                                )}
-                              />
-                              <TextInput
-                                style={styles.colorValue}
-                                value={element.meta.cardBackgroundColor}
-                              />
-                            </View>
-                          </View>
-                        )}
-                      </View>
-                    </View>
-                  )}
-                </View>
+                <ColorPicker
+                  color={element.meta.cardBackgroundColor}
+                  label={'Card Background Color'}
+                  selectColor={e => {
+                    onChange('cardBackgroundColor', e);
+                  }}
+                />
                 <View style={styles.settingView}>
                   <Text style={styles.titleLabel}>Card Corner</Text>
                   <View style={styles.settingTab}>
@@ -374,21 +257,7 @@ const CardListSetting = props => {
                       text="DEFAULT"
                       textStyle={styles.textButtonText('#FFFFFF')}
                       onPress={() => {
-                        const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                        setFormData({
-                          ...formData,
-                          data: updateField(
-                            formData,
-                            {childIndex: index},
-                            {
-                              ...element,
-                              meta: {
-                                ...tempMeta,
-                                cardCorner: 'default',
-                              },
-                            },
-                          ),
-                        });
+                        onChange('cardCorner', 'default');
                       }}
                     />
                     <TextButton
@@ -396,21 +265,7 @@ const CardListSetting = props => {
                       text="ROUNDED"
                       textStyle={styles.textButtonText('#FFFFFF')}
                       onPress={() => {
-                        const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                        setFormData({
-                          ...formData,
-                          data: updateField(
-                            formData,
-                            {childIndex: index},
-                            {
-                              ...element,
-                              meta: {
-                                ...tempMeta,
-                                cardCorner: 'rounded',
-                              },
-                            },
-                          ),
-                        });
+                        onChange('cardCorner', 'rounded');
                       }}
                     />
                   </View>
@@ -423,21 +278,7 @@ const CardListSetting = props => {
                       text="AUTO"
                       textStyle={styles.textButtonText('#FFFFFF')}
                       onPress={() => {
-                        const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                        setFormData({
-                          ...formData,
-                          data: updateField(
-                            formData,
-                            {childIndex: index},
-                            {
-                              ...element,
-                              meta: {
-                                ...tempMeta,
-                                cardWidth: 'auto',
-                              },
-                            },
-                          ),
-                        });
+                        onChange('cardWidth', 'auto');
                       }}
                     />
                     <TextButton
@@ -445,184 +286,39 @@ const CardListSetting = props => {
                       text="FULL"
                       textStyle={styles.textButtonText('#FFFFFF')}
                       onPress={() => {
-                        const tempMeta = JSON.parse(JSON.stringify(element.meta));
-                        setFormData({
-                          ...formData,
-                          data: updateField(
-                            formData,
-                            {childIndex: index},
-                            {
-                              ...element,
-                              meta: {
-                                ...tempMeta,
-                                cardWidth: 'full',
-                              },
-                            },
-                          ),
-                        });
+                        onChange('cardWidth', 'full');
                       }}
                     />
                   </View>
                 </View>
-                <View style={styles.settingView}>
-                  <Text style={styles.titleLabel}>Title Color</Text>
-                  <TextButton
-                    style={styles.background(element.meta.cardBackgroundColor)}
-                    text="CHANGE COLOR"
-                    textStyle={styles.textButtonText(
-                      invertColor(element.meta.cardBackgroundColor),
-                    )}
-                    onPress={() => {
-                      setVisibleTitleColors(!visibleTitleColors);
-                    }}
-                  />
-                  {visibleTitleColors && (
-                    <View style={styles.colorSetting}>
-                      <View style={styles.settingTab}>
-                        <TextButton
-                          style={{
-                            ...styles.colortab(titleColorTab === 'styles'),
-                            borderTopLeftRadius: 7,
-                          }}
-                          text="COLOR STYLES"
-                          textStyle={styles.tabText(titleColorTab === 'styles')}
-                          onPress={() => setTitleColorTab('styles')}
-                        />
-                        <TextButton
-                          style={{
-                            ...styles.colortab(titleColorTab === 'customize'),
-                            borderTopRightRadius: 7,
-                          }}
-                          text="CUSTOMIZE"
-                          textStyle={styles.tabText(titleColorTab === 'customize')}
-                          onPress={() => setTitleColorTab('customize')}
-                        />
-                      </View>
-                      <View style={styles.colorContainer}>
-                        {titleColorTab === 'styles' && (
-                          <>
-                            {colorStyles.map((color, colorindex) => (
-                              <TextButton
-                                key={colorindex}
-                                style={styles.colorElement}
-                                text={color}
-                                textStyle={styles.colorElementText(color)}
-                                onPress={() => {}}
-                              />
-                            ))}
-                          </>
-                        )}
-                        {titleColorTab === 'customize' && (
-                          <View style={styles.buttonCustomStyle}>
-                            <View style={styles.customizeBackground}>
-                              <View
-                                style={styles.colorView(
-                                  element.meta.cardBackgroundColor,
-                                )}
-                              />
-                              <TextInput
-                                style={styles.colorValue}
-                                value={element.meta.cardBackgroundColor}
-                              />
-                            </View>
-                          </View>
-                        )}
-                      </View>
-                    </View>
-                  )}
-                </View>
-                <View style={styles.settingView}>
-                  <Text style={styles.titleLabel}>Button Style</Text>
-                  <TextButton
-                    style={styles.background(element.meta.cardBackgroundColor)}
-                    text="CHANGE STYLE"
-                    textStyle={styles.textButtonText(
-                      invertColor(element.meta.cardBackgroundColor),
-                    )}
-                    onPress={() => {
-                      setVisibleButtonStyle(!visibleButtonStyle);
-                    }}
-                  />
-                  {visibleButtonStyle && (
-                    <View style={styles.colorSetting}>
-                      <View style={styles.settingTab}>
-                        <TextButton
-                          style={{
-                            ...styles.colortab(buttonStyleTab === 'styles'),
-                            borderTopLeftRadius: 7,
-                          }}
-                          text="STYLES"
-                          textStyle={styles.tabText(buttonStyleTab === 'styles')}
-                          onPress={() => setButtonStyleTab('styles')}
-                        />
-                        <TextButton
-                          style={{
-                            ...styles.colortab(buttonStyleTab === 'customize'),
-                            borderTopRightRadius: 7,
-                          }}
-                          text="CUSTOMIZE"
-                          textStyle={styles.tabText(buttonStyleTab === 'customize')}
-                          onPress={() => setButtonStyleTab('customize')}
-                        />
-                      </View>
-                      <View style={styles.colorContainer}>
-                        {buttonStyleTab === 'styles' && (
-                          <>
-                            {buttonStyles.map((item, styleindex) => (
-                              <TextButton
-                                key={styleindex}
-                                style={styles.colorElement}
-                                text={'Button'}
-                                textStyle={styles.colorElementText1(item)}
-                                onPress={() => {}}
-                              />
-                            ))}
-                          </>
-                        )}
-                        {buttonStyleTab === 'customize' && (
-                          <View style={styles.buttonCustomStyle}>
-                            <Text style={styles.titleLabel}>Background Color</Text>
-                            <View style={styles.customizeBackground}>
-                              <View
-                                style={styles.colorView(
-                                  element.meta.cardBackgroundColor,
-                                )}
-                              />
-                              <TextInput
-                                style={styles.colorValue}
-                                value={element.meta.cardBackgroundColor}
-                              />
-                            </View>
-                            <Text style={styles.titleLabel}>Border Color</Text>
-                            <View style={styles.customizeBackground}>
-                              <View
-                                style={styles.colorView(
-                                  element.meta.cardBackgroundColor,
-                                )}
-                              />
-                              <TextInput
-                                style={styles.colorValue}
-                                value={element.meta.cardBackgroundColor}
-                              />
-                            </View>
-                            <Text style={styles.titleLabel}>Text Color</Text>
-                            <View style={styles.customizeBackground}>
-                              <View
-                                style={styles.colorView(
-                                  element.meta.cardBackgroundColor,
-                                )}
-                              />
-                              <TextInput
-                                style={styles.colorValue}
-                                value={element.meta.cardBackgroundColor}
-                              />
-                            </View>
-                          </View>
-                        )}
-                      </View>
-                    </View>
-                  )}
-                </View>
+                <FontSetting
+                  label={'Title Font'}
+                  fontColor={element.meta.titleFont.color}
+                  fontSize={element.meta.titleFont.fontSize}
+                  fontType={element.meta.titleFont.fontFamily}
+                  onChange={(type, e) => {onChangeFont('titleFont', type, e);}}
+                />
+                <FontSetting
+                  label={'Description Font'}
+                  fontColor={element.meta.descriptionFont.color}
+                  fontSize={element.meta.descriptionFont.fontSize}
+                  fontType={element.meta.descriptionFont.fontFamily}
+                  onChange={(type, e) => {onChangeFont('descriptionFont', type, e);}}
+                />
+                <ColorPicker
+                  color={element.meta.buttonBackgroundColor}
+                  label={'Button Background Color'}
+                  selectColor={e => {
+                    onChange('buttonBackgroundColor', e);
+                  }}
+                />
+                <FontSetting
+                  label={'Button Text Font'}
+                  fontColor={element.meta.buttonTextFont.color}
+                  fontSize={element.meta.buttonTextFont.fontSize}
+                  fontType={element.meta.buttonTextFont.fontFamily}
+                  onChange={(type, e) => {onChangeFont('buttonTextFont', type, e);}}
+                />
               </>
             )}
           </>
@@ -654,14 +350,7 @@ const CardListSetting = props => {
                       onChangeText={newText => {
                         const tempElement = JSON.parse(JSON.stringify(element));
                         tempElement.meta.cardDatas[cardData.current].title = newText;
-                        setFormData({
-                          ...formData,
-                          data: updateField(
-                            formData,
-                            {childIndex: index},
-                            tempElement
-                          )
-                        });
+                        updateFormData(index, tempElement);
                       }}
                     />
                   </View>
@@ -673,14 +362,7 @@ const CardListSetting = props => {
                       onChangeText={newText => {
                         const tempElement = JSON.parse(JSON.stringify(element));
                         tempElement.meta.cardDatas[cardData.current].subTitle = newText;
-                        setFormData({
-                          ...formData,
-                          data: updateField(
-                            formData,
-                            {childIndex: index},
-                            tempElement
-                          )
-                        });
+                        updateFormData(index, tempElement);
                       }}
                     />
                   </View>
@@ -692,14 +374,7 @@ const CardListSetting = props => {
                       onChangeText={newText => {
                         const tempElement = JSON.parse(JSON.stringify(element));
                         tempElement.meta.cardDatas[cardData.current].description = newText;
-                        setFormData({
-                          ...formData,
-                          data: updateField(
-                            formData,
-                            {childIndex: index},
-                            tempElement
-                          )
-                        });
+                        updateFormData(index, tempElement);
                       }}
                     />
                   </View>
@@ -711,14 +386,7 @@ const CardListSetting = props => {
                       onChangeText={newText => {
                         const tempElement = JSON.parse(JSON.stringify(element));
                         tempElement.meta.cardDatas[cardData.current].hyperlink = newText;
-                        setFormData({
-                          ...formData,
-                          data: updateField(
-                            formData,
-                            {childIndex: index},
-                            tempElement
-                          )
-                        });
+                        updateFormData(index, tempElement);
                       }}
                     />
                   </View>
@@ -748,14 +416,7 @@ const CardListSetting = props => {
                             tempElement.meta.cardDatas[cardData.current].image !== result[0].uri
                           ) {
                             tempElement.meta.cardDatas[cardData.current].image = result[0].uri;
-                            setFormData({
-                              ...formData,
-                              data: updateField(
-                                formData,
-                                {childIndex: index},
-                                tempElement
-                              )
-                            });
+                            updateFormData(index, tempElement);
                           }
                         }).catch({});
                       }}

@@ -3,26 +3,28 @@ import PropTypes from 'prop-types';
 import {View, StyleSheet, Text, Alert, TouchableOpacity} from 'react-native';
 import {IconButton, useTheme} from 'react-native-paper';
 import DocumentPicker, {
-  DocumentPickerResponse,
   isInprogress,
   types,
 } from 'react-native-document-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
+import FieldLabel from '../../common/FieldLabel';
+import formStore from '../../store/formStore';
 
 const FileUpload = props => {
-  const {element, contents} = props;
-  const {colors} = useTheme();
-  const editRole = true;
-  const [result, setResult] = useState(null);
+  const {element} = props;
+  const {colors, fonts} = useTheme();
+  const userRole = formStore(state => state.userRole);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
+  const role = element.role.find(e => e.name === userRole);
+  const [result, setResult] = useState((element.field_name in formValue  && formValue[element.field_name]) ? formValue[element.field_name] : null);
 
   useEffect(() => {
-    if (result && result[0] && result[0].name) {
-      // onChangeInputValue(result[0].name);
-      if (element.event.onSelectFile) {
-        Alert.alert('Rule Action', `Fired onSelectFile action. rule - ${element.event.onSelectFile}. selectedFile - ${result[0].name}`);
-      }
+    setResult(formValue[element.field_name])
+    if (result && result[0] && result[0].name && element.event.onSelectFile) {
+      Alert.alert('Rule Action', `Fired onSelectFile action. rule - ${element.event.onSelectFile}. selectedFile - ${result[0].name}`);
     }
-  }, [result]);
+  }, [JSON.stringify(formValue[element.field_name])]);
 
   const handleError = err => {
     if (DocumentPicker.isCancel(err)) {
@@ -38,71 +40,99 @@ const FileUpload = props => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.carouselTitle(colors)}>{element.meta.title || 'File Upload'}</Text>
-      <TouchableOpacity
-        style={styles.browerBtn(colors)}
-        onPress={() => {
-            DocumentPicker.pick({
-              presentationStyle: 'fullScreen',
-              type: types.allFiles,
-              allowMultiSelection: element.meta.multi_select,
-            })
-              .then(setResult)
-              .catch(handleError);
-        }}>
-        <Icon name="cloud-upload-outline" size={35} color={colors.text} />
-        <Text style={styles.browerBtnText(colors)}>Browse Files</Text>
-      </TouchableOpacity>
-      {!element.meta.multi_select && (
-        <View style={styles.mainView}>
-          <Text style={styles.text(editRole, colors)}>
-            {result && result[0] !== undefined && result[0].name !== undefined
-              ? result[0].name
-              : 'Select File'}
-          </Text>
-          <IconButton
-            icon="delete-outline"
-            iconColor={colors.colorButton}
-            onPress={() => {
-              
-            }}
-            style={{
-              ...styles.icon,
-              backgroundColor: colors.borderIconButtonBackground,
-              borderColor: colors.colorIconButtonBorder,
-            }}
-          />
-        </View>        
-      )}
-      {element.meta.multi_select && (
-        <>
-          <View style={styles.multifile}>
-            {result &&
-              result.map((e, i) => {
-                return (
-                  <View style={styles.selectedFile}>
-                    <Text
-                      key={i}
-                      style={{...styles.multiText, color: '#000000'}}>
-                      {e.name}
-                    </Text>
+      {
+        role.view && (
+          <>
+            <FieldLabel label={element.meta.title || 'File Upload'} visible={!element.meta.hide_title} />
+            {
+              (role.edit || preview) && (
+                <TouchableOpacity
+                  style={styles.browerBtn(fonts)}
+                  onPress={() => {
+                      DocumentPicker.pick({
+                        presentationStyle: 'fullScreen',
+                        type: types.allFiles,
+                        allowMultiSelection: element.meta.multi_select,
+                      })
+                        .then(e => {
+                          setFormValue({...formValue, [element.field_name]: e})
+                        })
+                        .catch(handleError);
+                  }}>
+                  <Icon name="cloud-upload-outline" size={35} color={fonts.values.color} />
+                  <Text style={styles.browerBtnText(fonts)}>Browse Files</Text>
+                </TouchableOpacity>
+              )
+            }
+            {!element.meta.multi_select && (
+              <View style={styles.mainView(colors)}>
+                <Text style={styles.text(fonts)}>
+                  {result && result[0] !== undefined && result[0].name !== undefined
+                    ? result[0].name
+                    : 'Selected File'}
+                </Text>
+                {
+                  (role.edit || preview) && (
                     <IconButton
                       icon="close"
-                      size={15}
-                      color={'#000000'}
-                      style={styles.closeBtn}
+                      iconColor={fonts.values.color}
+                      disabled={!(role.edit || preview)}
                       onPress={() => {
-                        const tempResult = JSON.parse(JSON.stringify(result));
-                        tempResult.splice(i, 1);
-                        setResult([...tempResult]);
+                        const tempFormValue = {...formValue};
+                        delete tempFormValue[element.field_name];
+                        setFormValue(tempFormValue);
+                      }}
+                      style={{
+                        ...styles.icon,
                       }}
                     />
-                  </View>
-                );
-              })}
-          </View>
-        </>
-      )}
+                  )
+                }
+              </View>        
+            )}
+            {element.meta.multi_select && (
+              <>
+                <View style={styles.multifile(colors)}>
+                  {result &&
+                    result.map((e, i) => {
+                      return (
+                        <View key={i} style={styles.selectedFile}>
+                          <Text
+                            key={i}
+                            style={{...styles.multiText, color: '#000000'}}>
+                            {e.name}
+                          </Text>
+                          {
+                            (role.edit || preview) && (
+                              <IconButton
+                                icon="close"
+                                size={15}
+                                color={'#000000'}
+                                style={styles.closeBtn}
+                                onPress={() => {
+                                  const tempValue = [...formValue[element.field_name]];
+                                  if (tempValue.length > 1) {
+                                    tempValue.splice(i, 1);
+                                    setFormValue({...formValue, [element.field_name]: tempValue});
+                                  } else {
+                                    const tempFormValue = {...formValue};
+                                    delete tempFormValue[element.field_name];
+                                    setFormValue(tempFormValue);
+                                  }
+                                  
+                                }}
+                              />
+                            )
+                          }
+                        </View>
+                      );
+                    })}
+                </View>
+              </>
+            )}
+          </>
+        )
+      }
     </View>
   );
 };
@@ -116,18 +146,18 @@ const styles = StyleSheet.create({
     padding: 5,
     color: colors.text,
   }),
-  browerBtn: colors => ({
+  browerBtn: fonts => ({
     height: 100,
     borderStyle: 'dashed',
     borderWidth: 1,
-    borderColor: colors.text,
+    borderColor: fonts.values.color,
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 5,
+    marginBottom: 10,
   }),
-  browerBtnText: colors => ({
-    color: colors.text,
+  browerBtnText: fonts => ({
+    ...fonts.values
   }),
   closeBtn: {
     margin: 0,
@@ -146,40 +176,34 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: 'black',
   },
-  multifile: {
+  multifile: colors => ({
     flexWrap: 'wrap',
     alignItems: 'flex-start',
     flexDirection: 'row',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: 'grey',
     padding: 3,
     minHeight: 40,
     marginBottom: 5,
     width: '100%',
-  },
-  mainView: {
+    borderRadius: 10,
+    backgroundColor: colors.card,
+  }),
+  mainView: colors => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
-  },
+    backgroundColor: colors.card,
+    borderRadius: 10,
+  }),
   icon: {
     margin: 0,
-    width: '13%',
-    borderWidth: 1,
-    borderRadius: 10,
   },
-  text: (editRole, colors) => ({
+  text: (fonts) => ({
     height: 35,
     textAlign: 'center',
-    width: editRole ? '85%' : '100%',
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: colors.border,
     textAlignVertical: 'center',
-    backgroundColor: colors.inputTextBackground,
-    color: colors.text,
+    marginLeft: 10,
+    ...fonts.values,
   }),
   datePicker: {
     justifyContent: 'center',

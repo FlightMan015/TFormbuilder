@@ -11,10 +11,11 @@ import { globalStyles, color } from '../../../theme/styles';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/Feather';
 import { datatypes } from '../../../constant';
-import {Button, IconButton, useTheme} from 'react-native-paper';
+import {IconButton, useTheme} from 'react-native-paper';
 
 const BarChartDataSection = ({data, onChangeData}) => {
-  const {colors} = useTheme();
+  const {colors, fonts} = useTheme();
+  console.log(data)
   const [openLabel, setOpenLabel] = useState(true);
   const [newLabel, setNewLabel] = useState('');
   const [newLabelValid, setNewLabelValid] = useState(false);
@@ -102,7 +103,7 @@ const BarChartDataSection = ({data, onChangeData}) => {
       <View>
         <Text style={{
           ...styles.text,
-          color: colors.label,
+          color: fonts.labels.color,
         }}>X Value</Text>
         <View style={globalStyles.fieldheader}>
           <SelectDropdown
@@ -111,20 +112,16 @@ const BarChartDataSection = ({data, onChangeData}) => {
             dropdownStyle={{...styles.dropdown, backgroundColor: colors.card}}
             rowTextStyle={{fontSize: 15, color: colors.text}}
             rowStyle={styles.dropdownRow}
-            buttonStyle={{
-              ...styles.dropdownBtn,
-              backgroundColor: colors.inputTextBackground,
-              borderColor: colors.inputTextBorder,
-            }}
-            buttonTextStyle={{color: colors.text, fontSize: 14, fontFamily: 'PublicSans-Regular'}}
+            buttonStyle={styles.buttonStyle(colors, fonts)}
+            buttonTextStyle={fonts.values}
             selectedRowStyle={{backgroundColor: '#bbf'}}
             selectedRowTextStyle={{color: 'white'}}
             renderDropdownIcon={
               openLabel
                 ? () => (
-                    <Icon name="chevron-down" size={18} color={colors.text} />
+                    <Icon name="chevron-down" size={18} color={fonts.values.color} />
                   )
-                : () => <Icon name="chevron-up" size={18} color={colors.text} />
+                : () => <Icon name="chevron-up" size={18} color={fonts.values.color} />
             }
             dropdownIconPosition="right"
             onFocus={e => setOpenLabel(false)}
@@ -136,21 +133,21 @@ const BarChartDataSection = ({data, onChangeData}) => {
           <View style={globalStyles.iconsContainer}>
             <IconButton
               icon={'playlist-plus'}
-              iconColor={colors.icon}
+              iconColor={fonts.values.color}
               size={18}
               onPress={onClickAddLabel}
               style={globalStyles.iconButton}
             />
             <IconButton
               icon={'pencil'}
-              iconColor={colors.icon}
+              iconColor={fonts.values.color}
               size={18}
               onPress={onClickEditLabel}
               style={globalStyles.iconButton}
             />
             <IconButton
               icon="delete-forever"
-              iconColor={colors.icon}
+              iconColor={fonts.values.color}
               size={18}
               onPress={onClickRemoveLabel}
               disabled={data.labels.length > 1 ? false : true}
@@ -160,11 +157,7 @@ const BarChartDataSection = ({data, onChangeData}) => {
         </View>
         {labelStatus.editLabel && (
           <TextInput
-            style={{
-              ...styles.textBox,
-              backgroundColor: colors.inputTextBackground,
-              borderColor: colors.inputTextBorder,
-            }}
+            style={styles.textBox(colors, fonts)}
             underlineColorAndroid="transparent"
             onChangeText={onChangeLabel}
             editable
@@ -175,11 +168,7 @@ const BarChartDataSection = ({data, onChangeData}) => {
         {labelStatus.addLabel && (
           <View style={globalStyles.addView}>
             <TextInput
-              style={{
-                ...globalStyles.textBoxNewLine,
-                backgroundColor: colors.inputTextBackground,
-                borderColor: colors.inputTextBorder,
-              }}
+              style={globalStyles.textBoxNewLine(colors, fonts)}
               underlineColorAndroid="transparent"
               onChangeText={onChangeNewLabel}
               editable
@@ -199,47 +188,23 @@ const BarChartDataSection = ({data, onChangeData}) => {
       <View>
         <Text style={{
           ...styles.text,
-          color: colors.label,
+          color: fonts.labels.color,
         }}>Y Value</Text>
         <View>
           <TextInput
             keyboardType="numeric"
-            style={{
-              ...styles.textBox,
-              backgroundColor: colors.inputTextBackground,
-              borderColor: colors.inputTextBorder,
-            }}
+            style={styles.textBox(colors, fonts)}
             underlineColorAndroid="transparent"
             onChangeText={onChangeY}
             editable
             placeholder="Please input Y value"
             value={
-              data.datasets[0].data[labelStatus.labelIndex] !== null
+              data.datasets[0].data[labelStatus.labelIndex]
                 ? data.datasets[0].data[labelStatus.labelIndex].toString()
                 : ''
             }
           />
         </View>
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          onPress={() => onChangeData('changeField')}
-          color={color.WHITE}
-          style={{
-            ...styles.saveBtn,
-            backgroundColor: colors.colorButton,
-            }}>
-          Save
-        </Button>
-        <Button
-          onPress={() => onChangeData('cancel')}
-          color={color.WHITE}
-          style={{
-            ...styles.saveBtn,
-            backgroundColor: colors.colorButton,
-            }}>
-          Cancel
-        </Button>
       </View>
     </View>
   );
@@ -282,16 +247,22 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlignVertical: 'center',
   },
-  textBox: {
+  textBox: (colors, fonts) => ({
     height: 40,
-    borderColor: color.GREY,
-    borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     marginHorizontal: 10,
     paddingLeft: 10,
     marginBottom: 10,
-    fontFamily: 'PublicSans-Regular',
-  },
+    backgroundColor: colors.card,
+    ...fonts.values,
+  }),
+  buttonStyle: (colors, fonts) => ({
+    borderRadius: 10,
+    width: '60%',
+    backgroundColor: colors.card,
+    height: 40,
+    ...fonts.values,
+  }),
   text: {
     marginLeft: 10,
     marginTop: 10,
