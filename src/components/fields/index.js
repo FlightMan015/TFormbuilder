@@ -16,6 +16,7 @@ const Field = props => {
   const {element, index, selected, onClick, onSelect, isLastField} = props;
   const {colors, size} = useTheme();
   const userRole = formStore(state => state.userRole);
+  const preview = formStore(state => state.preview);
   const role = element.role.find(e => e.name === userRole);
   const FieldComponent = getComponent(element.component);
   const opacity = new Animated.Value(1);
@@ -42,13 +43,13 @@ const Field = props => {
         role.view && (
           <>
             <View
-              style={styles.field(colors, selected)}
+              style={styles.field(colors, (selected && !preview))}
               onStartShouldSetResponder={() => {
                 onSelect(index);
               }}>
               <FieldComponent element={element} index={index} selected={selected} />
             </View>
-            {selected && (
+            {(selected && !preview) && (
               <Animated.View style={{...styles.setIcons, opacity}}>
                 {
                   index.childIndex > 0 && (

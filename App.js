@@ -22,6 +22,7 @@ import BitmapEditLinkDlg from './src/dialogs/BitmapEditLinkDlg';
 import formStore from './src/store/formStore';
 import { useMemo } from 'react';
 import CalendarDlg from './src/dialogs/CalendarDlg';
+import FormJsonDlg from './src/dialogs/FormJsonDlg';
 
 const App: () => Node = () => {
   const scheme = useColorScheme();
@@ -63,6 +64,7 @@ const App: () => Node = () => {
           <BitmapDrawingDlg />
           <BitmapEditLinkDlg />
           <CalendarDlg />
+          <FormJsonDlg />
         </NavigationContainer>
       </MenuProvider>
     </PaperProvider>

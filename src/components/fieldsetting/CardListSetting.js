@@ -127,7 +127,7 @@ const CardListSetting = props => {
                   keyName={'buttonText'}
                 />
                 <SettingSwitch
-                  title={'Hide label'}
+                  title={'Hide Label'}
                   value={element.meta.hide_title}
                   onChange={onChange}
                   keyName={'hide_title'}
@@ -139,6 +139,13 @@ const CardListSetting = props => {
                   onChange={onChange}
                   keyName={'autoplay'}
                   description={'Make sure to slide automatically.'}
+                />
+                <SettingSwitch
+                  title={'Visible Page Dots'}
+                  value={element.meta.visibleDots}
+                  onChange={onChange}
+                  keyName={'visibleDots'}
+                  description={'Make sure to show page dots.'}
                 />
                 <View style={styles.settingView}>
                   <Text style={styles.titleLabel}>Card Template</Text>
@@ -305,13 +312,6 @@ const CardListSetting = props => {
                   fontType={element.meta.descriptionFont.fontFamily}
                   onChange={(type, e) => {onChangeFont('descriptionFont', type, e);}}
                 />
-                <ColorPicker
-                  color={element.meta.buttonBackgroundColor}
-                  label={'Button Background Color'}
-                  selectColor={e => {
-                    onChange('buttonBackgroundColor', e);
-                  }}
-                />
                 <FontSetting
                   label={'Button Text Font'}
                   fontColor={element.meta.buttonTextFont.color}
@@ -319,6 +319,35 @@ const CardListSetting = props => {
                   fontType={element.meta.buttonTextFont.fontFamily}
                   onChange={(type, e) => {onChangeFont('buttonTextFont', type, e);}}
                 />
+                <SettingLabel
+                  title={'Gradient Background'}
+                  label={element.meta.isGradientBackground}
+                  onChange={onChange}
+                  keyName={'isGradientBackground'}
+                />
+                <ColorPicker
+                  color={element.meta.buttonBackgroundStartColor}
+                  label={element.meta.isGradientBackground ? 'Button Background Start Color' : 'Button Background Color'}
+                  selectColor={e => {
+                    if (!element.meta.isGradientBackground) {
+                      onChange('buttonBackgroundStartColor', e);
+                      onChange('buttonBackgroundEndColor', e);
+                    } else {
+                      onChange('buttonBackgroundStartColor', e);
+                    }
+                  }}
+                />
+                {
+                  element.emta.isGradientBackground && (
+                    <ColorPicker
+                      color={element.meta.buttonBackgroundEndColor}
+                      label={'Button Background End Color'}
+                      selectColor={e => {
+                        onChange('buttonBackgroundEndColor', e);
+                      }}
+                    />
+                  )
+                }
               </>
             )}
           </>

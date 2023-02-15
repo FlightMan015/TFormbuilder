@@ -12,19 +12,23 @@ import {
 import { menuItems } from '../constant';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PatternBackgroundView from '../common/PatternBackgroundView';
-import { radioButton } from '../constant';
 
-const Header = props => {
+const Header = () => {
   const {colors, size, fonts} = useTheme();
   const setSettingType = formStore(state => state.setSettingType);
   const setOpenSetting = formStore(state => state.setOpenSetting);
   const formData = formStore(state => state.formData);
-  const setPreview = formStore(state => state.setPreview);
 
   return (
     <View style={{height: Platform.OS === 'ios' ? 85 : 60}}>
       <View style={{flex: 1}}>
-        <PatternBackgroundView imageWidth={20} imageHeight={20} imageUri={formData.lightStyle.backgroundPatternImage} backgroundColor={colors.background} viewHeight={Platform.OS === 'ios' ? 85 : 60}/>
+        <PatternBackgroundView
+          imageWidth={20}
+          imageHeight={20}
+          imageUri={formData.lightStyle.backgroundPatternImage}
+          backgroundColor={colors.background}
+          viewHeight={Platform.OS === 'ios' ? 85 : 60}
+        />
       </View>
       <View style={{position: 'absolute', width: '100%', height: '100%'}}>
         <View style={{height: Platform.OS === 'ios' ? 25 : 0}}></View>
@@ -61,14 +65,6 @@ const Header = props => {
           </View>
           <View style={styles.subView}>
             <IconButton
-              icon="eye-outline"
-              size={size.s20}
-              iconColor={fonts.headings.color}
-              onPress={() => {
-                setPreview(true);
-              }}
-            />
-            <IconButton
               icon="cog-outline"
               size={size.s20}
               iconColor={fonts.headings.color}
@@ -82,7 +78,6 @@ const Header = props => {
         </View>
       </View>
     </View>
-    
   );
 };
 

@@ -90,7 +90,11 @@ const CardSlider = props => {
               loop={true}
               onSnapToItem={(slideindex) => {setActiveSlide(slideindex)}}
             />
-            <CarouselPagination />
+            {
+              element.meta.visibleDots && (
+                <CarouselPagination />
+              )
+            }
           </>
         )
       }

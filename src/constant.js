@@ -743,6 +743,10 @@ export const newCardSlider = {
     title: 'Card List',
     buttonText: 'Button',
     autoplay: false,
+    visibleDots: true,
+    isGradientBackground: true,
+    buttonBackgroundStartColor: '#3A88B2',
+    buttonBackgroundEndColor: '#84DCD2', 
     cardtemplate: 'card1',
     cardCorner: 'default',
     cardWidth: 'auto',
@@ -758,7 +762,6 @@ export const newCardSlider = {
       fontSize: 14,
       fontFamily: 'PublicSans-Regular',
     },
-    buttonBackgroundColor: '#5AB7C4',
     buttonTextFont: {
       color: '#FFFFFF',
       fontSize: 14,

@@ -11,11 +11,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useTheme} from 'react-native-paper';
-import {emptyImage} from '../../../constant';
 import ResizedImage from '../../../common/ResizedImage';
 import GradientButton from '../../../common/GradientButton';
 import Icon from 'react-native-vector-icons/Ionicons';
-import formStore from '../../../store/formStore';
 
 const ScreenWidth = Dimensions.get('window').width;
 
@@ -29,7 +27,8 @@ const Card1 = (props) => {
     backgroundColor,
     cardCorner,
     cardWidth,
-    buttonBackgroundColor,
+    buttonBackgroundStartColor,
+    buttonBackgroundEndColor,
     titleFont,
     descriptionFont,
     buttonTextFont,
@@ -109,7 +108,7 @@ const Card1 = (props) => {
         text={buttonText || 'Button'}
         textStyle={buttonTextFont}
         style={styles.button(cardCorner)}
-        colors={['#3A88B2', '#84DCD2']}
+        colors={[buttonBackgroundStartColor, buttonBackgroundEndColor]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0.5 }}
         onPress={handlePress}

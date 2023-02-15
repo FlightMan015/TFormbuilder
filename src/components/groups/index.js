@@ -42,13 +42,13 @@ const Group = props => {
         role.view && (
           <>
             <View
-              style={styles.field(colors, selected)}
+              style={styles.field(colors, (selected && !preview))}
               onStartShouldSetResponder={() => {
                 if(!selected) onSelect(index);
               }}>
               <GroupComponent element={element} index={index} selected={selected} onSelect={e => onSelect(e)} />
             </View>
-            {selected && (
+            {(selected && !preview) && (
               <Animated.View style={{...styles.setIcons, opacity}}>
                 {
                   index.groupIndex > 0 && (
