@@ -319,11 +319,12 @@ const CardListSetting = props => {
                   fontType={element.meta.buttonTextFont.fontFamily}
                   onChange={(type, e) => {onChangeFont('buttonTextFont', type, e);}}
                 />
-                <SettingLabel
+                <SettingSwitch
                   title={'Gradient Background'}
-                  label={element.meta.isGradientBackground}
+                  value={element.meta.isGradientBackground}
                   onChange={onChange}
                   keyName={'isGradientBackground'}
+                  description={'Make sure to show gradient.'}
                 />
                 <ColorPicker
                   color={element.meta.buttonBackgroundStartColor}
@@ -338,7 +339,7 @@ const CardListSetting = props => {
                   }}
                 />
                 {
-                  element.emta.isGradientBackground && (
+                  element.meta.isGradientBackground && (
                     <ColorPicker
                       color={element.meta.buttonBackgroundEndColor}
                       label={'Button Background End Color'}

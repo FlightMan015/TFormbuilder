@@ -38,8 +38,7 @@ const GridCellFieldSetting = props => {
 //   const {visibleDlg, setVisibleDlg} = useContext(FieldSettingContext);
 
   const tableFieldItem = ({item, drag, isActive, getIndex}) => {
-		console.log(item);
-		const index = getIndex();
+	const index = getIndex();
     return (
       <ScaleDecorator>
         <View style={styles.tableField}>

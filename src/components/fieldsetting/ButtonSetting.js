@@ -24,8 +24,6 @@ const ButtonSetting = ({element, index, onClick}) => {
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
 
-  console.log(element.meta.icon)
-
   const onChange = (key, value) => {
     const tempMeta = JSON.parse(JSON.stringify(element.meta));
     setFormData({

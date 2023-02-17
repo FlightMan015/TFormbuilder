@@ -22,7 +22,6 @@ const RadarChartField = ({element, index}) => {
   const [meta, setMeta] = useState(formValue[element.field_name] ? {...element.meta, data: formValue[element.field_name]} : {...element.meta, data: {datasets: [], lines: [], colors: []}});
 
   useEffect(() => {
-    console.log(formValue[element.field_name], 'meta', meta)
     if(formValue[element.field_name]) {
       setMeta({...element.meta, data: formValue[element.field_name]});
     }

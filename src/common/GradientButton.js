@@ -4,7 +4,6 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const GradientButton = props => {
   const {onPress, style, text, textStyle, colors, start, end, disabled} = props;
-  console.log(style)
   return (
     <LinearGradient colors={colors} start={start} end={end} style={style}>
       <TouchableOpacity

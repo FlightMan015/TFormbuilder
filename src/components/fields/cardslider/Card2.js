@@ -9,9 +9,13 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import {useTheme} from 'react-native-paper';
+import {useTheme, IconButton} from 'react-native-paper';
 import ResizedImage from '../../../common/ResizedImage';
 import Icon from 'react-native-vector-icons/Ionicons';
+import formStore from '../../../store/formStore';
+import DocumentPicker, {
+  types,
+} from 'react-native-document-picker';
 
 const ScreenWidth = Dimensions.get('window').width;
 
@@ -20,9 +24,14 @@ const Card2 = ({
   imageUri,
   cardCorner,
   cardWidth,
+  element,
+  cardIndex,
 }) => {
   const {colors, fonts} = useTheme();
-
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
   const cardWidthValue = cardWidth === 'auto' ? ((ScreenWidth - 15) * 75 / 100) > 300 ? 300 : ((ScreenWidth - 15) * 75 / 100) : (ScreenWidth - 30);
   const cardHeight = cardWidth === 'auto' ? ((ScreenWidth - 15) * 75 / 100) > 300 ? 170 : ((ScreenWidth - 15) * 75 / 100 * 9 / 16) : (ScreenWidth - 30) * 9 / 16;
 
@@ -43,8 +52,17 @@ const Card2 = ({
   return (
     <TouchableOpacity
       style={styles.card2(cardCorner, cardWidthValue, cardHeight)}
-      onPress={handlePress}
-      disabled={!hyperlink}>
+      onPress={() => {
+        DocumentPicker.pick({
+          type: types.images,
+        }).then(result => {
+          const newData = [...formValue[element.field_name]];
+          const newCardData = {...newData[cardIndex], image: result[0].uri};
+          newData.splice(cardIndex, 1, newCardData);
+          setFormValue({...formValue, [element.field_name]: newData});
+        }).catch({});
+      }}
+      disabled={!role.edit}>
       {
         !imageUri && (
           <View style={styles.emptyImageView(cardCorner, cardWidthValue, cardHeight, fonts, colors)}>
@@ -62,6 +80,23 @@ const Card2 = ({
           />
         )
       }
+      <IconButton
+        icon="close"
+        size={20}
+        iconColor={fonts.values.color}
+        style={{position: 'absolute', right: 0, top: 0}}
+        onPress={() => {
+          if (formValue[element.field_name]?.length > 0) {
+            const newCards = [...formValue[element.field_name]];
+            newCards.splice(cardIndex, 1);
+            setFormValue({...formValue, [element.field_name]: newCards});
+          } else {
+            const tempValue = {...formValue};
+            delete tempValue[element.field_name];
+            setFormValue(tempValue);
+          }
+        }}
+      />
     </TouchableOpacity>
   );
 };

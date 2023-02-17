@@ -39,7 +39,6 @@ const SchedularSubField = ({element, index}) => {
   const selectedDay = useRef(null);
   let opacity = new Animated.Value(1);
   const newDayString = new Date(Date.now()).toLocaleDateString().split('/');
-  console.log('20' + newDayString[2] + '-' + newDayString[1] + '-' + newDayString[0])
 
   const animate1 = () => {
     Animated.timing(opacity, {

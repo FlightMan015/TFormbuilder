@@ -32,7 +32,7 @@ const Header = () => {
       </View>
       <View style={{position: 'absolute', width: '100%', height: '100%'}}>
         <View style={{height: Platform.OS === 'ios' ? 25 : 0}}></View>
-        <View style={styles.titleBar(colors)}>
+        <View style={styles.titleBar}>
           <View style={styles.subView}>
             <Menu>
               <MenuTrigger>
@@ -61,8 +61,8 @@ const Header = () => {
                 })}
               </MenuOptions>
             </Menu>
-            <Text style={styles.title(fonts)}>{formData.title}</Text>
           </View>
+          <Text style={styles.title(fonts)}>{formData.title}</Text>
           <View style={styles.subView}>
             <IconButton
               icon="cog-outline"
@@ -86,14 +86,14 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     ...fonts.headings,
   }),
-  titleBar: colors => ({
+  titleBar: {
     width: '100%',
     height: 60,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 5,
-  }),
+  },
   addFieldButton: colors => ({
     backgroundColor: colors.colorButton,
   }),

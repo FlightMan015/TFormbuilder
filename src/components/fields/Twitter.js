@@ -13,7 +13,6 @@ const Twitter = props => {
       "https://publish.twitter.com/oembed?url=" + encodeURIComponent('https://twitter.com/MMKK02887216');
     await fetch(tweetUrl, { method: "GET", headers: { Accepts: "application/json" } }).then(
       resp => {
-        console.log('resp--------', resp);
         resp.json().then(json => {
           let html = json.html
           setEmbedHTML(html);
@@ -25,7 +24,6 @@ const Twitter = props => {
   useEffect(() => {setupEmbed()}, []);
 
   const renderEmbed = () => {
-    console.log('embedHTML', embedHTML);
     if (embedHTML) {
       let html = `<!DOCTYPE html>\
         <html>\

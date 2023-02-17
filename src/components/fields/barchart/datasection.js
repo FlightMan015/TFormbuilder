@@ -15,7 +15,6 @@ import {IconButton, useTheme} from 'react-native-paper';
 
 const BarChartDataSection = ({data, onChangeData}) => {
   const {colors, fonts} = useTheme();
-  console.log(data)
   const [openLabel, setOpenLabel] = useState(true);
   const [newLabel, setNewLabel] = useState('');
   const [newLabelValid, setNewLabelValid] = useState(false);

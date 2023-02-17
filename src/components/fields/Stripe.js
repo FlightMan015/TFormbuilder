@@ -35,7 +35,6 @@ const Stripe = props => {
       }),
     });
     const {result: {paymentIntent, ephemeralKey, customer, publishableKey}} = await response.json();
-    console.log('result-----------------', result);
     setClientSecred(paymentIntent);
     setStripePubKey(publishableKey);
     return {
@@ -48,7 +47,6 @@ const Stripe = props => {
   const initializePaymentSheet = async () => {
     const {paymentIntent, ephemeralKey, customer} =
       await fetchPaymentSheetParams();
-    console.log('paymentIntent---------------',paymentIntent);
     const {error} = await initPaymentSheet({
       customerId: customer,
       customerEphemeralKeySecret: ephemeralKey,
@@ -61,9 +59,7 @@ const Stripe = props => {
   };
 
   const openPaymentSheet = async () => {
-    console.log('opentpaymentShet--------------', error, clientSecret);
     const {error} = await presentPaymentSheet({clientSecret: clientSecret});
-    console.log('opentpaymentShet111--------------', error);
     if (error) {
       Alert.alert(`Error code: ${error.code}`, error.message);
     } else {

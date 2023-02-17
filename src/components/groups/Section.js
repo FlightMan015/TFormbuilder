@@ -3,6 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import MemoField from '../fields';
 import {IconButton, useTheme} from 'react-native-paper';
 import formStore from '../../store/formStore';
+import FieldLabel from '../../common/FieldLabel';
 
 const Section = ({
   element,
@@ -17,7 +18,7 @@ const Section = ({
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
   return (
     <View style={styles.container}>
-      <Text style={styles.carouselTitle(fonts)}>{element.meta.title || 'Section'}</Text>
+      <FieldLabel label={element.meta.title || 'Section'} visible={!element.meta.hide_title} />
       <View style={styles.tabContent(colors)}>
         {element.meta.childs.map((child, childindex) => {
           return (
@@ -57,11 +58,6 @@ const Section = ({
 };
 
 const styles = StyleSheet.create({
-  carouselTitle: fonts => ({
-    fontSize: 16,
-    padding: 5,
-    ...fonts.labels,
-  }),
   container: {
     padding: 5,
   },

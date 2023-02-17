@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import MemoField from '../fields';
 import DynamicTabView from '../../common/dynamic_tab_view/DynamicTabView';
 import {IconButton, useTheme} from 'react-native-paper';
 import formStore from '../../store/formStore';
-import { RollInLeft } from 'react-native-reanimated';
+import FieldLabel from '../../common/FieldLabel';
 
 const TabSection = ({
   element,
@@ -19,7 +19,7 @@ const TabSection = ({
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
   return (
     <View style={styles.container}>
-      <Text style={styles.carouselTitle(fonts)}>{element.meta.title || 'Tab Section'}</Text>
+      <FieldLabel label={element.meta.title || 'Tab Section'} visible={!element.meta.hide_title} />
       <DynamicTabView
         data={element.meta.childs}
         renderTab={(item, tabIndex) => {
@@ -76,11 +76,6 @@ const TabSection = ({
 };
 
 const styles = StyleSheet.create({
-  carouselTitle: fonts => ({
-    fontSize: 16,
-    padding: 5,
-    ...fonts.labels,
-  }),
   container: {
     padding: 5,
   },

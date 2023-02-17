@@ -47,8 +47,6 @@ const VoiceMessage = ({element}) => {
     audioRecorderPlayer.removeRecordBackListener();
     setFormValue({...formValue, [element.field_name]: {uri: result, audio_length: recordTime}});
     setRecordSecs(0);
-
-    console.log(result, typeof result);
   };
 
   const onStartPlay = async () => {
@@ -61,7 +59,6 @@ const VoiceMessage = ({element}) => {
       if (e.currentPosition < 0) {
         return;
       }
-      console.log(e.currentPosition)
 
       setCurrentPositionSec(e.currentPosition);
       setCurrentDurationSec(e.duration);

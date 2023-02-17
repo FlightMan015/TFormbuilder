@@ -9,7 +9,6 @@
 import React, { useEffect } from 'react';
 import type {Node} from 'react';
 import {useColorScheme, PermissionsAndroid, Platform} from 'react-native';
-import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import FieldMenu from './src/components/FieldMenu';
 import Header from './src/components/Header';
@@ -20,7 +19,6 @@ import { MenuProvider } from 'react-native-popup-menu';
 import BitmapDrawingDlg from './src/dialogs/BitmapDrawingDlg';
 import BitmapEditLinkDlg from './src/dialogs/BitmapEditLinkDlg';
 import formStore from './src/store/formStore';
-import { useMemo } from 'react';
 import CalendarDlg from './src/dialogs/CalendarDlg';
 import FormJsonDlg from './src/dialogs/FormJsonDlg';
 

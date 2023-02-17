@@ -792,7 +792,9 @@ export const newCardSlider = {
   role: [{name: 'admin', view: true, edit: true}],
   action: {create: false, update: false, read: false, delete: false},
   event: {
-    onClick: '',
+    onCreateCard: '',
+    onChangeCard: '',
+    onDeleteCard: '',
   },
 };
 

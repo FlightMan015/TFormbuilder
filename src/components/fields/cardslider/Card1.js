@@ -2,18 +2,21 @@ import React, {useCallback, useMemo} from 'react';
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   Linking,
   Alert,
   Dimensions,
-  TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {useTheme} from 'react-native-paper';
+import {IconButton, useTheme} from 'react-native-paper';
 import ResizedImage from '../../../common/ResizedImage';
 import GradientButton from '../../../common/GradientButton';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { TextInput } from 'react-native';
+import formStore from '../../../store/formStore';
+import DocumentPicker, {
+  types,
+} from 'react-native-document-picker';
 
 const ScreenWidth = Dimensions.get('window').width;
 
@@ -29,13 +32,20 @@ const Card1 = (props) => {
     cardWidth,
     buttonBackgroundStartColor,
     buttonBackgroundEndColor,
+    isGradientBackground,
     titleFont,
     descriptionFont,
     buttonTextFont,
     buttonText,
+    element,
+    cardIndex,
   } = props;
   const {colors, fonts} = useTheme();
-
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
+  console.log('========================', formValue[element.field_name].length);
   const cardInfoHeight = cardWidth === 'auto' ? ((ScreenWidth - 15) * 75 / 100) > 300 ? 130 : ((ScreenWidth - 15) * 75 / 100 * 9 / 16 - 40) : (ScreenWidth - 30) * 9 / 16 - 60;
 
   const handlePress = useCallback(async () => {
@@ -52,29 +62,47 @@ const Card1 = (props) => {
     }
   }, [hyperlink]);
 
-  return useMemo(() => (
+  return (
     <View style={styles.card}>
       <View style={styles.info(backgroundColor, cardCorner, cardInfoHeight)}>
-        {!imageUri && (
-          <TouchableOpacity style={styles.emptyImageView(cardCorner, cardInfoHeight, fonts)} disabled>
+        <TouchableOpacity
+          style={styles.emptyImageView(cardCorner, cardInfoHeight, fonts, imageUri)}
+          disabled={!role.edit}
+          onPress={() => {
+            console.log(formValue[element.field_name].length)
+            DocumentPicker.pick({
+              type: types.images,
+            }).then(result => {
+              const newData = [...formValue[element.field_name]];
+              const newCardData = {...newData[cardIndex], image: result[0].uri};
+              newData.splice(cardIndex, 1, newCardData);
+              setFormValue({...formValue, [element.field_name]: newData});
+            }).catch({});
+          }}
+        >
+          {!imageUri && (
             <Icon name="image-outline" size={40} color={fonts.values.color} />
-          </TouchableOpacity>
-        )}
-        {imageUri && <ResizedImage
-          uri={imageUri}
-          maxWidth={cardInfoHeight - 40}
-          maxHeight={cardInfoHeight - 40}
-          borderRadius={cardCorner === 'default' ? 3 : 10}
-        />}
+          )}
+          {imageUri && <ResizedImage
+            uri={imageUri}
+            maxWidth={cardInfoHeight - 40}
+            maxHeight={cardInfoHeight - 40}
+            borderRadius={cardCorner === 'default' ? 3 : 10}
+          />}
+        </TouchableOpacity>
         <View style={styles.textContainer}>
-          {/* <View>
+          <View>
             <TextInput
               style={{...titleFont, padding: 0, paddingVertical: 0}}
               value={title}
               placeholder='Title'
               editable={role.edit}
               onChange={e => {
-                
+                e.persist();
+                const newData = [...formValue[element.field_name]];
+                const newCardData = {...newData[cardIndex], title: e};
+                newData.splice(cardIndex, 1, newCardData);
+                setFormValue({...formValue, [element.field_name]: newData});
               }}
             />
             <TextInput
@@ -83,7 +111,11 @@ const Card1 = (props) => {
               placeholder='Subtitle'
               editable={role.edit}
               onChange={e => {
-                
+                e.persist();
+                const newData = [...formValue[element.field_name]];
+                const newCardData = {...newData[cardIndex], subTitle: e};
+                newData.splice(cardIndex, 1, newCardData);
+                setFormValue({...formValue, [element.field_name]: newData});
               }}
             />
           </View>
@@ -94,28 +126,48 @@ const Card1 = (props) => {
             editable={role.edit}
             multiline numberOfLines={2}
             onChange={e => {
-              
+              e.persist();
+              const newData = [...formValue[element.field_name]];
+              const newCardData = {...newData[cardIndex], description: e};
+              newData.splice(cardIndex, 1, newCardData);
+              setFormValue({...formValue, [element.field_name]: newData});
             }}
-          /> */}
-          <View>
+          />
+          {/* <View>
             <Text style={{...titleFont, padding: 0, paddingVertical: 0}}>{title || 'Title'}</Text>
             <Text style={{...titleFont, padding: 0, paddingVertical: 0}}>{subTitle || 'Subtitle'}</Text>
           </View>
-          <Text style={{...descriptionFont, padding: 0, paddingVertical: 0}}>{description || 'Description'}</Text>
+          <Text style={{...descriptionFont, padding: 0, paddingVertical: 0}}>{description || 'Description'}</Text> */}
         </View>
+        <IconButton
+					icon="close"
+					size={20}
+					iconColor={fonts.values.color}
+          style={{position: 'absolute', right: 0, top: 0}}
+					onPress={() => {
+            if (formValue[element.field_name]?.length > 0) {
+              const newCards = [...formValue[element.field_name]];
+              newCards.splice(cardIndex, 1);
+              setFormValue({...formValue, [element.field_name]: newCards});
+            } else {
+              const tempValue = {...formValue};
+              delete tempValue[element.field_name];
+              setFormValue(tempValue);
+            }
+					}}
+				/>
       </View>
       <GradientButton
         text={buttonText || 'Button'}
         textStyle={buttonTextFont}
         style={styles.button(cardCorner)}
-        colors={[buttonBackgroundStartColor, buttonBackgroundEndColor]}
+        colors={[buttonBackgroundStartColor, isGradientBackground? buttonBackgroundEndColor : buttonBackgroundStartColor]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0.5 }}
         onPress={handlePress}
         disabled={!hyperlink}
       />
-    </View>
-  ), [props]);
+    </View>);
 };
 
 const styles = StyleSheet.create({
@@ -137,13 +189,13 @@ const styles = StyleSheet.create({
     height: (ScreenWidth * 9) / 50 > 100 ? 100 : (ScreenWidth * 9) / 50,
     borderRadius: cardCorner === 'default' ? 3 : 10,
   }),
-  emptyImageView: (cardCorner, cardInfoHeight, fonts) => ({
+  emptyImageView: (cardCorner, cardInfoHeight, fonts, imageUri) => ({
     width: cardInfoHeight - 40,
     height: cardInfoHeight - 40,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: cardCorner === 'default' ? 3 : 10,
-    borderWidth: 1,
+    borderWidth: imageUri ? 0 : 1,
     borderColor: fonts.values.color,
     borderStyle: 'dashed',
   }),

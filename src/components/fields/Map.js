@@ -148,7 +148,6 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
   }, []);
 
   useEffect(() => {
-    console.log('efwfewf', formValue[element.field_name])
     setPoints(formValue[element.field_name]?.points || []);
     setGeoFences(formValue[element.field_name]?.geofences || []);
     const tempFencePageCount = Math.ceil(

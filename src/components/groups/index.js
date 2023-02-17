@@ -13,9 +13,10 @@ import { useNavigation } from '@react-navigation/native';
 import { deleteField, moveDown, moveUp } from '../../actions/formdata';
 
 const Group = props => {
-  const {element, index, selected, preview, onClick, onSelect, isLastGroup} = props;
+  const {element, index, selected, onClick, onSelect, isLastGroup} = props;
   const {colors, size} = useTheme();
   const userRole = formStore(state => state.userRole);
+  const preview = formStore(state => state.preview);
   const role = element.role.find(e => e.name === userRole);
   const GroupComponent = getComponent(element.component);
   const opacity = new Animated.Value(1);

@@ -382,7 +382,6 @@ const FormSetting = () => {
             imageUri={formData.lightStyle.backgroundPatternImage}
             keyName={'backgroundPatternImage'}
             onSelect={(keyname, value) => {
-              console.log(value);
               const newLightStyle = {...formData.lightStyle, [keyname]: value};
               const newDarkStyle = {...formData.darkStyle, [keyname]: value};
               setFormData({...formData, lightStyle: newLightStyle, darkStyle: newDarkStyle});

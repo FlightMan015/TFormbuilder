@@ -19,8 +19,6 @@ const ImageField = ({element}) => {
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
 
-  console.log(formValue);
-
   return (
     <View style={styles.container}>
       {

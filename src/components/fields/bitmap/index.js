@@ -35,7 +35,6 @@ const Bitmap = ({element, index}) => {
   const userRole = formStore(state => state.userRole);
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
-  console.log('123132--------', formValue[element.field_name])
   const setFormValue = formStore(state => state.setFormValue);
   // Array of completed paths from global state
   // const completedPaths = useDrawingStore(state => state.completedPaths);
