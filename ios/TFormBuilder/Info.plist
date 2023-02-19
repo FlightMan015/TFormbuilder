@@ -37,9 +37,9 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Websites you visit may request your location</string>
-	<key>NSLocationAkwaysUsageDescriptioin</key>
+	<key>NSLocationAlwaysUsageDescriptioin</key>
 	<string>Websites you visit may request your location</string>
-	<key>NSLocationAkwaysAndWhenInUseUsageDescription</key>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Websites you visit may request your location</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
