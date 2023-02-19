@@ -56,6 +56,8 @@ const App: () => Node = () => {
         authorizationLevel: 'whenInUse',
       });
       GeoLocation.requestAuthorization();
+
+      return null;
     }
 
     if (Platform.OS === 'android') {
