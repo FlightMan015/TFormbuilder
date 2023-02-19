@@ -22,7 +22,7 @@ import {
 } from 'react-native';
 import useDrawingStore from '../../../store/bitmapStore';
 import history from './history';
-import Header from './Header';
+import Header from './header';
 import formStore from '../../../store/formStore';
 import utils from './utils';
 
