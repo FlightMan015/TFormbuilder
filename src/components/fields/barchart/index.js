@@ -15,6 +15,7 @@ const BarChartSubField = ({element, index, onClickUpdateField}) => {
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const preview = formStore(state => state.preview);
   const [chartWidth, setChartWidth] = useState(0);
   const [data, setData] = useState(formValue[element.field_name] || {labels: [], datasets: [{data: []}]});
   const [visible, setVisible] = useState(false);

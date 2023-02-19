@@ -13,9 +13,11 @@ import Icon from 'react-native-vector-icons/Feather';
 import {datatypes, string16} from '../../../constant';
 import {IconButton, Switch, useTheme} from 'react-native-paper';
 import ColorPalette from '../../../common/color_palette';
+import formStore from '../../../store/formStore';
 
 const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
   const {colors, fonts} = useTheme();
+  const preview = formStore(state => state.preview);
   const [openLine, setOpenLine] = useState(true);
   const [openAxis, setOpenAxis] = useState(true);
   const [customColor, setCustomColor] = useState({red: 0, green: 0, blue: 0});

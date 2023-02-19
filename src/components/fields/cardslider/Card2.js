@@ -32,6 +32,7 @@ const Card2 = ({
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const preview = formStore(state => state.preview);
   const cardWidthValue = cardWidth === 'auto' ? ((ScreenWidth - 15) * 75 / 100) > 300 ? 300 : ((ScreenWidth - 15) * 75 / 100) : (ScreenWidth - 30);
   const cardHeight = cardWidth === 'auto' ? ((ScreenWidth - 15) * 75 / 100) > 300 ? 170 : ((ScreenWidth - 15) * 75 / 100 * 9 / 16) : (ScreenWidth - 30) * 9 / 16;
 

@@ -12,6 +12,7 @@ const DatePicker = ({element}) => {
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const preview = formStore(state => state.preview);
   const [visible, setVisible] = useState(false);
 
   return (

@@ -47,7 +47,7 @@ const Group = props => {
               onStartShouldSetResponder={() => {
                 if(!selected) onSelect(index);
               }}>
-              <GroupComponent element={element} index={index} selected={selected} onSelect={e => onSelect(e)} />
+              <GroupComponent element={element} index={index} selected={selected} onSelect={e => onSelect(e)} preview={preview} />
             </View>
             {(selected && !preview) && (
               <Animated.View style={{...styles.setIcons, opacity}}>

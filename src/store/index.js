@@ -4,9 +4,6 @@ import {StyleSheet, View, Text} from 'react-native';
 import {IconButton} from 'react-native-paper';
 
 const Body = props => {
-  const {formName, preview, onClick} = props;
-  const {colors, size} = useTheme();
-
   return <View style={styles.container} />;
 };
 

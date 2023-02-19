@@ -13,10 +13,12 @@ import Icon from 'react-native-vector-icons/Feather';
 import { datatypes, string16 } from '../../../constant';
 import {Button, IconButton, Switch, useTheme} from 'react-native-paper';
 import ColorPalette from '../../../common/color_palette';
+import formStore from '../../../store/formStore';
 
 const LineChartDataSection = ({data, onChangeData, role}) => {
 
   const {colors, fonts} = useTheme();
+  const preview = formStore(state => state.preview);
   const [openLine, setOpenLine] = useState(true);
   const [openLabel, setOpenLabel] = useState(true);
   const [lineStatus, setLineStatus] = useState({

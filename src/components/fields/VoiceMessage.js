@@ -8,6 +8,7 @@ import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 
 const VoiceMessage = ({element}) => {
   const {colors, fonts} = useTheme();
+  const preview = formStore(state => state.preview);
   const audioRecorderPlayer = useRef(new AudioRecorderPlayer()).current;
   const userRole = formStore(state => state.userRole);
   const role = element.role.find(e => e.name === userRole);

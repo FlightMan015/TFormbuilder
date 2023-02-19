@@ -24,7 +24,6 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
   const visibleDlg = formStore(state => state.visibleDlg);
   const setVisibleDlg = formStore(state => state.setVisibleDlg);
   const [open, setOpen] = useState(true);
-  const dropdownItem = useRef();
 
   const formNames = formDatas.map((item, index) => {
     return item.name;
@@ -101,13 +100,11 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
                 onPress={() => {
                   setSettingType('formSetting');
                   setOpenSetting(true);
-                  dropdownItem.reset();
                 }}
               />
               <Avatar.Image size={40} style={{marginHorizontal: 5}} source={formData.logo ? {uri: formData.logo} : require('../assets/icon_images/user_avatar.png')} />
             </View>
             <SelectDropdown
-              ref={dropdownItem}
               data={formNames}
               onSelect={e => {
                 const tempFormData = formDatas.find(data => data.name === e);

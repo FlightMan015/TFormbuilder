@@ -16,6 +16,7 @@ const FileUpload = props => {
   const userRole = formStore(state => state.userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const preview = formStore(state => state.preview);
   const role = element.role.find(e => e.name === userRole);
   const [result, setResult] = useState((element.field_name in formValue  && formValue[element.field_name]) ? formValue[element.field_name] : null);
 

@@ -15,6 +15,7 @@ const PieChartSubField = ({element, index, onClickUpdateField}) => {
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const preview = formStore(state => state.preview);
   const [chartWidth, setChartWidth] = useState(0);
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState(formValue[element.field_name] || []);

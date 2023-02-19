@@ -28,6 +28,7 @@ const SchedularSubField = ({element, index}) => {
   const setFormValue = formStore(state => state.setFormValue);
   const visibleDlg = formStore(state => state.visibleDlg);
   const setVisibleDlg = formStore(state => state.setVisibleDlg);
+  const preview = formStore(state => state.preview);
   const [markedDates, setMarkedDates] = useState({});
   const [visibleCalendar, setVisibleCalendar] = useState(true);
   const addType = useRef('');

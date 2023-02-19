@@ -15,6 +15,7 @@ const screenWidth = Dimensions.get('window').width;
 const ImageField = ({element}) => {
   const {colors, fonts} = useTheme();
   const userRole = formStore(state => state.userRole);
+  const preview = formStore(state => state.preview);
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);

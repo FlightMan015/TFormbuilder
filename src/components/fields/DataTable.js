@@ -17,6 +17,7 @@ const DataTableBody = props => {
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const preview = formStore(state => state.preview);
   const cellWidth = useRef(100);
   const [headers, setHeaders] = useState([]);
   const [widthArr, setWidthArr] = useState([]);

@@ -10,6 +10,7 @@ import formStore from '../../store/formStore';
 const DropDown = props => {
   const {element} = props;
   const {colors, fonts} = useTheme();
+  const preview = formStore(state => state.preview);
   const userRole = formStore(state => state.userRole);
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);

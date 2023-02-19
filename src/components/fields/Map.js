@@ -60,6 +60,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const preview = formStore(state => state.preview);
   const [searchQuery, setSearchQuery] = useState('');
   const [visibleSetPoint, setVisibleSetPoint] = useState(false);
   const [newPointData, setNewPointData] = useState({

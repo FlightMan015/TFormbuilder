@@ -12,6 +12,7 @@ const TimePicker = ({element}) => {
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const preview = formStore(state => state.preview);
   const [visible, setVisible] = useState(false);
   const [time, setTime] = useState((element.field_name in formValue  && formValue[element.field_name]) ? new Date(formValue[element.field_name]) : new Date(Date.now()));
 
