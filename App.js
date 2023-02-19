@@ -55,7 +55,7 @@ const App: () => Node = () => {
         // skipPermissionRequests: false,
         authorizationLevel: 'whenInUse',
       });
-      GeoLocation.requestAuthorization().then(e => {console.log(e)});
+      GeoLocation.requestAuthorization();
 
       return null;
     }
