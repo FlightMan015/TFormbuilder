@@ -2,12 +2,12 @@ import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {View, StyleSheet, Button, Alert} from 'react-native';
 import {useTheme} from 'react-native-paper';
-import {
-  CardField,
-  CardFieldInput,
-  useStripe,
-  StripeProvider,
-} from '@stripe/stripe-react-native';
+// import {
+//   CardField,
+//   CardFieldInput,
+//   useStripe,
+//   StripeProvider,
+// } from '@stripe/stripe-react-native';
 
 const Stripe = props => {
   const {element, value, onChangeValue, userRole} = props;

@@ -47,6 +47,10 @@ const VoiceMessage = ({element}) => {
     audioRecorderPlayer.removeRecordBackListener();
     setFormValue({...formValue, [element.field_name]: {uri: result, audio_length: recordTime}});
     setRecordSecs(0);
+
+    if (element.event.onCreateMessage) {
+      Alert.alert('Rule Action', `Fired onCreateMessage action. rule - ${element.event.onCreateMessage}.`);
+    }
   };
 
   const onStartPlay = async () => {
@@ -70,16 +74,26 @@ const VoiceMessage = ({element}) => {
       }
       return;
     });
+
+    if (element.event.onStartPlay) {
+      Alert.alert('Rule Action', `Fired onStartPlay action. rule - ${element.event.onStartPlay}.`);
+    }
   };
 
   const onPausePlay = async () => {
     setPaused(true);
     await audioRecorderPlayer.pausePlayer();
+    if (element.event.onPausePlay) {
+      Alert.alert('Rule Action', `Fired onPausePlay action. rule - ${element.event.onPausePlay}.`);
+    }
   };
 
   const onResumePlay = async () => {
     setPaused(false);
     await audioRecorderPlayer.resumePlayer();
+    if (element.event.onResumePlay) {
+      Alert.alert('Rule Action', `Fired onResumePlay action. rule - ${element.event.onResumePlay}.`);
+    }
   };
 
   const onStopPlay = async () => {
@@ -88,6 +102,9 @@ const VoiceMessage = ({element}) => {
     setPlayTime(0);
     audioRecorderPlayer.stopPlayer();
     audioRecorderPlayer.removePlayBackListener();
+    if (element.event.onStopPlay) {
+      Alert.alert('Rule Action', `Fired onStopPlay action. rule - ${element.event.onStopPlay}.`);
+    }
   };
 
   return (

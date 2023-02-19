@@ -21,7 +21,7 @@ import Calendar from './Calendar';
 import DataTable from './DataTable';
 import Button from './Button';
 import Twitter from './Twitter';
-// import Stripe from './Stripe';
+import Stripe from './Stripe';
 import VoiceMessage from './VoiceMessage';
 
 const componentMap = {
@@ -99,9 +99,9 @@ const componentMap = {
   [componentName.BUTTON]: {
     component: Button,
   },
-  // [componentName.PAYMENT]: {
-  //   component: Stripe,
-  // },
+  [componentName.PAYMENT]: {
+    component: Stripe,
+  },
   // [componentName.EMBEDDED]: {
   //   component: Embedded,
   // },

@@ -1,6 +1,6 @@
 import React, {useState, useMemo, useRef} from 'react';
 import PropTypes from 'prop-types';
-import {View, StyleSheet, Dimensions} from 'react-native';
+import {View, StyleSheet, Dimensions, Alert} from 'react-native';
 import {useTheme, IconButton} from 'react-native-paper';
 import Carousel from 'react-native-snap-carousel-v4';
 import Card1 from './Card1';
@@ -111,7 +111,7 @@ const CardSlider = props => {
                 <CarouselPagination />
               )
             }
-            {(!preview || !role.edit) && (
+            {(preview || role.edit) && (
               <View style={styles.renderContainer}>
                 <IconButton
                   icon="plus"
@@ -130,6 +130,9 @@ const CardSlider = props => {
                       const newCards = [];
                       newCards.push(newCard);
                       setFormValue({...formValue, [element.field_name]: newCards});
+                    }
+                    if (element.event.onCreateCard) {
+                      Alert.alert('Rule Action', `Fired onCreateCard action. rule - ${element.event.onCreateCard}.`);
                     }
                   }}
                 />

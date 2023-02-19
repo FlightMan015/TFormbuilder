@@ -85,6 +85,8 @@ const formStore = create(set => ({
   setVisibleDlg: newVisibleDlg => set(() => ({visibleDlg: newVisibleDlg})),
   visibleJsonDlg: false,
   setVisibleJsonDlg: newVisible => set(() => ({visibleJsonDlg: newVisible})),
+  formDatas: [],
+  setFormDatas: newFormDatas => set(() => ({formDatas: newFormDatas,})),
 }));
 
 export default formStore;

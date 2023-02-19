@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useRef} from 'react';
 import {useTheme} from 'react-native-paper';
 import {StyleSheet, View, Text, Platform} from 'react-native';
 import {IconButton, Avatar} from 'react-native-paper';
@@ -9,15 +9,26 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import { menuItems } from '../constant';
+import { menuItems, newFormData } from '../constant';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PatternBackgroundView from '../common/PatternBackgroundView';
+import SelectDropdown from 'react-native-select-dropdown';
 
-const Header = () => {
+const Header = ({deleteForm, renameForm, saveForm}) => {
   const {colors, size, fonts} = useTheme();
   const setSettingType = formStore(state => state.setSettingType);
   const setOpenSetting = formStore(state => state.setOpenSetting);
   const formData = formStore(state => state.formData);
+  const formDatas = formStore(state => state.formDatas);
+  const setFormData = formStore(state => state.setFormData);
+  const visibleDlg = formStore(state => state.visibleDlg);
+  const setVisibleDlg = formStore(state => state.setVisibleDlg);
+  const [open, setOpen] = useState(true);
+  const dropdownItem = useRef();
+
+  const formNames = formDatas.map((item, index) => {
+    return item.name;
+  });
 
   return (
     <View style={{height: Platform.OS === 'ios' ? 85 : 60}}>
@@ -45,7 +56,25 @@ const Header = () => {
               <MenuOptions>
                 {menuItems.map((item, index) => {
                   return (
-                    <MenuOption key={index} style={{padding: 0}} onSelect={() => {}}>
+                    <MenuOption key={index} style={{padding: 0}} onSelect={() => {
+                      switch (item.name) {
+                        case menuItems[0].name:
+                          setFormData(newFormData);
+                          break;
+                        case menuItems[1].name:
+                          saveForm(formData);
+                          break;
+                        case menuItems[2].name:
+                          setVisibleDlg({...visibleDlg, saveForm: true, rename: false, oldName: formData.name});
+                          break;
+                        case menuItems[3].name:
+                          setVisibleDlg({...visibleDlg, saveForm: true, rename: true, oldName: formData.name});
+                          break;
+                        case menuItems[4].name:
+                          deleteForm(formData.name);
+                          break;
+                      }
+                    }}>
                       <View
                         key={index}
                         style={styles.fieldListItem}>
@@ -62,18 +91,45 @@ const Header = () => {
               </MenuOptions>
             </Menu>
           </View>
-          <Text style={styles.title(fonts)}>{formData.title}</Text>
-          <View style={styles.subView}>
-            <IconButton
-              icon="cog-outline"
-              size={size.s20}
-              iconColor={fonts.headings.color}
-              onPress={() => {
-                setSettingType('formSetting');
-                setOpenSetting(true);
+          {/* <Text style={styles.title(fonts)}>{formData.title}</Text> */}
+          <View style={{flex: 1, flexDirection: 'row-reverse'}}>
+            <View style={styles.subView}>
+              <IconButton
+                icon="cog-outline"
+                size={size.s20}
+                iconColor={fonts.headings.color}
+                onPress={() => {
+                  setSettingType('formSetting');
+                  setOpenSetting(true);
+                  dropdownItem.reset();
+                }}
+              />
+              <Avatar.Image size={40} style={{marginHorizontal: 5}} source={formData.logo ? {uri: formData.logo} : require('../assets/icon_images/user_avatar.png')} />
+            </View>
+            <SelectDropdown
+              ref={dropdownItem}
+              data={formNames}
+              onSelect={e => {
+                const tempFormData = formDatas.find(data => data.name === e);
+                setFormData(tempFormData);
               }}
+              dropdownStyle={styles.dropdown(colors)}
+              rowStyle={styles.rowStyle}
+              rowTextStyle={styles.rowTextStyle(fonts)}
+              buttonStyle={styles.buttonStyle(colors)}
+              buttonTextStyle={{...styles.textStyle(fonts)}}
+              selectedRowTextStyle={styles.selectedRowTextStyle(fonts)}
+              renderDropdownIcon={
+                open
+                  ? () => <Icon name="chevron-down" size={18} color={fonts.headings.color} />
+                  : () => <Icon name="chevron-up" size={18} color={fonts.headings.color} />
+              }
+              dropdownIconPosition="right"
+              onFocus={() => setOpen(false)}
+              onBlur={() => setOpen(true)}
+              defaultButtonText={formData.name || 'New Form'}
+              defaultValue={formData.name}
             />
-            <Avatar.Image size={40} style={{marginHorizontal: 5}} source={formData.logo ? {uri: formData.logo} : require('../assets/icon_images/user_avatar.png')} />
           </View>
         </View>
       </View>
@@ -122,6 +178,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
   },
+  rowTextStyle: fonts => ({
+    fontSize: 14,
+    color: fonts.labels.color,
+    textAlign: 'left',
+    marginLeft: 20,
+  }),
+  selectedRowStyle: {
+    backgroundColor: 'grey',
+  },
+  selectedRowTextStyle: fonts => ({
+    color: fonts.values.color,
+  }),
+  dropdown: colors => ({
+    borderRadius: 15,
+    backgroundColor: colors.card,
+    maxHeight: 500,
+  }),
+  buttonStyle: colors => ({
+    flex: 1,
+    backgroundColor: colors.background,
+  }),
+  rowStyle: {
+    height: 40,
+    borderBottomWidth: 0,
+  },
+  textStyle: fonts => ({
+    ...fonts.headings,
+    textAlign: 'center',
+  }),
 });
 
 export default Header;

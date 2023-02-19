@@ -70,10 +70,52 @@ export const modes = {
   approver: 'approver',
 };
 
+
 export const newFormData = {
   title: 'New TForm',
   logo: '',
   data: [],
+  theme: 'Native',
+  lightStyle: {
+    formBackgroundColor: '#F8F8F8',
+    backgroundPatternImage: '',
+    foregroundColor: '#FFFFFF',
+    headings: {
+      fontSize: 18,
+      color: '#000000',
+      fontFamily: 'PublicSans-SemiBold',
+    },
+    labels: {
+        fontSize: 16,
+        color: '#080808',
+        fontFamily: 'PublicSans-Regular',
+    },
+    values: {
+        fontSize: 14,
+        color: '#080808',
+        fontFamily: 'PublicSans-Regular',
+    },
+  },
+  darkStyle: {
+    formBackgroundColor: '#1F2128',
+    backgroundPatternImage: '',
+    foregroundColor: '#242731',
+    headings: {
+      fontSize: 18,
+      color: '#FFFFFF',
+      fontFamily: 'PublicSans-SemiBold',
+    },
+    labels: {
+        fontSize: 16,
+        color: '#FFFFFF',
+        fontFamily: 'PublicSans-Regular',
+    },
+    values: {
+        fontSize: 14,
+        color: '#FFFFFF',
+        fontFamily: 'PublicSans-Regular',
+    },
+  },
   checkedRoles: [],
 };
 
@@ -825,7 +867,11 @@ export const newVoiceMessage = {
   role: [{name: 'admin', view: true, edit: true}],
   action: {create: false, update: false, read: false, delete: false},
   event: {
-    onClick: '',
+    onCreateMessage: '',
+    onStartPlay: '',
+    onPausePlay: '',
+    onResumePlay: '',
+    onStopPlay: '',
   },
 };
 

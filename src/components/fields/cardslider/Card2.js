@@ -60,9 +60,12 @@ const Card2 = ({
           const newCardData = {...newData[cardIndex], image: result[0].uri};
           newData.splice(cardIndex, 1, newCardData);
           setFormValue({...formValue, [element.field_name]: newData});
+          if (element.event.onChangeCard) {
+            Alert.alert('Rule Action', `Fired onChangeCard action. rule - ${element.event.onChangeCard}.`);
+          }
         }).catch({});
       }}
-      disabled={!role.edit}>
+      disabled={!(role.edit || preview)}>
       {
         !imageUri && (
           <View style={styles.emptyImageView(cardCorner, cardWidthValue, cardHeight, fonts, colors)}>
@@ -80,23 +83,30 @@ const Card2 = ({
           />
         )
       }
-      <IconButton
-        icon="close"
-        size={20}
-        iconColor={fonts.values.color}
-        style={{position: 'absolute', right: 0, top: 0}}
-        onPress={() => {
-          if (formValue[element.field_name]?.length > 0) {
-            const newCards = [...formValue[element.field_name]];
-            newCards.splice(cardIndex, 1);
-            setFormValue({...formValue, [element.field_name]: newCards});
-          } else {
-            const tempValue = {...formValue};
-            delete tempValue[element.field_name];
-            setFormValue(tempValue);
-          }
-        }}
-      />
+      {
+        (role.edit || preview) && (
+          <IconButton
+            icon="close"
+            size={20}
+            iconColor={fonts.values.color}
+            style={{position: 'absolute', right: 0, top: 0}}
+            onPress={() => {
+              if (formValue[element.field_name]?.length > 0) {
+                const newCards = [...formValue[element.field_name]];
+                newCards.splice(cardIndex, 1);
+                setFormValue({...formValue, [element.field_name]: newCards});
+              } else {
+                const tempValue = {...formValue};
+                delete tempValue[element.field_name];
+                setFormValue(tempValue);
+              }
+              if (element.event.onDeleteCard) {
+                Alert.alert('Rule Action', `Fired onDeleteCard action. rule - ${element.event.onDeleteCard}.`);
+              }
+            }}
+          />
+        )
+      }
     </TouchableOpacity>
   );
 };

@@ -45,7 +45,6 @@ const Card1 = (props) => {
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
-  console.log('========================', formValue[element.field_name].length);
   const cardInfoHeight = cardWidth === 'auto' ? ((ScreenWidth - 15) * 75 / 100) > 300 ? 130 : ((ScreenWidth - 15) * 75 / 100 * 9 / 16 - 40) : (ScreenWidth - 30) * 9 / 16 - 60;
 
   const handlePress = useCallback(async () => {
@@ -67,9 +66,8 @@ const Card1 = (props) => {
       <View style={styles.info(backgroundColor, cardCorner, cardInfoHeight)}>
         <TouchableOpacity
           style={styles.emptyImageView(cardCorner, cardInfoHeight, fonts, imageUri)}
-          disabled={!role.edit}
+          disabled={!(role.edit || preview)}
           onPress={() => {
-            console.log(formValue[element.field_name].length)
             DocumentPicker.pick({
               type: types.images,
             }).then(result => {
@@ -77,6 +75,9 @@ const Card1 = (props) => {
               const newCardData = {...newData[cardIndex], image: result[0].uri};
               newData.splice(cardIndex, 1, newCardData);
               setFormValue({...formValue, [element.field_name]: newData});
+              if (element.event.onChangeCard) {
+                Alert.alert('Rule Action', `Fired onChangeCard action. rule - ${element.event.onChangeCard}.`);
+              }
             }).catch({});
           }}
         >
@@ -96,26 +97,32 @@ const Card1 = (props) => {
               style={{...titleFont, padding: 0, paddingVertical: 0}}
               value={title}
               placeholder='Title'
-              editable={role.edit}
+              editable={(role.edit || preview)}
               onChange={e => {
                 e.persist();
                 const newData = [...formValue[element.field_name]];
                 const newCardData = {...newData[cardIndex], title: e};
                 newData.splice(cardIndex, 1, newCardData);
                 setFormValue({...formValue, [element.field_name]: newData});
+                if (element.event.onChangeCard) {
+                  Alert.alert('Rule Action', `Fired onChangeCard action. rule - ${element.event.onChangeCard}.`);
+                }
               }}
             />
             <TextInput
               style={{...titleFont, padding: 0, paddingVertical: 0}}
               value={subTitle}
               placeholder='Subtitle'
-              editable={role.edit}
+              editable={(role.edit || preview)}
               onChange={e => {
                 e.persist();
                 const newData = [...formValue[element.field_name]];
                 const newCardData = {...newData[cardIndex], subTitle: e};
                 newData.splice(cardIndex, 1, newCardData);
                 setFormValue({...formValue, [element.field_name]: newData});
+                if (element.event.onChangeCard) {
+                  Alert.alert('Rule Action', `Fired onChangeCard action. rule - ${element.event.onChangeCard}.`);
+                }
               }}
             />
           </View>
@@ -123,7 +130,7 @@ const Card1 = (props) => {
             style={{...descriptionFont, padding: 0, paddingVertical: 0}}
             value={description}
             placeholder='Description'
-            editable={role.edit}
+            editable={(role.edit || preview)}
             multiline numberOfLines={2}
             onChange={e => {
               e.persist();
@@ -131,6 +138,9 @@ const Card1 = (props) => {
               const newCardData = {...newData[cardIndex], description: e};
               newData.splice(cardIndex, 1, newCardData);
               setFormValue({...formValue, [element.field_name]: newData});
+              if (element.event.onChangeCard) {
+                Alert.alert('Rule Action', `Fired onChangeCard action. rule - ${element.event.onChangeCard}.`);
+              }
             }}
           />
           {/* <View>
@@ -139,23 +149,30 @@ const Card1 = (props) => {
           </View>
           <Text style={{...descriptionFont, padding: 0, paddingVertical: 0}}>{description || 'Description'}</Text> */}
         </View>
-        <IconButton
-					icon="close"
-					size={20}
-					iconColor={fonts.values.color}
-          style={{position: 'absolute', right: 0, top: 0}}
-					onPress={() => {
-            if (formValue[element.field_name]?.length > 0) {
-              const newCards = [...formValue[element.field_name]];
-              newCards.splice(cardIndex, 1);
-              setFormValue({...formValue, [element.field_name]: newCards});
-            } else {
-              const tempValue = {...formValue};
-              delete tempValue[element.field_name];
-              setFormValue(tempValue);
-            }
-					}}
-				/>
+        {
+          role.edit && (
+            <IconButton
+              icon="close"
+              size={20}
+              iconColor={fonts.values.color}
+              style={{position: 'absolute', right: 0, top: 0}}
+              onPress={() => {
+                if (formValue[element.field_name]?.length > 0) {
+                  const newCards = [...formValue[element.field_name]];
+                  newCards.splice(cardIndex, 1);
+                  setFormValue({...formValue, [element.field_name]: newCards});
+                } else {
+                  const tempValue = {...formValue};
+                  delete tempValue[element.field_name];
+                  setFormValue(tempValue);
+                }
+                if (element.event.onDeleteCard) {
+                  Alert.alert('Rule Action', `Fired onDeleteCard action. rule - ${element.event.onDeleteCard}.`);
+                }
+              }}
+            />
+          )
+        }
       </View>
       <GradientButton
         text={buttonText || 'Button'}
@@ -165,7 +182,7 @@ const Card1 = (props) => {
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0.5 }}
         onPress={handlePress}
-        disabled={!hyperlink}
+        disabled={(!hyperlink || !(role.edit || preview))}
       />
     </View>);
 };
