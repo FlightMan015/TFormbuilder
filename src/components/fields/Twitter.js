@@ -53,13 +53,13 @@ const Twitter = props => {
 const styles = StyleSheet.create({
   webviewWrap: {
     flex: 1,
-    width: 100,
+    width: '100%',
     height: 200,
     backgroundColor: 'red',
   },
   webview: {
     flex: 1,
-    width: 300,
+    width: '100%',
     height:  200, // height is hard to control
   },
 });
