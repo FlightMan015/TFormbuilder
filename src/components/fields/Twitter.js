@@ -54,13 +54,13 @@ const styles = StyleSheet.create({
   webviewWrap: {
     flex: 1,
     width: '100%',
-    height: 500,
+    height: 300,
     backgroundColor: 'red',
   },
   webview: {
     flex: 1,
     width: '100%',
-    height:  500, // height is hard to control
+    height:  300, // height is hard to control
   },
 });
 

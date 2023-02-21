@@ -92,7 +92,7 @@ const Grid = props => {
     <View style={styles.container}>
       <FieldLabel label={element.meta.title || 'Grid Section'} visible={!element.meta.hide_title} />
       {cellData.viewGrid && (
-        <View style={styles.gridView(colors)}>
+        <View style={styles.gridView}>
           <FlatList
             data={cells}
             renderItem={({item, index}) => (
@@ -183,10 +183,9 @@ const Grid = props => {
 };
 
 const styles = StyleSheet.create({
-  gridView: colors => ({
-    backgroundColor: colors.card,
+  gridView: {
     padding: 5,
-  }),
+  },
   container: {
     padding: 5,
   },
