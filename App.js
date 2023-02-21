@@ -52,11 +52,12 @@ const App: () => Node = () => {
 
   async function requestPermissions() {
     if (Platform.OS === 'ios') {
-      GeoLocation.setRNConfiguration({
-        // skipPermissionRequests: false,
-        authorizationLevel: 'whenInUse',
-      });
-      await GeoLocation.requestAuthorization();
+      // GeoLocation.setRNConfiguration({
+      //   // skipPermissionRequests: false,
+      //   authorizationLevel: 'whenInUse',
+      // });
+      const status = await GeoLocation.requestAuthorization('whenInUse');
+      console.log(status);
 
       return null;
     }
