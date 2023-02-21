@@ -6223,6 +6223,11 @@ react-native-snap-carousel-v4@^1.0.1:
     "@types/react-addons-shallow-compare" "^0.14.22"
     react-addons-shallow-compare "15.6.2"
 
+react-native-stripe-checkout-webview@^0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/react-native-stripe-checkout-webview/-/react-native-stripe-checkout-webview-0.0.13.tgz#3f385ee76336beb3c84babbbfde8b3460ebf42f0"
+  integrity sha512-kRQ04JhO9bERPOnuYKv4rv0qOdSYleN/b+Poby6fYd70OjW9OcbiXPcI4cPCoiMYy9ICuPd4QUY/PGURsxW2Ag==
+
 react-native-svg@^13.7.0:
   version "13.7.0"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-13.7.0.tgz#be2ffb935e996762543dd7376bdc910722f7a43c"

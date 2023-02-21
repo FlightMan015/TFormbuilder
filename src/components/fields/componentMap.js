@@ -23,6 +23,7 @@ import Button from './Button';
 import Twitter from './Twitter';
 import Stripe from './Stripe';
 import VoiceMessage from './VoiceMessage';
+import Schedular from './scheduler';
 
 const componentMap = {
   [componentName.IMAGE]: {
@@ -82,6 +83,9 @@ const componentMap = {
   },
   [componentName.CALENDAR]: {
     component: Calendar,
+  },
+  [componentName.SCHEDULAR]: {
+    component: Schedular,
   },
   // // New 2022-8-22
   [componentName.DATA_TABLE]: {

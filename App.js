@@ -23,6 +23,7 @@ import CalendarDlg from './src/dialogs/CalendarDlg';
 import FormJsonDlg from './src/dialogs/FormJsonDlg';
 import RNFS from 'react-native-fs';
 import FormSaveDlg from './src/dialogs/FormSaveDlg';
+import SchedularDlg from './src/dialogs/SchedularDlg';
 
 const App: () => Node = () => {
   const scheme = useColorScheme();
@@ -190,6 +191,7 @@ const App: () => Node = () => {
           <CalendarDlg />
           <FormJsonDlg />
           <FormSaveDlg saveForm={saveData} renameForm={renameForm} />
+          <SchedularDlg />
         </NavigationContainer>
       </MenuProvider>
     </PaperProvider>

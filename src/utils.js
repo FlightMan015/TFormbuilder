@@ -142,3 +142,45 @@ export const handleImageSize = (width, height, maxWidth, maxHeight) => {
 
   return ret;
 };
+
+export const sortByYearAndByMonth = (data) => {
+  const dateKeys = Object.keys(data);
+  var sorted = dateKeys.sort(function(a, b) {
+    return new Date(a) - new Date(b);
+  });
+  
+  var byYearAndByMonth = {};
+  
+  sorted.map(item => {
+    var year = item.substring(0,4)
+    var month = item.substring(5,7)
+  
+    if (typeof byYearAndByMonth[year] === "undefined") {
+      byYearAndByMonth[year] = {};
+    }
+  
+    if (typeof byYearAndByMonth[year][month] === "undefined") {
+      byYearAndByMonth[year][month] = [];
+    }
+  
+    byYearAndByMonth[year][month].push(item);
+  });
+
+  return byYearAndByMonth;
+};
+
+export const tConvert = (time) => {
+  // Check correct time format and split into components
+  time = time.toString().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+  if (time.length > 1) { // If time format correct
+    time = time.slice (1);  // Remove full string match value
+    time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+    time[0] = +time[0] % 12 || 12; // Adjust hours
+  }
+
+  return time.join (''); // return adjusted time or original string
+}
+
+
+

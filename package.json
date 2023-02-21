@@ -36,6 +36,7 @@
     "react-native-screens": "^3.18.2",
     "react-native-select-dropdown": "^3.2.1",
     "react-native-snap-carousel-v4": "^1.0.1",
+    "react-native-stripe-checkout-webview": "^0.0.13",
     "react-native-svg": "^13.7.0",
     "react-native-table-component": "^1.2.2",
     "react-native-vector-icon-picker": "^0.1.0",

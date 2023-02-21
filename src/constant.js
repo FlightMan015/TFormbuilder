@@ -22,6 +22,7 @@ export const componentName = {
   RADARCHART: 'radar_chart',
   MAP: 'map',
   CALENDAR: 'calendar',
+  SCHEDULAR: 'schedular',
   TAB: 'tab',
   BITMAP: 'bitmap',
   DATA_TABLE: 'data_table',
@@ -395,6 +396,44 @@ const newCalendarData = {
     title: 'Calendar',
     hide_title: false,
     items: {},
+  },
+  role: [{name: 'admin', view: true, edit: true}],
+  action: {create: false, update: false, read: false, delete: false},
+  event: {
+    onCreateNewSchedule: '',
+    onUpdateSchedule: '',
+    onDeleteSchedule: '',
+    onSelectDay: '',
+  },
+};
+
+const newSchedularData = {
+  component: componentName.SCHEDULAR,
+  field_name: 'schedular',
+  is_mandatory: true,
+  meta: {
+    title: 'Schedular',
+    hide_title: false,
+    monthFont: {
+      color: '#4195B4',
+      fontSize: 15,
+      fontFamily: 'PublicSans-Regular',
+    },
+    dateFont: {
+      color: '#4195B4',
+      fontSize: 14,
+      fontFamily: 'PublicSans-Regular',
+    },
+    dayFont: {
+      color: '#4195B4',
+      fontSize: 14,
+      fontFamily: 'PublicSans-Regular',
+    },
+    scheduleFont: {
+      color: '#080808',
+      fontSize: 12,
+      fontFamily: 'PublicSans-Regular',
+    },
   },
   role: [{name: 'admin', view: true, edit: true}],
   action: {create: false, update: false, read: false, delete: false},
@@ -915,6 +954,7 @@ export const newFieldData = {
   [componentName.CARD]: newCard,
   [componentName.TWITTER]: newTwitterData,
   [componentName.VOICEMESSAGE]: newVoiceMessage,
+  [componentName.SCHEDULAR]: newSchedularData,
 };
 
 export const datatypes = {
@@ -1116,6 +1156,11 @@ export const fieldMenuData = {
           name: 'Calendar',
           key: componentName.CALENDAR,
           icon: 'calendar',
+        },
+        {
+          name: 'Schedular',
+          key: componentName.SCHEDULAR,
+          icon: 'flag',
         },
         {
           name: 'Map',

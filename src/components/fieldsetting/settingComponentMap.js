@@ -22,6 +22,7 @@ import GridSectionSetting from './GridSectionSetting';
 import TwitterSetting from './TwitterSetting';
 import StripeSetting from './StripeSetting';
 import VoiceMessageSetting from './VoiceMessageSetting';
+import SchedularSetting from './SchedularSetting';
 
 const componentMap = {
   [componentName.CARDSLIDER]: {
@@ -92,6 +93,9 @@ const componentMap = {
   },
   [componentName.VOICEMESSAGE]: {
     component: VoiceMessageSetting,
+  },
+  [componentName.SCHEDULAR]: {
+    component: SchedularSetting,
   },
 };
 

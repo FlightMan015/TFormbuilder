@@ -183,6 +183,7 @@ const SchedularSubField = ({element, index}) => {
   };
 
   const selectDay = day => {
+    console.log(day)
     let selectedDayData = {};
     let tempMarkedDates = JSON.parse(JSON.stringify(markedDates));
     if (selectedDay.current) {
