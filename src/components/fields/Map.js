@@ -38,21 +38,21 @@ import TextButton from '../../common/TextButton';
 
 const ScreenWidth = Dimensions.get('window').width;
 
-async function requestPermissions() {
-  if (Platform.OS === 'ios') {
-    GeoLocation.requestAuthorization();
-    GeoLocation.setRNConfiguration({
-      skipPermissionRequests: false,
-      authorizationLevel: 'whenInUse',
-    });
-  }
+// async function requestPermissions() {
+//   if (Platform.OS === 'ios') {
+//     GeoLocation.setRNConfiguration({
+//       skipPermissionRequests: false,
+//       authorizationLevel: 'whenInUse',
+//     });
+//     GeoLocation.requestAuthorization();
+//   }
 
-  if (Platform.OS === 'android') {
-    await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    );
-  }
-}
+//   if (Platform.OS === 'android') {
+//     await PermissionsAndroid.request(
+//       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+//     );
+//   }
+// }
 
 const MapChildComponent = ({element, index, onClickUpdateField}) => {
   const {colors, fonts} = useTheme();
@@ -118,7 +118,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
   });
 
   useEffect(() => {
-    requestPermissions();
+    // requestPermissions();
     setDisplayFenceItems(geofences.slice(0, itemNum));
     setDisplayPointItems(points.slice(0, itemNum));
     GeoLocation.getCurrentPosition(
