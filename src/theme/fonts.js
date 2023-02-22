@@ -1,4 +1,9 @@
 export const nativeDarkFonts = {
+    buttonTexts: {
+        fontSize: 14,
+        color: '#FFFFFF',
+        fontFamily: 'PublicSans-Regular',
+    },
     headings: {
         fontSize: 18,
         color: '#FFFFFF',
@@ -17,6 +22,11 @@ export const nativeDarkFonts = {
 }
 
 export const nativeLightFonts = {
+    buttonTexts: {
+        fontSize: 14,
+        color: '#FFFFFF',
+        fontFamily: 'PublicSans-Regular',
+    },
     headings: {
         fontSize: 18,
         color: '#080808',
@@ -35,6 +45,11 @@ export const nativeLightFonts = {
 }
 
 export const trivergenceLightFonts = {
+    buttonTexts: {
+        fontSize: 14,
+        color: '#FFFFFF',
+        fontFamily: 'PublicSans-Regular',
+    },
     headings: {
         fontSize: 18,
         color: '#4195B4',
@@ -53,6 +68,11 @@ export const trivergenceLightFonts = {
 }
 
 export const trivergenceDarkFonts = {
+    buttonTexts: {
+        fontSize: 14,
+        color: '#FFFFFF',
+        fontFamily: 'PublicSans-Regular',
+    },
     headings: {
         fontSize: 18,
         color: '#4195B4',

@@ -368,9 +368,21 @@ const FormSetting = () => {
             title={'Theme'}
             options={defaultThemes}
             onChange={(keyName, value) => {
-                const darkThemeStyle = {...darkTheme[value].fonts, formBackgroundColor: darkTheme[value].colors.background, foregroundColor: darkTheme[value].colors.card, backgroundPatternImage: darkTheme[value].patternUri};
+                const darkThemeStyle = {
+                  ...darkTheme[value].fonts,
+                  formBackgroundColor: darkTheme[value].colors.background,
+                  foregroundColor: darkTheme[value].colors.card,
+                  backgroundPatternImage: darkTheme[value].patternUri,
+                  buttonBackgroundColor: darkTheme[value].colors.colorButton,
+                };
                 const newDarkStyle = {...formData.darkStyle, ...darkThemeStyle};
-                const ligthThemeStyle = {...lightTheme[value].fonts, formBackgroundColor: lightTheme[value].colors.background, foregroundColor: lightTheme[value].colors.card, backgroundPatternImage: lightTheme[value].patternUri};
+                const ligthThemeStyle = {
+                  ...lightTheme[value].fonts,
+                  formBackgroundColor: lightTheme[value].colors.background,
+                  foregroundColor: lightTheme[value].colors.card,
+                  backgroundPatternImage: lightTheme[value].patternUri,
+                  buttonBackgroundColor: darkTheme[value].colors.colorButton,
+                };
                 const newLightStyle = {...formData.lightStyle, ...ligthThemeStyle};
                 setFormData({...formData, [keyName]: value, darkStyle: newDarkStyle, lightStyle: newLightStyle});
             }}
@@ -414,6 +426,20 @@ const FormSetting = () => {
               }
             }}
           />
+          <ColorPicker
+            color={viewMode === 'light' ? formData.lightStyle.buttonBackgroundColor : formData.darkStyle.buttonBackgroundColor}
+            label={'Button Background Color'}
+            selectColor={e => {
+              if (viewMode === 'light') {
+                const newStyle = {...formData.lightStyle, buttonBackgroundColor: e};
+                setFormData({...formData, lightStyle: newStyle});
+              }
+              if (viewMode === 'dark') {
+                const newStyle = {...formData.darkStyle, buttonBackgroundColor: e};
+                setFormData({...formData, darkStyle: newStyle});
+              }
+            }}
+          />
           <FontSetting
             label={'Headings'}
             fontColor={viewMode === 'light' ? formData.lightStyle.headings.color : formData.darkStyle.headings.color}
@@ -434,6 +460,13 @@ const FormSetting = () => {
             fontSize={viewMode === 'light' ? formData.lightStyle.values.fontSize : formData.darkStyle.values.fontSize}
             fontType={viewMode === 'light' ? formData.lightStyle.values.fortFamily : formData.darkStyle.values.fortFamily}
             onChange={(type, e) => {onChange('values', type, e);}}
+          />
+          <FontSetting
+            label={'Button Text'}
+            fontColor={viewMode === 'light' ? formData.lightStyle.buttonTexts.color : formData.darkStyle.buttonTexts.color}
+            fontSize={viewMode === 'light' ? formData.lightStyle.buttonTexts.fontSize : formData.darkStyle.buttonTexts.fontSize}
+            fontType={viewMode === 'light' ? formData.lightStyle.buttonTexts.fortFamily : formData.darkStyle.buttonTexts.fortFamily}
+            onChange={(type, e) => {onChange('buttonTexts', type, e);}}
           />
         </>
       )}

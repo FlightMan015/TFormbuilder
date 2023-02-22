@@ -70,7 +70,7 @@ export const trivergenceDarkColors = {
   icon: '#818293',
   activeIcon: '#3E7EFF',
   placeholder: '#8A8B9D',
-  colorButton: '#3E7EFF',
+  colorButton: '#4195B4',
   markerText1: '#20C54D',
   markerBackground1: '#243033',
   markerText2: '#3E7EFF',

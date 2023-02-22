@@ -7,15 +7,20 @@ import SelectDropdown from 'react-native-select-dropdown';
 import {useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Feather';
 import { color } from '../../theme/styles';
+import formStore from '../../store/formStore';
 
-const TextCell = ({data, rowIndex, colIndex, actionRule}) => {
+const TextCell = ({data, rowIndex, colIndex, actionRule, element}) => {
   const {colors, fonts} = useTheme();
   const {tableData, setTableData, cellWidth} = useContext(DataTableContext);
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const preview = formStore(state => state.preview);
 
   return (
     <TextInput
       style={{...styles.textInput(cellWidth.current), ...fonts.values}}
       value={data}
+      editable={role.edit || preview}
       onChangeText={e => {
         const tempTableData = JSON.parse(JSON.stringify(tableData));
         tempTableData[rowIndex].splice(colIndex, 1, e);
@@ -29,13 +34,18 @@ const TextCell = ({data, rowIndex, colIndex, actionRule}) => {
   );
 };
 
-const NumberCell = ({data, rowIndex, colIndex, actionRule}) => {
+const NumberCell = ({data, rowIndex, colIndex, actionRule, element}) => {
   const {colors, fonts} = useTheme();
   const {tableData, setTableData, cellWidth} = useContext(DataTableContext);
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const preview = formStore(state => state.preview);
+
   return (
     <TextInput
       style={{...styles.textInput(cellWidth.current), ...fonts.values}}
       value={data}
+      editable={role.edit || preview}
       onChangeText={e => {
         const tempTableData = JSON.parse(JSON.stringify(tableData));
         tempTableData[rowIndex].splice(colIndex, 1, e);
@@ -50,13 +60,17 @@ const NumberCell = ({data, rowIndex, colIndex, actionRule}) => {
   );
 };
 
-const DateCell = ({data, rowIndex, colIndex, actionRule}) => {
+const DateCell = ({data, rowIndex, colIndex, actionRule, element}) => {
   const {colors, fonts} = useTheme();
   const {tableData, setTableData, cellWidth} = useContext(DataTableContext);
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const preview = formStore(state => state.preview);
   const [visible, setVisible] = useState(false);
+
   return (
     <View>
-      <TouchableOpacity onPress={() => setVisible(true)}>
+      <TouchableOpacity onPress={() => setVisible(true)} disabled={!role.edit && !preview}>
         <Text style={{...styles.text(cellWidth.current), ...fonts.values}}>
           {data}
         </Text>
@@ -70,7 +84,7 @@ const DateCell = ({data, rowIndex, colIndex, actionRule}) => {
           onChange={(e, v) => {
             setVisible(false);
             const tempTableData = JSON.parse(JSON.stringify(tableData));
-            tempTableData[rowIndex].splice(colIndex, 1, v.toLocaleDateString());
+            tempTableData[rowIndex].splice(colIndex, 1, v.toISOString().split('T')[0]);
             setTableData(tempTableData);
 
             if (actionRule) {
@@ -84,13 +98,16 @@ const DateCell = ({data, rowIndex, colIndex, actionRule}) => {
   );
 };
 
-const TimeCell = ({data, rowIndex, colIndex, actionRule}) => {
+const TimeCell = ({data, rowIndex, colIndex, actionRule, element}) => {
   const {colors, fonts} = useTheme();
   const {tableData, setTableData, cellWidth} = useContext(DataTableContext);
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const preview = formStore(state => state.preview);
   const [visible, setVisible] = useState(false);
   return (
     <View>
-      <TouchableOpacity onPress={() => setVisible(true)}>
+      <TouchableOpacity onPress={() => setVisible(true)} disabled={!role.edit && !preview}>
         <Text style={{...styles.text(cellWidth.current), ...fonts.values}}>
           {data ? new Date(data).toLocaleTimeString() : ''}
         </Text>
@@ -118,15 +135,19 @@ const TimeCell = ({data, rowIndex, colIndex, actionRule}) => {
   );
 };
 
-const MenuCell = ({data, rowIndex, colIndex, header, actionRule}) => {
+const MenuCell = ({data, rowIndex, colIndex, header, actionRule, element}) => {
   const options = header[colIndex].data.options;
   const {tableData, setTableData, cellWidth} = useContext(DataTableContext);
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
+  const preview = formStore(state => state.preview);
   const {colors, fonts} = useTheme();
   const [open, setOpen] = useState(true);
   return (
     <View>
       <SelectDropdown
         data={header[colIndex].data.options}
+        disabled={!role.edit && !preview}
         onSelect={e => {
           const tempTableData = JSON.parse(JSON.stringify(tableData));
           tempTableData[rowIndex].splice(colIndex, 1, e);
@@ -147,8 +168,8 @@ const MenuCell = ({data, rowIndex, colIndex, header, actionRule}) => {
           backgroundColor: colors.card,
           height: 40,
         }}
-        buttonTextStyle={{...fonts.values}}
-        selectedRowTextStyle={{...fonts.values}}
+        buttonTextStyle={fonts.values}
+        selectedRowTextStyle={fonts.values}
         defaultButtonText=" "
         onFocus={() => setOpen(false)}
         onBlur={() => setOpen(true)}

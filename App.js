@@ -181,8 +181,8 @@ const App: () => Node = () => {
     <PaperProvider
       theme={
         (viewMode === 'dark') ?
-          {...darkTheme[formData.theme], colors: {...darkTheme[formData.theme].colors, background: formData.darkStyle.formBackgroundColor, card: formData.darkStyle.foregroundColor}, fonts: {headings: formData.darkStyle.headings, labels: formData.darkStyle.labels, values: formData.darkStyle.values}}
-          : {...lightTheme[formData.theme], colors: {...lightTheme[formData.theme].colors, background: formData.lightStyle.formBackgroundColor, card: formData.lightStyle.foregroundColor}, fonts: {headings: formData.lightStyle.headings, labels: formData.lightStyle.labels, values: formData.lightStyle.values}}}>
+          {...darkTheme[formData.theme], colors: {...darkTheme[formData.theme].colors, background: formData.darkStyle.formBackgroundColor, card: formData.darkStyle.foregroundColor, colorButton: formData.darkStyle.buttonBackgroundColor}, fonts: {headings: formData.darkStyle.headings, labels: formData.darkStyle.labels, values: formData.darkStyle.values, buttonTexts: formData.darkStyle.buttonTexts}}
+          : {...lightTheme[formData.theme], colors: {...lightTheme[formData.theme].colors, background: formData.lightStyle.formBackgroundColor, card: formData.lightStyle.foregroundColor, colorButton: formData.lightStyle.buttonBackgroundColor}, fonts: {headings: formData.lightStyle.headings, labels: formData.lightStyle.labels, values: formData.lightStyle.values, buttonTexts: formData.lightStyle.buttonTexts}}}>
       <MenuProvider>
         <NavigationContainer>
           <Header deleteForm={deleteForm} renameForm={renameForm} saveForm={saveData} />

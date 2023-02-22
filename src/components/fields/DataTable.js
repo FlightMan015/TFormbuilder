@@ -16,6 +16,7 @@ const DataTableBody = props => {
   const userRole = formStore(state => state.userRole);
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
+  console.log(formValue[element.field_name])
   const setFormValue = formStore(state => state.setFormValue);
   const preview = formStore(state => state.preview);
   const cellWidth = useRef(100);
@@ -94,9 +95,10 @@ const DataTableBody = props => {
                       <Cell
                         data={
                           <IconButton
-                            icon="delete-forever-outline"
+                            icon="delete-outline"
                             size={15}
-                            iconColor={fonts.values.color}
+                            disabled={!role.edit && !preview}
+                            iconColor={colors.colorButton}
                             onPress={() => {
                               Alert.alert(
                                 'Delete Row',
@@ -142,6 +144,7 @@ const DataTableBody = props => {
                                 colIndex={cellIndex}
                                 header={element.meta.headers}
                                 actionRule={element.event.onUpdateEntry}
+                                element={element}
                               />
                             }
                             textStyle={{color: colors.text}}
@@ -158,8 +161,8 @@ const DataTableBody = props => {
                 <IconButton
                   icon="playlist-plus"
                   size={15}
-                  style={{...styles.iconBtn, backgroundColor: fonts.values.color}}
-                  iconColor={colors.card}
+                  style={{...styles.iconBtn, backgroundColor: colors.colorButton}}
+                  iconColor={fonts.buttonTexts.color}
                   onPress={() => {
                     let newRow = [];
                     headers.map(() => {
