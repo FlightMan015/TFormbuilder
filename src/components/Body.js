@@ -64,7 +64,7 @@ const Body = props => {
         <ScrollView style={styles.container(colors)}>
           <View style={{paddingBottom: 50}}>
             {formData.data.map((field, index) => {
-              if (field.component !== componentName.TABSECTION && field.component !== componentName.GROUP && field.component !== componentName.GRID) {
+              if (field.component !== componentName.TABSECTION && field.component !== componentName.GROUP && field.component !== componentName.GRID && field.component !== componentName.LISTSECTION) {
                 return (
                   <MemoField
                     key={index}

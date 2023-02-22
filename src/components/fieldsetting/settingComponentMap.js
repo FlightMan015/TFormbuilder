@@ -23,6 +23,7 @@ import TwitterSetting from './TwitterSetting';
 import StripeSetting from './StripeSetting';
 import VoiceMessageSetting from './VoiceMessageSetting';
 import SchedularSetting from './SchedularSetting';
+import ListSectionSetting from './ListSectionSetting';
 
 const componentMap = {
   [componentName.CARDSLIDER]: {
@@ -96,6 +97,9 @@ const componentMap = {
   },
   [componentName.SCHEDULAR]: {
     component: SchedularSetting,
+  },
+  [componentName.LISTSECTION]: {
+    component: ListSectionSetting,
   },
 };
 

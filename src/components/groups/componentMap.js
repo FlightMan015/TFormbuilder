@@ -2,6 +2,7 @@ import {componentName} from '../../constant';
 import TabSection from './TabSection';
 import Section from './Section';
 import Grid from './gridSection';
+import ListSection from './ListSection';
 
 const componentMap = {
   [componentName.TABSECTION]: {
@@ -12,6 +13,9 @@ const componentMap = {
   },
   [componentName.GRID]: {
     component: Grid,
+  },
+  [componentName.LISTSECTION]: {
+    component: ListSection,
   },
 };
 

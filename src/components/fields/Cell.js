@@ -140,7 +140,7 @@ const MenuCell = ({data, rowIndex, colIndex, header, actionRule}) => {
           backgroundColor: colors.card,
           maxHeight: 200,
         }}
-        rowTextStyle={{fontSize: 15, color: colors.text}}
+        rowTextStyle={fonts.values}
         rowStyle={{height: 30}}
         buttonStyle={{
           width: cellWidth ? cellWidth.current - 2 : 68,

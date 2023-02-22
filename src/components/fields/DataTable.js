@@ -22,12 +22,29 @@ const DataTableBody = props => {
   const [headers, setHeaders] = useState([]);
   const [widthArr, setWidthArr] = useState([]);
   const [tableData, setTableData] = useState([]);
+  const tableWidth = useRef(0);
 
   useEffect(() => {
     const tableHeaderTitles = element.meta.headers.map(header => header.name);
     tableHeaderTitles.unshift('');
     setHeaders(tableHeaderTitles);
-  }, [props]);
+    if (widthArr.length !== tableHeaderTitles.length) {
+      const columnCount = tableHeaderTitles.length - 1;
+      const averageWidth = Math.ceil(tableWidth.current / columnCount);
+      if (averageWidth > 100) {
+        cellWidth.current = averageWidth;
+      } else {
+        cellWidth.current = 100;
+      }
+      const tempWidthArr = tableHeaderTitles.map((e, i) => {
+        if (i === 0) {
+          return 40;
+        }
+        return cellWidth.current;
+      });
+      setWidthArr(tempWidthArr);
+    }
+  }, [JSON.stringify(element.meta.headers)]);
 
   useEffect(() => {
     setTableData(formValue[element.field_name] || []);
@@ -35,6 +52,7 @@ const DataTableBody = props => {
 
   const onLayout = event => {
     const tableLayoutWidth = event.nativeEvent.layout.width - 20 - 40;
+    tableWidth.current = tableLayoutWidth;
     const columnCount = headers.length - 1;
     const averageWidth = Math.ceil(tableLayoutWidth / columnCount);
     if (averageWidth > 100) {

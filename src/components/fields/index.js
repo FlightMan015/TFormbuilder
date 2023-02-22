@@ -50,7 +50,7 @@ const Field = props => {
               <FieldComponent element={element} index={index} selected={selected} />
             </View>
             {(selected && !preview) && (
-              <Animated.View style={{...styles.setIcons, opacity}}>
+              <Animated.View style={{...styles.setIcons, opacity, backgroundColor: colors.background, borderRadius: 20}}>
                 {
                   index.childIndex > 0 && (
                     <IconButton

@@ -28,7 +28,7 @@ const Button = props => {
                   Alert.alert('Rule Action', `Fired onPress action. rule - ${element.event.onPress}.`);
                 }
               }}
-              disabled={!role.edit || !preview}
+              disabled={!role.edit && !preview}
               style={{
                 ...styles.touchableContainer,
                 backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,

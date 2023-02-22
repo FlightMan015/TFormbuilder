@@ -1047,11 +1047,11 @@ export const fieldMenuData = {
           key: componentName.GRID,
           icon: 'grid',
         },
-        // {
-        //   name: 'List',
-        //   key: componentName.LISTSECTION,
-        //   icon: 'list',
-        // },
+        {
+          name: 'List',
+          key: componentName.LISTSECTION,
+          icon: 'list',
+        },
         // {
         //   name: 'Composite',
         //   key: componentName.COMPOSITE,

@@ -6,9 +6,9 @@ import formStore from '../../store/formStore';
 import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import SettingSwitch from './common/SettingSwitch';
-import DataTableHeaderSetting from './DataTableHeaderSetting';
+import GridCellFieldSetting from './GridCellFieldSetting';
 
-const DataTableSetting = ({element, index, onClick}) => {
+const ListSectionSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
@@ -27,8 +27,7 @@ const DataTableSetting = ({element, index, onClick}) => {
 
   return (
     <>
-      <SettingHeader title={'Data Table Settings'} />
-      <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
+      <SettingHeader title={'Grid Section Settings'} />
       <SettingSwitch
         title={'Hide label'}
         value={element.meta.hide_title}
@@ -36,10 +35,18 @@ const DataTableSetting = ({element, index, onClick}) => {
         keyName={'hide_title'}
         description={'Make sure to show label.'}
       />
-      <DataTableHeaderSetting fields={element.meta.headers} changeData={onChange} />
+      <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
+      <GridCellFieldSetting fields={element.meta.cellFields} changeData={onChange} />
+      <SettingSwitch
+        title={'Vertical alignment'}
+        value={element.meta.listVerticalAlign}
+        onChange={onChange}
+        keyName={'listVerticalAlign'}
+        description={'Make sure to align vertically.'}
+      />
       <SettingDuplicate index={index} element={element} />
     </>
   );
 };
 
-export default DataTableSetting;
+export default ListSectionSetting;
