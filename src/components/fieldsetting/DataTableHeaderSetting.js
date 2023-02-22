@@ -38,11 +38,11 @@ const DataTableHeaderSetting = props => {
   const [newMenuColumnOptions, setNewMenuColumnOptions] = useState(['option1', 'option2', 'option3']);
   const [newOption, setNewOption] = useState('');
 
-  const tableFieldItem = ({item, drag, isActive, getIndex}) => {
-	const index = getIndex();
+  const tableFieldItem = ({item, drag, isActive, getIndex, index, isFirst, isLast}) => {
+	// const index = getIndex();
     return (
-      <ScaleDecorator>
-        <View style={styles.tableField}>
+    //   <ScaleDecorator>
+        <View key={index} style={styles.tableField}>
           <Text style={styles.tableFieldNo}>{index + 1}</Text>
           <TextInput
             style={{...styles.tableFieldName, color: '#FFFFFF'}}
@@ -123,43 +123,79 @@ const DataTableHeaderSetting = props => {
 							</Text>
 						)
 					}
-          <IconButton
-            style={styles.tableFieldDelIcon}
-            icon={'delete-outline'}
-            iconColor={'#fff'}
-            size={15}
-            onPress={() => {
-              Alert.alert(
-                'Delete Form',
-                `Are you sure want to delete field "${item.name}" ?`,
-                [
-                  {
-                    text: 'Yes',
-                    onPress: () => {
-                      const tempdata = JSON.parse(JSON.stringify(fields));
-                      tempdata.splice(index, 1);
-                      changeData(types.headers, tempdata);
-                    },
-                  },
-                  {
-                    text: 'No',
-                    onPress: () => {},
-                    style: 'cancel',
-                  },
-                ],
-              );
-            }}
-          />
-          <IconButton
-            style={styles.tableFieldDelIcon}
-            icon={'drag-horizontal-variant'}
-            iconColor={'#fff'}
-            size={15}
-            onPress={() => {}}
-            onLongPress={drag}
-          />
+			{/* <IconButton
+				style={styles.tableFieldDelIcon}
+				icon={'drag-horizontal-variant'}
+				iconColor={'#fff'}
+				size={15}
+				onPress={() => {}}
+				// onLongPress={drag}
+			/> */}
+			{
+				!isFirst && (
+					<IconButton
+						style={styles.tableFieldDelIcon}
+						icon={'chevron-up'}
+						iconColor={'#fff'}
+						size={15}
+						onPress={() => {
+							const tempdata = JSON.parse(JSON.stringify(fields));
+							const selectedHeader = JSON.parse(JSON.stringify(tempdata[index]));
+							tempdata.splice(index, 1);
+							tempdata.splice(index - 1, 0, selectedHeader);
+							changeData(types.headers, tempdata);
+						}}
+						// onLongPress={drag}
+					/>
+				)
+			}
+			{
+				!isLast && (
+					<IconButton
+						style={styles.tableFieldDelIcon}
+						icon={'chevron-down'}
+						iconColor={'#fff'}
+						size={15}
+						onPress={() => {
+							const tempdata = JSON.parse(JSON.stringify(fields));
+							const selectedHeader = JSON.parse(JSON.stringify(tempdata[index]));
+							tempdata.splice(index, 1);
+							tempdata.splice(index + 1, 0, selectedHeader);
+							changeData(types.headers, tempdata);
+						}}
+						// onLongPress={drag}
+					/>
+				)
+			}
+			<IconButton
+				style={styles.tableFieldDelIcon}
+				icon={'delete-outline'}
+				iconColor={'#fff'}
+				size={15}
+				onPress={() => {
+				Alert.alert(
+					'Delete Form',
+					`Are you sure want to delete field "${item.name}" ?`,
+					[
+					{
+						text: 'Yes',
+						onPress: () => {
+						const tempdata = JSON.parse(JSON.stringify(fields));
+						tempdata.splice(index, 1);
+						changeData(types.headers, tempdata);
+						},
+					},
+					{
+						text: 'No',
+						onPress: () => {},
+						style: 'cancel',
+					},
+					],
+				);
+				}}
+			/>
         </View>
-      </ScaleDecorator>
+    //   </ScaleDecorator>
     );
   };
 
@@ -172,7 +208,7 @@ const DataTableHeaderSetting = props => {
 				<Text style={styles.tableFieldType}>Type</Text>
 				<Text style={styles.tableFieldAction}>Action</Text>
 			</View>
-			<GestureHandlerRootView style={styles.gestureHandlerView}>
+			{/* <GestureHandlerRootView style={styles.gestureHandlerView}>
 				<DraggableFlatList
 					nestedScrollEnabled
 					data={fields}
@@ -183,7 +219,12 @@ const DataTableHeaderSetting = props => {
 					keyExtractor={(item, i) => i}
 					renderItem={tableFieldItem}
 				/>
-			</GestureHandlerRootView>
+			</GestureHandlerRootView> */}
+			{
+				fields.map((field, i) => {
+					return tableFieldItem({item: field, index: i, isFirst: (i === 0), isLast: (i + 1 === fields.length)});
+				})
+			}
 			<View style={{...styles.tableField}}>
 				<IconButton
 					style={{
@@ -362,7 +403,7 @@ const styles = StyleSheet.create({
 		color: '#ABB3B2',
   },
   tableFieldName: {
-    width: '50%',
+    width: '40%',
     paddingVertical: 0,
     paddingLeft: 10,
     borderRightWidth: 1,
