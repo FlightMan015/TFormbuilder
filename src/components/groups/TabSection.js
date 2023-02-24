@@ -17,6 +17,8 @@ const TabSection = ({
   const setIndexToAdd = formStore(state => state.setIndexToAdd);
   const setOpenMenu = formStore(state => state.setOpenMenu);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
   return (
     <View style={styles.container}>
       <FieldLabel label={element.meta.title || 'Tab Section'} visible={!element.meta.hide_title} />
@@ -41,7 +43,7 @@ const TabSection = ({
                   />
                 );
               })}
-              {(!preview || !role.edit) && (
+              {(preview || role.edit) && (
                 <View style={styles.renderContainer}>
                   <IconButton
                     icon="plus"
@@ -63,11 +65,12 @@ const TabSection = ({
         }}
         onChangeTab={(item, index) => {}}
         defaultIndex={0}
-        headerBackgroundColor={colors.border}
-        headerUnderlayColor={colors.text}
+        headerBackgroundColor={colors.card}
+        headerUnderlayColor={fonts.values.color}
         headerTextStyle={{
           ...styles.dynamicHeaderTextStyle,
-          color: colors.text,
+          ...fonts.values,
+          fontSize: fonts.labels.fontSize,
         }}
         preview={preview}
       />
@@ -86,9 +89,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   dynamicHeaderTextStyle: {
-    fontSize: 15,
     paddingVertical: 5,
-    fontFamily: 'PublicSans-Regular',
   },
   renderContainer: {
     flexDirection: 'row',

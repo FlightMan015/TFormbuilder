@@ -15,44 +15,41 @@ export const color = {
 
 export const globalStyles = StyleSheet.create({
   textBoxNewLine: (colors, fonts) => ({
+    flex: 1,
     height: 40,
-    width: '75%',
     borderRadius: 10,
     paddingLeft: 10,
+    marginRight: 10,
     backgroundColor: colors.card,
     ...fonts.values,
   }),
   addView: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     marginHorizontal: 10,
     marginBottom: 10,
     justifyContent: 'space-between',
   },
-  opacityStyle: {
+  opacityStyle: colors => ({
     borderRadius: 10,
-    backgroundColor: 'green',
-    width: '23%',
+    backgroundColor: colors.colorButton,
+    width: 80,
     height: 40,
-  },
+  }),
   buttonStyle: (colors, fonts) => ({
+    flex: 1,
     borderRadius: 10,
-    width: '60%',
+    marginLeft: 10,
     backgroundColor: colors.card,
     height: 40,
     ...fonts.values,
   }),
   fieldheader: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'row-reverse',
     marginHorizontal: 10,
     marginBottom: 10,
   },
   iconsContainer: {
-    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '40%',
     alignItems: 'center',
   },
   iconButton: {

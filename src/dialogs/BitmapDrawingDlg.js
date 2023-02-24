@@ -32,16 +32,17 @@ const BitmapDrawingDlg = () => {
   return (
     <Dialog visible={visible} onDismiss={init} style={{...styles.dialog, backgroundColor: colors.card}}>
       <Text style={{...fonts.headings, marginBottom: 10}}>New Marker</Text>
-      <Text style={fonts.labels}>{'Name'}</Text>
+      <Text style={{...fonts.values, color: fonts.labels.color, marginTop: 10, marginBottom: 5}}>{'Name'}</Text>
       <TextInput
         style={styles.textInput(colors, fonts)}
         underlineColorAndroid="transparent"
         editable
         placeholder={'Marker name'}
+        placeholderTextColor={colors.placeholder}
         value={newMarker.name}
         onChangeText={e => setNewMarker({...newMarker, name: e})}
       />
-      <Text style={fonts.labels}>{'Link'}</Text>
+      <Text style={{...fonts.values, color: fonts.labels.color}}>{'Link'}</Text>
       <TextInput
         style={styles.textInput(colors, fonts)}
         underlineColorAndroid="transparent"

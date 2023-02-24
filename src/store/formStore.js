@@ -1,66 +1,9 @@
 import create from 'zustand';
 import { updateField, addField, deleteField } from '../actions/formdata';
+import { newFormData } from '../constant';
 
 const formStore = create(set => ({
-  formData: {
-    title: 'New TForm',
-    logo: '',
-    data: [],
-    theme: 'Native',
-    lightStyle: {
-      formBackgroundColor: '#F8F8F8',
-      backgroundPatternImage: '',
-      foregroundColor: '#FFFFFF',
-      buttonBackgroundColor: '#3E7EFF',
-      buttonTexts: {
-        fontSize: 14,
-        color: '#FFFFFF',
-        fontFamily: 'PublicSans-Regular',
-      },
-      headings: {
-        fontSize: 18,
-        color: '#080808',
-        fontFamily: 'PublicSans-SemiBold',
-      },
-      labels: {
-          fontSize: 16,
-          color: '#080808',
-          fontFamily: 'PublicSans-Regular',
-      },
-      values: {
-          fontSize: 14,
-          color: '#080808',
-          fontFamily: 'PublicSans-Regular',
-      },
-    },
-    darkStyle: {
-      formBackgroundColor: '#1F2128',
-      backgroundPatternImage: '',
-      foregroundColor: '#242731',
-      buttonBackgroundColor: '#3E7EFF',
-      buttonTexts: {
-        fontSize: 14,
-        color: '#FFFFFF',
-        fontFamily: 'PublicSans-Regular',
-      },
-      headings: {
-        fontSize: 18,
-        color: '#FFFFFF',
-        fontFamily: 'PublicSans-SemiBold',
-      },
-      labels: {
-        fontSize: 16,
-        color: '#FFFFFF',
-        fontFamily: 'PublicSans-Regular',
-      },
-      values: {
-        fontSize: 14,
-        color: '#FFFFFF',
-        fontFamily: 'PublicSans-Regular',
-      },
-    },
-    checkedRoles: [],
-  },
+  formData: newFormData,
   setFormData: newFormData => set(() => ({formData: newFormData})),
   preview: false,
   setPreview: newRenderMode => set(() => ({preview: newRenderMode})),
@@ -99,6 +42,18 @@ const formStore = create(set => ({
   setVisibleJsonDlg: newVisible => set(() => ({visibleJsonDlg: newVisible})),
   formDatas: [],
   setFormDatas: newFormDatas => set(() => ({formDatas: newFormDatas,})),
+  submit: false,
+  setSubmit: newSubmit => set(() => ({submit: newSubmit})),
+  validation: {},
+  setValidation: newValidation => set(() => ({validation: newValidation})),
+  formValidation: true,
+  setFormValidation: newFormValidation => set(() => ({formValidation: newFormValidation})),
+  visibleCalendarDlg: {},
+  setVisibleCalendarDlg: newVisible => set(() => ({visibleCalendarDlg: newVisible})),
+  visibleMapDlg: {},
+  setVisibleMapDlg: newVisible => set(() => ({visibleMapDlg: newVisible})),
+  visibleSchedularDlg: {},
+  setVisibleSchedularDlg: newVisible => set(() => ({visibleSchedularDlg: newVisible})),
 }));
 
 export default formStore;

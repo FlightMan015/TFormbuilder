@@ -10,11 +10,37 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 const Button = props => {
-  const {element} = props;
+  const {element, onProcess} = props;
   const {colors} = useTheme();
   const userRole = formStore(state => state.userRole);
   const preview = formStore(state => state.preview);
+  const submit = formStore(state => state.submit);
+  const setSubmit = formStore(state => state.setSubmit);
+  const formValue = formStore(state => state.formValue);
+  const formValidation = formStore(state => state.formValidation);
+  const setFormValidation = formStore(state => state.setFormValidation);
   const role = element.role.find(e => e.name === userRole);
+
+  console.log('formValue--------------', formValue);
+
+  const onClick = () => {
+    if (element.meta.function === 'formSubmit') {
+      if (!submit) {
+        setSubmit(true);
+      }
+
+      if (formValidation) {
+        console.log(formValidation, 'submit formdata');
+        setSubmit(false);
+        if (onProcess) {
+          onProcess(formValue);
+        }
+      } else {
+        console.log(formValidation, 'validate error');
+        setFormValidation(true);
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -24,6 +50,7 @@ const Button = props => {
             {element.meta.iconPosition === 'left' && <TouchableOpacity
               activeOpacity={0.6}
               onPress={() => {
+                onClick();
                 if (element.event.onPress) {
                   Alert.alert('Rule Action', `Fired onPress action. rule - ${element.event.onPress}.`);
                 }
@@ -57,11 +84,12 @@ const Button = props => {
             {element.meta.iconPosition === 'above' && <TouchableOpacity
               activeOpacity={0.6}
               onPress={() => {
+                onClick();
                 if (element.event.onPress) {
                   Alert.alert('Rule Action', `Fired onPress action. rule - ${element.event.onPress}.`);
                 }
               }}
-              disabled={!role.edit || !preview}
+              disabled={!role.edit && !preview}
               style={{
                 ...styles.touchableContainer1,
                 backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,
@@ -92,11 +120,12 @@ const Button = props => {
             {element.meta.iconPosition === 'below' && <TouchableOpacity
               activeOpacity={0.6}
               onPress={() => {
+                onClick();
                 if (element.event.onPress) {
                   Alert.alert('Rule Action', `Fired onPress action. rule - ${element.event.onPress}.`);
                 }
               }}
-              disabled={!role.edit || !preview}
+              disabled={!role.edit && !preview}
               style={{
                 ...styles.touchableContainer1,
                 backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,
@@ -127,11 +156,12 @@ const Button = props => {
             {element.meta.iconPosition === 'right' && <TouchableOpacity
               activeOpacity={0.6}
               onPress={() => {
+                onClick();
                 if (element.event.onPress) {
                   Alert.alert('Rule Action', `Fired onPress action. rule - ${element.event.onPress}.`);
                 }
               }}
-              disabled={!role.edit || !preview}
+              disabled={!role.edit && !preview}
               style={{
                 ...styles.touchableContainer,
                 backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,
@@ -160,11 +190,12 @@ const Button = props => {
             {element.meta.iconPosition === 'middle' && <TouchableOpacity
               activeOpacity={0.6}
               onPress={() => {
+                onClick();
                 if (element.event.onPress) {
                   Alert.alert('Rule Action', `Fired onPress action. rule - ${element.event.onPress}.`);
                 }
               }}
-              disabled={!role.edit || !preview}
+              disabled={!role.edit && !preview}
               style={{
                 ...styles.touchableContainer,
                 backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,

@@ -26,7 +26,8 @@ export const nativeDarkColors = {
   buttonTextColor: '#000000',
   elevation: {
     level3: '#FFFFFF',
-  }
+  },
+  warning: '#FF0000',
 };
 
 export const nativeLightColors = {
@@ -57,7 +58,8 @@ export const nativeLightColors = {
   buttonTextColor: '#FFFFFF',
   elevation: {
     level3: '#FFFFFF',
-  }
+  },
+  warning: '#FF0000',
 };
 
 export const trivergenceDarkColors = {
@@ -89,6 +91,7 @@ export const trivergenceDarkColors = {
   elevation: {
     level3: '#FFFFFF',
   },
+  warning: '#FF0000',
 };
 
 export const trivergenceLightColors = {
@@ -119,5 +122,6 @@ export const trivergenceLightColors = {
   buttonTextColor: '#FFFFFF',
   elevation: {
     level3: '#FFFFFF',
-  }
+  },
+  warning: '#FF0000',
 };

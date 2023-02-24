@@ -27,7 +27,7 @@ const ListSectionSetting = ({element, index, onClick}) => {
 
   return (
     <>
-      <SettingHeader title={'Grid Section Settings'} />
+      <SettingHeader title={'List Section Settings'} />
       <SettingSwitch
         title={'Hide label'}
         value={element.meta.hide_title}

@@ -48,7 +48,7 @@ const FileUpload = props => {
             {
               (role.edit || preview) && (
                 <TouchableOpacity
-                  style={styles.browerBtn(fonts)}
+                  style={styles.browerBtn(fonts, colors)}
                   onPress={() => {
                       DocumentPicker.pick({
                         presentationStyle: 'fullScreen',
@@ -65,7 +65,7 @@ const FileUpload = props => {
                 </TouchableOpacity>
               )
             }
-            {!element.meta.multi_select && (
+            {!element.meta.multi_select && result && (
               <View style={styles.mainView(colors)}>
                 <Text style={styles.text(fonts)}>
                   {result && result[0] !== undefined && result[0].name !== undefined
@@ -76,7 +76,7 @@ const FileUpload = props => {
                   (role.edit || preview) && (
                     <IconButton
                       icon="close"
-                      iconColor={fonts.values.color}
+                      iconColor={colors.colorButton}
                       disabled={!(role.edit || preview)}
                       onPress={() => {
                         const tempFormValue = {...formValue};
@@ -91,16 +91,16 @@ const FileUpload = props => {
                 }
               </View>        
             )}
-            {element.meta.multi_select && (
+            {element.meta.multi_select && result && (
               <>
                 <View style={styles.multifile(colors)}>
                   {result &&
                     result.map((e, i) => {
                       return (
-                        <View key={i} style={styles.selectedFile}>
+                        <View key={i} style={{...styles.selectedFile, backgroundColor: colors.colorButton}}>
                           <Text
                             key={i}
-                            style={{...styles.multiText, color: '#000000'}}>
+                            style={{...styles.multiText, color: '#FFFFFF'}}>
                             {e.name}
                           </Text>
                           {
@@ -108,8 +108,9 @@ const FileUpload = props => {
                               <IconButton
                                 icon="close"
                                 size={15}
-                                color={'#000000'}
+                                iconColor={'#FFFFFF'}
                                 style={styles.closeBtn}
+                                disabled={!(role.edit || preview)}
                                 onPress={() => {
                                   const tempValue = [...formValue[element.field_name]];
                                   if (tempValue.length > 1) {
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
     padding: 5,
     color: colors.text,
   }),
-  browerBtn: fonts => ({
+  browerBtn: (fonts, colors) => ({
     height: 100,
     borderStyle: 'dashed',
     borderWidth: 1,
@@ -156,6 +157,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
+    backgroundColor: colors.card,
   }),
   browerBtnText: fonts => ({
     ...fonts.values

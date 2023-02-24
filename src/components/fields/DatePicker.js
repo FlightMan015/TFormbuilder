@@ -23,12 +23,12 @@ const DatePicker = ({element}) => {
             <FieldLabel label={element.meta.title || 'Date'} visible={!element.meta.hide_title} />
             <View style={styles.mainView(colors)}>
               <Text style={styles.text(fonts)}>
-                {(element.field_name in formValue  && formValue[element.field_name]) ? new Date(formValue[element.field_name]).toLocaleDateString(): new Date(Date.now()).toLocaleDateString()}
+                {(element.field_name in formValue  && formValue[element.field_name]) ? formValue[element.field_name]: new Date(Date.now()).toISOString().split('T')[0]}
               </Text>
               {(role.edit  || preview) && (
                 <IconButton
                   icon="calendar"
-                  iconColor={fonts.values.color}
+                  iconColor={colors.colorButton}
                   onPress={() => setVisible(true)}
                   style={{
                     ...styles.icon,
@@ -44,7 +44,7 @@ const DatePicker = ({element}) => {
                 is24Hour={true}
                 onChange={(e, v) => {
                   setVisible(false);
-                  setFormValue({...formValue, [element.field_name]: v.toLocaleDateString()});
+                  setFormValue({...formValue, [element.field_name]: v.toISOString().split('T')[0]});
                   if (element.event.onChangeDate) {
                     Alert.alert('Rule Action', `Fired onChangeText action. rule - ${element.event.onChangeDate}. newDate - ${v}`);
                   }

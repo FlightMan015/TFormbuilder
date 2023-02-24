@@ -3,6 +3,7 @@ import {newFieldData, componentName} from '../constant';
 
 export const addField = (
   type,
+  field_name,
   previousFormData,
   indexes,
   addInfo,
@@ -28,7 +29,7 @@ export const addField = (
   // }
   const newData = {
     ...tempNewFieldData,
-    field_name: tempNewFieldData.field_name + '-' + Date.now() + '-0',
+    field_name,
     ...addInfo,
   };
   const tempFormData = JSON.parse(JSON.stringify(previousFormData.data));

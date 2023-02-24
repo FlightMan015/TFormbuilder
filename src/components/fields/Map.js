@@ -61,6 +61,8 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
   const preview = formStore(state => state.preview);
+  const visibleMapDlg = formStore(state => state.visibleMapDlg);
+  const setVisibleMapDlg = formStore(state => state.setVisibleMapDlg);
   const [searchQuery, setSearchQuery] = useState('');
   const [visibleSetPoint, setVisibleSetPoint] = useState(false);
   const [newPointData, setNewPointData] = useState({
@@ -118,6 +120,16 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
   });
 
   useEffect(() => {
+    if (!role.edit) {
+      setAddStatus({
+        point: false,
+        circle: false,
+        polygon: false,
+      });
+    }
+  }, [role.edit])
+
+  useEffect(() => {
     // requestPermissions();
     setDisplayFenceItems(geofences.slice(0, itemNum));
     setDisplayPointItems(points.slice(0, itemNum));
@@ -165,15 +177,15 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
     }
     setFencePageCount(tempFencePageCount === 0 ? 1 : tempFencePageCount);
     setPointPageCount(tempPointPageCount === 0 ? 1 : tempPointPageCount);
-    const pageItems1 = geofences.slice(
+    const pageItems1 = formValue[element.field_name]?.geofences?.slice(
       itemNum * (geofencePageNum - 1),
       itemNum * (geofencePageNum - 1) + 5,
-    );
+    ) || [];
     setDisplayFenceItems(pageItems1);
-    const pageItems2 = points.slice(
+    const pageItems2 = formValue[element.field_name]?.points?.slice(
       itemNum * (pointPageNum - 1),
       itemNum * (pointPageNum - 1) + 5,
-    );
+    ) || [];
     setDisplayPointItems(pageItems2);
   }, [JSON.stringify(formValue[element.field_name])]);
 
@@ -339,6 +351,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
         longitude: locationInfomation.longitude,
         location: searchQuery,
       }];
+      tempValue.push()
       setFormValue({...formValue, [element.field_name]: {...formValue[element.field_name], points: tempValue}});
       if (element.event.onCreateNewPoint) {
         Alert.alert(
@@ -373,7 +386,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
           'Rule Action',
           `Fired onCreateNewGeofence action. rule - ${
             element.event.onCreateNewGeofence
-          }. newData - ${JSON.stringify(tempElement.meta.data)}`,
+          }.`,
         );
       }
       setVisibleSetFence(false);
@@ -399,6 +412,14 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
     setFormValue({...formValue, [element.field_name]: {...formValue[element.field_name], geofences: tempValue}});
     setPolygonPointList([]);
     setPolygonTitle('');
+    if (element.event.onCreateNewGeofence) {
+      Alert.alert(
+        'Rule Action',
+        `Fired onCreateNewGeofence action. rule - ${
+          element.event.onCreateNewGeofence
+        }.`,
+      );
+    }
   };
 
   const selectPalette = selectedColor => {
@@ -457,7 +478,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
         {
           text: 'Yes',
           onPress: () => {
-            const tempgeofences = {...geofences};
+            const tempgeofences = [...geofences];
             tempgeofences.splice(geofenceIndex, 1);
             setFormValue({...formValue, [element.field_name]: {...formValue[element.field_name], points: tempgeofences}});
             if (element.event.onDeleteGeofence) {
@@ -465,7 +486,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
                 'Rule Action',
                 `Fired onDeleteGeofence action. rule - ${
                   element.event.onDeleteGeofence
-                }. newData - ${JSON.stringify(tempElement.meta.data)}`,
+                }.`,
               );
             }
           },
@@ -484,7 +505,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
       {
         text: 'Yes',
         onPress: () => {
-          const temppoints = {...points};
+          const temppoints = [...points];
           temppoints.splice(pointIndex, 1);
           setFormValue({...formValue, [element.field_name]: {...formValue[element.field_name], points: temppoints}});
           if (element.event.onDeletePoint) {
@@ -492,7 +513,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
               'Rule Action',
               `Fired onDeletePoint action. rule - ${
                 element.event.onDeletePoint
-              }. newData - ${JSON.stringify(tempElement.meta.data)}`,
+              }.`,
             );
           }
         },
@@ -506,32 +527,32 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
   };
 
   const editPoint = (oldData, pointIndex) => {
-    // setVisibleDlg({
-    //   ...visibleDlg,
-    //   mapEditDlg: true,
-    //   mapEditData: {
-    //     type: 'point',
-    //     title: oldData.title,
-    //     description: oldData.description,
-    //     pointIndex: pointIndex,
-    //     index: index,
-    //     element: element,
-    //   },
-    // });
+    setVisibleMapDlg({
+      ...visibleMapDlg,
+      mapEditDlg: true,
+      mapEditData: {
+        type: 'point',
+        title: oldData.title,
+        description: oldData.description,
+        pointIndex: pointIndex,
+        index: index,
+        element: element,
+      },
+    });
   };
 
   const editGeoFence = (oldData, geofenceIndex) => {
-    // setVisibleDlg({
-    //   ...visibleDlg,
-    //   mapEditDlg: true,
-    //   mapEditData: {
-    //     type: 'fence',
-    //     title: oldData.title,
-    //     fenceIndex: geofenceIndex,
-    //     index: index,
-    //     element: element,
-    //   },
-    // });
+    setVisibleMapDlg({
+      ...visibleMapDlg,
+      mapEditDlg: true,
+      mapEditData: {
+        type: 'fence',
+        title: oldData.title,
+        fenceIndex: geofenceIndex,
+        index: index,
+        element: element,
+      },
+    });
   };
 
   const selectPoint = selectedIndex => {
@@ -649,8 +670,8 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
             visible={visibleSetPoint}
             onDismiss={() => setVisibleSetPoint(false)}
             style={{...styles.dialog, backgroundColor: colors.card}}>
-            <Text style={{...fonts.headings, marginBottom: 10}}>New Location</Text>
-            <Text style={fonts.labels}>
+            <Text style={{...fonts.headings, marginVertical: 15}}>New Location</Text>
+            <Text style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
               {'Title'}
             </Text>
             <TextInput
@@ -662,7 +683,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
               placeholderTextColor={colors.placeholder}
               value={newPointData.title}
             />
-            <Text style={fonts.labels}>
+            <Text style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
               {'Description'}
             </Text>
             <TextInput
@@ -694,7 +715,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
               onDismiss={() => setVisibleSetFence(false)}
               style={{...styles.dialog, backgroundColor: colors.card}}>
               <Text style={{...fonts.headings, marginBottom: 10}}>New Fence</Text>
-              <Text style={fonts.labels}>
+              <Text style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
                 {'Title'}
               </Text>
               <TextInput
@@ -717,7 +738,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
                 placeholder={'Point description'}
                 value={newFenceData.description}
               /> */}
-              <Text style={fonts.labels}>
+              <Text style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
                 {'Radius'}
               </Text>
               <TextInput
@@ -732,12 +753,12 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
                 defaultValue="200"
               />
               <View style={styles.colorLabel}>
-                <Text style={fonts.labels}>
+                <Text style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
                   {'Color'}
                 </Text>
                 <View style={styles.colorLabel}>
                   <Text
-                    style={fonts.labels}>
+                    style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
                     {'RGB color'}
                   </Text>
                   <Switch
@@ -823,7 +844,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
             onDismiss={() => setVisibleSetPolygon(false)}
             style={{...styles.dialog, backgroundColor: colors.card}}>
               <Text style={{...fonts.headings, marginBottom: 10}}>New Polygon Fence</Text>
-              <Text style={fonts.labels}>
+              <Text style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
                 {'Title'}
               </Text>
               <TextInput
@@ -847,12 +868,12 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
                 value={newFenceData.description}
               /> */}
               <View style={styles.colorLabel}>
-                <Text style={fonts.labels}>
+                <Text style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
                   {'Color'}
                 </Text>
                 <View style={styles.colorLabel}>
                   <Text
-                    style={fonts.labels}>
+                    style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
                     {'RGB color'}
                   </Text>
                   <Switch
@@ -947,7 +968,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
           {(role.edit || preview) && (
             <View style={styles.mapControlView}>
               <TouchableOpacity onPress={onClickAddPoint}>
-                <View style={styles.markerIcon(addStatus.point, fonts)}>
+                <View style={styles.markerIcon(addStatus.point, colors)}>
                   <IconButton
                     icon={'map-marker-plus-outline'}
                     iconColor={addStatus.point ? 'white' : 'grey'}
@@ -956,7 +977,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={onClickAddFence}>
-                <View style={styles.circleIcon(addStatus.circle, fonts)}>
+                <View style={styles.circleIcon(addStatus.circle, colors)}>
                   <IconButton
                     icon={'shape-circle-plus'}
                     iconColor={addStatus.circle ? 'white' : 'grey'}
@@ -965,7 +986,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={onClickAddPolygon}>
-                <View style={styles.polygonIcon(addStatus.polygon, fonts)}>
+                <View style={styles.polygonIcon(addStatus.polygon, colors)}>
                   <IconButton
                     icon={'shape-polygon-plus'}
                     iconColor={addStatus.polygon ? 'white' : 'grey'}
@@ -976,11 +997,11 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
             </View>
           )}
           {drawPolygon && (
-            <Button
-              title='Finish'
+            <TextButton
+              text='Finish'
+              onPress={finishDrawPolygon}
+              textStyle={styles.finishButton}
               style={styles.drawPolytonBtn}
-              color="white"
-              onPress={() => finishDrawPolygon()}
             />
           )}
         </View>
@@ -1216,7 +1237,8 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
 
 const Map = ({element, index}) => {
   const updateFormData = formStore(state => state.updateFormData);
-  return useMemo(() => <MapChildComponent element={element} index={index} onClickUpdateField={updateFormData} />, [element, index]);
+  const formValue = formStore(state => state.formValue);
+  return useMemo(() => <MapChildComponent element={element} index={index} onClickUpdateField={updateFormData} />, [element, index, JSON.stringify(formValue[element.field_name])]);
 };
 
 const styles = StyleSheet.create({
@@ -1247,7 +1269,6 @@ const styles = StyleSheet.create({
     width: ScreenWidth - 50,
     marginHorizontal: 0,
     alignSelf: 'center',
-    marginTop: 0,
     paddingHorizontal: 15,
   },
 
@@ -1283,20 +1304,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 10,
   },
-  markerIcon: (addPoint, fonts) => ({
-    backgroundColor: addPoint ? fonts.values.color : '#ddd',
+  markerIcon: (addPoint, colors) => ({
+    backgroundColor: addPoint ? colors.colorButton : '#ddd',
     borderRightColor: 'white',
     borderRightWidth: 1,
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
   }),
-  circleIcon: (addFence, fonts) => ({
-    backgroundColor: addFence ? fonts.values.color : '#ddd',
+  circleIcon: (addFence, colors) => ({
+    backgroundColor: addFence ? colors.colorButton : '#ddd',
     borderRightColor: 'white',
     borderRightWidth: 1,
   }),
-  polygonIcon: (addPolygonFence, fonts) => ({
-    backgroundColor: addPolygonFence ? fonts.values.color : '#ddd',
+  polygonIcon: (addPolygonFence, colors) => ({
+    backgroundColor: addPolygonFence ? colors.colorButton : '#ddd',
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
   }),
@@ -1306,6 +1327,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     position: 'absolute',
     bottom: 10,
+    borderRadius: 5,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
   },
   points: {
     fontSize: 15,
@@ -1417,6 +1441,9 @@ const styles = StyleSheet.create({
     width: 100,
     paddingVertical: 10
   }),
+  finishButton: {
+    color: '#FFFFFF',
+  },
 });
 
 Map.propTypes = {

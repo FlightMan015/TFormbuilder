@@ -13,15 +13,26 @@ const FileUploadSetting = ({element, index, onClick}) => {
   const setFormData = formStore(state => state.setFormData);
 
   const onChange = (key, value) => {
-    const tempMeta = JSON.parse(JSON.stringify(element.meta));
-    setFormData({
-      ...formData,
-      data: updateField(
-        formData,
-        index,
-        {...element, meta: {...tempMeta, [key]: value}},
-      ),
-    });
+    if (key === 'is_mandatory') {
+      setFormData({
+        ...formData,
+        data: updateField(
+          formData,
+          index,
+          {...element, [key]: value},
+        ),
+      });
+    } else {
+      const tempMeta = JSON.parse(JSON.stringify(element.meta));
+      setFormData({
+        ...formData,
+        data: updateField(
+          formData,
+          index,
+          {...element, meta: {...tempMeta, [key]: value}},
+        ),
+      });
+    }
   };
 
   return (
@@ -34,6 +45,12 @@ const FileUploadSetting = ({element, index, onClick}) => {
         onChange={onChange}
         keyName={'hide_title'}
         description={'Make sure to show label.'}
+      />
+      <SettingSwitch
+        title={'Is Mandatory'}
+        value={element.is_mandatory}
+        onChange={onChange}
+        keyName={'is_mandatory'}
       />
       <SettingSwitch title={'Multiple selection'} value={element.meta.multi_select} onChange={onChange} keyName={'multi_select'} />
       <SettingDuplicate index={index} element={element} />

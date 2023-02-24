@@ -36,6 +36,12 @@ const DataTableSetting = ({element, index, onClick}) => {
         keyName={'hide_title'}
         description={'Make sure to show label.'}
       />
+      <SettingSwitch
+        title={'Is Mandatory'}
+        value={element.is_mandatory}
+        onChange={onChange}
+        keyName={'is_mandatory'}
+      />
       <DataTableHeaderSetting fields={element.meta.headers} changeData={onChange} />
       <SettingDuplicate index={index} element={element} />
     </>

@@ -1,16 +1,10 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import {View, Text, TextInput, StyleSheet, Alert} from 'react-native';
 import {IconButton, useTheme} from 'react-native-paper';
 import {color} from '../../theme/styles';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/Feather';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import DraggableFlatList, {
-  ScaleDecorator,
-  RenderItemParams,
-} from 'react-native-draggable-flatlist';
 import {componentName, newFieldData} from '../../constant';
-import FieldLabel from '../../common/FieldLabel';
 
 const types = {
   title: 'title',
@@ -37,26 +31,24 @@ const GridCellFieldSetting = props => {
   const [open, setOpen] = useState(true);
 //   const {visibleDlg, setVisibleDlg} = useContext(FieldSettingContext);
 
-  const tableFieldItem = ({item, drag, isActive, getIndex}) => {
-	const index = getIndex();
+  const tableFieldItem = ({item, index, isFirst, isLast}) => {
     return (
-      <ScaleDecorator>
-        <View style={styles.tableField}>
-          <Text style={styles.tableFieldNo}>{index + 1}</Text>
-          <TextInput
-            style={{...styles.tableFieldName, color: '#FFFFFF'}}
-            underlineColorAndroid="transparent"
-            onChangeText={e => {
-              const tempHeader = JSON.parse(JSON.stringify(fields));
-              const changedData = {
-                ...tempHeader[index],
-                name: e,
-              };
-              tempHeader.splice(index, 1, changedData);
-              changeData({[types.cellFields]: tempHeader});
-            }}
-            value={item.meta.title}
-          />
+		<View key={index} style={styles.tableField}>
+			<Text style={styles.tableFieldNo}>{index + 1}</Text>
+			<TextInput
+			style={{...styles.tableFieldName, color: '#FFFFFF'}}
+			underlineColorAndroid="transparent"
+			onChangeText={e => {
+				const tempHeader = JSON.parse(JSON.stringify(fields));
+				const changedData = {
+				...tempHeader[index],
+				name: e,
+				};
+				tempHeader.splice(index, 1, changedData);
+				changeData({[types.cellFields]: tempHeader});
+			}}
+			value={item.meta.title}
+			/>
 					{
 						item.component === componentName.TEXT_INPUT && (
 							<Text
@@ -122,44 +114,68 @@ const GridCellFieldSetting = props => {
 							</Text>
 						)
 					}
-          
-          <IconButton
-            style={styles.tableFieldDelIcon}
-            icon={'delete-outline'}
-            iconColor={'#fff'}
-            size={15}
-            onPress={() => {
-              Alert.alert(
-                'Delete Form',
-                `Are you sure want to delete field "${item.name}" ?`,
-                [
-                  {
-                    text: 'Yes',
-                    onPress: () => {
-                      const tempdata = JSON.parse(JSON.stringify(fields));
-                      tempdata.splice(index, 1);
-                      changeData(types.cellFields, tempdata);
-                    },
-                  },
-                  {
-                    text: 'No',
-                    onPress: () => {},
-                    style: 'cancel',
-                  },
-                ],
-              );
-            }}
-          />
-          <IconButton
-            style={styles.tableFieldDelIcon}
-            icon={'drag-horizontal-variant'}
-            iconColor={'#fff'}
-            size={15}
-            onPress={() => {}}
-            onLongPress={drag}
-          />
-        </View>
-      </ScaleDecorator>
+			{
+				!isFirst && (
+					<IconButton
+						style={styles.tableFieldDelIcon}
+						icon={'chevron-up'}
+						iconColor={'#fff'}
+						size={15}
+						onPress={() => {
+							const tempdata = JSON.parse(JSON.stringify(fields));
+							const selectedHeader = JSON.parse(JSON.stringify(tempdata[index]));
+							tempdata.splice(index, 1);
+							tempdata.splice(index - 1, 0, selectedHeader);
+							changeData(types.cellFields, tempdata);
+						}}
+					/>
+				)
+			}
+			{
+				!isLast && (
+					<IconButton
+						style={styles.tableFieldDelIcon}
+						icon={'chevron-down'}
+						iconColor={'#fff'}
+						size={15}
+						onPress={() => {
+							const tempdata = JSON.parse(JSON.stringify(fields));
+							const selectedHeader = JSON.parse(JSON.stringify(tempdata[index]));
+							tempdata.splice(index, 1);
+							tempdata.splice(index + 1, 0, selectedHeader);
+							changeData(types.cellFields, tempdata);
+						}}
+					/>
+				)
+			}
+			<IconButton
+				style={styles.tableFieldDelIcon}
+				icon={'delete-outline'}
+				iconColor={'#fff'}
+				size={15}
+				onPress={() => {
+					Alert.alert(
+					'Delete Form',
+					`Are you sure want to delete field "${item.name}" ?`,
+					[
+						{
+						text: 'Yes',
+						onPress: () => {
+							const tempdata = JSON.parse(JSON.stringify(fields));
+							tempdata.splice(index, 1);
+							changeData(types.cellFields, tempdata);
+						},
+						},
+						{
+						text: 'No',
+						onPress: () => {},
+						style: 'cancel',
+						},
+					],
+					);
+				}}
+			/>
+		</View>
     );
   };
 
@@ -172,17 +188,11 @@ const GridCellFieldSetting = props => {
 				<Text style={styles.tableFieldType}>Type</Text>
 				<Text style={styles.tableFieldAction}>Action</Text>
 			</View>
-			<GestureHandlerRootView style={styles.gestureHandlerView}>
-				<DraggableFlatList
-					data={fields}
-					onDragBegin={() => {}}
-					onDragEnd={changedData => {
-						changeData(types.cellFields, changedData.data);
-					}}
-					keyExtractor={(item, i) => i}
-					renderItem={tableFieldItem}
-				/>
-			</GestureHandlerRootView>
+			{
+				fields.map((field, i) =>{
+					return tableFieldItem({item: field, index: i, isFirst: (i === 0), isLast: (i + 1 === fields.length)});
+				})
+			}
 			<View style={{...styles.tableField}}>
 				<IconButton
 					style={{
@@ -207,6 +217,7 @@ const GridCellFieldSetting = props => {
 								'-' +
 								Date.now() +
 								'-1',
+							is_mandatory: false,
 						});
 						changeData(types.cellFields, tempdata);
 						setNewCellField({
@@ -284,7 +295,7 @@ const styles = StyleSheet.create({
 		color: '#ABB3B2',
   },
   tableFieldAction: {
-    width: '20%',
+    width: '30%',
     textAlign: 'center',
 		color: '#ABB3B2',
   },
@@ -296,7 +307,7 @@ const styles = StyleSheet.create({
 		color: '#ABB3B2',
   },
   tableFieldName: {
-    width: '50%',
+    width: '40%',
     paddingVertical: 0,
     paddingLeft: 10,
     borderRightWidth: 1,
@@ -311,7 +322,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderColor: color.GREY,
     borderRightWidth: 1,
-		color: '#FFFFFF',
+	color: '#FFFFFF',
   },
   tableFieldDelIcon: {
     width: '10%',

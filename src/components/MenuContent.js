@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {IconButton} from 'react-native-paper';
-import {fieldMenuData, newFieldData} from '../constant';
+import {componentName, fieldMenuData, newFieldData} from '../constant';
 import Icon from 'react-native-vector-icons/Feather';
 import formStore from '../store/formStore';
 import { useDrawerStatus } from '@react-navigation/drawer';
@@ -13,8 +13,30 @@ const MenuContent = () => {
   const setFormData = formStore(state => state.setFormData);
   const setOpenMenu = formStore(state => state.setOpenMenu);
   const indexToAdd = formStore(state => state.indexToAdd);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
+
   const selectMenu = component => {
-    setFormData({...formData, data: addField(component, formData, indexToAdd)});
+    const field_name = newFieldData[component].field_name + '-' + Date.now() + '-0';
+    if (component === componentName.DATE_PICKER) {
+      setFormValue({...formValue, [field_name]: new Date(Date.now()).toISOString().split('T')[0]});
+    }
+    if (component === componentName.TIME_PICKER) {
+      setFormValue({...formValue, [field_name]: new Date(Date.now()).toLocaleString()});
+    }
+    if (component === componentName.LINECHART) {
+      setFormValue({...formValue, [field_name]: newFieldData[component].meta.data});
+    }
+    if (component === componentName.BARCHART) {
+      setFormValue({...formValue, [field_name]: newFieldData[component].meta.data});
+    }
+    if (component === componentName.PIECHART) {
+      setFormValue({...formValue, [field_name]: newFieldData[component].meta.data});
+    }
+    if (component === componentName.RADARCHART) {
+      setFormValue({...formValue, [field_name]: newFieldData[component].meta.data});
+    }
+    setFormData({...formData, data: addField(component, field_name, formData, indexToAdd, )});
   };
 
   const status = useDrawerStatus();

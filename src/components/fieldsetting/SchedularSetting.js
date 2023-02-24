@@ -15,15 +15,26 @@ const SchedularSetting = ({element, index, onClick}) => {
   const updateFormData = formStore(state => state.updateFormData);
 
   const onChange = (key, value) => {
-    const tempMeta = JSON.parse(JSON.stringify(element.meta));
-    setFormData({
-      ...formData,
-      data: updateField(
-        formData,
-        index,
-        {...element, meta: {...tempMeta, [key]: value}},
-      ),
-    });
+    if (key === 'is_mandatory') {
+      setFormData({
+        ...formData,
+        data: updateField(
+          formData,
+          index,
+          {...element, [key]: value},
+        ),
+      });
+    } else {
+      const tempMeta = JSON.parse(JSON.stringify(element.meta));
+      setFormData({
+        ...formData,
+        data: updateField(
+          formData,
+          index,
+          {...element, meta: {...tempMeta, [key]: value}},
+        ),
+      });
+    }
   };
 
   const onChangeFont = (key, subkey, value) => {
@@ -42,6 +53,12 @@ const SchedularSetting = ({element, index, onClick}) => {
         onChange={onChange}
         keyName={'hide_title'}
         description={'Make sure to show label.'}
+      />
+      <SettingSwitch
+        title={'Is Mandatory'}
+        value={element.is_mandatory}
+        onChange={onChange}
+        keyName={'is_mandatory'}
       />
       <FontSetting
         label={'Month Font'}

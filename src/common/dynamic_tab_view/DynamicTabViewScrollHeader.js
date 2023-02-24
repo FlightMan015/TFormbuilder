@@ -1,7 +1,6 @@
 import React, {useState, useRef} from 'react';
 import {Button, TouchableHighlight, Text, View, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
-import {IconButton} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FlatList } from 'react-native-gesture-handler';
 const ScreenWidth = Dimensions.get('window').width;

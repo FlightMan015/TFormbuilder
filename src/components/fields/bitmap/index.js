@@ -122,55 +122,59 @@ const Bitmap = ({element, index}) => {
             </Canvas>
             <Text style={styles.linkName(fonts)}>{name}</Text>
           </View>
-          <View style={styles.itemIconsContainer}>
-            <IconButton
-              icon={'pencil-outline'}
-              iconColor={colors.colorButton}
-              size={18}
-              onPress={() => {
-                setVisibleDlg({
-                  ...visibleDlg,
-                  editBitmapLink: true,
-                  bitmapIndex: index,
-                  bitmapLinkIndex: linkIndex,
-                  bitmapElement: element,
-                  bitmapLinkData: {name: name, link: url},
-                });
-              }}
-              style={styles.actionButton}
-            />
-            <IconButton
-              icon={'delete-outline'}
-              iconColor={colors.colorButton}
-              size={18}
-              onPress={() => {
-                Alert.alert(
-                  'Delete link',
-                  'Are you sure want to delete this link ?',
-                  [
-                    {
-                      text: 'Yes',
-                      onPress: () => {
-                        const tempValue = {...formValue[element.field_name]};
-                        tempValue.paths.splice(linkIndex, 1);
-                        tempValue.svgs.splice(linkIndex, 1);
-                        setFormValue({...formValue, [element.field_name]: tempValue});
-                        if (element.event.onDeleteMarker) {
-                          Alert.alert('Rule Action', `Fired onDeleteMarker action. rule - ${element.event.onDeleteMarker}. newSeries - ${JSON.stringify(tempValue)}`);
-                        }
-                      },
-                    },
-                    {
-                      text: 'No',
-                      onPress: () => {},
-                      style: 'cancel',
-                    },
-                  ],
-                );
-              }}
-              style={styles.actionButton}
-            />
-          </View>
+          {
+            (role.edit || preview) && (
+              <View style={styles.itemIconsContainer}>
+                <IconButton
+                  icon={'pencil-outline'}
+                  iconColor={colors.colorButton}
+                  size={18}
+                  onPress={() => {
+                    setVisibleDlg({
+                      ...visibleDlg,
+                      editBitmapLink: true,
+                      bitmapIndex: index,
+                      bitmapLinkIndex: linkIndex,
+                      bitmapElement: element,
+                      bitmapLinkData: {name: name, link: url},
+                    });
+                  }}
+                  style={styles.actionButton}
+                />
+                <IconButton
+                  icon={'delete-outline'}
+                  iconColor={colors.colorButton}
+                  size={18}
+                  onPress={() => {
+                    Alert.alert(
+                      'Delete link',
+                      'Are you sure want to delete this link ?',
+                      [
+                        {
+                          text: 'Yes',
+                          onPress: () => {
+                            const tempValue = {...formValue[element.field_name]};
+                            tempValue.paths.splice(linkIndex, 1);
+                            tempValue.svgs.splice(linkIndex, 1);
+                            setFormValue({...formValue, [element.field_name]: tempValue});
+                            if (element.event.onDeleteMarker) {
+                              Alert.alert('Rule Action', `Fired onDeleteMarker action. rule - ${element.event.onDeleteMarker}. newSeries - ${JSON.stringify(tempValue)}`);
+                            }
+                          },
+                        },
+                        {
+                          text: 'No',
+                          onPress: () => {},
+                          style: 'cancel',
+                        },
+                      ],
+                    );
+                  }}
+                  style={styles.actionButton}
+                />
+              </View>
+            ) 
+          }
         </View>
       </TouchableOpacity>
     );
@@ -182,38 +186,40 @@ const Bitmap = ({element, index}) => {
         <FieldLabel label={element.meta.title || 'Bitmap'} visible={!element.meta.hide_title} />
         <View style={styles.selectImageContainer(colors)}>
           <View style={{flexDirection: 'row'}}>
-            <CustomButton
-              onPress={() => {
-                DocumentPicker.pick({
-                  type: types.images,
-                })
-                  .then(result => {
-                    if (
-                      imageData.imageName !== result[0].name ||
-                      imageData.imageUri !== result[0].uri
-                    ) {
-                      const tempMetaData = {
-                        imageName: result[0].name,
-                        imageUri: result[0].uri,
-                        imageWidth: imageScreenWidth.current,
-                        paths: [],
-                        svgs: [],
-                      };
-                      setFormValue({...formValue, [element.field_name]: tempMetaData});
-                      if (element.event.onSelectImage) {
-                        Alert.alert('Rule Action', `Fired onSelectImage action. rule - ${element.event.onSelectImage}. newSeries - ${JSON.stringify(tempMetaData)}`);
-                      }
-                    }
+            {(role.edit || preview) && (
+              <CustomButton
+                onPress={() => {
+                  DocumentPicker.pick({
+                    type: types.images,
                   })
-                  .catch({});
-              }}
-              style={{
-                ...styles.iconButton,
-              }}
-              iconColor={colors.colorButton}
-              icon="folder"
-              iconSize={18}
-            />
+                    .then(result => {
+                      if (
+                        imageData.imageName !== result[0].name ||
+                        imageData.imageUri !== result[0].uri
+                      ) {
+                        const tempMetaData = {
+                          imageName: result[0].name,
+                          imageUri: result[0].uri,
+                          imageWidth: imageScreenWidth.current,
+                          paths: [],
+                          svgs: [],
+                        };
+                        setFormValue({...formValue, [element.field_name]: tempMetaData});
+                        if (element.event.onSelectImage) {
+                          Alert.alert('Rule Action', `Fired onSelectImage action. rule - ${element.event.onSelectImage}. newSeries - ${JSON.stringify(tempMetaData)}`);
+                        }
+                      }
+                    })
+                    .catch({});
+                }}
+                style={{
+                  ...styles.iconButton,
+                }}
+                iconColor={colors.colorButton}
+                icon="folder"
+                iconSize={18}
+              />
+            )}
             {(role.edit || preview) && imageData.imageName && (
               <CustomButton
                 onPress={() => {

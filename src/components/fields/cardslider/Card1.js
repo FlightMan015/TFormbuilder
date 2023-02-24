@@ -64,7 +64,7 @@ const Card1 = (props) => {
 
   return (
     <View style={styles.card}>
-      <View style={styles.info(backgroundColor, cardCorner, cardInfoHeight)}>
+      <View style={styles.info(colors, cardCorner, cardInfoHeight)}>
         <TouchableOpacity
           style={styles.emptyImageView(cardCorner, cardInfoHeight, fonts, imageUri)}
           disabled={!(role.edit || preview)}
@@ -151,7 +151,7 @@ const Card1 = (props) => {
           <Text style={{...descriptionFont, padding: 0, paddingVertical: 0}}>{description || 'Description'}</Text> */}
         </View>
         {
-          role.edit && (
+          (role.edit || preview) && (
             <IconButton
               icon="close"
               size={20}
@@ -193,12 +193,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: cardCorner === 'default' ? 3 : 20,
   }),
-  info: (backgroundColor, cardCorner, cardInfoHeight) => ({
+  info: (colors, cardCorner, cardInfoHeight) => ({
     height: cardInfoHeight,
     flexDirection: 'row',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: backgroundColor,
+    backgroundColor: colors.card,
     borderTopRightRadius: cardCorner === 'default' ? 3 : 20,
     borderTopLeftRadius: cardCorner === 'default' ? 3 : 20,
   }),

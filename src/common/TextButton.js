@@ -2,12 +2,13 @@ import React from 'react';
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 const TextButton = props => {
-  const {onPress, style, text, textStyle} = props;
+  const {onPress, style, text, textStyle, disabled} = props;
 
   return (
     <TouchableOpacity
       activeOpacity={0.5}
       onPress={onPress}
+      disabled={disabled}
       style={{...styles.touchableOpacity, ...style}}>
       <Text
         style={{

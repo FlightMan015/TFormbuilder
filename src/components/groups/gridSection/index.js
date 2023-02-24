@@ -10,10 +10,12 @@ import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import FieldLabel from '../../../common/FieldLabel';
 
 const Grid = props => {
-  const {element, index, onSelect, selected} = props;
+  const {element, index, onSelect, selected, preview} = props;
   const onClickUpdateField = formStore(state => state.updateFormData);
   const onClickDeleteField = formStore(state => state.deleteFormData);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
   const {colors, fonts} = useTheme();
   const [cellData, setCellData] = useState({viewGrid: true, data: []});
   const [cells, setCells] = useState([]);
@@ -21,7 +23,7 @@ const Grid = props => {
 
   useEffect(() => {
     setCells(element.meta.childs);
-    setCellData({...cellData, data: element.meta.cellFields});
+    // setCellData({...cellData, data: element.meta.cellFields});
   }, [element]);
 
   const onCellAction = (cellIndex, action) => {
@@ -30,6 +32,7 @@ const Grid = props => {
         ...cellData,
         viewGrid: false,
         cellIndex: cellIndex,
+        data: element.meta.childs[cellIndex],
       });
     }
     if (action === 'edit') {
@@ -58,10 +61,9 @@ const Grid = props => {
       ]);
     }
     if (action === 'add') {
-      let newCellData = {};
+      let newCellData = [];
       element.meta.cellFields.map(e => {
-        const tempNewCellData = JSON.parse(JSON.stringify(newCellData));
-        newCellData = {...tempNewCellData, [e.field_name]: ''};
+        newCellData.push({...e, field_name: element.field_name + '=' + e.field_name + '=' + element.meta.childs.length})
       });
       const tempElement = JSON.parse(JSON.stringify(element));
       tempElement.meta.childs.push(newCellData);
@@ -93,26 +95,23 @@ const Grid = props => {
       <FieldLabel label={element.meta.title || 'Grid Section'} visible={!element.meta.hide_title} />
       {cellData.viewGrid && (
         <View style={styles.gridView}>
-          <FlatList
-            data={cells}
-            renderItem={({item, index}) => (
-              <RenderItem
-                uri={null}
-                height={element.meta.cellData.autoColumn ? cellDemensions.height : element.meta.cellData.height}
-                width={cellDemensions.width}
-                autoColumn={element.meta.cellData.autoColumn}
-                onClick={onCellAction}
-                index={index}
-                // editRole={userRole.edit}
-                editRole={true}
-              />
-            )}
-            //Setting the number of column
-            numColumns={element.meta.cellData.autoColumn ? cellDemensions.numberOfColumns : element.meta.cellData.numColumns}
-            keyExtractor={(item, index) => index}
-            onLayout={e => onLayoutFlatList(e)}
-          />
-          {/* {!preview && 'edit' in userRole && userRole.edit && ( */}
+          <View style={styles.gridSeries} onLayout={e => onLayoutFlatList(e)}>
+            {
+              cells.map((cell, cellIndex) => (
+                <RenderItem
+                  key={cellIndex}
+                  uri={null}
+                  height={element.meta.cellData.autoColumn ? cellDemensions.height : element.meta.cellData.height}
+                  width={cellDemensions.width}
+                  autoColumn={element.meta.cellData.autoColumn}
+                  onClick={onCellAction}
+                  index={cellIndex}
+                  editRole={role.edit || preview}
+                />
+              ))
+            }
+          </View>
+          {(preview || role.edit) && (
             <IconButton
               icon="shape-square-rounded-plus"
               size={15}
@@ -122,11 +121,11 @@ const Grid = props => {
                 onCellAction(null, 'add');
               }}
             />
-          {/* )} */}
+          )}
         </View>
       )}
       {!cellData.viewGrid && (
-        <View style={styles.gridView(colors)}>
+        <View style={styles.gridView}>
           <Text
             style={{...fonts.values, color: colors.colorButton, marginLeft: 5}}
             onPress={() => {
@@ -146,29 +145,16 @@ const Grid = props => {
               {cellData.data.map((child, childindex) => {
                 return (
                   <View key={childindex} style={styles.listCell(element.meta.verticalAlign)}>
-                    {/* <FieldComponent
-                      key={childindex}
-                      index={{
-                        ...index,
-                      }}
-                      element={child}
-                      preview={true}
-                      onChangeValue={onChangeFieldValue}
-                      value={
-                        cells[cellData.cellIndex][child.field_name]
-                          ? cells[cellData.cellIndex][child.field_name]
-                          : ''
-                      }
-                      user="admin"
-                    /> */}
                     <MemoField
                       index={{
                         ...index,
                         childIndex: childindex,
                       }}
                       element={child}
-                      onSelect={e => onSelect(e)}
-                      selected={selected && 'childIndex' in selectedFieldIndex && selectedFieldIndex.childIndex === childindex}
+                      // onSelect={e => onSelect(e)}
+                      // selected={selected && 'childIndex' in selectedFieldIndex && selectedFieldIndex.childIndex === childindex}
+                      onSelect={() => {}}
+                      elected={false}
                       isLastField={cellData.data.length === (childindex + 1)}
                     />
                   </View>
@@ -242,6 +228,11 @@ const styles = StyleSheet.create({
   listCell: verticalAlign => ({
     width: verticalAlign ? '100%' : 340,
   }),
+  gridSeries: {
+    width: '100%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
 });
 
 Grid.propTypes = {

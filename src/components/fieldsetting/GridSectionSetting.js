@@ -29,7 +29,6 @@ const GridSectionSetting = ({element, index, onClick}) => {
     <>
       <SettingHeader title={'Grid Section Settings'} />
       <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
-      <GridCellFieldSetting fields={element.meta.cellFields} changeData={onChange} />
       <SettingSwitch
         title={'Hide label'}
         value={element.meta.hide_title}
@@ -37,6 +36,7 @@ const GridSectionSetting = ({element, index, onClick}) => {
         keyName={'hide_title'}
         description={'Make sure to show label.'}
       />
+      <GridCellFieldSetting fields={element.meta.cellFields} changeData={onChange} />
       <SettingDuplicate index={index} element={element} />
     </>
   );

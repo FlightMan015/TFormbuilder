@@ -64,15 +64,9 @@ const InputTextSetting = ({element, index, onClick}) => {
         onChange={onChange}
         keyName={'placeholder'}
       />
-      <SettingNumber
-        title={'Number of lines'}
-        value={element.meta.numberOfLines}
-        onChange={onChange}
-        keyName={'numberOfLines'}
-      />
       <SettingSwitch
         title={'Multiline'}
-        value={element.multiline}
+        value={element.meta.multiline}
         onChange={onChange}
         keyName={'multiline'}
         description={'Make sure to show multiline.'}

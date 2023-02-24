@@ -78,6 +78,15 @@ const Group = props => {
                   )
                 }
                 <IconButton
+                  icon="account-outline"
+                  size={24}
+                  iconColor={'#fff'}
+                  style={{margin: 3, backgroundColor: '#0A1551'}}
+                  onPress={() => {
+                    onClick('role');
+                  }}
+                />
+                <IconButton
                   icon="cog-outline"
                   size={24}
                   iconColor={'#fff'}
@@ -105,18 +114,19 @@ const Group = props => {
   );
 };
 
-const MemoGroup = ({element, index, editRole, onSelect, selected, isLastGroup}) => {
+const MemoGroup = ({element, index, onSelect, selected, isLastGroup}) => {
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
   const setSelectedField = formStore(state => state.setSelectedField);
+  const setSettingType = formStore(state => state.setSettingType);
   // const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
   const setSelectedFieldIndex = formStore(state => state.setSelectedFieldIndex);
   const navigation = useNavigation();
 
   useEffect(() => {
-    // if (selected && !('childIndex' in selectedFieldIndex))
+    if (selected)
       setSelectedField(element);
-  }, [element, selected]);
+  }, [JSON.stringify(element), selected]);
 
   const onClickAction = type => {
     if (type === 'delete') {
@@ -124,7 +134,8 @@ const MemoGroup = ({element, index, editRole, onSelect, selected, isLastGroup}) 
       setFormData({...formData, data: deleteField(formData, index)});
     }
     if (type === 'setting') {
-      setSelectedField(element);
+      // setSelectedField(element);
+      setSettingType('setting');
       navigation.getParent('RightDrawer').openDrawer();
     }
     if (type === 'moveup') {
@@ -134,6 +145,10 @@ const MemoGroup = ({element, index, editRole, onSelect, selected, isLastGroup}) 
     if (type === 'movedown') {
       setFormData({...formData, data: moveDown(formData, index)});
       setSelectedFieldIndex({...index, groupIndex: index.groupIndex + 1});
+    }
+    if (type === 'role') {
+      setSettingType('role');
+      navigation.getParent('RightDrawer').openDrawer();
     }
   };
 
@@ -148,7 +163,7 @@ const MemoGroup = ({element, index, editRole, onSelect, selected, isLastGroup}) 
         isLastGroup={isLastGroup}
       />
     ),
-    [JSON.stringify(element), JSON.stringify(index), editRole, selected],
+    [JSON.stringify(element), JSON.stringify(index), selected],
   );
 };
 

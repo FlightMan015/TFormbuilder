@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     backgroundGradientFrom: colors.card,
     backgroundGradientTo: colors.card,
     decimalPlaces: 2,
-    color: (opacity = 1) => fonts.values.color,
+    color: (opacity = 1) => colors.colorButton,
     labelColor: (opacity = 1) => fonts.labels.color,
     style: {
       borderRadius: 16,

@@ -35,10 +35,10 @@ const ImageField = ({element}) => {
                       maxHeight={screenWidth * 9 / 16}
                       maxWidth={screenWidth}
                     />
-                    {<IconButton
-                      icon="pencil"
+                    {(role.edit || preview) && <IconButton
+                      icon="image-edit"
                       size={18}
-                      iconColor={fonts.values.color}
+                      iconColor={colors.background}
                       style={styles.selectIcon(colors, fonts)}
                       disabled={!(role.edit || preview)}
                       onPress={() =>{
@@ -48,9 +48,8 @@ const ImageField = ({element}) => {
                           .then(result => {
                             setFormValue({...formValue, [element.field_name]: result});
                             if (element.event.onSelectImage) {
-                              Alert.alert('Rule Action', `Fired onSelectImage action. rule - ${element.event.onSelectImage}. new image - ${JSON.stringify(tempMetaData)}`);
+                              Alert.alert('Rule Action', `Fired onSelectImage action. rule - ${element.event.onSelectImage}. new image - ${result}`);
                             }
-                            
                           })
                           .catch({});
                       }}
@@ -59,10 +58,9 @@ const ImageField = ({element}) => {
                 )
               }
               {
-                !formValue[element.field_name] && (
+                !formValue[element.field_name] && (role.edit || preview) && (
                   <TouchableOpacity
-                    style={styles.browerBtn(fonts)}
-                    disabled={!(role.edit || preview)}
+                    style={styles.browerBtn(fonts, colors)}
                     onPress={() => {
                       DocumentPicker.pick({
                         type: types.images,
@@ -70,7 +68,7 @@ const ImageField = ({element}) => {
                         .then(result => {
                           setFormValue({...formValue, [element.field_name]: result});
                           if (element.event.onSelectImage) {
-                            Alert.alert('Rule Action', `Fired onSelectImage action. rule - ${element.event.onSelectImage}. new image - ${JSON.stringify(tempMetaData)}`);
+                            Alert.alert('Rule Action', `Fired onSelectImage action. rule - ${element.event.onSelectImage}. new image - ${result}`);
                           }
                         })
                         .catch({});
@@ -101,16 +99,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 250,
   },
-  selectIcon: (colors, fonts) => ({
-    backgroundColor: colors.card,
-    margin: 3,
-    borderWidth: 1,
-    borderColor: fonts.values.color,
-    position: 'absolute',
-    right: 20,
-    top: 10,
+  selectIcon: (colors) => ({
+    backgroundColor: colors.colorButton,
+    alignSelf: 'center',
   }),
-  browerBtn: fonts => ({
+  browerBtn: (fonts, colors) => ({
     height: 100,
     borderStyle: 'dashed',
     borderWidth: 1,
@@ -119,6 +112,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 5,
+    backgroundColor: colors.card,
   }),
   browerBtnText: fonts => ({
     ...fonts.values

@@ -16,6 +16,8 @@ const Section = ({
   const setIndexToAdd = formStore(state => state.setIndexToAdd);
   const setOpenMenu = formStore(state => state.setOpenMenu);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
+  const userRole = formStore(state => state.userRole);
+  const role = element.role.find(e => e.name === userRole);
   return (
     <View style={styles.container}>
       <FieldLabel label={element.meta.title || 'Section'} visible={!element.meta.hide_title} />
@@ -35,7 +37,7 @@ const Section = ({
             />
           );
         })}
-        {(!preview || !role.edit) && (
+        {(preview || role.edit) && (
           <View style={styles.renderContainer}>
             <IconButton
               icon="plus"

@@ -21,7 +21,6 @@ const CardSlider = props => {
   const setFormValue = formStore(state => state.setFormValue);
   const _carousel = useRef();
   const [activeSlide, setActiveSlide] = useState(0);
-  console.log('-------------------------------', formValue[element.field_name]?.length)
 
   const CarouselPagination = () => {
     if (formValue[element.field_name]?.length > 0) {
@@ -33,7 +32,7 @@ const CardSlider = props => {
             })
           }
         </View>
-      );                   
+      );
     }
   }
 

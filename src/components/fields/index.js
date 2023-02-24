@@ -14,13 +14,32 @@ import { deleteField, moveDown, moveUp } from '../../actions/formdata';
 
 const Field = props => {
   const {element, index, selected, onClick, onSelect, isLastField} = props;
-  const {colors, size} = useTheme();
+  const {colors, fonts} = useTheme();
   const userRole = formStore(state => state.userRole);
   const preview = formStore(state => state.preview);
+  const submit = formStore(state => state.submit);
+  const formValue = formStore(state => state.formValue);
   const role = element.role.find(e => e.name === userRole);
   const FieldComponent = getComponent(element.component);
   const opacity = new Animated.Value(1);
 
+  const setValidation = formStore(state => state.setValidation);
+  const validation = formStore(state => state.validation);
+  const formValidation = formStore(state => state.formValidation);
+  const setFormValidation = formStore(state => state.setFormValidation);
+
+  if (formValidation && element.is_mandatory && !formValue[element.field_name]) {
+    setFormValidation(false);
+  }
+
+  useEffect(() => {
+    if (element.is_mandatory && !formValue[element.field_name]) {
+      setValidation({...validation, [element.field_name]: false});
+    } else if (!validation[element.field_name]) {
+      setValidation({...validation, [element.field_name]: true});
+    }
+  }, [element.is_mandatory, !!formValue[element.field_name]]);
+ 
   const fadeOut = () => {
     Animated.timing(opacity, {
       toValue: 0,
@@ -48,6 +67,9 @@ const Field = props => {
                 onSelect(index);
               }}>
               <FieldComponent element={element} index={index} selected={selected} />
+              {(element.is_mandatory && !validation[element.field_name] && submit) && (
+                <Text style={styles.note(colors, fonts)}>{element.meta.title} field is required.</Text>
+              )}
             </View>
             {(selected && !preview) && (
               <Animated.View style={{...styles.setIcons, opacity, backgroundColor: colors.background, borderRadius: 20}}>
@@ -132,10 +154,13 @@ const MemoField = ({element, index, onSelect, selected, isLastField}) => {
   const setFormValue = formStore(state => state.setFormValue);
   const navigation = useNavigation();
   const viewMode = formStore(state => state.viewMode);
+  const validation = formStore(state => state.validation);
+  const formValidation = formStore(state => state.formValidation);
 
   useEffect(() => {
-    if (selected) setSelectedField(element);
-  }, [element, selected]);
+    if (selected)
+      setSelectedField(element);
+  }, [JSON.stringify(element), selected]);
 
   const onClickAction = type => {
     if (type === 'delete') {
@@ -176,7 +201,7 @@ const MemoField = ({element, index, onSelect, selected, isLastField}) => {
       onClick={type => onClickAction(type)}
       onSelect={onSelect}
       isLastField={isLastField}
-    />), [JSON.stringify(element), JSON.stringify(index), selected, JSON.stringify(formData.lightStyle), JSON.stringify(formData.darkStyle), viewMode]);
+    />), [JSON.stringify(element), JSON.stringify(index), selected, JSON.stringify(formData.lightStyle), JSON.stringify(formData.darkStyle), viewMode, validation[element.field_name], formValidation]);
 };
 
 const styles = StyleSheet.create({
@@ -193,6 +218,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: visibleBorder ? 2 : 0,
     marginVertical: 3,
+  }),
+  note: (colors, fonts) => ({
+    color: colors.warning,
+    fontFamily: fonts.values.fontFamily,
+    fontSize: fonts.values.fontSize,
+    marginHorizontal: 5,
+    marginLeft: 10,
   }),
 });
 

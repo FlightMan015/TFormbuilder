@@ -1,18 +1,19 @@
 
 
 import React, {useState} from 'react';
-import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import useDrawingStore from '../../../store/bitmapStore';
 import history from './history';
 import utils from './utils';
 import CustomButton from '../../../common/CustomButton';
-import {Skia, ImageSVG, Canvas} from '@shopify/react-native-skia';
 import {color} from '../../../theme/styles';
+import { useTheme } from 'react-native-paper';
 
 const BitmapHeader = ({onSave}) => {
   /**
    * Reset the canvas & draw state
    */
+  const {colors} = useTheme();
 
   const reset = () => {
     useDrawingStore.getState().setCompletedPaths([]);
@@ -34,20 +35,20 @@ const BitmapHeader = ({onSave}) => {
     <View style={styles.controlView}>
       <CustomButton
         onPress={undo}
-        style={styles.button1}
+        style={styles.button1(colors)}
         textStyle={{color: color.WHITE}}
         text="Undo"
       />
 
       <CustomButton
         onPress={redo}
-        style={styles.button2}
+        style={styles.button2(colors)}
         textStyle={{color: color.WHITE}}
         text="Redo"
       />
       <CustomButton
         onPress={reset}
-        style={styles.button1}
+        style={styles.button1(colors)}
         textStyle={{color: color.WHITE}}
         text="Reset"
       />
@@ -56,19 +57,19 @@ const BitmapHeader = ({onSave}) => {
 };
 
 const styles = StyleSheet.create({
-  button1: {
+  button1: colors => ({
     width: 65,
     height: 30,
     borderRadius: 7,
     marginRight: 10,
-    backgroundColor: color.PRIMARY,
-  },
-  button2: {
+    backgroundColor: colors.colorButton,
+  }),
+  button2: colors => ({
     width: 65,
     height: 30,
     borderRadius: 7,
-    backgroundColor: color.PRIMARY,
-  },
+    backgroundColor: colors.colorButton,
+  }),
   controlView: {
     height: 30,
     width: '100%',

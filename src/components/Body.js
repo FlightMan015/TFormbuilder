@@ -88,16 +88,20 @@ const Body = props => {
             })}
           </View>
         </ScrollView>
-        <IconButton
-          icon="plus"
-          size={size.s30}
-          iconColor={colors.card}
-          style={styles.addFieldButton(colors)}
-          onPress={() => {
-            setIndexToAdd({});
-            setOpenMenu(!openMenu);
-          }}
-        />
+        {
+          !preview && (
+            <IconButton
+              icon="plus"
+              size={size.s30}
+              iconColor={colors.card}
+              style={styles.addFieldButton(colors)}
+              onPress={() => {
+                setIndexToAdd({});
+                setOpenMenu(!openMenu);
+              }}
+            />
+          )
+        }
         <IconButton
           icon={preview ? 'pencil-outline' : 'eye-outline'}
           size={size.s30}
@@ -118,7 +122,6 @@ const Body = props => {
         />
       </View>
     </View>
-    
   );
 };
 

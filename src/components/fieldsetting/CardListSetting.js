@@ -72,8 +72,19 @@ const CardListSetting = props => {
   const cardData = useRef(-1);
 
   const onChange = (key, value) => {
+    if (key === 'is_mandatory') {
+      setFormData({
+        ...formData,
+        data: updateField(
+          formData,
+          index,
+          {...element, [key]: value},
+        ),
+      });
+    } else {
     const tempMeta = {...element.meta};
-    updateFormData(index, {...element, meta: {...tempMeta, [key]: value}});
+      updateFormData(index, {...element, meta: {...tempMeta, [key]: value}});
+    }
   };
 
   const onChangeFont = (key, subkey, value) => {
@@ -132,6 +143,12 @@ const CardListSetting = props => {
                   onChange={onChange}
                   keyName={'hide_title'}
                   description={'Make sure to show label.'}
+                />
+                <SettingSwitch
+                  title={'Is Mandatory'}
+                  value={element.is_mandatory}
+                  onChange={onChange}
+                  keyName={'is_mandatory'}
                 />
                 <SettingSwitch
                   title={'Auto Play'}
@@ -249,13 +266,13 @@ const CardListSetting = props => {
             )}
             {selectedTab === 'style' && (
               <>
-                <ColorPicker
+                {/* <ColorPicker
                   color={element.meta.cardBackgroundColor}
                   label={'Card Background Color'}
                   selectColor={e => {
                     onChange('cardBackgroundColor', e);
                   }}
-                />
+                /> */}
                 <View style={styles.settingView}>
                   <Text style={styles.titleLabel}>Card Corner</Text>
                   <View style={styles.settingTab}>

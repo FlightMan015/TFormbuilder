@@ -347,53 +347,29 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
       }}>
       <View>
         <Text style={{
-          ...styles.text,
-          color: colors.label,
+          ...styles.text(fonts),
         }}>Series</Text>
         <View style={globalStyles.fieldheader}>
-          <SelectDropdown
-            data={meta.data.lines}
-            onSelect={onSelectLine}
-            dropdownStyle={{...styles.dropdown, backgroundColor: colors.card}}
-            rowTextStyle={{fontSize: 14, color: colors.text, fontFamily: 'PublicSans-Regular'}}
-            buttonStyle={globalStyles.buttonStyle(colors, fonts)}
-            buttonTextStyle={{color: colors.text, fontSize: 14, fontFamily: 'PublicSans-Regular'}}
-            selectedRowStyle={{backgroundColor: colors.inputTextBackground}}
-            selectedRowTextStyle={{color: colors.text}}
-            renderDropdownIcon={
-              openLine
-                ? () => (
-                    <Icon name="chevron-down" size={18} color={colors.text} />
-                  )
-                : () => <Icon name="chevron-up" size={18} color={colors.text} />
-            }
-            dropdownIconPosition="right"
-            onFocus={e => setOpenLine(false)}
-            onBlur={e => setOpenLine(true)}
-            defaultButtonText="Select Series"
-            defaultValueByIndex={lineStatus.lineIndex}
-            // search={true}
-          />
           <View style={globalStyles.iconsContainer}>
             <IconButton
               icon={'playlist-plus'}
-              iconColor={colors.icon}
+              iconColor={colors.colorButton}
               size={18}
               onPress={onClickAddLine}
-              disabled={!('editSeries' in userRole && userRole.editSeries) || !preview}
+              disabled={!('editSeries' in userRole && userRole.editSeries) && !preview}
               style={globalStyles.iconButton}
             />
             <IconButton
-              icon={'pencil'}
-              iconColor={colors.icon}
+              icon={'pencil-outline'}
+              iconColor={colors.colorButton}
               size={18}
-              disabled={!('editSeries' in userRole && userRole.editSeries) || !preview}
+              disabled={!('editSeries' in userRole && userRole.editSeries) && !preview}
               onPress={onClickEditLine}
               style={globalStyles.iconButton}
             />
             <IconButton
-              icon="delete-forever"
-              iconColor={colors.icon}
+              icon="delete-outline"
+              iconColor={colors.colorButton}
               disabled={
                 (('editSeries' in userRole && userRole.editSeries) || preview)
                   ? meta.data.lines.length > 1
@@ -406,27 +382,51 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
               style={globalStyles.iconButton}
             />
           </View>
+          <SelectDropdown
+            data={meta.data.lines}
+            onSelect={onSelectLine}
+            dropdownStyle={{...styles.dropdown, backgroundColor: colors.card}}
+            rowTextStyle={fonts.values}
+            buttonStyle={globalStyles.buttonStyle(colors, fonts)}
+            buttonTextStyle={fonts.values}
+            selectedRowStyle={{backgroundColor: colors.card}}
+            selectedRowTextStyle={{...fonts.values, color: colors.colorButton}}
+            renderDropdownIcon={
+              openLine
+                ? () => (
+                    <Icon name="chevron-down" size={18} color={colors.colorButton} />
+                  )
+                : () => <Icon name="chevron-up" size={18} color={colors.colorButton} />
+            }
+            dropdownIconPosition="right"
+            onFocus={e => setOpenLine(false)}
+            onBlur={e => setOpenLine(true)}
+            defaultButtonText="Select Series"
+            defaultValueByIndex={lineStatus.lineIndex}
+            // search={true}
+          />
         </View>
         {lineStatus.editLine && (
           <View>
             <View style={globalStyles.addView}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={globalStyles.opacityStyle(colors)}
+                onPress={onClickChangeNewLine}
+                // disabled={newLineValid ? false : true}
+              >
+                <Text style={styles.textBtnStyle}>Change</Text>
+              </TouchableOpacity>
               <TextInput
                 style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeLine}
                 editable
                 placeholder="Series name"
+                placeholderTextColor={'grey'}
                 value={changeLine}
                 // showSoftInputOnFocus={false}
               />
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={globalStyles.opacityStyle}
-                onPress={onClickChangeNewLine}
-                // disabled={newLineValid ? false : true}
-              >
-                <Text style={styles.textBtnStyle}>Change</Text>
-              </TouchableOpacity>
             </View>
             {!isRGBcolor && (
               <View>
@@ -488,22 +488,23 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
         {lineStatus.addLine && (
           <View>
             <View style={globalStyles.addView}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={globalStyles.opacityStyle(colors)}
+                onPress={onClickAddNewLine}
+                disabled={lineStatus.newLineValid ? false : true}>
+                <Text style={styles.textBtnStyle}>Add</Text>
+              </TouchableOpacity>
               <TextInput
                 style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeNewLine}
                 editable
                 placeholder="new series name"
+                placeholderTextColor={'grey'}
                 value={lineStatus.newLine}
                 // showSoftInputOnFocus={false}
               />
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={globalStyles.opacityStyle}
-                onPress={onClickAddNewLine}
-                disabled={lineStatus.newLineValid ? false : true}>
-                <Text style={styles.textBtnStyle}>Add</Text>
-              </TouchableOpacity>
             </View>
             {!isRGBcolor && (
               <View>
@@ -518,21 +519,21 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
             )}
             {isRGBcolor && (
               <View style={styles.colorContainer}>
-                <Text style={styles.RGBtext}>R</Text>
+                <Text style={styles.RGBtext(fonts)}>R</Text>
                 <TextInput
                   keyboardType="numeric"
                   style={styles.RGBvalue(colors, fonts)}
                   value={customColor.red.toString()}
                   onChangeText={onChangeRed}
                 />
-                <Text style={styles.RGBtext}>G</Text>
+                <Text style={styles.RGBtext(fonts)}>G</Text>
                 <TextInput
                   keyboardType="numeric"
                   style={styles.RGBvalue(colors, fonts)}
                   value={customColor.green.toString()}
                   onChangeText={onChangeGreen}
                 />
-                <Text style={styles.RGBtext}>B</Text>
+                <Text style={styles.RGBtext(fonts)}>B</Text>
                 <TextInput
                   keyboardType="numeric"
                   style={styles.RGBvalue(colors, fonts)}
@@ -567,62 +568,29 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
         <View>
           <View>
             <Text style={{
-              ...styles.text,
-              color: colors.label,
+              ...styles.text(fonts),
             }}>Axis</Text>
             <View style={globalStyles.fieldheader}>
-              <SelectDropdown
-                data={axes}
-                onSelect={onSelectAxis}
-                dropdownStyle={{
-                  ...styles.dropdown,
-                  backgroundColor: colors.card,
-                }}
-                rowTextStyle={{fontSize: 14, color: colors.text}}
-                buttonStyle={globalStyles.buttonStyle(colors, fonts)}
-                buttonTextStyle={{color: colors.text, fontSize: 14}}
-                selectedRowStyle={{backgroundColor: colors.inputTextBackground}}
-                selectedRowTextStyle={{color: colors.text}}
-                renderDropdownIcon={
-                  openAxis
-                    ? () => (
-                        <Icon
-                          name="chevron-down"
-                          size={18}
-                          color={colors.text}
-                        />
-                      )
-                    : () => (
-                        <Icon name="chevron-up" size={18} color={colors.text} />
-                      )
-                }
-                dropdownIconPosition="right"
-                onFocus={e => setOpenAxis(false)}
-                onBlur={e => setOpenAxis(true)}
-                defaultButtonText="Select axis"
-                defaultValueByIndex={axisStatus.axisIndex}
-                // search={true}
-              />
               <View style={globalStyles.iconsContainer}>
                 <IconButton
                   icon={'playlist-plus'}
-                  iconColor={colors.icon}
+                  iconColor={colors.colorButton}
                   size={18}
                   onPress={onClickAddAxis}
-                  disabled={!('editAxes' in userRole && userRole.editAxes) || !preivew}
+                  disabled={!('editAxes' in userRole && userRole.editAxes) && !preview}
                   style={globalStyles.iconButton}
                 />
                 <IconButton
-                  icon={'pencil'}
-                  iconColor={colors.icon}
+                  icon={'pencil-outline'}
+                  iconColor={colors.colorButton}
                   size={18}
                   onPress={onClickEditAxis}
-                  disabled={!('editAxes' in userRole && userRole.editAxes) || !preivew}
+                  disabled={!('editAxes' in userRole && userRole.editAxes) && !preview}
                   style={globalStyles.iconButton}
                 />
                 <IconButton
-                  icon="delete-forever"
-                  iconColor={colors.icon}
+                  icon="delete-outline"
+                  iconColor={colors.colorButton}
                   size={18}
                   onPress={onClickRemoveAxis}
                   disabled={
@@ -631,53 +599,77 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
                   style={globalStyles.iconButton}
                 />
               </View>
+              <SelectDropdown
+                data={axes}
+                onSelect={onSelectAxis}
+                dropdownStyle={{...styles.dropdown, backgroundColor: colors.card}}
+                rowTextStyle={fonts.values}
+                buttonStyle={globalStyles.buttonStyle(colors, fonts)}
+                buttonTextStyle={fonts.values}
+                selectedRowStyle={{backgroundColor: colors.card}}
+                selectedRowTextStyle={{...fonts.values, color: colors.colorButton}}
+                renderDropdownIcon={
+                  openAxis
+                    ? () => (
+                        <Icon name="chevron-down" size={18} color={colors.colorButton} />
+                      )
+                    : () => <Icon name="chevron-up" size={18} color={colors.colorButton} />
+                }
+                dropdownIconPosition="right"
+                onFocus={e => setOpenAxis(false)}
+                onBlur={e => setOpenAxis(true)}
+                defaultButtonText="Select axis"
+                defaultValueByIndex={axisStatus.axisIndex}
+                // search={true}
+              />
             </View>
             {axisStatus.editAxis && (
               <View style={globalStyles.addView}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={globalStyles.opacityStyle(colors)}
+                  onPress={onClickChangeAxis}
+                  // disabled={newAxisValid ? false : true}
+                >
+                  <Text style={styles.textBtnStyle}>Change</Text>
+                </TouchableOpacity>
                 <TextInput
                   style={globalStyles.textBoxNewLine(colors, fonts)}
                   underlineColorAndroid="transparent"
                   onChangeText={onChangeAxis}
                   editable
                   placeholder="Please input X value"
+                  placeholderTextColor={'grey'}
                   value={changeAxis}
                   // showSoftInputOnFocus={false}
                 />
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={globalStyles.opacityStyle}
-                  onPress={onClickChangeAxis}
-                  // disabled={newAxisValid ? false : true}
-                >
-                  <Text style={styles.textBtnStyle}>Change</Text>
-                </TouchableOpacity>
               </View>
             )}
             {axisStatus.addAxis && (
               <View style={globalStyles.addView}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={globalStyles.opacityStyle(colors)}
+                  onPress={onClickAddNewAxis}
+                  disabled={axisStatus.newAxisValid ? false : true}>
+                  <Text style={styles.textBtnStyle}>Add</Text>
+                </TouchableOpacity>
                 <TextInput
                   style={globalStyles.textBoxNewLine(colors, fonts)}
                   underlineColorAndroid="transparent"
                   onChangeText={onChangeNewAxis}
                   editable
                   placeholder="new X value"
+                  placeholderTextColor={'grey'}
                   value={axisStatus.newAxis}
                   // showSoftInputOnFocus={false}
                 />
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={globalStyles.opacityStyle}
-                  onPress={onClickAddNewAxis}
-                  disabled={axisStatus.newAxisValid ? false : true}>
-                  <Text style={styles.textBtnStyle}>Add</Text>
-                </TouchableOpacity>
               </View>
             )}
           </View>
           <View>
             <Text style={{
-              ...styles.text,
-              color: colors.label,
+              ...styles.text(fonts),
             }}>Value</Text>
             <View>
               <TextInput
@@ -732,13 +724,14 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: 10,
     justifyContent: 'space-around',
+    alignItems: 'center',
   },
   RGBtext: fonts => ({
     width: '11%',
     textAlign: 'center',
-    textAlignVertical: 'center',
     color: fonts.labels.color,
     fontFamily: fonts.labels.fontFamily,
+    fontSize: fonts.values.fontSize,
   }),
   RGBvalue: (colors, fonts) => ({
     width: '20%',
@@ -764,13 +757,14 @@ const styles = StyleSheet.create({
     borderColor: color.GREY,
     borderWidth: 1,
   }),
-  text: {
+  text: fonts => ({
     marginLeft: 10,
     marginTop: 10,
     marginBottom: 10,
-    fontFamily: 'PublicSans-Regular',
-    fontSize: 14,
-  },
+    color: fonts.labels.color,
+    fontFamily: fonts.labels.fontFamily,
+    fontSize: fonts.values.fontSize,
+  }),
   dropdown: {
     borderRadius: 5,
     borderColor: 'black',

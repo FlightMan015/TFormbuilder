@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { WebView } from 'react-native-webview';
 import { StyleSheet, ScrollView, View } from 'react-native';
+import FieldLabel from '../../common/FieldLabel';
 
 const Twitter = props => {
  const { element } = props;
@@ -10,7 +11,7 @@ const Twitter = props => {
     // pass in the Twitter Web URL
     //https://twitter.com/MMKK02887216
     let tweetUrl =
-      "https://publish.twitter.com/oembed?url=" + encodeURIComponent('https://twitter.com/MMKK02887216');
+      "https://publish.twitter.com/oembed?url=" + encodeURIComponent(element.meta.tweetUrl);
     await fetch(tweetUrl, { method: "GET", headers: { Accepts: "application/json" } }).then(
       resp => {
         resp.json().then(json => {
@@ -21,7 +22,7 @@ const Twitter = props => {
     )
   }
 
-  useEffect(() => {setupEmbed()}, []);
+  useEffect(() => {setupEmbed()}, [element.meta.tweetUrl]);
 
   const renderEmbed = () => {
     if (embedHTML) {
@@ -44,7 +45,8 @@ const Twitter = props => {
   }
 
   return (     
-    <ScrollView style={{ height: 300, width: '100%' }}>
+    <ScrollView style={{ height: 350, width: '100%', padding: 5 }}>
+      <FieldLabel label={element.meta.title || 'Twitter View'} visible={!element.meta.hide_title} />
       {renderEmbed()}
     </ScrollView>
   );

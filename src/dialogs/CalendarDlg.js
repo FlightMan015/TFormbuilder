@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, TextInput, Text, View, Alert, Button} from 'react-native';
+import {StyleSheet, TextInput, Text, View, Alert} from 'react-native';
 import {Dialog, useTheme} from 'react-native-paper';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import formStore from '../store/formStore';
@@ -15,8 +15,6 @@ const CalendarDlg = () => {
   const {colors, fonts} = useTheme();
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
-  const visibleDlg = formStore(state => state.visibleDlg);
-  const setVisibleDlg = formStore(state => state.setVisibleDlg);
   const [newScheduleData, setNewScheduleData] = useState({
     dateString: '',
     name: '',
@@ -28,12 +26,14 @@ const CalendarDlg = () => {
   const [visibleTimePicker, setVisibleTimePicker] = useState(false);
   const [time, setTime] = useState(new Date(Date.now()));
   const [timeType, setTimeType] = useState('');
+  const visibleCalendarDlg = formStore(state => state.visibleCalendarDlg);
+  const setVisibleCalendarDlg = formStore(state => state.setVisibleCalendarDlg);
 
   useEffect(() => {
-    if (visibleDlg.eventType === addTypes.editEvent) {
-      setNewScheduleData(visibleDlg.oldScheduleData);
+    if (visibleCalendarDlg.eventType === addTypes.editEvent) {
+      setNewScheduleData(visibleCalendarDlg.oldScheduleData);
     }
-  }, [visibleDlg]);
+  }, [visibleCalendarDlg]);
 
   const onChangeNewData = (changedData, type) => {
     const tempData = newScheduleData;
@@ -74,7 +74,7 @@ const CalendarDlg = () => {
   };
 
   const cancel = () => {
-    setVisibleDlg({...visibleDlg, calendarEvent: false});
+    setVisibleCalendarDlg({...visibleCalendarDlg, calendarEvent: false});
     setNewScheduleData({
       name: '',
       title: '',
@@ -126,44 +126,50 @@ const CalendarDlg = () => {
       ]);
     } else {
       cancel();
-      if (visibleDlg.eventType === addTypes.firstEvent) {
-        const tempItems = {...formValue[visibleDlg.element.field_name]};
-        setFormValue({...formValue, [visibleDlg.element.field_name]: {
+      if (visibleCalendarDlg.eventType === addTypes.firstEvent) {
+        const tempItems = {...formValue[visibleCalendarDlg.element.field_name]};
+        setFormValue({...formValue, [visibleCalendarDlg.element.field_name]: {
           ...tempItems,
-          [visibleDlg.selectedDay.dateString]: {
+          [visibleCalendarDlg.selectedDay.dateString]: {
             marked: true,
             events: [
               {
                 ...newScheduleData,
-                dateString: visibleDlg.selectedDay.dateString,
+                dateString: visibleCalendarDlg.selectedDay.dateString,
                 color: getRandomColor(),
               },
             ],
           },
         }})
       }
-      if (visibleDlg.eventType === addTypes.newEvent) {
-        const tempItems = {...formValue[visibleDlg.element.field_name]};
-        tempItems[visibleDlg.selectedDay.dateString].events.push({
+      if (visibleCalendarDlg.eventType === addTypes.newEvent) {
+        const tempItems = {...formValue[visibleCalendarDlg.element.field_name]};
+        tempItems[visibleCalendarDlg.selectedDay.dateString].events.push({
           ...newScheduleData,
-          dateString: visibleDlg.selectedDay.dateString,
+          dateString: visibleCalendarDlg.selectedDay.dateString,
           color: getRandomColor(),
         });
-        setFormValue({...formValue, [visibleDlg.element.field_name]: tempItems});
+        setFormValue({...formValue, [visibleCalendarDlg.element.field_name]: tempItems});
+        if (visibleCalendarDlg.element.event.onCreateNewSchedule) {
+          Alert.alert('Rule Action', `Fired onCreateNewSchedule action. rule - ${visibleCalendarDlg.element.event.onCreateNewSchedule}.`);
+        }
       }
-      if (visibleDlg.eventType === addTypes.editEvent) {
-        const tempItems = {...formValue[visibleDlg.element.field_name]};
-        const oldColor = tempItems[visibleDlg.selectedDay.dateString].events[visibleDlg.eventEditIndex].color;
-        tempItems[visibleDlg.selectedDay.dateString].events.splice(
-          visibleDlg.eventEditIndex,
+      if (visibleCalendarDlg.eventType === addTypes.editEvent) {
+        const tempItems = {...formValue[visibleCalendarDlg.element.field_name]};
+        const oldColor = tempItems[visibleCalendarDlg.selectedDay.dateString].events[visibleCalendarDlg.eventEditIndex].color;
+        tempItems[visibleCalendarDlg.selectedDay.dateString].events.splice(
+          visibleCalendarDlg.eventEditIndex,
           1,
           {
             ...newScheduleData,
-            dateString: visibleDlg.selectedDay.dateString,
+            dateString: visibleCalendarDlg.selectedDay.dateString,
             color: oldColor,
           },
         );
-        setFormValue({...formValue, [visibleDlg.element.field_name]: tempItems});
+        setFormValue({...formValue, [visibleCalendarDlg.element.field_name]: tempItems});
+        if (visibleCalendarDlg.element.event.onUpdateSchedule) {
+          Alert.alert('Rule Action', `Fired onUpdateSchedule action. rule - ${visibleCalendarDlg.element.event.onUpdateSchedule}.`);
+        }
       }
       setNewScheduleData({
         name: '',
@@ -177,48 +183,16 @@ const CalendarDlg = () => {
 
   return (
     <Dialog
-      visible={visibleDlg.calendarEvent !== undefined && visibleDlg.calendarEvent}
+      visible={visibleCalendarDlg.calendarEvent !== undefined && visibleCalendarDlg.calendarEvent}
       onDismiss={cancel}
       style={{...styles.dialog, backgroundColor: colors.card}}>
-      <Text style={{...fonts.headings, marginBottom: 10}}>
-        {visibleDlg.eventType === addTypes.editEvent ? 'Edit entry' : 'New entry'}
+      <Text style={{...fonts.headings, marginVertical: 15}}>
+        {visibleCalendarDlg.eventType === addTypes.editEvent ? 'Edit entry' : 'New entry'}
       </Text>
       <View>
-        <View style={styles.field}>
-          <Text style={fonts.labels}>Full Name</Text>
-          <TextInput
-            style={styles.nameInput(colors, fonts)}
-            placeholder="Enter full name"
-            placeholderTextColor={colors.placeholder}
-            onChangeText={e => onChangeNewData(e, 'name')}
-            value={newScheduleData.name}
-          />
-        </View>
-        <View style={fonts.labels}>
-          <Text style={fonts.labels}>Title</Text>
-          <TextInput
-            style={styles.nameInput(colors, fonts)}
-            placeholder="Enter title"
-            placeholderTextColor={colors.placeholder}
-            onChangeText={e => onChangeNewData(e, 'title')}
-            value={newScheduleData.title}
-          />
-        </View>
-        <View style={fonts.labels}>
-          <Text style={fonts.labels}>Description</Text>
-          <TextInput
-            style={styles.nameInput(colors, fonts)}
-            placeholder="Enter description"
-            placeholderTextColor={colors.placeholder}
-            multiline={true}
-            numberOfLines={2}
-            onChangeText={e => onChangeNewData(e, 'description')}
-            value={newScheduleData.description}
-          />
-        </View>
         <View style={styles.timeContainer}>
           <View style={styles.startTime}>
-            <Text style={fonts.labels}>Start time</Text>
+            <Text style={styles.label(fonts)}>Start time</Text>
             <TextInput
               style={styles.nameInput(colors, fonts)}
               onPressIn={() => {
@@ -242,7 +216,7 @@ const CalendarDlg = () => {
             />
           </View>
           <View style={styles.startTime}>
-            <Text style={fonts.labels}>End time</Text>
+            <Text style={styles.label(fonts)}>End time</Text>
             <TextInput
               style={styles.nameInput(colors, fonts)}
               onPressIn={() => {
@@ -276,10 +250,42 @@ const CalendarDlg = () => {
             />
           )}
         </View>
+        <View style={styles.field}>
+          <Text style={styles.label(fonts)}>Full Name</Text>
+          <TextInput
+            style={styles.nameInput(colors, fonts)}
+            placeholder="Enter full name"
+            placeholderTextColor={colors.placeholder}
+            onChangeText={e => onChangeNewData(e, 'name')}
+            value={newScheduleData.name}
+          />
+        </View>
+        <View style={styles.field}>
+          <Text style={styles.label(fonts)}>Title</Text>
+          <TextInput
+            style={styles.nameInput(colors, fonts)}
+            placeholder="Enter title"
+            placeholderTextColor={colors.placeholder}
+            onChangeText={e => onChangeNewData(e, 'title')}
+            value={newScheduleData.title}
+          />
+        </View>
+        <View style={styles.field}>
+          <Text style={styles.label(fonts)}>Description</Text>
+          <TextInput
+            style={styles.nameInput(colors, fonts)}
+            placeholder="Enter description"
+            placeholderTextColor={colors.placeholder}
+            multiline={true}
+            numberOfLines={2}
+            onChangeText={e => onChangeNewData(e, 'description')}
+            value={newScheduleData.description}
+          />
+        </View>
       </View>
-      <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
+      <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 15}}>
         <TextButton
-          text={visibleDlg.eventType === addTypes.editEvent ? 'Update' : 'Add'}
+          text={visibleCalendarDlg.eventType === addTypes.editEvent ? 'Update' : 'Add'}
           onPress={() => addSchedule()}
           textStyle={styles.actionButtonText}
           style={styles.actionButton(colors)}
@@ -302,6 +308,7 @@ const styles = StyleSheet.create({
   timeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 10,
   },
   nameInput: (colors, fonts) => ({
     width: '100%',
@@ -326,6 +333,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 100,
     paddingVertical: 10
+  }),
+  field: {
+    marginBottom: 10,
+  },
+  label: fonts => ({
+    ...fonts.values,
+    color: fonts.labels.color,
+    marginBottom: 5,    
   }),
 });
 

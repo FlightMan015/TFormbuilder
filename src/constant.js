@@ -81,9 +81,15 @@ export const newFormData = {
     formBackgroundColor: '#F8F8F8',
     backgroundPatternImage: '',
     foregroundColor: '#FFFFFF',
+    buttonBackgroundColor: '#3E7EFF',
+    buttonTexts: {
+      fontSize: 14,
+      color: '#FFFFFF',
+      fontFamily: 'PublicSans-Regular',
+    },
     headings: {
       fontSize: 18,
-      color: '#000000',
+      color: '#080808',
       fontFamily: 'PublicSans-SemiBold',
     },
     labels: {
@@ -101,20 +107,26 @@ export const newFormData = {
     formBackgroundColor: '#1F2128',
     backgroundPatternImage: '',
     foregroundColor: '#242731',
+    buttonBackgroundColor: '#3E7EFF',
+    buttonTexts: {
+      fontSize: 14,
+      color: '#FFFFFF',
+      fontFamily: 'PublicSans-Regular',
+    },
     headings: {
       fontSize: 18,
       color: '#FFFFFF',
       fontFamily: 'PublicSans-SemiBold',
     },
     labels: {
-        fontSize: 16,
-        color: '#FFFFFF',
-        fontFamily: 'PublicSans-Regular',
+      fontSize: 16,
+      color: '#FFFFFF',
+      fontFamily: 'PublicSans-Regular',
     },
     values: {
-        fontSize: 14,
-        color: '#FFFFFF',
-        fontFamily: 'PublicSans-Regular',
+      fontSize: 14,
+      color: '#FFFFFF',
+      fontFamily: 'PublicSans-Regular',
     },
   },
   checkedRoles: [],
@@ -144,7 +156,7 @@ const newInputTextData = {
 const newInputDateData = {
   component: componentName.DATE_PICKER,
   field_name: 'date',
-  is_mandatory: true,
+  is_mandatory: false,
   meta: {
     title: 'Date',
     hide_title: false,
@@ -176,7 +188,7 @@ const newDropDownData = {
 const newInputTimeData = {
   component: componentName.TIME_PICKER,
   field_name: 'time',
-  is_mandatory: true,
+  is_mandatory: false,
   meta: {
     title: 'Time',
     hide_title: false,
@@ -207,7 +219,7 @@ const newFileUploadData = {
 const newLineChartData = {
   component: componentName.LINECHART,
   field_name: 'line-chart',
-  is_mandatory: true,
+  is_mandatory: false,
   meta: {
     title: 'Line Chart',
     hide_title: false,
@@ -249,7 +261,7 @@ const newLineChartData = {
 const newBarChartData = {
   component: componentName.BARCHART,
   field_name: 'bar-chart',
-  is_mandatory: true,
+  is_mandatory: false,
   meta: {
     title: 'Bar Chart',
     hide_title: false,
@@ -275,7 +287,7 @@ const newBarChartData = {
 const newPieChartData = {
   component: componentName.PIECHART,
   field_name: 'pie-chart',
-  is_mandatory: true,
+  is_mandatory: false,
   meta: {
     title: 'Pie Chart',
     hide_title: false,
@@ -337,7 +349,7 @@ const newPieChartData = {
 const newRadarChartData = {
   component: componentName.RADARCHART,
   field_name: 'radar-chart',
-  is_mandatory: true,
+  is_mandatory: false,
   meta: {
     title: 'Radar Chart',
     hide_title: false,
@@ -367,7 +379,7 @@ const newRadarChartData = {
 const newMapData = {
   component: componentName.MAP,
   field_name: 'map',
-  is_mandatory: true,
+  is_mandatory: false,
   meta: {
     title: 'Map widget',
     hide_title: false,
@@ -391,7 +403,7 @@ const newMapData = {
 const newCalendarData = {
   component: componentName.CALENDAR,
   field_name: 'calendar',
-  is_mandatory: true,
+  is_mandatory: false,
   meta: {
     title: 'Calendar',
     hide_title: false,
@@ -441,7 +453,6 @@ const newSchedularData = {
     onCreateNewSchedule: '',
     onUpdateSchedule: '',
     onDeleteSchedule: '',
-    onSelectDay: '',
   },
 };
 
@@ -679,6 +690,7 @@ const newButtonData = {
     isRound: true,
     backgroundColor: '',
     iconPosition: 'left',
+    function: 'formSubmit',
   },
   role: [{name: 'admin', view: true, edit: true}],
   action: {create: false, update: false, read: false, delete: false},
@@ -690,7 +702,7 @@ const newButtonData = {
 const newImageData = {
   component: componentName.IMAGE,
   field_name: 'image',
-  is_mandatory: false,
+  is_mandatory: true,
   meta: {
     title: 'Image',
     hide_title: false,
@@ -839,7 +851,7 @@ export const newCardSlider = {
       fontFamily: 'PublicSans-Regular',
     },
     descriptionFont: {
-      color: '#000000',
+      color: '#888888',
       fontSize: 14,
       fontFamily: 'PublicSans-Regular',
     },
@@ -885,7 +897,7 @@ export const newTwitterData = {
   is_mandatory: false,
   meta: {
     title: 'Twitter',
-    tweetUrl: 'https://twitter.com/',
+    tweetUrl: 'https://twitter.com/MMKK02887216',
   },
   role: [{name: 'admin', view: true, edit: true}],
   action: {create: false, update: false, read: false, delete: false},
@@ -911,6 +923,7 @@ export const newVoiceMessage = {
     onPausePlay: '',
     onResumePlay: '',
     onStopPlay: '',
+    onDeleteMessage: '',
   },
 };
 

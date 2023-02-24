@@ -26,8 +26,8 @@ const SchedularSubField = ({element, index}) => {
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
-  const visibleDlg = formStore(state => state.visibleDlg);
-  const setVisibleDlg = formStore(state => state.setVisibleDlg);
+  const visibleCalendarDlg = formStore(state => state.visibleCalendarDlg);
+  const setVisibleCalendarDlg = formStore(state => state.setVisibleCalendarDlg);
   const preview = formStore(state => state.preview);
   const [markedDates, setMarkedDates] = useState({});
   const [visibleCalendar, setVisibleCalendar] = useState(true);
@@ -72,8 +72,7 @@ const SchedularSubField = ({element, index}) => {
             <TouchableOpacity
               key={i}
               onPress={() => {
-                setVisibleDlg({
-                  ...visibleDlg,
+                setVisibleCalendarDlg({
                   calendarEvent: true,
                   eventType: addTypes.editEvent,
                   index: index,
@@ -95,6 +94,10 @@ const SchedularSubField = ({element, index}) => {
                         const tempElement = {...formValue[element.field_name]};
                         tempElement[e.dateString].events.splice(i, 1);
                         setFormValue({...formValue, [element.field_name]: tempElement});
+
+                        if (element.event.onDeleteSchedule) {
+                          Alert.alert('Rule Action', `Fired onDeleteSchedule action. rule - ${element.event.onDeleteSchedule}.`);
+                        }
                       },
                     },
                     {
@@ -105,7 +108,7 @@ const SchedularSubField = ({element, index}) => {
                   ],
                 );
               }}>
-              <View style={styles.eventItemContainter}>
+              <View style={styles.eventItemContainter(colors)}>
                 <List.Item
                   title={`${
                     typeof e.startTime === 'string'
@@ -116,9 +119,9 @@ const SchedularSubField = ({element, index}) => {
                       ? new Date(e.endTime).toLocaleTimeString('en-US')
                       : e.endTime.toLocaleTimeString('en-US')
                   }`}
-                  titleStyle={styles.eventItemTime}
+                  titleStyle={{...fonts.labels, fontSize: fonts.values.fontSize}}
                   description={e.title}
-                  descriptionStyle={styles.eventItemTitle}
+                  descriptionStyle={fonts.labels}
                   right={props => {
                     if (e.name) {
                       return (
@@ -139,7 +142,7 @@ const SchedularSubField = ({element, index}) => {
                   }}
                   style={styles.eventItemHeader}
                 />
-                <Text style={styles.eventItemContent}>{e.description}</Text>
+                <Text style={styles.eventItemContent(fonts)}>{e.description}</Text>
               </View>
             </TouchableOpacity>
           );
@@ -148,7 +151,7 @@ const SchedularSubField = ({element, index}) => {
           <IconButton
             icon="plus"
             size={18}
-            iconColor={color.WHITE}
+            iconColor={colors.card}
             style={{
               ...styles.newScheduleBtn,
               backgroundColor: colors.colorButton,
@@ -157,8 +160,8 @@ const SchedularSubField = ({element, index}) => {
               // setAddType(addTypes.newEvent);
               addType.current = addTypes.firstEvent;
               if (markedDates[selectedDay.current.dateString] && markedDates[selectedDay.current.dateString].events) {
-                setVisibleDlg({
-                  ...visibleDlg,
+                setVisibleCalendarDlg({
+                  ...visibleCalendarDlg,
                   calendarEvent: true,
                   eventType: addTypes.newEvent,
                   index: index,
@@ -166,8 +169,8 @@ const SchedularSubField = ({element, index}) => {
                   element: element,
                 });
               } else {
-                setVisibleDlg({
-                  ...visibleDlg,
+                setVisibleCalendarDlg({
+                  ...visibleCalendarDlg,
                   calendarEvent: true,
                   eventType: addTypes.firstEvent,
                   index: index,
@@ -183,7 +186,9 @@ const SchedularSubField = ({element, index}) => {
   };
 
   const selectDay = day => {
-    console.log(day)
+    if (element.event.onSelectDay) {
+      Alert.alert('Rule Action', `Fired onSelectDay action. rule - ${visibleCalendarDlg.element.event.onSelectDay}.`);
+    }
     let selectedDayData = {};
     let tempMarkedDates = JSON.parse(JSON.stringify(markedDates));
     if (selectedDay.current) {
@@ -301,22 +306,13 @@ const styles = StyleSheet.create({
   startTime: {
     width: '49%',
   },
-  eventItemContainter: {
+  eventItemContainter: colors => ({
     marginTop: 2,
-    backgroundColor: 'white',
+    backgroundColor: colors.background,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: color.GREY,
-  },
-  eventItemTime: {
-    color: '#333',
-    fontSize: 14,
-  },
-  eventItemTitle: {
-    color: '#222',
-    fontSize: 17,
-    fontWeight: '600',
-  },
+  }),
   eventItemAvatar: backgroundColor => ({
     alignSelf: 'center',
     backgroundColor: backgroundColor,
@@ -325,11 +321,11 @@ const styles = StyleSheet.create({
   eventItemHeader: {
     paddingBottom: 0,
   },
-  eventItemContent: {
+  eventItemContent: fonts => ({
     paddingBottom: 10,
     paddingHorizontal: 15,
-    fontSize: 15,
-  },
+    ...fonts.values,
+  }),
   newScheduleBtn: {
     alignSelf: 'center',
     marginTop: 10,
@@ -345,11 +341,11 @@ const styles = StyleSheet.create({
     todayTextColor: colors.colorButton,
     dayTextColor: colors.icon,
     textDisabledColor: colors.border,
-    dotColor: '#00adf5',
+    dotColor: colors.colorButton,
     selectedDotColor: '#ffffff',
-    arrowColor: fonts.labels.color,
-    disabledArrowColor: '#d9e1e8',
-    monthTextColor: fonts.labels.color,
+    arrowColor: colors.colorButton,
+    disabledArrowColor: 'grey',
+    monthTextColor: colors.colorButton,
     indicatorColor: colors.colorButton,
     textDayFontFamily: fonts.values.fontFamily,
     textMonthFontFamily: fonts.labels.fontFamily,
@@ -361,7 +357,6 @@ const styles = StyleSheet.create({
     textMonthFontSize: fonts.labels.fontSize,
     textDayHeaderFontSize: fonts.values.fontSize,
   }),
-
   header: headerStyle => ({
     margin: 15,
     marginTop: 20,

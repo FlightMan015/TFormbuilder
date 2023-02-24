@@ -3,20 +3,21 @@ import PropTypes from 'prop-types';
 import {View, StyleSheet, Alert} from 'react-native';
 import {IconButton, useTheme} from 'react-native-paper';
 import { color } from '../../theme/styles';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import formStore from '../../store/formStore';
 import MemoField from '../fields';
+import FieldLabel from '../../common/FieldLabel';
 
 const ListSection = ({
 	element,
   index,
   selected,
   onSelect,
+  preview,
 }) => {
   const {colors, size} = useTheme();
   const userRole = formStore(state => state.userRole);
   const role = element.role.find(e => e.name === userRole);
-	const preview = formStore(state => state.preview);
   const updateFormData = formStore(state => state.updateFormData);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
 
@@ -30,77 +31,82 @@ const ListSection = ({
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={element.meta.childs}
-        horizontal={!element.meta.listVerticalAlign}
-        renderItem={cellItem => {
-          return <View
-            key={cellItem.index}
-            style={{...styles.listView(element.meta.listVerticalAlign), backgroundColor: colors.background}}>
-            {role.edit && <View style={styles.iconContainer}>
-              <IconButton
-                icon="delete-forever"
-                size={size.s16}
-                iconColor={colors.icon}
-                style={{...styles.iconBtn1, borderColor: colors.icon}}
-                onPress={() => {
-                  Alert.alert('Delete Cell', 'Are you sure want to delete this cell ?', [
-                    {
-                      text: 'Yes',
-                      onPress: () => {
-                        const tempElement = {...element};
-                        tempElement.meta.childs.splice(cellItem.index, 1);
-                        updateFormData(index, tempElement);
-                        if (element.event.onDeleteCell) {
-                          Alert.alert('Rule Action', `Fired onDeleteCell action. rule - ${element.event.onDeleteCell}.`);
-                        }
-                      },
-                    },
-                    {
-                      text: 'No',
-                      onPress: () => {},
-                      style: 'cancel',
-                    },
-                  ]);
-                }}
-              />
-            </View>}
-            <FlatList
-							data={element.meta.cellFields}
-							horizontal={!element.meta.cellVerticalAlign}
-							nestedScrollEnabled
-							// directionalLockEnabled
-							renderItem={({item, childIndex}) => {
-							return  <View style={styles.listCell(element.meta.cellVerticalAlign)}>
-									<MemoField
-											key={childIndex}
-											index={{
-													...index,
-													tabIndex: cellItem.index,
-													childIndex: childIndex,
-											}}
-											element={item}
-											onSelect={e => onSelect(e)}
-											selected={selected && 'tabIndex' in selectedFieldIndex && selectedFieldIndex.tabIndex === cellItem.index && 'childIndex' in selectedFieldIndex && selectedFieldIndex.childIndex === childIndex}
-											isLastField={element.meta.childs.length === (childIndex + 1)}
-									/>
-							</View>;
-							}}
-            />
-          </View>;
-        }}
-      />
-      {!preview && role.edit && (
+      <FieldLabel label={element.meta.title || 'List Section'} visible={!element.meta.hide_title} />
+      <ScrollView style={{width: '100%'}} horizontal>
+        <View style={{flexDirection: element.meta.listVerticalAlign ? 'column' : 'row', alignItems: 'center'}}>
+          {
+            element.meta.childs.map((child, childindex) => (
+              <View
+                key={childindex}
+                style={{...styles.listView(element.meta.listVerticalAlign), backgroundColor: colors.background}}>
+                <View style={{flexDirection: !element.meta.listVerticalAlign ? 'column' : 'row', alignItems: 'center'}}>
+                  {
+                    <>
+                      {(role.edit || preview) && 
+                      <IconButton
+                        icon="delete-forever"
+                        size={size.s16}
+                        iconColor={'#FFFFFF'}
+                        style={{...styles.iconBtn1, backgroundColor: colors.colorButton}}
+                        onPress={() => {
+                          Alert.alert('Delete Cell', 'Are you sure want to delete this cell ?', [
+                            {
+                              text: 'Yes',
+                              onPress: () => {
+                                const tempElement = {...element};
+                                tempElement.meta.childs.splice(childindex, 1);
+                                updateFormData(index, tempElement);
+                                if (element.event.onDeleteCell) {
+                                  Alert.alert('Rule Action', `Fired onDeleteCell action. rule - ${element.event.onDeleteCell}.`);
+                                }
+                              },
+                            },
+                            {
+                              text: 'No',
+                              onPress: () => {},
+                              style: 'cancel',
+                            },
+                          ]);
+                        }}
+                      />}
+                      {
+                        child.map((field, fieldIndex) => (
+                          <View key={fieldIndex} style={styles.listCell(element.meta.listVerticalAlign)}>
+                            <MemoField
+                                key={fieldIndex}
+                                index={{
+                                    ...index,
+                                    tabIndex: childindex,
+                                    childIndex: fieldIndex,
+                                }}
+                                element={field}
+                                onSelect={() => {}}
+                                selected={false}
+                                isLastField={false}
+                            />
+                          </View>
+                        ))
+                      }
+                    </>
+                  }
+                </View>
+              </View>
+            ))
+          }
+        </View>
+      
+      </ScrollView>
+      
+      {(preview || role.edit) && (
         <IconButton
           icon="shape-square-rounded-plus"
           size={15}
           style={{...styles.iconBtn, backgroundColor: colors.colorButton}}
           iconColor={color.WHITE}
           onPress={() => {
-            let newCellData = {};
+            let newCellData = [];
             element.meta.cellFields.map(e => {
-              const tempNewCellData = {...newCellData};
-              newCellData = {...tempNewCellData, [e.field_name]: ''};
+              newCellData.push({...e, field_name: element.field_name + '=' + e.field_name + '=' + element.meta.childs.length})
             });
             const tempElement = {...element};
             tempElement.meta.childs.push(newCellData);
@@ -139,7 +145,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     borderRadius: 7,
     marginHorizontal:  verticalAlign ? 0 : 5,
-    paddingBottom: 10,
   }),
   listScrollView: {
     width: '100%',
@@ -151,12 +156,11 @@ const styles = StyleSheet.create({
     flexDirection: verticalAlign ? 'row' : 'column',
   }),
   listCell: verticalAlign => ({
-    width: verticalAlign ? '100%' : 340,
+    width: verticalAlign ? 340 : '100%',
   }),
   iconBtn1: {
     backgroundColor: 'white',
     margin: 3,
-    borderWidth: 1,
   },
   iconContainer: {
     flexDirection: 'row',

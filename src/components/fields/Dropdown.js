@@ -39,8 +39,8 @@ const DropDown = props => {
               selectedRowTextStyle={styles.selectedRowTextStyle(fonts)}
               renderDropdownIcon={
                 open
-                  ? () => <Icon name="chevron-down" size={18} color={fonts.values.color} />
-                  : () => <Icon name="chevron-up" size={18} color={fonts.values.color} />
+                  ? () => <Icon name="chevron-down" size={18} color={colors.colorButton} />
+                  : () => <Icon name="chevron-up" size={18} color={colors.colorButton} />
               }
               dropdownIconPosition="right"
               onFocus={() => setOpen(false)}

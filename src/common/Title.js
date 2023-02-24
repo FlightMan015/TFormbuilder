@@ -5,15 +5,15 @@ import { useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Feather';
 
 const Title = ({visible, onPress, name, style}) => {
-  const {fonts} = useTheme();
+  const {fonts, colors} = useTheme();
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={{...style, ...styles.showItem}}>
-        <Text style={{...styles.text(fonts)}}>{name}</Text>
+        <Text style={{...styles.text(fonts, colors)}}>{name}</Text>
         <Icon
           name={visible ? 'chevron-down' : 'chevron-right'}
           size={20}
-          color={fonts.values.color}
+          color={colors.colorButton}
         />
       </View>
     </TouchableOpacity>
@@ -25,10 +25,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  text: fonts => ({
+  text: (fonts, colors) => ({
     marginLeft: 5,
     marginRight: 10,
     ...fonts.values,
+    color: colors.colorButton,
   }),
 });
 

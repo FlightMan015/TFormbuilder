@@ -105,16 +105,40 @@ const BarChartDataSection = ({data, onChangeData}) => {
           color: fonts.labels.color,
         }}>X Value</Text>
         <View style={globalStyles.fieldheader}>
+          <View style={globalStyles.iconsContainer}>
+            <IconButton
+              icon={'playlist-plus'}
+              iconColor={colors.colorButton}
+              size={18}
+              onPress={onClickAddLabel}
+              style={globalStyles.iconButton}
+            />
+            <IconButton
+              icon={'pencil-outline'}
+              iconColor={colors.colorButton}
+              size={18}
+              onPress={onClickEditLabel}
+              style={globalStyles.iconButton}
+            />
+            <IconButton
+              icon="delete-outline"
+              iconColor={colors.colorButton}
+              size={18}
+              onPress={onClickRemoveLabel}
+              disabled={data.labels.length > 1 ? false : true}
+              style={globalStyles.iconButton}
+            />
+          </View>
           <SelectDropdown
             data={data.labels}
             onSelect={onSelectLabel}
-            dropdownStyle={{...styles.dropdown, backgroundColor: colors.card}}
-            rowTextStyle={{fontSize: 15, color: colors.text}}
             rowStyle={styles.dropdownRow}
+            dropdownStyle={{...styles.dropdown, backgroundColor: colors.card}}
+            rowTextStyle={fonts.values}
             buttonStyle={styles.buttonStyle(colors, fonts)}
             buttonTextStyle={fonts.values}
-            selectedRowStyle={{backgroundColor: '#bbf'}}
-            selectedRowTextStyle={{color: 'white'}}
+            selectedRowStyle={{backgroundColor: colors.card}}
+            selectedRowTextStyle={{...fonts.values, color: colors.colorButton}}
             renderDropdownIcon={
               openLabel
                 ? () => (
@@ -129,30 +153,6 @@ const BarChartDataSection = ({data, onChangeData}) => {
             defaultValueByIndex={labelStatus.labelIndex}
             // search={true}
           />
-          <View style={globalStyles.iconsContainer}>
-            <IconButton
-              icon={'playlist-plus'}
-              iconColor={fonts.values.color}
-              size={18}
-              onPress={onClickAddLabel}
-              style={globalStyles.iconButton}
-            />
-            <IconButton
-              icon={'pencil'}
-              iconColor={fonts.values.color}
-              size={18}
-              onPress={onClickEditLabel}
-              style={globalStyles.iconButton}
-            />
-            <IconButton
-              icon="delete-forever"
-              iconColor={fonts.values.color}
-              size={18}
-              onPress={onClickRemoveLabel}
-              disabled={data.labels.length > 1 ? false : true}
-              style={globalStyles.iconButton}
-            />
-          </View>
         </View>
         {labelStatus.editLabel && (
           <TextInput
@@ -161,26 +161,28 @@ const BarChartDataSection = ({data, onChangeData}) => {
             onChangeText={onChangeLabel}
             editable
             placeholder="Please input X value"
+            placeholderTextColor={'grey'}
             value={data.labels[labelStatus.labelIndex] || ''}
           />
         )}
         {labelStatus.addLabel && (
           <View style={globalStyles.addView}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={globalStyles.opacityStyle(colors)}
+              onPress={onClickAddNewLabel}
+              disabled={newLabelValid ? false : true}>
+              <Text style={styles.textBtnStyle}>Add</Text>
+            </TouchableOpacity>
             <TextInput
               style={globalStyles.textBoxNewLine(colors, fonts)}
               underlineColorAndroid="transparent"
               onChangeText={onChangeNewLabel}
               editable
               placeholder="new X value"
+              placeholderTextColor={'grey'}
               value={newLabel}
             />
-            <TouchableOpacity
-              activeOpacity={0.7}
-              style={globalStyles.opacityStyle}
-              onPress={onClickAddNewLabel}
-              disabled={newLabelValid ? false : true}>
-              <Text style={styles.textBtnStyle}>Add</Text>
-            </TouchableOpacity>
           </View>
         )}
       </View>
@@ -197,6 +199,7 @@ const BarChartDataSection = ({data, onChangeData}) => {
             onChangeText={onChangeY}
             editable
             placeholder="Please input Y value"
+            placeholderTextColor={'grey'}
             value={
               data.datasets[0].data[labelStatus.labelIndex]
                 ? data.datasets[0].data[labelStatus.labelIndex].toString()
@@ -256,8 +259,9 @@ const styles = StyleSheet.create({
     ...fonts.values,
   }),
   buttonStyle: (colors, fonts) => ({
+    flex: 1,
     borderRadius: 10,
-    width: '60%',
+    marginLeft: 10,
     backgroundColor: colors.card,
     height: 40,
     ...fonts.values,

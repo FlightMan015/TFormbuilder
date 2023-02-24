@@ -6,17 +6,17 @@ import formStore from '../store/formStore';
 import TextButton from '../common/TextButton';
 
 const addTypes = {
-  newEvent: 'newEvent',
-  firstEvent: 'firstEvent',
-  editEvent: 'editEvent',
+  newEvent: 'add',
+  firstEvent: 'first',
+  editEvent: 'edit',
 };
 
 const SchedularDlg = () => {
   const {colors, fonts} = useTheme();
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
-  const visibleDlg = formStore(state => state.visibleDlg);
-  const setVisibleDlg = formStore(state => state.setVisibleDlg);
+  const visibleSchedularDlg = formStore(state => state.visibleSchedularDlg);
+  const setVisibleSchedularDlg = formStore(state => state.setVisibleSchedularDlg);
   const [newScheduleData, setNewScheduleData] = useState({
     dateString: '',
     name: '',
@@ -33,13 +33,12 @@ const SchedularDlg = () => {
   const timeType = useRef('');
 
   useEffect(() => {
-    if (visibleDlg.eventType === addTypes.editEvent) {
-      setNewScheduleData(visibleDlg.oldScheduleData);
+    if (visibleSchedularDlg.type === addTypes.editEvent) {
+      setNewScheduleData(visibleSchedularDlg.sorted[visibleSchedularDlg.eventindex]);
     }
-  }, [visibleDlg]);
+  }, [JSON.stringify(visibleSchedularDlg)]);
 
   const onChangeNewData = (changedData, type) => {
-    console.log('changedData================================', changedData, new Date(changedData));
     switch (type) {
       case 'startTime':
         setVisibleTimePicker(false);
@@ -84,7 +83,7 @@ const SchedularDlg = () => {
   };
 
   const cancel = () => {
-    setVisibleDlg({...visibleDlg, schedularEvent: false});
+    setVisibleSchedularDlg({});
     setNewScheduleData({
       name: '',
       title: '',
@@ -137,111 +136,111 @@ const SchedularDlg = () => {
       ]);
     } else {
       cancel();
-      const dateStr = new Date(newScheduleData.date).toISOString().substring(0, 10);
-      if (!formValue[visibleDlg.element.field_name]) {
-        setFormValue({...formValue, [visibleDlg.element.field_name]: {
-          [dateStr]: {
-            events: [
-              {
-                ...newScheduleData,
-                dateString: dateStr,
-                color: getRandomColor(),
-              },
-            ],
-          },
-        }})
-      } else if (formValue[visibleDlg.element.field_name][dateStr]) {
-        const tempItems = {...formValue[visibleDlg.element.field_name]};
-        tempItems[dateStr].events.push({
+      if (visibleSchedularDlg.type === 'add') {
+        const dateStr = new Date(newScheduleData.date).toISOString().substring(0, 10);
+        if (!formValue[visibleSchedularDlg.element.field_name]) {
+          setFormValue({...formValue, [visibleSchedularDlg.element.field_name]: {
+            [dateStr]: {
+              events: [
+                {
+                  ...newScheduleData,
+                  dateString: dateStr,
+                  color: getRandomColor(),
+                },
+              ],
+            },
+          }})
+        } else if (formValue[visibleSchedularDlg.element.field_name][dateStr]) {
+          const tempItems = {...formValue[visibleSchedularDlg.element.field_name]};
+          tempItems[dateStr].events.push({
+            ...newScheduleData,
+            dateString: dateStr,
+            color: getRandomColor(),
+          });
+          setFormValue({...formValue, [visibleSchedularDlg.element.field_name]: tempItems});
+        } else {
+          const tempItems = {...formValue[visibleSchedularDlg.element.field_name]};
+          setFormValue({...formValue, [visibleSchedularDlg.element.field_name]: {
+            ...tempItems,
+            [dateStr]: {
+              events: [
+                {
+                  ...newScheduleData,
+                  dateString: dateStr,
+                  color: getRandomColor(),
+                },
+              ],
+            },
+          }})
+        }
+        setNewScheduleData({
+          name: '',
+          title: '',
+          description: '',
+          startTime: new Date(Date.now()),
+          endTime: new Date(Date.now()),
+          date: new Date(Date.now()),
+        });
+        if (visibleSchedularDlg.element.event.onCreateNewSchedule) {
+          Alert.alert('Rule Action', `Fired onCreateNewSchedule action. rule - ${visibleSchedularDlg.element.event.onCreateNewSchedule}.`);
+        }
+      }
+      if (visibleSchedularDlg.type === 'edit') {
+        const dateStr = new Date(newScheduleData.date).toISOString().substring(0, 10);
+        const tempEvents = visibleSchedularDlg.sorted;
+        tempEvents.splice(visibleSchedularDlg.eventindex, 1, {
           ...newScheduleData,
           dateString: dateStr,
           color: getRandomColor(),
         });
-        setFormValue({...formValue, [visibleDlg.element.field_name]: tempItems});
-      } else {
-        const tempItems = {...formValue[visibleDlg.element.field_name]};
-        setFormValue({...formValue, [visibleDlg.element.field_name]: {
-          ...tempItems,
-          [dateStr]: {
-            events: [
-              {
-                ...newScheduleData,
-                dateString: dateStr,
-                color: getRandomColor(),
-              },
-            ],
-          },
-        }})
+        const tempData = {...formValue[visibleSchedularDlg.element.field_name]};
+        setFormValue({...formValue, [visibleSchedularDlg.element.field_name]: {...tempData, [visibleSchedularDlg.date]: {events: tempEvents}}});
+        setNewScheduleData({
+          name: '',
+          title: '',
+          description: '',
+          startTime: new Date(Date.now()),
+          endTime: new Date(Date.now()),
+          date: new Date(Date.now()),
+        });
+        if (visibleSchedularDlg.element.event.onUpdateSchedule) {
+          Alert.alert('Rule Action', `Fired onUpdateSchedule action. rule - ${visibleSchedularDlg.element.event.onUpdateSchedule}.`);
+        }
       }
+    }
+  };
 
-      // if (visibleDlg.eventType === addTypes.firstEvent) {
-        // const tempItems = {...formValue[visibleDlg.element.field_name]};
-        // console.log('tempItems--------', tempItems);
-        // setFormValue({...formValue, [visibleDlg.element.field_name]: {
-        //   ...tempItems,
-        //   [visibleDlg.selectedDay.dateString]: {
-        //     marked: true,
-        //     events: [
-        //       {
-        //         ...newScheduleData,
-        //         dateString: typeof newScheduleData.date === 'string'
-        //           ? new Date(newScheduleData.date).toISOString().split('T')[0]
-        //           : newScheduleData.date.toISOString().split('T')[0],
-        //         color: getRandomColor(),
-        //       },
-        //     ],
-        //   },
-        // }})
-      // }
-      // if (visibleDlg.eventType === addTypes.newEvent) {
-      //   const tempItems = {...formValue[visibleDlg.element.field_name]};
-      //   tempItems[visibleDlg.selectedDay.dateString].events.push({
-      //     ...newScheduleData,
-      //     dateString: typeof newScheduleData.date === 'string'
-      //       ? new Date(newScheduleData.date).toISOString().split('T')[0]
-      //       : newScheduleData.date.toISOString().split('T')[0],
-      //     color: getRandomColor(),
-      //   });
-      //   setFormValue({...formValue, [visibleDlg.element.field_name]: tempItems});
-      // }
-      // if (visibleDlg.eventType === addTypes.editEvent) {
-      //   const tempItems = {...formValue[visibleDlg.element.field_name]};
-      //   const oldColor = tempItems[visibleDlg.selectedDay.dateString].events[visibleDlg.eventEditIndex].color;
-      //   tempItems[visibleDlg.selectedDay.dateString].events.splice(
-      //     visibleDlg.eventEditIndex,
-      //     1,
-      //     {
-      //       ...newScheduleData,
-      //       dateString: typeof newScheduleData.date === 'string'
-      //         ? new Date(newScheduleData.date).toISOString().split('T')[0]
-      //         : newScheduleData.date.toISOString().split('T')[0],
-      //       color: oldColor,
-      //     },
-      //   );
-      //   setFormValue({...formValue, [visibleDlg.element.field_name]: tempItems});
-      // }
-      setNewScheduleData({
-        name: '',
-        title: '',
-        description: '',
-        startTime: new Date(Date.now()),
-        endTime: new Date(Date.now()),
-        date: new Date(Date.now()),
-      });
+  const deleteSchedule = () => {
+    console.log(visibleSchedularDlg)
+    cancel();
+    const tempEvents = visibleSchedularDlg.sorted;
+    tempEvents.splice(visibleSchedularDlg.eventindex, 1);
+    const tempData = {...formValue[visibleSchedularDlg.element.field_name]};
+    setFormValue({...formValue, [visibleSchedularDlg.element.field_name]: {...tempData, [visibleSchedularDlg.date]: {events: tempEvents}}});
+    setNewScheduleData({
+      name: '',
+      title: '',
+      description: '',
+      startTime: new Date(Date.now()),
+      endTime: new Date(Date.now()),
+      date: new Date(Date.now()),
+    });
+    if (visibleSchedularDlg.element.event.onDeleteSchedule) {
+      Alert.alert('Rule Action', `Fired onDeleteSchedule action. rule - ${visibleSchedularDlg.element.event.onDeleteSchedule}.`);
     }
   };
 
   return (
     <Dialog
-      visible={visibleDlg.schedularEvent !== undefined && visibleDlg.schedularEvent}
+      visible={visibleSchedularDlg.schedularEvent !== undefined && visibleSchedularDlg.schedularEvent}
       onDismiss={cancel}
       style={{...styles.dialog, backgroundColor: colors.card}}>
       <Text style={{...fonts.headings, marginBottom: 10}}>
-        {visibleDlg.eventType === addTypes.editEvent ? 'Edit entry' : 'New entry'}
+        {visibleSchedularDlg.type === addTypes.editEvent ? 'Update entry' : 'New entry'}
       </Text>
       <View>
         <View style={styles.field}>
-          <Text style={fonts.labels}>Date</Text>
+          <Text style={styles.label(fonts)}>Date</Text>
           <TextInput
             style={styles.nameInput(colors, fonts)}
             value={new Date(newScheduleData.date).toISOString().substring(0, 10)}
@@ -254,7 +253,7 @@ const SchedularDlg = () => {
         </View>
         <View style={styles.timeContainer}>
           <View style={styles.startTime}>
-            <Text style={fonts.labels}>Start time</Text>
+            <Text style={styles.label(fonts)}>Start time</Text>
             <TextInput
               style={styles.nameInput(colors, fonts)}
               onPressIn={() => {
@@ -278,7 +277,7 @@ const SchedularDlg = () => {
             />
           </View>
           <View style={styles.startTime}>
-            <Text style={fonts.labels}>End time</Text>
+            <Text style={styles.label(fonts)}>End time</Text>
             <TextInput
               style={styles.nameInput(colors, fonts)}
               onPressIn={() => {
@@ -303,7 +302,7 @@ const SchedularDlg = () => {
           </View>
         </View>
         <View style={styles.field}>
-          <Text style={fonts.labels}>Full Name</Text>
+          <Text style={styles.label(fonts)}>Full Name</Text>
           <TextInput
             style={styles.nameInput(colors, fonts)}
             placeholder="Enter full name"
@@ -312,8 +311,8 @@ const SchedularDlg = () => {
             value={newScheduleData.name}
           />
         </View>
-        <View style={fonts.labels}>
-          <Text style={fonts.labels}>Title</Text>
+        <View style={styles.field}>
+          <Text style={styles.label(fonts)}>Title</Text>
           <TextInput
             style={styles.nameInput(colors, fonts)}
             placeholder="Enter title"
@@ -322,8 +321,8 @@ const SchedularDlg = () => {
             value={newScheduleData.title}
           />
         </View>
-        <View style={fonts.labels}>
-          <Text style={fonts.labels}>Description</Text>
+        <View style={styles.field}>
+          <Text style={styles.label(fonts)}>Description</Text>
           <TextInput
             style={styles.nameInput(colors, fonts)}
             placeholder="Enter description"
@@ -357,11 +356,21 @@ const SchedularDlg = () => {
       </View>
       <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
         <TextButton
-          text={visibleDlg.eventType === addTypes.editEvent ? 'Update' : 'Add'}
+          text={visibleSchedularDlg.type === addTypes.editEvent ? 'Update' : 'Add'}
           onPress={() => addSchedule()}
           textStyle={styles.actionButtonText}
           style={styles.actionButton(colors)}
         />
+        {
+          visibleSchedularDlg.type === addTypes.editEvent && (
+            <TextButton
+              text='Remove'
+              onPress={deleteSchedule}
+              textStyle={styles.actionButtonText}
+              style={styles.actionButton(colors)}
+            />
+          )
+        }
         <TextButton
           text='Cancel'
           onPress={cancel}
@@ -380,6 +389,7 @@ const styles = StyleSheet.create({
   timeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 10,
   },
   nameInput: (colors, fonts) => ({
     width: '100%',
@@ -402,8 +412,16 @@ const styles = StyleSheet.create({
   actionButton: colors => ({
     backgroundColor: colors.colorButton,
     borderRadius: 10,
-    width: 100,
+    width: 90,
     paddingVertical: 10
+  }),
+  field: {
+    marginBottom: 10,
+  },
+  label: fonts => ({
+    ...fonts.values,
+    color: fonts.labels.color,
+    marginBottom: 5,    
   }),
 });
 

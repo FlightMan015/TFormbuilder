@@ -22,22 +22,17 @@ const RenderItem = ({uri, height, onClick, index, editRole, autoColumn, width}) 
             height: height,
             backgroundColor: colors.icon,
           }}>
-          {editRole && <View style={styles.iconContainer}>
-            <IconButton
-              icon="pencil"
-              size={size.s18}
-              iconColor={colors.icon}
-              style={{...styles.iconBtn, borderColor: colors.icon}}
-              onPress={() => onClick(index, 'edit')}
-            />
-            <IconButton
-              icon="delete-forever"
-              size={size.s18}
-              iconColor={colors.icon}
-              style={{...styles.iconBtn, borderColor: colors.icon}}
-              onPress={() => onClick(index, 'delete')}
-            />
-          </View>}
+          {editRole && 
+            <View style={styles.iconContainer}>
+              <IconButton
+                icon="delete-outline"
+                size={size.s18}
+                iconColor={'#FFFFFF'}
+                style={{...styles.iconBtn(colors), borderColor: colors.icon}}
+                onPress={() => onClick(index, 'delete')}
+              />
+            </View>
+          }
         </ImageBackground>
       </TouchableOpacity>
     </View>
@@ -52,18 +47,19 @@ const styles = StyleSheet.create({
   },
   autoContainer: {
     flexDirection: 'column',
-    margin: 1,
+    padding: 1,
+    marginVertical: 1,
   },
   imageThumbnail: {
     justifyContent: 'center',
     alignItems: 'center',
     height: 100,
   },
-  iconBtn: {
-    backgroundColor: 'white',
-    margin: 3,
+  iconBtn: colors => ({
+    backgroundColor: colors.colorButton,
+    margin: 0,
     borderWidth: 1,
-  },
+  }),
   iconContainer: {
     flexDirection: 'row',
     position: 'absolute',

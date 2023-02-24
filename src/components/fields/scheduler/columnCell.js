@@ -4,6 +4,7 @@ import {View, StyleSheet, Text, Alert} from 'react-native';
 import {useTheme} from 'react-native-paper';
 import TextButton from '../../../common/TextButton';
 import { tConvert } from '../../../utils';
+import formStore from '../../../store/formStore';
 
 const addTypes = {
     newEvent: 'newEvent',
@@ -13,23 +14,37 @@ const addTypes = {
 
 const ColumnCell = ({date, schedulesOfDate, onClick, index, element}) => {
     const {colors, fonts} = useTheme();
+    console.log(date)
+    const userRole = formStore(state => state.userRole);
+    const preview = formStore(state => state.preview);
+    const setVisibleSchedularDlg = formStore(state => state.setVisibleSchedularDlg);
+    const role = element.role.find(e => e.name === userRole);
     var sorted = schedulesOfDate.sort(function(a, b) {
         return new Date(a.startTime) - new Date(b.startTime);
     });
     return useMemo(() => (
         <View style={styles.containter(element.meta.dateFont.color, index)}>
-            <Text style={element.meta.dateFont}>{new Date(date).toDateString().split(' ')[2]}</Text>
+            <Text style={element.meta.dateFont}>{date.substring(8, 10)}</Text>
             <Text style={{...element.meta.dayFont, marginBottom: 10}}>{new Date(date).toDateString().split(' ')[0]}</Text>
             {
-                sorted.map((schedule, index) => {
+                sorted.map((schedule, eventindex) => {
                     return (
                         <TextButton
-                            key={index}
-                            text={tConvert(schedule?.startTime.toISOString().split('T')[1].substring(0, 5))}
+                            key={eventindex}
+                            disabled={!role.edit && !preview}
+                            text={tConvert(schedule?.startTime.toLocaleTimeString().substring(0, 5))}
                             style={styles.button(element.meta.dateFont.color)}
                             textStyle={element.meta.scheduleFont}
                             onPress={() => {
-                                Alert.alert('Appointment', `${schedule.startTime} ~ ${schedule.endTime}`);
+                                setVisibleSchedularDlg({
+                                    schedularEvent: true,
+                                    eventindex,
+                                    index,
+                                    element: element,
+                                    sorted,
+                                    date,
+                                    type: 'edit',
+                                });
                             }}
                         />
                     );

@@ -29,7 +29,7 @@ const TimePicker = ({element}) => {
               {(role.edit || preview) && (
                 <IconButton
                   icon="alarm"
-                  iconColor={fonts.values.color}
+                  iconColor={colors.colorButton}
                   onPress={() => setVisible(true)}
                   style={{
                     ...styles.icon,
@@ -47,7 +47,7 @@ const TimePicker = ({element}) => {
                   setVisible(false);
                   setTime(v);
                   setFormValue({...formValue, [element.field_name]: v.toLocaleString()});
-                  if (element.event.onChangeDate) {
+                  if (element.event.onChangeTime) {
                     Alert.alert('Rule Action', `Fired onChangeTime action. rule - ${element.event.onChangeTime}. newTime - ${v}`);
                   }
                 }}

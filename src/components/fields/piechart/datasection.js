@@ -225,25 +225,49 @@ const PieChartDataSection = ({data, onChangeData}) => {
   return (
     <View style={{...styles.sectionContainer, borderColor: colors.border}}>
       <View>
-        <Text style={{...styles.text, color: fonts.labels.color}}>Label</Text>
+        <Text style={{...styles.text(fonts)}}>Label</Text>
         {/* {labels.length > 0 && ( */}
           <View style={globalStyles.fieldheader}>
+            <View style={globalStyles.iconsContainer}>
+              <IconButton
+                icon={'playlist-plus'}
+                iconColor={colors.colorButton}
+                size={18}
+                onPress={onClickAddLabel}
+                style={globalStyles.iconButton}
+              />
+              <IconButton
+                icon={'pencil-outline'}
+                iconColor={colors.colorButton}
+                size={18}
+                onPress={onClickEditLabel}
+                style={globalStyles.iconButton}
+              />
+              <IconButton
+                icon="delete-outline"
+                iconColor={colors.colorButton}
+                size={18}
+                onPress={onClickRemoveLabel}
+                disabled={data.length > 1 ? false : true}
+                style={globalStyles.iconButton}
+              />
+            </View>
             <SelectDropdown
               data={labels}
               onSelect={onSelectLabel}
-              dropdownStyle={{...styles.dropdown, backgroundColor: colors.inputTextBackground}}
-              rowTextStyle={{fontSize: 14, color: colors.text, fontFamily: 'PublicSans-Regular'}}
+              dropdownStyle={{...styles.dropdown, backgroundColor: colors.card}}
+              rowTextStyle={fonts.values}
               buttonStyle={styles.buttonStyle(colors, fonts)}
               buttonTextStyle={fonts.values}
-              selectedRowStyle={{backgroundColor: colors.inputTextBackground}}
-              selectedRowTextStyle={{color: colors.text, fontFamily: 'PublicSans-Regular'}}
+              selectedRowStyle={{backgroundColor: colors.card}}
+              selectedRowTextStyle={{...fonts.values, color: colors.colorButton}}
               renderDropdownIcon={
                 openLabel
                   ? () => (
-                      <Icon name="chevron-down" size={18} color={fonts.values.color} />
+                      <Icon name="chevron-down" size={18} color={colors.colorButton} />
                     )
                   : () => (
-                      <Icon name="chevron-up" size={18} color={fonts.values.color} />
+                      <Icon name="chevron-up" size={18} color={colors.colorButton} />
                     )
               }
               dropdownIconPosition="right"
@@ -253,51 +277,28 @@ const PieChartDataSection = ({data, onChangeData}) => {
               defaultValueByIndex={labelStatus.labelIndex}
               // search={true}
             />
-            <View style={globalStyles.iconsContainer}>
-              <IconButton
-                icon={'playlist-plus'}
-                iconColor={fonts.values.color}
-                size={18}
-                onPress={onClickAddLabel}
-                style={globalStyles.iconButton}
-              />
-              <IconButton
-                icon={'pencil'}
-                iconColor={fonts.values.color}
-                size={18}
-                onPress={onClickEditLabel}
-                style={globalStyles.iconButton}
-              />
-              <IconButton
-                icon="delete-forever"
-                iconColor={fonts.values.color}
-                size={18}
-                onPress={onClickRemoveLabel}
-                disabled={data.length > 1 ? false : true}
-                style={globalStyles.iconButton}
-              />
-            </View>
           </View>
         {/* )} */}
         {labelStatus.editLabel && (
           <View>
             <View style={globalStyles.addView}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={globalStyles.opacityStyle(colors)}
+                onPress={onClickChangeLabel}
+                // disabled={newLabelValid ? false : true}
+              >
+                <Text style={styles.textBtnStyle}>Change</Text>
+              </TouchableOpacity>
               <TextInput
                 style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeLabel}
                 editable
                 placeholder="Please input axis name"
+                placeholderTextColor={'grey'}
                 value={changeLabel}
               />
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={globalStyles.opacityStyle}
-                onPress={onClickChangeLabel}
-                // disabled={newLabelValid ? false : true}
-              >
-                <Text style={styles.textBtnStyle}>Change</Text>
-              </TouchableOpacity>
             </View>
             {!isRGBcolor && (
               <View>
@@ -312,36 +313,24 @@ const PieChartDataSection = ({data, onChangeData}) => {
             )}
             {isRGBcolor && (
               <View style={styles.colorContainer}>
-                <Text style={styles.RGBtext}>R</Text>
+                <Text style={styles.RGBtext(fonts)}>R</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.red.toString()}
                   onChangeText={onChangeRed}
                 />
-                <Text style={styles.RGBtext}>G</Text>
+                <Text style={styles.RGBtext(fonts)}>G</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.green.toString()}
                   onChangeText={onChangeGreen}
                 />
-                <Text style={styles.RGBtext}>B</Text>
+                <Text style={styles.RGBtext(fonts)}>B</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.blue.toString()}
                   onChangeText={onChangeBlue}
                 />
@@ -371,21 +360,22 @@ const PieChartDataSection = ({data, onChangeData}) => {
         {labelStatus.addLabel && (
           <View>
             <View style={globalStyles.addView}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={globalStyles.opacityStyle(colors)}
+                onPress={onClickAddNewLabel}
+                disabled={labelStatus.newLabelValid ? false : true}>
+                <Text style={styles.textBtnStyle}>Add</Text>
+              </TouchableOpacity>
               <TextInput
                 style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeNewLabel}
                 editable
                 placeholder="new Axis name"
+                placeholderTextColor={'grey'}
                 value={labelStatus.newLabel}
               />
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={globalStyles.opacityStyle}
-                onPress={onClickAddNewLabel}
-                disabled={labelStatus.newLabelValid ? false : true}>
-                <Text style={styles.textBtnStyle}>Add</Text>
-              </TouchableOpacity>
             </View>
             {!isRGBcolor && (
               <View>
@@ -400,36 +390,24 @@ const PieChartDataSection = ({data, onChangeData}) => {
             )}
             {isRGBcolor && (
               <View style={styles.colorContainer}>
-                <Text style={styles.RGBtext}>R</Text>
+                <Text style={styles.RGBtext(fonts)}>R</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.red.toString()}
                   onChangeText={onChangeRed}
                 />
-                <Text style={styles.RGBtext}>G</Text>
+                <Text style={styles.RGBtext(fonts)}>G</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.green.toString()}
                   onChangeText={onChangeGreen}
                 />
-                <Text style={styles.RGBtext}>B</Text>
+                <Text style={styles.RGBtext(fonts)}>B</Text>
                 <TextInput
                   keyboardType="numeric"
-                  style={{
-                    ...styles.RGBvalue,
-                    backgroundColor: colors.inputTextBackground,
-                    borderColor: colors.inputTextBorder,
-                  }}
+                  style={styles.RGBvalue(colors, fonts)}
                   value={customColor.blue.toString()}
                   onChangeText={onChangeBlue}
                 />
@@ -458,7 +436,7 @@ const PieChartDataSection = ({data, onChangeData}) => {
         )}
       </View>
       <View>
-        <Text style={{...styles.text, color: fonts.labels.color}}>Value</Text>
+        <Text style={{...styles.text(fonts)}}>Value</Text>
         <View>
           <TextInput
             keyboardType="numeric"
@@ -499,19 +477,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: 'space-around',
   },
-  RGBtext: {
+  RGBtext: fonts => ({
     width: '11%',
     textAlign: 'center',
     textAlignVertical: 'center',
-  },
-  RGBvalue: {
+    ...fonts.values,
+    color: fonts.labels.color,
+  }),
+  RGBvalue: (colors, fonts) => ({
     width: '20%',
     height: 40,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: color.GREY,
-    fontFamily: 'PublicSans-Regular',
-  },
+    borderRadius: 10,
+    backgroundColor: colors.card,
+    ...fonts.values,
+  }),
   lineColorContainer: {
     width: 40,
     height: 40,
@@ -546,17 +525,20 @@ const styles = StyleSheet.create({
     ...fonts.values,
   }),
   buttonStyle: (colors, fonts) => ({
+    flex: 1,
     borderRadius: 10,
-    width: '60%',
+    marginLeft: 10,
     backgroundColor: colors.card,
     height: 40,
     ...fonts.values,
   }),
-  text: {
+  text: fonts => ({
     marginLeft: 10,
     marginTop: 10,
-    marginBottom: 10,
-  },
+    marginBottom: 5,
+    ...fonts.values,
+    color: fonts.labels.color,
+  }),
   dropdown: {
     borderRadius: 5,
     borderColor: 'black',

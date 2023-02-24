@@ -10,6 +10,7 @@ const FieldAction = () => {
   const [events, setEvents] = useState({});
   const {colors} = useTheme();
   const element = formStore(state => state.selectedField);
+  console.log('action element=========================', element)
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
 	const setOpenSetting = formStore(state => state.setOpenSetting);
   const setFormData = formStore(state => state.setFormData);
@@ -18,7 +19,7 @@ const FieldAction = () => {
 
   useEffect(() => {
     setEvents({...events, ...element.event});
-  }, [element]);
+  }, [JSON.stringify(element)]);
 
 	return (
 		<View>

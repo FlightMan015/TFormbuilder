@@ -1,7 +1,7 @@
 import React, {useState, useEffect, createContext, useRef} from 'react';
 import {IconButton, useTheme} from 'react-native-paper';
 import PropTypes from 'prop-types';
-import {View, StyleSheet, Alert} from 'react-native';
+import {View, StyleSheet, Alert, Text} from 'react-native';
 import {Table, TableWrapper, Row, Cell} from 'react-native-table-component';
 import cell from './Cell';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -16,7 +16,6 @@ const DataTableBody = props => {
   const userRole = formStore(state => state.userRole);
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
-  console.log(formValue[element.field_name])
   const setFormValue = formStore(state => state.setFormValue);
   const preview = formStore(state => state.preview);
   const cellWidth = useRef(100);
@@ -74,6 +73,10 @@ const DataTableBody = props => {
     setFormValue({...formValue, [element.field_name]: tableValue});
   };
 
+  const CellHeaderElement = ({cellData, index}) => {
+    return <Text style={{width: widthArr[index + 1]}}>{cellData}</Text>;
+  };
+
   return (
     <View style={styles.container} onLayout={onLayout}>
       {
@@ -110,8 +113,14 @@ const DataTableBody = props => {
                                       const tempData = JSON.parse(
                                         JSON.stringify(tableData),
                                       );
-                                      tempData.splice(rowIndex, 1);
-                                      setFormValue({...formValue, [element.field_name]: [...tempData]});
+                                      if (tempData.length === 1) {
+                                        const tempFormValue = {...formValue};
+                                        delete tempFormValue[element.field_name];
+                                        setFormValue(tempFormValue);
+                                      } else {
+                                        tempData.splice(rowIndex, 1);
+                                        setFormValue({...formValue, [element.field_name]: [...tempData]});
+                                      }
 
                                       if (element.event.onDeleteEntry) {
                                         Alert.alert('Rule Action', `Fired onDeleteEntry action. rule - ${element.event.onDeleteEntry}. newTableData - ${JSON.stringify(tempData)}`);
@@ -129,7 +138,6 @@ const DataTableBody = props => {
                             style={styles.delIcon}
                           />
                         }
-                        textStyle={{color: colors.text}}
                       />
                       {rowData.map((cellData, cellIndex) => {
                         const CellElement =

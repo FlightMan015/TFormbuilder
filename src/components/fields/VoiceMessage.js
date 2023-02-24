@@ -57,7 +57,7 @@ const VoiceMessage = ({element}) => {
   const onStartPlay = async () => {
     setPaused(false);
     setLoadingAudio(true);
-    await audioRecorderPlayer.startPlayer(element.meta.asset_url || null);
+    await audioRecorderPlayer.startPlayer(formValue[element.field_name].uri || null);
 
     setLoadingAudio(false);
     audioRecorderPlayer.addPlayBackListener(e => {
@@ -123,7 +123,7 @@ const VoiceMessage = ({element}) => {
                   </Text>
                   <IconButton
                     icon="microphone-outline"
-                    iconColor={fonts.values.color}
+                    iconColor={colors.colorButton}
                     onPress={() => {}}
                     onLongPress={onStartRecord}
                     onPressOut={onStopRecord}
@@ -137,43 +137,62 @@ const VoiceMessage = ({element}) => {
             }
             {
               formValue[element.field_name]?.uri && (
-                <View style={styles.mainView(colors)}>
-                <IconButton
-                  icon={(!paused  && playTime !== 0) ? 'pause' : 'play'}
-                  iconColor={fonts.values.color}
-                  onPress={() => {
-                    if (!paused && playTime === 0) {
-                      onStartPlay();
-                    } else if (paused) {
-                      onResumePlay();
-                    } else {
-                      onPausePlay();
-                    }
-                  }}
-                  onLongPress={onStartRecord}
-                  onPressOut={onStopRecord}
-                  style={{
-                  ...styles.icon,
-                  }}
-                />
-                <View style={{flex: 1, marginRight: 10}}>
-                  <View style={styles.progressIndicatorContainer}>
-                    <View 
-                      style={[
-                        styles.progressLine,
-                        {
-                          width: `${(currentPositionSec / currentDurationSec) * 100}%`,
-                          backgroundColor: colors.text,
-                        },
-                      ]}
+                <View style={{flexDirection: 'row-reverse', alignItems: 'center', backgroundColor: colors.card, borderRadius: 10}}>
+                  {(role.edit || preview) && (
+                    <IconButton
+                      icon={'delete-outline'}
+                      iconColor={colors.colorButton}
+                      onPress={() => {
+                        const tempValue = {...formValue};
+                        delete tempValue[element.field_name];
+                        setFormValue(tempValue)
+                        if (element.event.onDeleteMessage) {
+                          Alert.alert('Rule Action', `Fired onDeleteMessage action. rule - ${element.event.onDeleteMessage}.`);
+                        }
+                      }}
+                      style={{
+                      ...styles.icon,
+                      }}
                     />
-                  </View>
-                  <View style={styles.progressDetailsContainer}>
-                    <Text style={fonts.values}>{playTime === 0 ? '00:00' : playTime.toString().substring(0, 5)}</Text>
-                    <Text style={fonts.values}>{duration === 0 ? '00:00' : duration.toString().substring(0, 5)}</Text>
+                  )}
+                  
+                  <View style={{flex: 1, flexDirection: 'row'}}>
+                    <IconButton
+                      icon={(!paused  && playTime !== 0) ? 'pause' : 'play'}
+                      iconColor={colors.colorButton}
+                      onPress={() => {
+                        // onStopPlay();
+                        if (!paused && playTime === 0) {
+                          onStartPlay();
+                        } else if (paused) {
+                          onResumePlay();
+                        } else {
+                          onPausePlay();
+                        }
+                      }}
+                      style={{
+                      ...styles.icon,
+                      }}
+                    />
+                    <View style={{flex: 1, marginRight: 10}}>
+                      <View style={styles.progressIndicatorContainer}>
+                        <View 
+                          style={[
+                            styles.progressLine,
+                            {
+                              width: `${(currentPositionSec / currentDurationSec) * 100}%`,
+                              backgroundColor: colors.text,
+                            },
+                          ]}
+                        />
+                      </View>
+                      <View style={styles.progressDetailsContainer}>
+                        <Text style={fonts.values}>{playTime === 0 ? '00:00' : playTime.toString().substring(0, 5)}</Text>
+                        <Text style={fonts.values}>{duration === 0 ? '00:00' : duration.toString().substring(0, 5)}</Text>
+                      </View>
+                    </View>
                   </View>
                 </View>
-              </View>
               )
             }
           </>

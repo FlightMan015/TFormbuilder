@@ -256,50 +256,28 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
   return (
     <View style={{...styles.sectionContainer, borderColor: colors.border}}>
       <View>
-        <Text style={{...styles.text, color: fonts.labels.color}}>Series</Text>
+        <Text style={{...styles.text(fonts)}}>Series</Text>
         <View style={globalStyles.fieldheader}>
-          <SelectDropdown
-            data={data.legend}
-            onSelect={onSelectLine}
-            dropdownStyle={{...styles.dropdown, backgroundColor: colors.card}}
-            rowTextStyle={{fontSize: 15, color: colors.text}}
-            buttonStyle={styles.buttonStyle(colors, fonts)}
-            buttonTextStyle={fonts.values}
-            selectedRowStyle={{backgroundColor: '#bbf'}}
-            selectedRowTextStyle={{color: 'white'}}
-            renderDropdownIcon={
-              openLine
-                ? () => (
-                    <Icon name="chevron-down" size={18} color={fonts.values.color} />
-                  )
-                : () => <Icon name="chevron-up" size={18} color={fonts.values.color} />
-            }
-            dropdownIconPosition="right"
-            onFocus={e => setOpenLine(false)}
-            onBlur={e => setOpenLine(true)}
-            defaultButtonText="Select series"
-            defaultValueByIndex={lineStatus.lineIndex}
-            // search={true}
-          />
           <View style={globalStyles.iconsContainer}>
             <IconButton
               icon={'playlist-plus'}
-              iconColor={fonts.values.color}
+              iconColor={colors.colorButton}
               size={18}
               onPress={onClickAddLine}
               disabled={!(('editSeries' in role && role.editSeries) || preview)}
               style={globalStyles.iconButton}
             />
             <IconButton
-              icon={'pencil'}
-              iconColor={fonts.values.color}
+              icon={'pencil-outline'}
+              iconColor={colors.colorButton}
               size={18}
               onPress={onClickEditLine}
+              disabled={!(('editSeries' in role && role.editSeries) || preview)}
               style={globalStyles.iconButton}
             />
             <IconButton
-              icon="delete-forever"
-              iconColor={fonts.values.color}
+              icon="delete-outline"
+              iconColor={colors.colorButton}
               size={18}
               onPress={onClickRemoveLine}
               disabled={
@@ -308,27 +286,51 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
               style={globalStyles.iconButton}
             />
           </View>
+          <SelectDropdown
+            data={data.legend}
+            onSelect={onSelectLine}
+            dropdownStyle={{...styles.dropdown, backgroundColor: colors.card}}
+            rowTextStyle={fonts.values}
+            buttonStyle={styles.buttonStyle(colors, fonts)}
+            buttonTextStyle={fonts.values}
+            selectedRowStyle={{backgroundColor: colors.card}}
+            selectedRowTextStyle={{...fonts.values, color: colors.colorButton}}
+            renderDropdownIcon={
+              openLine
+                ? () => (
+                    <Icon name="chevron-down" size={18} color={colors.colorButton} />
+                  )
+                : () => <Icon name="chevron-up" size={18} color={colors.colorButton} />
+            }
+            dropdownIconPosition="right"
+            onFocus={e => setOpenLine(false)}
+            onBlur={e => setOpenLine(true)}
+            defaultButtonText="Select series"
+            defaultValueByIndex={lineStatus.lineIndex}
+            // search={true}
+          />
         </View>
         {lineStatus.editLine && (
           <View>
             <View style={globalStyles.addView}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={globalStyles.opacityStyle(colors)}
+                onPress={onClickChangeLine}
+                // disabled={newLineValid ? false : true}
+              >
+                <Text style={styles.textBtnStyle}>Change</Text>
+              </TouchableOpacity>
               <TextInput
                 style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeLine}
                 editable
                 placeholder="Series name"
+                placeholderTextColor={'grey'}
                 value={changeLine || ''}
                 // showSoftInputOnFocus={false}
               />
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={globalStyles.opacityStyle}
-                onPress={onClickChangeLine}
-                // disabled={newLineValid ? false : true}
-              >
-                <Text style={styles.textBtnStyle}>Change</Text>
-              </TouchableOpacity>
             </View>
             {!isRGBcolor && (
               <View>
@@ -390,22 +392,23 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
         {lineStatus.addLine && (
           <View>
             <View style={globalStyles.addView}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={globalStyles.opacityStyle(colors)}
+                onPress={onClickAddNewLine}
+                disabled={newLineValid ? false : true}>
+                <Text style={styles.textBtnStyle}>Add</Text>
+              </TouchableOpacity>
               <TextInput
                 style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeNewLine}
                 editable
                 placeholder="new series name"
+                placeholderTextColor={'grey'}
                 value={newLine}
                 // showSoftInputOnFocus={false}
               />
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={globalStyles.opacityStyle}
-                onPress={onClickAddNewLine}
-                disabled={newLineValid ? false : true}>
-                <Text style={styles.textBtnStyle}>Add</Text>
-              </TouchableOpacity>
             </View>
             {!isRGBcolor && (
               <View>
@@ -466,50 +469,28 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
         )}
       </View>
       <View>
-        <Text style={{...styles.text, color: fonts.labels.color}}>X Value</Text>
+        <Text style={{...styles.text(fonts)}}>X Value</Text>
         <View style={globalStyles.fieldheader}>
-          <SelectDropdown
-            data={data.labels}
-            onSelect={onSelectLabel}
-            dropdownStyle={{...styles.dropdown, backgroundColor: colors.card}}
-            rowTextStyle={{fontSize: 14, color: colors.text}}
-            buttonStyle={styles.buttonStyle(colors, fonts)}
-            buttonTextStyle={fonts.values}
-            selectedRowStyle={{backgroundColor: colors.card}}
-            selectedRowTextStyle={{color: colors.text}}
-            renderDropdownIcon={
-              openLabel
-                ? () => (
-                    <Icon name="chevron-down" size={18} color={fonts.values.color} />
-                  )
-                : () => <Icon name="chevron-up" size={18} color={fonts.values.color} />
-            }
-            dropdownIconPosition="right"
-            onFocus={e => setOpenLabel(false)}
-            onBlur={e => setOpenLabel(true)}
-            defaultButtonText="Select X value - Label"
-            defaultValueByIndex={labelStatus.labelIndex}
-            // search={true}
-          />
           <View style={globalStyles.iconsContainer}>
             <IconButton
               icon={'playlist-plus'}
-              iconColor={fonts.values.color}
+              iconColor={colors.colorButton}
               size={18}
               onPress={onClickAddLabel}
               disabled={!(('editAxes' in role && role.editAxes) || preview)}
               style={globalStyles.iconButton}
             />
             <IconButton
-              icon={'pencil'}
-              iconColor={fonts.values.color}
+              icon={'pencil-outline'}
+              iconColor={colors.colorButton}
               size={18}
               onPress={onClickEditLabel}
+              disabled={!(('editAxes' in role && role.editAxes) || preview)}
               style={globalStyles.iconButton}
             />
             <IconButton
-              icon="delete-forever"
-              iconColor={fonts.values.color}
+              icon="delete-outline"
+              iconColor={colors.colorButton}
               size={18}
               onPress={onClickRemoveLabel}
               disabled={
@@ -518,6 +499,29 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
               style={globalStyles.iconButton}
             />
           </View>
+          <SelectDropdown
+            data={data.labels}
+            onSelect={onSelectLabel}
+            dropdownStyle={{...styles.dropdown, backgroundColor: colors.card}}
+            rowTextStyle={fonts.values}
+            buttonStyle={styles.buttonStyle(colors, fonts)}
+            buttonTextStyle={fonts.values}
+            selectedRowStyle={{backgroundColor: colors.card}}
+            selectedRowTextStyle={{...fonts.values, color: colors.colorButton}}
+            renderDropdownIcon={
+              openLabel
+                ? () => (
+                    <Icon name="chevron-down" size={18} color={colors.colorButton} />
+                  )
+                : () => <Icon name="chevron-up" size={18} color={colors.colorButton} />
+            }
+            dropdownIconPosition="right"
+            onFocus={e => setOpenLabel(false)}
+            onBlur={e => setOpenLabel(true)}
+            defaultButtonText="Select X value - Label"
+            defaultValueByIndex={labelStatus.labelIndex}
+            // search={true}
+          />
         </View>
         {labelStatus.editLabel && (
           <TextInput
@@ -534,27 +538,28 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
         )}
         {labelStatus.addLabel && (
           <View style={globalStyles.addView}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={globalStyles.opacityStyle(colors)}
+              onPress={onClickAddNewLabel}
+              disabled={newLabelValid ? false : true}>
+              <Text style={styles.textBtnStyle}>Add</Text>
+            </TouchableOpacity>
             <TextInput
               style={globalStyles.textBoxNewLine(colors, fonts)}
               underlineColorAndroid="transparent"
               onChangeText={onChangeNewLabel}
               editable
               placeholder="new X value"
+              placeholderTextColor={'grey'}
               value={newLabel}
               // showSoftInputOnFocus={false}
             />
-            <TouchableOpacity
-              activeOpacity={0.7}
-              style={globalStyles.opacityStyle}
-              onPress={onClickAddNewLabel}
-              disabled={newLabelValid ? false : true}>
-              <Text style={styles.textBtnStyle}>Add</Text>
-            </TouchableOpacity>
           </View>
         )}
       </View>
       <View>
-        <Text style={{...styles.text, color: fonts.labels.color}}>Y Value</Text>
+        <Text style={{...styles.text(fonts)}}>Y Value</Text>
         <View>
           <TextInput
             keyboardType="numeric"
@@ -563,7 +568,7 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
             }}
             underlineColorAndroid="transparent"
             onChangeText={onChangeY}
-            editable
+            editable={('editAxes' in role && role.editAxes) || preview}
             placeholder="Please input Y value"
             value={
               data.datasets[lineStatus.lineIndex]?.data[
@@ -634,12 +639,13 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     borderWidth: 1,
   }),
-  text: {
+  text: fonts => ({
     marginLeft: 10,
     marginTop: 10,
-    marginBottom: 10,
-    fontFamily: 'PublicSans-Regular',
-  },
+    marginBottom: 5,
+    ...fonts.values,
+    color: fonts.labels.color,
+  }),
   dropdown: {
     borderRadius: 5,
     borderColor: 'black',
@@ -662,8 +668,9 @@ const styles = StyleSheet.create({
     ...fonts.values,
   }),
   buttonStyle: (colors, fonts) => ({
+    flex: 1,
     borderRadius: 10,
-    width: '60%',
+    marginLeft: 10,
     backgroundColor: colors.card,
     height: 40,
     ...fonts.values,

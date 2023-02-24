@@ -23,6 +23,7 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
   const setFormData = formStore(state => state.setFormData);
   const visibleDlg = formStore(state => state.visibleDlg);
   const setVisibleDlg = formStore(state => state.setVisibleDlg);
+  const setFormValue = formStore(state => state.setFormValue);
   const [open, setOpen] = useState(true);
 
   const formNames = formDatas.map((item, index) => {
@@ -59,6 +60,7 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
                       switch (item.name) {
                         case menuItems[0].name:
                           setFormData(newFormData);
+                          setFormValue({});
                           break;
                         case menuItems[1].name:
                           saveForm(formData);
