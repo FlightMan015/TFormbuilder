@@ -1,11 +1,10 @@
 import React, {useState, useRef, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {View, StyleSheet, Text, Alert} from 'react-native';
+import {View, StyleSheet, Text, Alert, TouchableOpacity} from 'react-native';
 import {IconButton, useTheme} from 'react-native-paper';
 import FieldLabel from '../../common/FieldLabel';
 import formStore from '../../store/formStore';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const VoiceMessage = ({element}) => {
@@ -135,9 +134,7 @@ const VoiceMessage = ({element}) => {
                     }}
                   /> */}
                   <TouchableOpacity
-                    style={{
-                      margin: 5,
-                    }}
+                    style={styles.recordIcon}
                     disabled={!(role.edit || preview)}
                     onPress={() => {}}
                     onLongPress={onStartRecord}
@@ -234,6 +231,9 @@ const styles = StyleSheet.create({
   }),
   icon: {
     margin: 0,
+  },
+  recordIcon: {
+    margin: 5,
   },
   text: (fonts) => ({
     textAlign: 'center',
