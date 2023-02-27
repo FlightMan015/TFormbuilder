@@ -583,8 +583,8 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
         <View style={styles.mapView}>
           <MapView
             // mapType={Platform.OS == "android" ? "none" : "standard"}
-            // provider={PROVIDER_GOOGLE}
-            provider={ Platform.OS === 'ios' ? PROVIDER_DEFAULT : PROVIDER_GOOGLE }
+            provider={PROVIDER_GOOGLE}
+            // provider={ Platform.OS === 'ios' ? PROVIDER_DEFAULT : PROVIDER_GOOGLE }
             style={styles.mapStyle}
             initialRegion={{
               latitude: locationInfomation.latitude,
