@@ -12,7 +12,6 @@ import {
   Alert,
   Dimensions,
   Button,
-  Platform,
 } from 'react-native';
 import { globalStyles, color } from '../../theme/styles';
 import {
