@@ -686,7 +686,7 @@ const newButtonData = {
     color: '',
     iconSize: 18,
     fontSize: 14,
-    fontFamily: '',
+    fontFamily: 'PublicSans-Regular',
     isRound: true,
     backgroundColor: '',
     iconPosition: 'left',
