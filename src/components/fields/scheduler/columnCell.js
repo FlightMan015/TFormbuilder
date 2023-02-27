@@ -14,7 +14,6 @@ const addTypes = {
 
 const ColumnCell = ({date, schedulesOfDate, onClick, index, element}) => {
     const {colors, fonts} = useTheme();
-    console.log(date)
     const userRole = formStore(state => state.userRole);
     const preview = formStore(state => state.preview);
     const setVisibleSchedularDlg = formStore(state => state.setVisibleSchedularDlg);

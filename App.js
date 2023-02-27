@@ -58,7 +58,6 @@ const App: () => Node = () => {
       //   authorizationLevel: 'whenInUse',
       // });
       const status = await GeoLocation.requestAuthorization('whenInUse');
-      console.log(status);
 
       return null;
     }

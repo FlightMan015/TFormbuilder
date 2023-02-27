@@ -8,7 +8,6 @@ const monthDates1 = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 const monthDates2 = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 const SchedularBody = ({year, month, schedules, schedulesOfMonth, element}) => {
-    console.log(schedulesOfMonth)
     const {colors, fonts} = useTheme();
     return (
         <ScrollView style={styles.scrollView} horizontal>

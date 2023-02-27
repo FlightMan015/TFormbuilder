@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {View, StyleSheet, TouchableOpacity, Text, Alert} from 'react-native';
 import {useTheme} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { color } from '../../theme/styles';
 import formStore from '../../store/formStore';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -21,8 +20,6 @@ const Button = props => {
   const setFormValidation = formStore(state => state.setFormValidation);
   const role = element.role.find(e => e.name === userRole);
 
-  console.log('formValue--------------', formValue);
-
   const onClick = () => {
     if (element.meta.function === 'formSubmit') {
       if (!submit) {
@@ -30,13 +27,11 @@ const Button = props => {
       }
 
       if (formValidation) {
-        console.log(formValidation, 'submit formdata');
         setSubmit(false);
         if (onProcess) {
           onProcess(formValue);
         }
       } else {
-        console.log(formValidation, 'validate error');
         setFormValidation(true);
       }
     }

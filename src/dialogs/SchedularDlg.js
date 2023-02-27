@@ -211,7 +211,6 @@ const SchedularDlg = () => {
   };
 
   const deleteSchedule = () => {
-    console.log(visibleSchedularDlg)
     cancel();
     const tempEvents = visibleSchedularDlg.sorted;
     tempEvents.splice(visibleSchedularDlg.eventindex, 1);
