@@ -73,7 +73,7 @@ export const modes = {
 
 
 export const newFormData = {
-  title: 'New TForm',
+  name: 'New TForm',
   logo: '',
   data: [],
   theme: 'Native',

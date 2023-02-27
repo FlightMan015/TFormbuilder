@@ -63,6 +63,7 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
                           setFormValue({});
                           break;
                         case menuItems[1].name:
+                          console.log(formData);
                           saveForm(formData);
                           break;
                         case menuItems[2].name:

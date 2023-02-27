@@ -5,6 +5,8 @@ import {IconButton, useTheme} from 'react-native-paper';
 import FieldLabel from '../../common/FieldLabel';
 import formStore from '../../store/formStore';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const VoiceMessage = ({element}) => {
   const {colors, fonts} = useTheme();
@@ -121,7 +123,7 @@ const VoiceMessage = ({element}) => {
                     {/* {(element.field_name in formValue  && formValue[element.field_name]) ? new Date(formValue[element.field_name]).toLocaleDateString(): new Date(Date.now()).toLocaleDateString()} */}
                     {recordingActive ? `Recording Voice ${recordTime}` : ''}
                   </Text>
-                  <IconButton
+                  {/* <IconButton
                     icon="microphone-outline"
                     iconColor={colors.colorButton}
                     onPress={() => {}}
@@ -131,7 +133,22 @@ const VoiceMessage = ({element}) => {
                     style={{
                       ...styles.icon,
                     }}
-                  />
+                  /> */}
+                  <TouchableOpacity
+                    style={{
+                      margin: 5,
+                    }}
+                    disabled={!(role.edit || preview)}
+                    onPress={() => {}}
+                    onLongPress={onStartRecord}
+                    onPressOut={onStopRecord}
+                  >
+                    <Icon
+                      name={'microphone-outline'}
+                      size={25}
+                      color={colors.colorButton}
+                    />
+                  </TouchableOpacity>
                 </View>
               )
             }

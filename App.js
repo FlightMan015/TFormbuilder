@@ -75,6 +75,7 @@ const App: () => Node = () => {
   }
 
   const saveData = async (data) => {
+    console.log('form name--------------------', data.name);
     var path = `${RNFS.DocumentDirectoryPath}/TForm`;
     RNFS.mkdir(path);
     path += '/form_data.json';

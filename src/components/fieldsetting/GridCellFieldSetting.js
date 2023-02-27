@@ -29,7 +29,6 @@ const GridCellFieldSetting = props => {
   const {colors} = useTheme();
   const [newCellField, setNewCellField] = useState({name: '', type: 'image'});
   const [open, setOpen] = useState(true);
-//   const {visibleDlg, setVisibleDlg} = useContext(FieldSettingContext);
 
   const tableFieldItem = ({item, index, isFirst, isLast}) => {
     return (
