@@ -25,6 +25,7 @@ import {string16} from '../../constant';
 import MapView, {
   Marker,
   PROVIDER_GOOGLE,
+  PROVIDER_DEFAULT,
   Circle,
   Polygon,
 } from 'react-native-maps';
