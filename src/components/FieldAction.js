@@ -18,7 +18,7 @@ const FieldAction = () => {
   const [event, setEvent] = useState({name: '', rule: '', state: false});
 
   useEffect(() => {
-    setEvents({...events, ...element.event});
+    setEvents({...element.event});
   }, [JSON.stringify(element)]);
 
 	return (
