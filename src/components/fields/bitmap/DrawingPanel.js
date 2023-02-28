@@ -212,8 +212,8 @@ const DrawingPanel = ({svgPosition}) => {
         <Canvas
           style={{
             ...styles.canvas,
-            // height: imageData.height,
-            // width: imageData.width,
+            height: imageData.height,
+            width: imageData.width,
           }}>
           {/* {completedPaths.length > 0
             ? completedPaths.map((path, index) => (
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   canvas: {
-    // width: '100%',
+    width: '100%',
     position: 'absolute',
   },
 });

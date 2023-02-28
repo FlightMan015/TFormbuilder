@@ -15,7 +15,6 @@ import {
   Linking,
   StyleSheet,
   Alert,
-  Dimensions
 } from 'react-native';
 import DocumentPicker, {
   DocumentPickerResponse,
@@ -31,8 +30,6 @@ import Title from '../../../common/Title';
 import formStore from '../../../store/formStore';
 import FieldLabel from '../../../common/FieldLabel';
 import ResizedImage from '../../../common/ResizedImage';
-
-var screenWidth = Dimensions.get('window').width;
 
 const Bitmap = ({element, index}) => {
   const {colors, fonts} = useTheme();
@@ -271,18 +268,16 @@ const Bitmap = ({element, index}) => {
             />
           )}
 
-          {/* {
-            imageSize.height !== 0 && imageSize.width !== 0 && ( */}
+          {
+            imageSize.height !== 0 && imageSize.width !== 0 && (
               <Canvas
                 style={{
                   ...styles.canvas,
-                  // height: imageSize.height || 300,
-                  // width: imageSize.width || screenWidth,
-                  // height: 300,
-                  // width: 300,
+                  height: imageSize.height,
+                  width: imageSize.width,
                 }}>
                 {completedPaths.length > 0
-                  && completedPaths.map((path, i) => {
+                  ? completedPaths.map((path, i) => {
                       return (
                         <ImageSVG
                           key={i}
@@ -294,10 +289,10 @@ const Bitmap = ({element, index}) => {
                         />
                       );
                     })
-                }
+                  : null}
               </Canvas>
-             {/* )
-          } */}
+            )
+          }
         </View>
 
         <View style={styles.linkButton}>
@@ -366,7 +361,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   canvas: {
-    // width: '100%',
+    width: '100%',
     position: 'absolute',
     alignSelf: 'center',
   },
