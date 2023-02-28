@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
 		color: '#FFFFFF',
   },
   tableFieldDelIcon: {
-    width: '10%',
+    // width: '10%',
     margin: 0,
   },
   tableField: {
