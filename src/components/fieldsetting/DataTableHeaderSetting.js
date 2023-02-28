@@ -137,7 +137,7 @@ const DataTableHeaderSetting = props => {
 						style={styles.tableFieldDelIcon}
 						icon={'chevron-up'}
 						iconColor={'#fff'}
-						size={10}
+						size={15}
 						onPress={() => {
 							const tempdata = JSON.parse(JSON.stringify(fields));
 							const selectedHeader = JSON.parse(JSON.stringify(tempdata[index]));
@@ -171,7 +171,7 @@ const DataTableHeaderSetting = props => {
 				style={styles.tableFieldDelIcon}
 				icon={'delete-outline'}
 				iconColor={'#fff'}
-				size={10}
+				size={15}
 				onPress={() => {
 				Alert.alert(
 					'Delete Form',
