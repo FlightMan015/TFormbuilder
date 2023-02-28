@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
   },
   typeText: {
     width: '20%',
-    height: 30,
+    paddingVertical: 5,
     borderRightWidth: 1,
     textAlign: 'center',
     textAlignVertical: 'center',
