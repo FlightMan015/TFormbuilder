@@ -278,8 +278,8 @@ const Bitmap = ({element, index}) => {
                   // ...styles.canvas,
                   // height: imageSize.height || 300,
                   // width: imageSize.width || screenWidth,
-                  // height: 300,
-                  // width: 300,
+                  height: 300,
+                  width: 300,
                 }}>
                 {completedPaths.length > 0
                   && completedPaths.map((path, i) => {
