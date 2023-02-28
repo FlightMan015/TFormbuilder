@@ -272,9 +272,9 @@ const Bitmap = ({element, index}) => {
             imageSize.height !== 0 && imageSize.width !== 0 && (
               <Canvas
                 style={{
-                  ...styles.canvas,
-                  height: imageSize.height,
-                  width: imageSize.width,
+                  // ...styles.canvas,
+                  // height: imageSize.height,
+                  // width: imageSize.width,
                 }}>
                 {completedPaths.length > 0
                   ? completedPaths.map((path, i) => {
