@@ -211,7 +211,7 @@ const DrawingPanel = ({svgPosition}) => {
         />
         <Canvas
           style={{
-            ...styles.canvas,
+            // ...styles.canvas,
             // height: imageData.height,
             // width: imageData.width,
           }}>
