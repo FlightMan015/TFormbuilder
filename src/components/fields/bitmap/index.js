@@ -260,13 +260,13 @@ const Bitmap = ({element, index}) => {
               source={{uri: imageData.imageUri}}
             />
           )} */}
-          {imageData.imageUri && (
+          {/* {imageData.imageUri && (
             <ResizedImage
               uri={imageData.imageUri}
               maxHeight={300}
               maxWidth={imageScreenWidth.current}
             />
-          )}
+          )} */}
 
           <Canvas
             style={{
