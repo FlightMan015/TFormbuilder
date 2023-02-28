@@ -327,9 +327,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   imageName: (fonts) => ({
-    height: 40,
     borderRadius: 10,
-    textAlignVertical: 'center',
     paddingLeft: 10,
     ...fonts.values,
   }),
