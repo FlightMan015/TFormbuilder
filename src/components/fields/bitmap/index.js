@@ -276,13 +276,13 @@ const Bitmap = ({element, index}) => {
               <Canvas
                 style={{
                   ...styles.canvas,
-                  // height: imageSize.height || 300,
-                  // width: imageSize.width || screenWidth,
-                  height: 300,
-                  width: 300,
+                  height: imageSize.height || 300,
+                  width: imageSize.width || screenWidth,
+                  // height: 300,
+                  // width: 300,
                 }}>
                 {completedPaths.length > 0
-                  ? completedPaths.map((path, i) => {
+                  && completedPaths.map((path, i) => {
                       return (
                         <ImageSVG
                           key={i}
@@ -294,7 +294,7 @@ const Bitmap = ({element, index}) => {
                         />
                       );
                     })
-                  : null}
+                }
               </Canvas>
              {/* )
           } */}
