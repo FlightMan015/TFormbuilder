@@ -271,11 +271,11 @@ const Bitmap = ({element, index}) => {
             />
           )}
 
-          {
-            imageSize.height !== 0 && imageSize.width !== 0 && (
+          {/* {
+            imageSize.height !== 0 && imageSize.width !== 0 && ( */}
               <Canvas
                 style={{
-                  ...styles.canvas,
+                  // ...styles.canvas,
                   // height: imageSize.height || 300,
                   // width: imageSize.width || screenWidth,
                   // height: 300,
@@ -296,8 +296,8 @@ const Bitmap = ({element, index}) => {
                     })
                 }
               </Canvas>
-             )
-          }
+             {/* )
+          } */}
         </View>
 
         <View style={styles.linkButton}>
