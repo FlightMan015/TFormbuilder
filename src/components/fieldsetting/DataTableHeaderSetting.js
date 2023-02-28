@@ -248,7 +248,7 @@ const DataTableHeaderSetting = props => {
 						setNewMenuColumnOptions(['option1', 'option2', 'option3']);
 					}}
 				/>
-				<TextInput
+				{/* <TextInput
 					style={{...styles.newTableFieldName}}
 					underlineColorAndroid="transparent"
 					placeholder="...new field name"
@@ -291,7 +291,7 @@ const DataTableHeaderSetting = props => {
 							? () => <Icon name="chevron-down" size={15} color={'#FFFFFF'} />
 							: () => <Icon name="chevron-up" size={15} color={'#FFFFFF'} />
 					}
-				/>
+				/> */}
 			</View>
 			{
 				newCellField.type === 'menu' && (
