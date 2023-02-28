@@ -268,13 +268,13 @@ const Bitmap = ({element, index}) => {
             />
           )}
 
-          {/* <Canvas
+          <Canvas
             style={{
               ...styles.canvas,
               height: imageSize.height,
               width: imageSize.width,
             }}>
-            {completedPaths.length > 0
+            {/* {completedPaths.length > 0
               ? completedPaths.map((path, i) => {
                   return (
                     <ImageSVG
@@ -287,8 +287,8 @@ const Bitmap = ({element, index}) => {
                     />
                   );
                 })
-              : null}
-          </Canvas> */}
+              : null} */}
+          </Canvas>
         </View>
 
         <View style={styles.linkButton}>
