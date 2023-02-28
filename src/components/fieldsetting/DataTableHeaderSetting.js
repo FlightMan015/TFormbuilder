@@ -133,38 +133,40 @@ const DataTableHeaderSetting = props => {
 			/> */}
 			{
 				!isFirst && (
-					<IconButton
-						style={styles.tableFieldDelIcon}
-						icon={'chevron-up'}
-						iconColor={'#fff'}
-						size={15}
-						onPress={() => {
-							const tempdata = JSON.parse(JSON.stringify(fields));
-							const selectedHeader = JSON.parse(JSON.stringify(tempdata[index]));
-							tempdata.splice(index, 1);
-							tempdata.splice(index - 1, 0, selectedHeader);
-							changeData(types.headers, tempdata);
-						}}
-						// onLongPress={drag}
-					/>
+					// <IconButton
+					// 	style={styles.tableFieldDelIcon}
+					// 	icon={'chevron-up'}
+					// 	iconColor={'#fff'}
+					// 	size={15}
+					// 	onPress={() => {
+					// 		const tempdata = JSON.parse(JSON.stringify(fields));
+					// 		const selectedHeader = JSON.parse(JSON.stringify(tempdata[index]));
+					// 		tempdata.splice(index, 1);
+					// 		tempdata.splice(index - 1, 0, selectedHeader);
+					// 		changeData(types.headers, tempdata);
+					// 	}}
+					// 	// onLongPress={drag}
+					// />
+					<Icon name="chevron-up" size={15} color={'#FFFFFF'} />
 				)
 			}
 			{
 				!isLast && (
-					<IconButton
-						style={styles.tableFieldDelIcon}
-						icon={'chevron-down'}
-						iconColor={'#fff'}
-						size={15}
-						onPress={() => {
-							const tempdata = JSON.parse(JSON.stringify(fields));
-							const selectedHeader = JSON.parse(JSON.stringify(tempdata[index]));
-							tempdata.splice(index, 1);
-							tempdata.splice(index + 1, 0, selectedHeader);
-							changeData(types.headers, tempdata);
-						}}
-						// onLongPress={drag}
-					/>
+					// <IconButton
+					// 	style={styles.tableFieldDelIcon}
+					// 	icon={'chevron-down'}
+					// 	iconColor={'#fff'}
+					// 	size={15}
+					// 	onPress={() => {
+					// 		const tempdata = JSON.parse(JSON.stringify(fields));
+					// 		const selectedHeader = JSON.parse(JSON.stringify(tempdata[index]));
+					// 		tempdata.splice(index, 1);
+					// 		tempdata.splice(index + 1, 0, selectedHeader);
+					// 		changeData(types.headers, tempdata);
+					// 	}}
+					// 	// onLongPress={drag}
+					// />
+					<Icon name="chevron-down" size={15} color={'#FFFFFF'} />
 				)
 			}
 			<IconButton
@@ -226,7 +228,7 @@ const DataTableHeaderSetting = props => {
 				})
 			}
 			<View style={{...styles.tableField}}>
-				<IconButton
+				{/* <IconButton
 					style={{
 						...styles.tableFieldDelIcon,
 					}}
@@ -247,7 +249,8 @@ const DataTableHeaderSetting = props => {
 						});
 						setNewMenuColumnOptions(['option1', 'option2', 'option3']);
 					}}
-				/>
+				/> */}
+				<Icon name="chevron-down" size={15} color={'#FFFFFF'} />
 				<TextInput
 					style={{...styles.newTableFieldName}}
 					underlineColorAndroid="transparent"
