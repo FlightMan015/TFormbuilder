@@ -231,7 +231,7 @@ const DataTableHeaderSetting = props => {
 						...styles.tableFieldDelIcon,
 					}}
 					icon={'plus'}
-					iconColor={'#fff'}
+					iconColor={'#FFFFFF'}
 					size={15}
 					onPress={() => {
 						const tempdata = JSON.parse(JSON.stringify(fields));
