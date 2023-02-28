@@ -115,11 +115,11 @@ const GridCellFieldSetting = props => {
 					}
 			{
 				!isFirst && (
-					<IconButton
-						style={styles.tableFieldDelIcon}
-						icon={'chevron-up'}
-						iconColor={'#fff'}
+					<Icon
+						name="chevron-up"
 						size={15}
+						color={'#FFFFFF'}
+						style={styles.tableFieldDelIcon}
 						onPress={() => {
 							const tempdata = JSON.parse(JSON.stringify(fields));
 							const selectedHeader = JSON.parse(JSON.stringify(tempdata[index]));
@@ -127,16 +127,16 @@ const GridCellFieldSetting = props => {
 							tempdata.splice(index - 1, 0, selectedHeader);
 							changeData(types.cellFields, tempdata);
 						}}
-					/>
+						/>
 				)
 			}
 			{
 				!isLast && (
-					<IconButton
-						style={styles.tableFieldDelIcon}
-						icon={'chevron-down'}
-						iconColor={'#fff'}
+					<Icon
+						name="chevron-down"
 						size={15}
+						color={'#FFFFFF'}
+						style={styles.tableFieldDelIcon}
 						onPress={() => {
 							const tempdata = JSON.parse(JSON.stringify(fields));
 							const selectedHeader = JSON.parse(JSON.stringify(tempdata[index]));
@@ -144,14 +144,14 @@ const GridCellFieldSetting = props => {
 							tempdata.splice(index + 1, 0, selectedHeader);
 							changeData(types.cellFields, tempdata);
 						}}
-					/>
+						/>
 				)
 			}
-			<IconButton
-				style={styles.tableFieldDelIcon}
-				icon={'delete-outline'}
-				iconColor={'#fff'}
+			<Icon
+				name="x"
 				size={15}
+				color={'#FFFFFF'}
+				style={styles.tableFieldDelIcon}
 				onPress={() => {
 					Alert.alert(
 					'Delete Form',
@@ -173,7 +173,7 @@ const GridCellFieldSetting = props => {
 					],
 					);
 				}}
-			/>
+				/>
 		</View>
     );
   };
@@ -193,13 +193,13 @@ const GridCellFieldSetting = props => {
 				})
 			}
 			<View style={{...styles.tableField}}>
-				<IconButton
+				<Icon
+					name="plus"
+					size={15}
+					color={'#FFFFFF'}
 					style={{
 						...styles.tableFieldDelIcon,
 					}}
-					icon={'plus'}
-					iconColor={'#fff'}
-					size={15}
 					onPress={() => {
 						const tempdata = JSON.parse(JSON.stringify(fields));
 						const tempNewCellFieldMeta = JSON.parse(
@@ -223,8 +223,7 @@ const GridCellFieldSetting = props => {
 							name: '',
 							type: '',
 						});
-					}}
-				/>
+					}}/>
 				<TextInput
 					style={{...styles.newTableFieldName}}
 					underlineColorAndroid="transparent"

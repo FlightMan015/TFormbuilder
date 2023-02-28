@@ -133,20 +133,6 @@ const DataTableHeaderSetting = props => {
 			/> */}
 			{
 				!isFirst && (
-					// <IconButton
-					// 	style={styles.tableFieldDelIcon}
-					// 	icon={'chevron-up'}
-					// 	iconColor={'#fff'}
-					// 	size={15}
-					// 	onPress={() => {
-					// 		const tempdata = JSON.parse(JSON.stringify(fields));
-					// 		const selectedHeader = JSON.parse(JSON.stringify(tempdata[index]));
-					// 		tempdata.splice(index, 1);
-					// 		tempdata.splice(index - 1, 0, selectedHeader);
-					// 		changeData(types.headers, tempdata);
-					// 	}}
-					// 	// onLongPress={drag}
-					// />
 					<Icon
 						name="chevron-up"
 						size={15}
@@ -164,20 +150,6 @@ const DataTableHeaderSetting = props => {
 			}
 			{
 				!isLast && (
-					// <IconButton
-					// 	style={styles.tableFieldDelIcon}
-					// 	icon={'chevron-down'}
-					// 	iconColor={'#fff'}
-					// 	size={15}
-					// 	onPress={() => {
-					// 		const tempdata = JSON.parse(JSON.stringify(fields));
-					// 		const selectedHeader = JSON.parse(JSON.stringify(tempdata[index]));
-					// 		tempdata.splice(index, 1);
-					// 		tempdata.splice(index + 1, 0, selectedHeader);
-					// 		changeData(types.headers, tempdata);
-					// 	}}
-					// 	// onLongPress={drag}
-					// />
 					<Icon
 						name="chevron-down"
 						size={15}
@@ -193,33 +165,6 @@ const DataTableHeaderSetting = props => {
 						/>
 				)
 			}
-			{/* <IconButton
-				style={styles.tableFieldDelIcon}
-				icon={'delete-outline'}
-				iconColor={'#fff'}
-				size={15}
-				onPress={() => {
-				Alert.alert(
-					'Delete Form',
-					`Are you sure want to delete field "${item.name}" ?`,
-					[
-					{
-						text: 'Yes',
-						onPress: () => {
-						const tempdata = JSON.parse(JSON.stringify(fields));
-						tempdata.splice(index, 1);
-						changeData(types.headers, tempdata);
-						},
-					},
-					{
-						text: 'No',
-						onPress: () => {},
-						style: 'cancel',
-					},
-					],
-				);
-				}}
-			/> */}
 			<Icon
 				name="x"
 				size={15}
@@ -279,28 +224,6 @@ const DataTableHeaderSetting = props => {
 				})
 			}
 			<View style={{...styles.tableField}}>
-				{/* <IconButton
-					style={{
-						...styles.tableFieldDelIcon,
-					}}
-					icon={'plus'}
-					iconColor={'#FFFFFF'}
-					size={15}
-					onPress={() => {
-						const tempdata = JSON.parse(JSON.stringify(fields));
-						if (newCellField.type === 'menu') {
-							tempdata.push({...newCellField, data: {is_mandatory: false, options: newMenuColumnOptions}});
-						} else {
-							tempdata.push(newCellField);
-						}
-						changeData(types.headers, tempdata);
-						setNewCellField({
-							name: '',
-							type: '',
-						});
-						setNewMenuColumnOptions(['option1', 'option2', 'option3']);
-					}}
-				/> */}
 				<Icon
 					name="plus"
 					size={15}
