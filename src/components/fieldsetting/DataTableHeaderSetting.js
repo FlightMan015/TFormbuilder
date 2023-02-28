@@ -422,7 +422,7 @@ const styles = StyleSheet.create({
   },
   tableFieldDelIcon: {
     // width: '10%',
-    // margin: 0,
+    margin: 0,
   },
   tableField: {
     flexDirection: 'row',
