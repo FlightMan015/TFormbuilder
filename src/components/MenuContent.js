@@ -112,12 +112,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   subHeader: {
-    height: 30,
+    paddingVertical: 10,
     backgroundColor: '#404651',
     color: '#fff',
     size: 16,
     textAlign: 'center',
-    alignSelf: 'center'
   },
   fieldListItem: {
     height: 60,
