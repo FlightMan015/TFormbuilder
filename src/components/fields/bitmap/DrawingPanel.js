@@ -212,8 +212,8 @@ const DrawingPanel = ({svgPosition}) => {
         <Canvas
           style={{
             ...styles.canvas,
-            height: imageData.height,
-            width: imageData.width,
+            // height: imageData.height,
+            // width: imageData.width,
           }}>
           {/* {completedPaths.length > 0
             ? completedPaths.map((path, index) => (
