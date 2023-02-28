@@ -232,7 +232,7 @@ const DataTableHeaderSetting = props => {
 					}}
 					icon={'plus'}
 					iconColor={'#FFFFFF'}
-					size={15}
+					size={10}
 					onPress={() => {
 						const tempdata = JSON.parse(JSON.stringify(fields));
 						if (newCellField.type === 'menu') {
