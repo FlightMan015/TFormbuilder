@@ -202,9 +202,7 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   text: (fonts) => ({
-    height: 35,
     textAlign: 'center',
-    textAlignVertical: 'center',
     marginLeft: 10,
     ...fonts.values,
   }),
