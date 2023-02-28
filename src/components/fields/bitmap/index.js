@@ -268,27 +268,31 @@ const Bitmap = ({element, index}) => {
             />
           )}
 
-          <Canvas
-            style={{
-              ...styles.canvas,
-              height: imageSize.height,
-              width: imageSize.width,
-            }}>
-            {/* {completedPaths.length > 0
-              ? completedPaths.map((path, i) => {
-                  return (
-                    <ImageSVG
-                      key={i}
-                      svg={Skia.SVG.MakeFromString(path)}
-                      x={0}
-                      y={0}
-                      width={imageSize.width}
-                      height={imageSize.height}
-                    />
-                  );
-                })
-              : null} */}
-          </Canvas>
+          {
+            imageSize.height !== 0 && imageSize.width !== 0 && (
+              <Canvas
+                style={{
+                  ...styles.canvas,
+                  height: imageSize.height,
+                  width: imageSize.width,
+                }}>
+                {completedPaths.length > 0
+                  ? completedPaths.map((path, i) => {
+                      return (
+                        <ImageSVG
+                          key={i}
+                          svg={Skia.SVG.MakeFromString(path)}
+                          x={0}
+                          y={0}
+                          width={imageSize.width}
+                          height={imageSize.height}
+                        />
+                      );
+                    })
+                  : null}
+              </Canvas>
+            )
+          }
         </View>
 
         <View style={styles.linkButton}>
