@@ -325,6 +325,7 @@ const styles = StyleSheet.create({
   tableFieldDelIcon: {
     width: '10%',
     margin: 0,
+	textAlign: 'center',
   },
   tableField: {
     flexDirection: 'row',
