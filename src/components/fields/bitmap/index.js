@@ -15,6 +15,7 @@ import {
   Linking,
   StyleSheet,
   Alert,
+  Dimensions
 } from 'react-native';
 import DocumentPicker, {
   DocumentPickerResponse,
@@ -30,6 +31,8 @@ import Title from '../../../common/Title';
 import formStore from '../../../store/formStore';
 import FieldLabel from '../../../common/FieldLabel';
 import ResizedImage from '../../../common/ResizedImage';
+
+var screenWidth = Dimensions.get('window').width;
 
 const Bitmap = ({element, index}) => {
   const {colors, fonts} = useTheme();
@@ -273,8 +276,8 @@ const Bitmap = ({element, index}) => {
               <Canvas
                 style={{
                   ...styles.canvas,
-                  height: imageSize.height,
-                  width: imageSize.width,
+                  height: imageSize.height || 300,
+                  width: imageSize.width || screenWidth,
                 }}>
                 {completedPaths.length > 0
                   ? completedPaths.map((path, i) => {
