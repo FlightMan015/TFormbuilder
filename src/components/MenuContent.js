@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     size: 16,
     textAlign: 'center',
-    textAlignVertical: 'center',
+    alignSelf: 'center'
   },
   fieldListItem: {
     height: 60,
