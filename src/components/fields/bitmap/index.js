@@ -271,13 +271,15 @@ const Bitmap = ({element, index}) => {
             />
           )}
 
-          {
-            imageSize.height !== 0 && imageSize.width !== 0 && (
+          {/* {
+            imageSize.height !== 0 && imageSize.width !== 0 && ( */}
               <Canvas
                 style={{
                   ...styles.canvas,
-                  height: imageSize.height || 300,
-                  width: imageSize.width || screenWidth,
+                  // height: imageSize.height || 300,
+                  // width: imageSize.width || screenWidth,
+                  height: 300,
+                  width: 300,
                 }}>
                 {completedPaths.length > 0
                   ? completedPaths.map((path, i) => {
@@ -294,8 +296,8 @@ const Bitmap = ({element, index}) => {
                     })
                   : null}
               </Canvas>
-            )
-          }
+          //   )
+          // }
         </View>
 
         <View style={styles.linkButton}>
@@ -364,7 +366,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   canvas: {
-    width: '100%',
+    // width: '100%',
     position: 'absolute',
     alignSelf: 'center',
   },
