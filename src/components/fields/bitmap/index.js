@@ -275,7 +275,7 @@ const Bitmap = ({element, index}) => {
             imageSize.height !== 0 && imageSize.width !== 0 && (
               <Canvas
                 style={{
-                  // ...styles.canvas,
+                  ...styles.canvas,
                   // height: imageSize.height || 300,
                   // width: imageSize.width || screenWidth,
                   // height: 300,
