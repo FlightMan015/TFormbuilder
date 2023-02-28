@@ -296,8 +296,8 @@ const Bitmap = ({element, index}) => {
                     })
                   : null}
               </Canvas>
-          //   )
-          // }
+             {/* )
+          } */}
         </View>
 
         <View style={styles.linkButton}>
