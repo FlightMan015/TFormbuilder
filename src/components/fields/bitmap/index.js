@@ -29,6 +29,7 @@ import CustomButton from '../../../common/CustomButton';
 import Title from '../../../common/Title';
 import formStore from '../../../store/formStore';
 import FieldLabel from '../../../common/FieldLabel';
+import ResizedImage from '../../../common/ResizedImage';
 
 const Bitmap = ({element, index}) => {
   const {colors, fonts} = useTheme();
@@ -253,12 +254,19 @@ const Bitmap = ({element, index}) => {
             height: imageSize.height,
             width: '100%',
           }}>
-          {/* {imageData.imageUri && ( */}
+          {/* {imageData.imageUri && (
             <Image
               style={{width: imageSize.width, height: imageSize.height, alignSelf: 'center'}}
               source={{uri: imageData.imageUri}}
             />
-          {/* )} */}
+          )} */}
+          {imageData.imageUri && (
+            <ResizedImage
+              uri={imageData.imageUri}
+              maxHeight={300}
+              maxWidth={imageScreenWidth.current}
+            />
+          )}
 
           <Canvas
             style={{
