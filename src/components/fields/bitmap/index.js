@@ -253,12 +253,12 @@ const Bitmap = ({element, index}) => {
             height: imageSize.height,
             width: '100%',
           }}>
-          {imageData.imageUri && (
+          {/* {imageData.imageUri && ( */}
             <Image
               style={{width: imageSize.width, height: imageSize.height, alignSelf: 'center'}}
               source={{uri: imageData.imageUri}}
             />
-          )}
+          {/* )} */}
 
           <Canvas
             style={{
