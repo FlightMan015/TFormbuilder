@@ -372,7 +372,7 @@ const DataTableHeaderSetting = props => {
 
 const styles = StyleSheet.create({
 	settingView: {
-    padding: 15,
+    // padding: 15,
     borderTopWidth: 1,
     borderTopColor: '#4B5260',
   },
