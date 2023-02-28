@@ -232,7 +232,7 @@ const DataTableHeaderSetting = props => {
 					}}
 					icon={'plus'}
 					iconColor={'#FFFFFF'}
-					size={15}
+					size={25}
 					onPress={() => {
 						const tempdata = JSON.parse(JSON.stringify(fields));
 						if (newCellField.type === 'menu') {
@@ -248,7 +248,7 @@ const DataTableHeaderSetting = props => {
 						setNewMenuColumnOptions(['option1', 'option2', 'option3']);
 					}}
 				/>
-				{/* <TextInput
+				<TextInput
 					style={{...styles.newTableFieldName}}
 					underlineColorAndroid="transparent"
 					placeholder="...new field name"
@@ -291,7 +291,7 @@ const DataTableHeaderSetting = props => {
 							? () => <Icon name="chevron-down" size={15} color={'#FFFFFF'} />
 							: () => <Icon name="chevron-up" size={15} color={'#FFFFFF'} />
 					}
-				/> */}
+				/>
 			</View>
 			{
 				newCellField.type === 'menu' && (
@@ -421,8 +421,8 @@ const styles = StyleSheet.create({
 		color: '#FFFFFF',
   },
   tableFieldDelIcon: {
-    width: '10%',
-    margin: 0,
+    // width: '10%',
+    // margin: 0,
   },
   tableField: {
     flexDirection: 'row',
