@@ -170,6 +170,7 @@ const SchedularSubField = ({element, index}) => {
   };
 
   const selectDay = day => {
+    console.log(day)
     if (element.event.onSelectDay) {
       Alert.alert('Rule Action', `Fired onSelectDay action. rule - ${visibleCalendarDlg.element.event.onSelectDay}.`);
     }
@@ -215,15 +216,16 @@ const SchedularSubField = ({element, index}) => {
           }
           minDate={'2012-05-01'}
           maxDate={'2100-05-30'}
-          onDayPress={selectDay}
+          // onDayPress={selectDay}
           monthFormat={'yyyy MM'}
           onPressArrowLeft={subtractMonth => subtractMonth()}
           onPressArrowRight={addMonth => addMonth()}
           markedDates={markedDates}
           theme={{...styles.theme(colors, fonts)}}
           dayComponent={({date, state}) => {
+            console.log('state--------', state);
             return (
-              <TouchableOpacity onPress={selectDay}>
+              <TouchableOpacity onPress={() => selectDay(date)}>
                 <Text style={{textAlign: 'center', color: state === 'disabled' ? 'gray' : 'black'}}>{date.day}</Text>
               </TouchableOpacity>
             );
