@@ -221,6 +221,7 @@ const SchedularSubField = ({element, index}) => {
         markedDates={markedDates}
         theme={{...styles.theme(colors, fonts)}}
       />}
+
       {!visibleCalendar && (
         <View style={styles.schedule(colors)}>
           <View style={styles.dayHeader}>
@@ -320,7 +321,7 @@ const styles = StyleSheet.create({
     selectedDayBackgroundColor: colors.colorButton,
     selectedDayTextColor: '#ffffff',
     todayTextColor: colors.colorButton,
-    dayTextColor: colors.text,
+    dayTextColor: '#FF0000',
     textDisabledColor: colors.border,
     dotColor: colors.colorButton,
     selectedDotColor: '#ffffff',
