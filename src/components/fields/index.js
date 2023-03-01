@@ -218,6 +218,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: visibleBorder ? 2 : 0,
     marginVertical: 3,
+    zIndex: 0,
   }),
   note: (colors, fonts) => ({
     color: colors.warning,
