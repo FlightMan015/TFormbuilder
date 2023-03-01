@@ -291,7 +291,7 @@ const Bitmap = ({element, index}) => {
               //       })
               //     : null}
               // </Canvas>
-              <Canvas style={{width: 300, height: 300 }}>
+              <Canvas style={{flex: 1, position: 'absolute'}}>
                 <Circle r={128} cx={128} cy={128} color="red" />
               </Canvas>
             )
