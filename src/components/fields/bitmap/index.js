@@ -1,4 +1,4 @@
-import {Canvas, Path, Skia, ImageSVG} from '@shopify/react-native-skia';
+import {Canvas, Path, Skia, ImageSVG, Circle} from '@shopify/react-native-skia';
 import React, {
   useCallback,
   useEffect,
@@ -270,26 +270,29 @@ const Bitmap = ({element, index}) => {
 
           {
             imageSize.height !== 0 && imageSize.width !== 0 && (
-              <Canvas
-                style={{
-                  ...styles.canvas,
-                  height: imageSize.height,
-                  width: imageSize.width,
-                }}>
-                {completedPaths.length > 0
-                  ? completedPaths.map((path, i) => {
-                      return (
-                        <ImageSVG
-                          key={i}
-                          svg={Skia.SVG.MakeFromString(path)}
-                          x={0}
-                          y={0}
-                          width={imageSize.width}
-                          height={imageSize.height}
-                        />
-                      );
-                    })
-                  : null}
+              // <Canvas
+              //   style={{
+              //     ...styles.canvas,
+              //     height: imageSize.height,
+              //     width: imageSize.width,
+              //   }}>
+              //   {completedPaths.length > 0
+              //     ? completedPaths.map((path, i) => {
+              //         return (
+              //           <ImageSVG
+              //             key={i}
+              //             svg={Skia.SVG.MakeFromString(path)}
+              //             x={0}
+              //             y={0}
+              //             width={imageSize.width}
+              //             height={imageSize.height}
+              //           />
+              //         );
+              //       })
+              //     : null}
+              // </Canvas>
+              <Canvas style={{width: 300, height: 300 }}>
+                <Circle r={128} cx={128} cy={128} color="red" />
               </Canvas>
             )
           }

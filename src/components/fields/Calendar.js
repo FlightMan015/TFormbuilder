@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Animated,
+  Agenda,
 } from 'react-native';
 import { color } from '../../theme/styles';
 import {
@@ -223,14 +224,15 @@ const SchedularSubField = ({element, index}) => {
           markedDates={markedDates}
           theme={{...styles.theme(colors, fonts)}}
           dayComponent={({date, state}) => {
-            console.log('state--------', state);
+            console.log('state--------', state, markedDates);
             return (
               <TouchableOpacity onPress={() => selectDay(date)}>
                 <Text style={{textAlign: 'center', color: state === 'disabled' ? 'gray' : 'black'}}>{date.day}</Text>
               </TouchableOpacity>
             );
           }}
-        />}
+        />
+      }
 
       {!visibleCalendar && (
         <View style={styles.schedule(colors)}>
