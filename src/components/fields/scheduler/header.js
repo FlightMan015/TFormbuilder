@@ -10,7 +10,7 @@ const SchedularHeader = ({selectedMonth, onClick, element}) => {
     const year = selectedDate.getFullYear();
     const month = selectedDate.getMonth() + 1;
 
-    console.log('selectedMonth---------------------------', selectedMonth, selectedDate.toDateString())
+    console.log('selectedMonth---------------------------', selectedMonth, selectedDate.toDateString(), selectedDate.toLocaleDateString())
 
     return (
         <View style={styles.containter(colors, fonts)}>
