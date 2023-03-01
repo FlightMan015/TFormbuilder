@@ -223,7 +223,7 @@ const SchedularSubField = ({element, index}) => {
           theme={{...styles.theme(colors, fonts)}}
           dayComponent={({date, state}) => {
             return (
-              <TouchableOpacity>
+              <TouchableOpacity onPress={selectDay}>
                 <Text style={{textAlign: 'center', color: state === 'disabled' ? 'gray' : 'black'}}>{date.day}</Text>
               </TouchableOpacity>
             );
