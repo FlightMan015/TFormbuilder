@@ -21,7 +21,7 @@ const Schedular = ({element, index}) => {
     return (
         <View style={styles.container}>
             <FieldLabel label={element.meta.title || 'Appointment'} visible={!element.meta.hide_title} />
-            <SchedularHeader selectedMonth={date} onClick={e => {console.log('changed date--------------', e); setDate(e);}} element={element} />
+            <SchedularHeader selectedMonth={date} onClick={e => {setDate(e);}} element={element} />
             <SchedularBody element={element} schedules={formValue[element.field_name] || {}} schedulesOfMonth={sortByYearAndByMonth(formValue[element.field_name] || {})} year={date.substring(0,4)} month={date.substring(5,7)} />
             {
                 (role.edit || preview) && (

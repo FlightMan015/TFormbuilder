@@ -10,8 +10,6 @@ const SchedularHeader = ({selectedMonth, onClick, element}) => {
     const year = selectedDate.getFullYear();
     const month = selectedDate.getMonth() + 1;
 
-    console.log('selectedMonth---------------------------', selectedMonth, selectedDate.toDateString(), selectedDate.toLocaleDateString())
-
     return (
         <View style={styles.containter(colors, fonts)}>
             <IconButton
@@ -34,9 +32,7 @@ const SchedularHeader = ({selectedMonth, onClick, element}) => {
                 size={fonts.labels.fontSize}
                 iconColor={element.meta.monthFont.color}
                 onPress={() => {
-                    console.log(year, month)
                     if (month <= 8) {
-                        console.log(month+1)
                         onClick(year.toString() + '-0' + (month + 1).toString() + '-15');
                     } else if (month > 8 && month < 12) {
                         onClick(year.toString() + '-' + (month + 1).toString() + '-15');
