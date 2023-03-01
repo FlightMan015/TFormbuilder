@@ -41,22 +41,6 @@ const SchedularSubField = ({element, index}) => {
   let opacity = new Animated.Value(1);
   const newDayString = new Date(Date.now()).toLocaleDateString().split('/');
 
-  const animate1 = () => {
-    Animated.timing(opacity, {
-      toValue: 0,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const animate2 = () => {
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  };
-
   useEffect(() => {
     if (formValue[element.field_name]) {
       setMarkedDates(formValue[element.field_name]);
@@ -218,9 +202,6 @@ const SchedularSubField = ({element, index}) => {
     }
     selectedDay.current = day;
     setMarkedDates({...tempMarkedDates, [day.dateString]: selectedDayData});
-    setTimeout(() => {
-      animate1();
-    }, 1000);
     setVisibleCalendar(false);
   };
 
@@ -339,7 +320,7 @@ const styles = StyleSheet.create({
     selectedDayBackgroundColor: colors.colorButton,
     selectedDayTextColor: '#ffffff',
     todayTextColor: colors.colorButton,
-    // dayTextColor: colors.text,
+    dayTextColor: colors.text,
     textDisabledColor: colors.border,
     dotColor: colors.colorButton,
     selectedDotColor: '#ffffff',
