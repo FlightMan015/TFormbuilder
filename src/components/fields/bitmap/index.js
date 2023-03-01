@@ -70,8 +70,6 @@ const Bitmap = ({element, index}) => {
 
   const [imageSize, setImageSize] = useState({width: 0, height: 0});
 
-  console.log('imageSize-----------------------', imageSize)
-
   useEffect(() => {
     if (formValue[element.field_name]?.imageUri) {
       setImageData({
