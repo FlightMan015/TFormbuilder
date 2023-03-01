@@ -27,7 +27,7 @@ const SchedularHeader = ({selectedMonth, onClick, element}) => {
                     }
                 }}
             />
-            <Text style={styles.text(element.meta.monthFont)}>{new Date(selectedMonth).toDateString().split(' ')[1] + '   ' + new Date(selectedMonth).toDateString().split(' ')[3]}</Text>
+            <Text style={styles.text(element.meta.monthFont)}>{selectedDate.toDateString().split(' ')[1] + '   ' + selectedDate.toDateString().split(' ')[3]}</Text>
             <IconButton
                 icon="chevron-right"
                 size={fonts.labels.fontSize}
