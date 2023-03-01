@@ -172,9 +172,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'row',
     alignSelf: 'center',
-    position: 'absolute',
-    bottom: -50,
-    zIndex: 999,
+    // position: 'absolute',
+    // bottom: -50,
+    // zIndex: 999,
   },
   field: (colors, visibleBorder) => ({
     borderColor: visibleBorder ? '#0087E0' : colors.background,

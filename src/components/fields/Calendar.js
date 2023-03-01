@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     selectedDayBackgroundColor: colors.colorButton,
     selectedDayTextColor: '#ffffff',
     todayTextColor: colors.colorButton,
-    dayTextColor: colors.icon,
+    dayTextColor: colors.text,
     textDisabledColor: colors.border,
     dotColor: colors.colorButton,
     selectedDotColor: '#ffffff',

@@ -211,14 +211,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     // position: 'absolute',
     // bottom: -50,
-    zIndex: 999,
+    // zIndex: 999,
   },
   field: (colors, visibleBorder) => ({
     borderColor: visibleBorder ? '#0087E0' : colors.background,
     borderRadius: 5,
     borderWidth: visibleBorder ? 2 : 0,
     marginVertical: 3,
-    zIndex: 0,
+    // zIndex: 0,
   }),
   note: (colors, fonts) => ({
     color: colors.warning,
