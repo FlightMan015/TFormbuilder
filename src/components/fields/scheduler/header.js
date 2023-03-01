@@ -34,6 +34,7 @@ const SchedularHeader = ({selectedMonth, onClick, element}) => {
                 onPress={() => {
                     console.log(year, month)
                     if (month <= 8) {
+                        console.log(month+1)
                         onClick(year.toString() + '-0' + (month + 1).toString() + '-01');
                     } else if (month > 8 && month < 12) {
                         onClick(year.toString() + '-' + (month + 1).toString() + '-01');
