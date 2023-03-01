@@ -20,11 +20,11 @@ const SchedularHeader = ({selectedMonth, onClick, element}) => {
                 iconColor={element.meta.monthFont.color}
                 onPress={() => {
                     if (month > 1 && month <= 10) {
-                        onClick(year.toString() + '-0' + (month - 1).toString() + '-01');
+                        onClick(year.toString() + '-0' + (month - 1).toString() + '-15');
                     } else if (month > 10) {
-                        onClick(year.toString() + '-' + (month - 1).toString() + '-01');
+                        onClick(year.toString() + '-' + (month - 1).toString() + '-15');
                     } else {
-                        onClick((year - 1).toString() + '-12-01');
+                        onClick((year - 1).toString() + '-12-15');
                     }
                 }}
             />
@@ -37,11 +37,11 @@ const SchedularHeader = ({selectedMonth, onClick, element}) => {
                     console.log(year, month)
                     if (month <= 8) {
                         console.log(month+1)
-                        onClick(year.toString() + '-0' + (month + 1).toString() + '-01');
+                        onClick(year.toString() + '-0' + (month + 1).toString() + '-15');
                     } else if (month > 8 && month < 12) {
-                        onClick(year.toString() + '-' + (month + 1).toString() + '-01');
+                        onClick(year.toString() + '-' + (month + 1).toString() + '-15');
                     } else {
-                        onClick((year + 1).toString() + '-01-01');
+                        onClick((year + 1).toString() + '-01-15');
                     }
                 }}
             />
