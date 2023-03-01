@@ -67,10 +67,9 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   textBox: {
-    paddingVertical: 3,
     borderWidth: 1,
     borderRadius: 10,
-    padding: 0,
+    paddingVertical: 5,
     paddingLeft: 10,
   },
 });
