@@ -6,10 +6,11 @@ import {useTheme, IconButton} from 'react-native-paper';
 const SchedularHeader = ({selectedMonth, onClick, element}) => {
     const {colors, fonts} = useTheme();
 
-    console.log('selectedMonth---------------------------', selectedMonth)
     const selectedDate = new Date(selectedMonth);
     const year = selectedDate.getFullYear();
     const month = selectedDate.getMonth() + 1;
+
+    console.log('selectedMonth---------------------------', selectedMonth, selectedDate.toDateString())
 
     return (
         <View style={styles.containter(colors, fonts)}>
