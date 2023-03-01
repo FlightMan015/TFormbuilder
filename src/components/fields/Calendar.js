@@ -208,19 +208,27 @@ const SchedularSubField = ({element, index}) => {
   return (
     <SafeAreaView style={styles.container}>
       <FieldLabel label={element.meta.title || 'Calendar'} visible={!element.meta.hide_title} />
-      {visibleCalendar && <Calendar
-        initialDate= {
-          '20' + newDayString[2] + '-' + newDayString[0] + '-' + newDayString[1]
-        }
-        minDate={'2012-05-01'}
-        maxDate={'2100-05-30'}
-        onDayPress={selectDay}
-        monthFormat={'yyyy MM'}
-        onPressArrowLeft={subtractMonth => subtractMonth()}
-        onPressArrowRight={addMonth => addMonth()}
-        markedDates={markedDates}
-        theme={{...styles.theme(colors, fonts)}}
-      />}
+      {visibleCalendar &&
+        <Calendar
+          initialDate= {
+            '20' + newDayString[2] + '-' + newDayString[0] + '-' + newDayString[1]
+          }
+          minDate={'2012-05-01'}
+          maxDate={'2100-05-30'}
+          onDayPress={selectDay}
+          monthFormat={'yyyy MM'}
+          onPressArrowLeft={subtractMonth => subtractMonth()}
+          onPressArrowRight={addMonth => addMonth()}
+          markedDates={markedDates}
+          theme={{...styles.theme(colors, fonts)}}
+          dayComponent={({date, state}) => {
+            return (
+              <View>
+                <Text style={{textAlign: 'center', color: state === 'disabled' ? 'gray' : 'black'}}>{date.day}</Text>
+              </View>
+            );
+          }}
+        />}
 
       {!visibleCalendar && (
         <View style={styles.schedule(colors)}>
