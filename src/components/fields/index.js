@@ -209,8 +209,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'row',
     alignSelf: 'center',
-    position: 'absolute',
-    bottom: -50,
+    // position: 'absolute',
+    // bottom: -50,
     zIndex: 999,
   },
   field: (colors, visibleBorder) => ({
