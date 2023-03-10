@@ -18,6 +18,7 @@ import formStore from '../../../store/formStore';
 const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
   const {colors, fonts} = useTheme();
   const preview = formStore(state => state.preview);
+  const i18nValues = formStore(state => state.i18nValues);
   const [openLine, setOpenLine] = useState(true);
   const [openAxis, setOpenAxis] = useState(true);
   const [customColor, setCustomColor] = useState({red: 0, green: 0, blue: 0});
@@ -348,7 +349,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
       <View>
         <Text style={{
           ...styles.text(fonts),
-        }}>Series</Text>
+        }}>{i18nValues.t("setting_labels.series")}</Text>
         <View style={globalStyles.fieldheader}>
           <View style={globalStyles.iconsContainer}>
             <IconButton
@@ -415,14 +416,14 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
                 onPress={onClickChangeNewLine}
                 // disabled={newLineValid ? false : true}
               >
-                <Text style={styles.textBtnStyle}>Change</Text>
+                <Text style={styles.textBtnStyle}>{i18nValues.t("setting_labels.change")}</Text>
               </TouchableOpacity>
               <TextInput
                 style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeLine}
                 editable
-                placeholder="Series name"
+                placeholder={i18nValues.t("placeholders.series_name")}
                 placeholderTextColor={'grey'}
                 value={changeLine}
                 // showSoftInputOnFocus={false}
@@ -476,7 +477,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
             <View
               flexDirection="row"
               style={{marginHorizontal: 10, justifyContent: 'flex-end'}}>
-              <Text style={globalStyles.label}>{'RGB color'}</Text>
+              <Text style={globalStyles.label}>{i18nValues.t("setting_labels.rgb_color")}</Text>
               <Switch
                 color={colors.colorButton}
                 value={isRGBcolor}
@@ -493,14 +494,14 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
                 style={globalStyles.opacityStyle(colors)}
                 onPress={onClickAddNewLine}
                 disabled={lineStatus.newLineValid ? false : true}>
-                <Text style={styles.textBtnStyle}>Add</Text>
+                <Text style={styles.textBtnStyle}>{i18nValues.t("setting_labels.add")}</Text>
               </TouchableOpacity>
               <TextInput
                 style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeNewLine}
                 editable
-                placeholder="new series name"
+                placeholder={i18nValues.t("placeholders.new_series_name")}
                 placeholderTextColor={'grey'}
                 value={lineStatus.newLine}
                 // showSoftInputOnFocus={false}
@@ -554,7 +555,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
             <View
               flexDirection="row"
               style={{marginHorizontal: 10, justifyContent: 'flex-end'}}>
-              <Text style={globalStyles.label}>{'RGB color'}</Text>
+              <Text style={globalStyles.label}>{i18nValues.t("setting_labels.rgb_color")}</Text>
               <Switch
                 color={colors.colorButton}
                 value={isRGBcolor}
@@ -569,7 +570,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
           <View>
             <Text style={{
               ...styles.text(fonts),
-            }}>Axis</Text>
+            }}>{i18nValues.t("setting_labels.axis")}</Text>
             <View style={globalStyles.fieldheader}>
               <View style={globalStyles.iconsContainer}>
                 <IconButton
@@ -631,14 +632,14 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
                   onPress={onClickChangeAxis}
                   // disabled={newAxisValid ? false : true}
                 >
-                  <Text style={styles.textBtnStyle}>Change</Text>
+                  <Text style={styles.textBtnStyle}>{i18nValues.t("setting_labels.change")}</Text>
                 </TouchableOpacity>
                 <TextInput
                   style={globalStyles.textBoxNewLine(colors, fonts)}
                   underlineColorAndroid="transparent"
                   onChangeText={onChangeAxis}
                   editable
-                  placeholder="Please input X value"
+                  placeholder={i18nValues.t("placeholders.input_x_value")}
                   placeholderTextColor={'grey'}
                   value={changeAxis}
                   // showSoftInputOnFocus={false}
@@ -652,14 +653,14 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
                   style={globalStyles.opacityStyle(colors)}
                   onPress={onClickAddNewAxis}
                   disabled={axisStatus.newAxisValid ? false : true}>
-                  <Text style={styles.textBtnStyle}>Add</Text>
+                  <Text style={styles.textBtnStyle}>{i18nValues.t("setting_labels.add")}</Text>
                 </TouchableOpacity>
                 <TextInput
                   style={globalStyles.textBoxNewLine(colors, fonts)}
                   underlineColorAndroid="transparent"
                   onChangeText={onChangeNewAxis}
                   editable
-                  placeholder="new X value"
+                  placeholder={i18nValues.t("placeholders.new_x_value")}
                   placeholderTextColor={'grey'}
                   value={axisStatus.newAxis}
                   // showSoftInputOnFocus={false}
@@ -670,7 +671,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
           <View>
             <Text style={{
               ...styles.text(fonts),
-            }}>Value</Text>
+            }}>{i18nValues.t("setting_labels.value")}</Text>
             <View>
               <TextInput
                 keyboardType="numeric"
@@ -678,7 +679,7 @@ const RadarChartDataSection = ({meta, onChangeData, userRole}) => {
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeY}
                 editable
-                placeholder="Please input Y value"
+                placeholder={i18nValues.t("placeholders.input_y_value")}
                 value={axisValue.toString()}
                 // showSoftInputOnFocus={false}
               />

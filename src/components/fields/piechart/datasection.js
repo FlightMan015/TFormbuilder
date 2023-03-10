@@ -12,10 +12,11 @@ import Icon from 'react-native-vector-icons/Feather';
 import { datatypes, string16 } from '../../../constant';
 import {Button, IconButton, Switch, useTheme} from 'react-native-paper';
 import ColorPalette from '../../../common/color_palette';
+import formStore from '../../../store/formStore';
 
 const PieChartDataSection = ({data, onChangeData}) => {
   const {colors, fonts} = useTheme();
-
+  const i18nValues = formStore(state => state.i18nValues);
   const [openLabel, setOpenLabel] = useState(true);
   const [labelStatus, setLabelStatus] = useState({
     labelIndex: 0,
@@ -225,7 +226,7 @@ const PieChartDataSection = ({data, onChangeData}) => {
   return (
     <View style={{...styles.sectionContainer, borderColor: colors.border}}>
       <View>
-        <Text style={{...styles.text(fonts)}}>Label</Text>
+        <Text style={{...styles.text(fonts)}}>{i18nValues.t("setting_labels.label")}</Text>
         {/* {labels.length > 0 && ( */}
           <View style={globalStyles.fieldheader}>
             <View style={globalStyles.iconsContainer}>
@@ -288,14 +289,14 @@ const PieChartDataSection = ({data, onChangeData}) => {
                 onPress={onClickChangeLabel}
                 // disabled={newLabelValid ? false : true}
               >
-                <Text style={styles.textBtnStyle}>Change</Text>
+                <Text style={styles.textBtnStyle}>{i18nValues.t("setting_labels.change")}</Text>
               </TouchableOpacity>
               <TextInput
                 style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeLabel}
                 editable
-                placeholder="Please input axis name"
+                placeholder={i18nValues.t("placeholders.input_axis_name")}
                 placeholderTextColor={'grey'}
                 value={changeLabel}
               />
@@ -348,7 +349,7 @@ const PieChartDataSection = ({data, onChangeData}) => {
             <View
               flexDirection="row"
               style={{marginHorizontal: 10, justifyContent: 'flex-end'}}>
-              <Text style={globalStyles.label}>{'RGB color'}</Text>
+              <Text style={globalStyles.label}>{i18nValues.t("setting_labels.rgb_color")}</Text>
               <Switch
                 color={colors.colorButton}
                 value={isRGBcolor}
@@ -365,14 +366,14 @@ const PieChartDataSection = ({data, onChangeData}) => {
                 style={globalStyles.opacityStyle(colors)}
                 onPress={onClickAddNewLabel}
                 disabled={labelStatus.newLabelValid ? false : true}>
-                <Text style={styles.textBtnStyle}>Add</Text>
+                <Text style={styles.textBtnStyle}>{i18nValues.t("setting_labels.add")}</Text>
               </TouchableOpacity>
               <TextInput
                 style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeNewLabel}
                 editable
-                placeholder="new Axis name"
+                placeholder={i18nValues.t("placeholders.new_axis_name")}
                 placeholderTextColor={'grey'}
                 value={labelStatus.newLabel}
               />
@@ -425,7 +426,7 @@ const PieChartDataSection = ({data, onChangeData}) => {
             <View
               flexDirection="row"
               style={{marginHorizontal: 10, justifyContent: 'flex-end'}}>
-              <Text style={globalStyles.label}>{'RGB color'}</Text>
+              <Text style={globalStyles.label}>{i18nValues.t("setting_labels.rgb_color")}</Text>
               <Switch
                 color={colors.colorButton}
                 value={isRGBcolor}
@@ -436,7 +437,7 @@ const PieChartDataSection = ({data, onChangeData}) => {
         )}
       </View>
       <View>
-        <Text style={{...styles.text(fonts)}}>Value</Text>
+        <Text style={{...styles.text(fonts)}}>{i18nValues.t("setting_labels.value")}</Text>
         <View>
           <TextInput
             keyboardType="numeric"
@@ -444,7 +445,7 @@ const PieChartDataSection = ({data, onChangeData}) => {
             underlineColorAndroid="transparent"
             onChangeText={onChangeY}
             editable
-            placeholder="Please input value"
+            placeholder={i18nValues.t("placeholders.input_value")}
             value={
               data[labelStatus.labelIndex]?.population
                 ? data[labelStatus.labelIndex].population.toString()

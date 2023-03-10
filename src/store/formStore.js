@@ -1,6 +1,17 @@
 import create from 'zustand';
 import { updateField, addField, deleteField } from '../actions/formdata';
 import { newFormData } from '../constant';
+import { I18n } from 'i18n-js';
+import en from '../languages/en.json';
+import ar from '../languages/ar.json';
+import fr from '../languages/fr.json';
+
+const i18n = new I18n({
+  ...en,
+  ...ar,
+  ...fr,
+});
+i18n.defaultLocale = "en";
 
 const formStore = create(set => ({
   formData: newFormData,
@@ -54,6 +65,8 @@ const formStore = create(set => ({
   setVisibleMapDlg: newVisible => set(() => ({visibleMapDlg: newVisible})),
   visibleSchedularDlg: {},
   setVisibleSchedularDlg: newVisible => set(() => ({visibleSchedularDlg: newVisible})),
+  i18nValues: i18n,
+  seti18nValues: newI18nValues => set(() => ({i18nValues: newI18nValues})),
 }));
 
 export default formStore;

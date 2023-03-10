@@ -46,6 +46,7 @@ const Card1 = (props) => {
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
   const preview = formStore(state => state.preview);
+  const i18nValues = formStore(state => state.i18nValues);
   const cardInfoHeight = cardWidth === 'auto' ? ((ScreenWidth - 15) * 75 / 100) > 300 ? 130 : ((ScreenWidth - 15) * 75 / 100 * 9 / 16 - 40) : (ScreenWidth - 30) * 9 / 16 - 60;
 
   const handlePress = useCallback(async () => {
@@ -97,7 +98,7 @@ const Card1 = (props) => {
             <TextInput
               style={{...titleFont, padding: 0, paddingVertical: 0}}
               value={title}
-              placeholder='Title'
+              placeholder={i18nValues.t("placeholders.title")}
               editable={(role.edit || preview)}
               onChange={e => {
                 e.persist();
@@ -113,7 +114,7 @@ const Card1 = (props) => {
             <TextInput
               style={{...titleFont, padding: 0, paddingVertical: 0}}
               value={subTitle}
-              placeholder='Subtitle'
+              placeholder={i18nValues.t("placeholders.subtitle")}
               editable={(role.edit || preview)}
               onChange={e => {
                 e.persist();
@@ -130,7 +131,7 @@ const Card1 = (props) => {
           <TextInput
             style={{...descriptionFont, padding: 0, paddingVertical: 0}}
             value={description}
-            placeholder='Description'
+            placeholder={i18nValues.t("placeholders.description")}
             editable={(role.edit || preview)}
             multiline numberOfLines={2}
             onChange={e => {

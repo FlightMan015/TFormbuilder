@@ -21,6 +21,7 @@ const FieldRole = () => {
   const element = formStore(state => state.selectedField);
   const setOpenSetting = formStore(state => state.setOpenSetting);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
+  const i18nValues = formStore(state => state.i18nValues);
 
   const onChangeRole = (i, type) => {
     const tempRoles = JSON.parse(JSON.stringify(element.role));
@@ -52,49 +53,56 @@ const FieldRole = () => {
           {'view' in element.role[0] && (
             <DataTable.Title>
               <Text style={styles.headerTitle(colors.description)}>
-                {'   View'}
+                {/* {'   View'} */}
+                {'   ' + i18nValues.t("setting_labels.view")}
               </Text>
             </DataTable.Title>
           )}
           {'edit' in element.role[0] && (
             <DataTable.Title>
               <Text style={styles.headerTitle(colors.description)}>
-                {'   Edit'}
+                {/* {'   Edit'} */}
+                {'   ' + i18nValues.t("setting_labels.edit")}
               </Text>
             </DataTable.Title>
           )}
           {'define' in element.role[0] && (
             <DataTable.Title>
               <Text style={styles.headerTitle(colors.description)}>
-                Define
+                {/* Define */}
+                {i18nValues.t("setting_labels.define")}
               </Text>
             </DataTable.Title>
           )}
           {'editAxes' in element.role[0] && (
             <DataTable.Title>
               <Text style={styles.headerTitle(colors.description)}>
-                Edit Axis
+                {/* Edit Axis */}
+                {i18nValues.t("setting_labels.edit_axis")}
               </Text>
             </DataTable.Title>
           )}
           {'editSeries' in element.role[0] && (
             <DataTable.Title>
               <Text style={styles.headerTitle(colors.description)}>
-                Edit Series
+                {/* Edit Series */}
+                {i18nValues.t("setting_labels.edit_series")}
               </Text>
             </DataTable.Title>
           )}
           {'read' in element.role[0] && (
             <DataTable.Title>
               <Text style={styles.headerTitle(colors.description)}>
-                {'   Read'}
+                {/* {'   Read'} */}
+                {'   ' + i18nValues.t("setting_labels.read")}
               </Text>
             </DataTable.Title>
           )}
           {'pay' in element.role[0] && (
             <DataTable.Title>
               <Text style={styles.headerTitle(colors.description)}>
-                {'   Pay'}
+                {/* {'   Pay'} */}
+                {'   ' + i18nValues.t("setting_labels.pay")}
               </Text>
             </DataTable.Title>
           )}

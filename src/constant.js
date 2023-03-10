@@ -1,6 +1,12 @@
 /* eslint-disable prettier/prettier */
 export const stripePubKey = 'pk_test_51M439GCc34pJZGeiWGWBUESTc6zTakAmrlKjGfZycotvoCPRJYfwDnGkdgAxG540gvdfx9ftpU7dqoMT3kN4vRAt00tS8MT56c';
 
+export const languages = [
+  {name: 'English', code: 'en'},
+  {name: 'French', code: 'fr'},
+  {name: 'Arabic', code: 'ar'},
+];
+
 export const componentName = {
   CHECKBOX: 'input_checkbox',
   DATE_PICKER: 'input_date',
@@ -137,7 +143,7 @@ const newInputTextData = {
   field_name: 'textbox',
   is_mandatory: true,
   meta: {
-    title: 'TextInput',
+    title: 'TextBox',
     hide_title: false,
     placeholder: 'Enter text..',
     numberOfLines: '1',
@@ -381,7 +387,7 @@ const newMapData = {
   field_name: 'map',
   is_mandatory: false,
   meta: {
-    title: 'Map widget',
+    title: 'Map',
     hide_title: false,
     data: {
       points: [],
@@ -587,7 +593,7 @@ const newDataTableData = {
   field_name: 'datatable',
   is_mandatory: true,
   meta: {
-    title: 'DataTable',
+    title: 'Data Table',
     hide_title: false,
     headers: [
       {name: 'id', type: 'num'},
@@ -615,7 +621,7 @@ const newRadioButtonData = {
   field_name: 'radio_button',
   is_mandatory: true,
   meta: {
-    title: 'Radio Button',
+    title: 'Radio Group',
     hide_title: false,
     options: [
       'option1',
@@ -1043,25 +1049,25 @@ export const componentFields = {
 export const fieldMenuData = {
   items: [
     {
-      name: 'Group',
+      name: 'group',
       items: [
         {
-          name: 'Section',
+          name: 'section',
           key: componentName.GROUP,
           icon: 'plus-square',
         },
         {
-          name: 'Multi tabs',
+          name: 'multi_tab_section',
           key: componentName.TABSECTION,
           icon: 'folder-plus',
         },
         {
-          name: 'Grid',
+          name: 'grid_section',
           key: componentName.GRID,
           icon: 'grid',
         },
         {
-          name: 'List',
+          name: 'list_section',
           key: componentName.LISTSECTION,
           icon: 'list',
         },
@@ -1078,145 +1084,145 @@ export const fieldMenuData = {
       ],
     },
     {
-      name: 'Input',
+      name: 'input',
       items: [
         {
-          name: 'TextBox',
+          name: 'textbox',
           key: componentName.TEXT_INPUT,
           icon: 'type',
         },
         {
-          name: 'Date',
+          name: 'date',
           key: componentName.DATE_PICKER,
           icon: 'clipboard',
         },
         {
-          name: 'Time',
+          name: 'time',
           key: componentName.TIME_PICKER,
           icon: 'clock',
         },
         {
-          name: 'File Upload',
+          name: 'file_upload',
           key: componentName.FILE_UPLOAD,
           icon: 'share',
         },
         {
-          name: 'Drop Down',
+          name: 'dropdown',
           key: componentName.DROPDOWN,
           icon: 'list',
         },
         {
-          name: 'Radio Group',
+          name: 'radio_group',
           key: componentName.RADIO,
           icon: 'disc',
         },
         {
-          name: 'Button',
+          name: 'button',
           key: componentName.BUTTON,
           icon: 'pause-circle',
         },
         {
-          name: 'Data Table',
+          name: 'data_table',
           key: componentName.DATA_TABLE,
           icon: 'layout',
         },
         // {
-        //   name: 'Slider',
+        //   name: 'slider',
         //   key: componentName.SLIDER,
         //   icon: 'sliders',
         // },
         {
-          name: 'Image',
+          name: 'image',
           key: componentName.IMAGE,
           icon: 'image',
         },
       ],
     },
     {
-      name: 'Chart',
+      name: 'chart',
       items: [
         {
-          name: 'Line Chart',
+          name: 'line_chart',
           key: componentName.LINECHART,
           icon: 'activity',
         },
         {
-          name: 'Bar Chart',
+          name: 'bar_chart',
           key: componentName.BARCHART,
           icon: 'bar-chart-2',
         },
         {
-          name: 'Pie Chart',
+          name: 'pie_chart',
           key: componentName.PIECHART,
           icon: 'pie-chart',
         },
         {
-          name: 'Radar Chart',
+          name: 'radar_chart',
           key: componentName.RADARCHART,
           icon: 'box',
         },
         // {
-        //   name: 'Gauge Chart',
+        //   name: 'gauge_chart',
         //   key: componentName.GAUGECHART,
         //   icon: 'compass',
         // },
       ],
     },
     {
-      name: 'Widget',
+      name: 'widget',
       items: [
         {
-          name: 'Calendar',
+          name: 'calendar',
           key: componentName.CALENDAR,
           icon: 'calendar',
         },
         {
-          name: 'Schedular',
+          name: 'schedular',
           key: componentName.SCHEDULAR,
           icon: 'flag',
         },
         {
-          name: 'Map',
+          name: 'map',
           key: componentName.MAP,
           icon: 'map',
         },
         {
-          name: 'Bitmap',
+          name: 'bitmap',
           key: componentName.BITMAP,
           icon: 'image',
         },
       ],
     },
     {
-      name: '3rd-Party',
+      name: '3rd_party',
       items: [
         {
-          name: 'Twitter',
+          name: 'twitter',
           key: componentName.TWITTER,
           icon: 'twitter',
         },
         {
-          name: 'Stripe',
+          name: 'stripe',
           key: componentName.PAYMENT,
           icon: 'dollar-sign',
         },
         {
-          name: 'Custom',
+          name: 'custom',
           key: componentName.EMBEDDED,
           icon: 'download',
         },
       ],
     },
     {
-      name: 'Featured Widget',
+      name: 'featured_widget',
       items: [
         {
-          name: 'Card Slider',
+          name: 'card_slider',
           key: componentName.CARDSLIDER,
           icon: 'columns',
         },
         {
-          name: 'Voice Message',
+          name: 'voice_message',
           key: componentName.VOICEMESSAGE,
           icon: 'mic',
         },
@@ -1251,9 +1257,9 @@ export const icons = [
 ];
 
 export const menuItems = [
-  {name: 'New', icon: 'file-plus-outline'},
-  {name: 'Save', icon: 'content-save-outline'},
-  {name: 'Save As', icon: 'content-save-edit-outline'},
-  {name: 'Rename', icon: 'pencil-outline'},
-  {name: 'Delete', icon: 'delete-forever-outline'},
+  {name: 'new', icon: 'file-plus-outline'},
+  {name: 'save', icon: 'content-save-outline'},
+  {name: 'save_as', icon: 'content-save-edit-outline'},
+  {name: 'rename', icon: 'pencil-outline'},
+  {name: 'delete', icon: 'delete-forever-outline'},
 ];

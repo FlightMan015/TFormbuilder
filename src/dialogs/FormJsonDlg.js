@@ -10,6 +10,7 @@ const FormJsonDlg = () => {
 	const visibleJsonDlg = formStore(state => state.visibleJsonDlg);
 	const setVisibleJsonDlg = formStore(state => state.setVisibleJsonDlg);
 	const formData = formStore(state => state.formData);
+  const i18nValues = formStore(state => state.i18nValues);
 
   const hideDialog = () => {
     setVisibleJsonDlg(false);
@@ -20,12 +21,12 @@ const FormJsonDlg = () => {
       visible={visibleJsonDlg}
       onDismiss={hideDialog}
       style={{...styles.dialog, backgroundColor: colors.card}}>
-    	<Text style={{...fonts.headings, marginBottom: 10}}>Form JSON</Text>
+    	<Text style={{...fonts.headings, marginBottom: 10}}>{i18nValues.t("setting_labels.form_json")}</Text>
 			<ScrollView style={styles.dlgContent}>
 				<JSONTree data={formData} />
 			</ScrollView>
 			<TextButton
-				text='Close'
+				text={i18nValues.t("setting_labels.close")}
 				onPress={hideDialog}
 				textStyle={styles.actionButtonText}
 				style={styles.actionButton(colors)}

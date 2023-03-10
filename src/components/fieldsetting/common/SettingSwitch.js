@@ -1,16 +1,18 @@
 import React from 'react';
 import {useTheme} from 'react-native-paper';
 import {View, StyleSheet, Text, Switch} from 'react-native';
+import formStore from '../../../store/formStore';
 
 const SettingSwitch = ({title, value, onChange, keyName, description}) => {
   const {colors, size} = useTheme();
+  const i18nValues = formStore(state => state.i18nValues);
 
   return (
     <View style={styles.settingView}>
       <Text style={styles.titleLabel}>{title}</Text>
       <View style={styles.switchView}>
         <Text style={styles.description}>
-          {description || 'Make sure to fill this field.'}
+          {description || i18nValues.t("setting_labels.is_mandatory_description")}
         </Text>
         <Switch
           trackColor={styles.switchTrackColor}

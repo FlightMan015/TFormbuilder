@@ -171,7 +171,6 @@ const SchedularSubField = ({element, index}) => {
   };
 
   const selectDay = day => {
-    console.log(day)
     if (element.event.onSelectDay) {
       Alert.alert('Rule Action', `Fired onSelectDay action. rule - ${visibleCalendarDlg.element.event.onSelectDay}.`);
     }
@@ -224,7 +223,6 @@ const SchedularSubField = ({element, index}) => {
           markedDates={markedDates}
           theme={{...styles.theme(colors, fonts)}}
           dayComponent={({date, state}) => {
-            console.log('state--------', state, markedDates);
             return (
               <TouchableOpacity onPress={() => selectDay(date)}>
                 <Text style={{textAlign: 'center', color: state === 'disabled' ? 'gray' : 'black'}}>{date.day}</Text>

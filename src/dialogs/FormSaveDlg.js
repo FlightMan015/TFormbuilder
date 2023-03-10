@@ -11,6 +11,7 @@ const FormSaveDlg = ({saveForm, renameForm}) => {
 	const setFormData = formStore(state => state.setFormData);
   const visibleDlg = formStore(state => state.visibleDlg);
   const setVisibleDlg = formStore(state => state.setVisibleDlg);
+  const i18nValues = formStore(state => state.i18nValues);
 
   return (
     <Dialog
@@ -23,8 +24,8 @@ const FormSaveDlg = ({saveForm, renameForm}) => {
         ...styles.dialog,
         backgroundColor: colors.card,
         }}>
-    	<Text style={{...fonts.headings, marginBottom: 10}}>Save Form</Text>
-			<Text style={globalStyles.label}>Form Name</Text>
+    	<Text style={{...fonts.headings, marginBottom: 10}}>{i18nValues.t("setting_labels.save_form")}</Text>
+			<Text style={globalStyles.label}>{i18nValues.t("setting_labels.form_name")}</Text>
 			<TextInput
 				style={{
 					...styles.nameInput,
@@ -36,7 +37,7 @@ const FormSaveDlg = ({saveForm, renameForm}) => {
 			/>
       <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
         <TextButton
-          text='Save'
+          text={i18nValues.t("setting_labels.save")}
           onPress={() => {
             if (visibleDlg.rename) {
               renameForm({oldName: visibleDlg.oldName, newName: formData.name});
@@ -50,7 +51,7 @@ const FormSaveDlg = ({saveForm, renameForm}) => {
           style={styles.actionButton(colors)}
         />
         <TextButton
-          text='Cancel'
+          text={i18nValues.t("setting_labels.cancel")}
           onPress={() => {
             setVisibleDlg({...visibleDlg, saveForm: false, rename: false});
             setFormData({...formData, name: visibleDlg.oldName});

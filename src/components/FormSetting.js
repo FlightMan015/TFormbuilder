@@ -30,6 +30,7 @@ const FormSetting = () => {
   const setOpenSetting = formStore(state => state.setOpenSetting);
   const viewMode = formStore(state => state.viewMode);
   const setViewMode = formStore(state => state.setViewMode);
+  const i18nValues = formStore(state => state.i18nValues);
 
   const {colors} = useTheme();
   const [roleDatas, setRoleDatas] = useState(roles || []);
@@ -285,7 +286,7 @@ const FormSetting = () => {
   return (
     <ScrollView style={{flex: 1}}>
       <View style={styles.menuHeader}>
-				<Text style={styles.menuTitle}>Form Setting</Text>
+				<Text style={styles.menuTitle}>{i18nValues.t("setting_labels.form_setting")}</Text>
 				<IconButton
 					icon="close"
 					size={20}
@@ -298,13 +299,13 @@ const FormSetting = () => {
       <View style={styles.settingTab}>
         <TextButton
           style={styles.tab(selectedTab === 'general')}
-          text="GENERAL"
+          text={i18nValues.t("setting_labels.general")}
           textStyle={styles.tabText(selectedTab === 'general')}
           onPress={() => setSelectedTab('general')}
         />
         <TextButton
           style={styles.tab(selectedTab === 'style')}
-          text="STYLE"
+          text={i18nValues.t("setting_labels.style")}
           textStyle={styles.tabText(selectedTab === 'style')}
           onPress={() => setSelectedTab('style')}
         />
@@ -312,7 +313,7 @@ const FormSetting = () => {
       {selectedTab === 'general' && (
         <>
           <View style={styles.settingView}>
-            <Text style={styles.titleLabel}>Form Title</Text>
+            <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.form_title")}</Text>
             <TextInput
               style={styles.title}
               value={formData.title}
@@ -322,7 +323,7 @@ const FormSetting = () => {
             />
           </View>
           <SettingImage
-            title={'Logo'}
+            title={i18nValues.t("setting_labels.logo")}
             imageUri={formData.logo}
             keyName={'logo'}
             onSelect={(keyname, value) => {
@@ -352,7 +353,7 @@ const FormSetting = () => {
       {selectedTab === 'style' && (
         <>
           <SettingSwitch
-            title={'Display'}
+            title={i18nValues.t("setting_labels.display")}
             value={scheme === 'dark' ? viewMode === 'light' ? true : false : viewMode === 'light' ? false : true}
             onChange={(keyName, value) => {
               if (scheme === 'dark') {
@@ -362,10 +363,10 @@ const FormSetting = () => {
               }
             }}
             keyName={'darkMode'}
-            description={scheme === 'dark' ? 'Light mode' : 'Dark mode'}
+            description={scheme === 'dark' ? i18nValues.t("setting_labels.light_mode") : i18nValues.t("setting_labels.dark_mode")}
           />
           <SettingDropdown
-            title={'Theme'}
+            title={i18nValues.t("setting_labels.theme")}
             options={defaultThemes}
             onChange={(keyName, value) => {
                 const darkThemeStyle = {
@@ -390,7 +391,7 @@ const FormSetting = () => {
             defaultValue={formData.theme}
           />
           <SettingImage
-            title={'Background Pattern'}
+            title={i18nValues.t("setting_labels.background_pattern")}
             imageUri={formData.lightStyle.backgroundPatternImage}
             keyName={'backgroundPatternImage'}
             onSelect={(keyname, value) => {
@@ -401,7 +402,7 @@ const FormSetting = () => {
           />
           <ColorPicker
             color={viewMode === 'light' ? formData.lightStyle.formBackgroundColor : formData.darkStyle.formBackgroundColor}
-            label={'Background Color'}
+            label={i18nValues.t("setting_labels.background_color")}
             selectColor={e => {
               if (viewMode === 'light') {
                 const newStyle = {...formData.lightStyle, formBackgroundColor: e};
@@ -415,7 +416,8 @@ const FormSetting = () => {
           />
           <ColorPicker
             color={viewMode === 'light' ? formData.lightStyle.foregroundColor : formData.darkStyle.foregroundColor}
-            label={'Foreground'} selectColor={e => {
+            label={i18nValues.t("setting_labels.foreground")}
+            selectColor={e => {
               if (viewMode === 'light') {
                 const newStyle = {...formData.lightStyle, foregroundColor: e};
                 setFormData({...formData, lightStyle: newStyle});
@@ -428,7 +430,7 @@ const FormSetting = () => {
           />
           <ColorPicker
             color={viewMode === 'light' ? formData.lightStyle.buttonBackgroundColor : formData.darkStyle.buttonBackgroundColor}
-            label={'Button Background Color'}
+            label={i18nValues.t("setting_labels.button_background_color")}
             selectColor={e => {
               if (viewMode === 'light') {
                 const newStyle = {...formData.lightStyle, buttonBackgroundColor: e};
@@ -441,28 +443,28 @@ const FormSetting = () => {
             }}
           />
           <FontSetting
-            label={'Headings'}
+            label={i18nValues.t("setting_labels.headings")}
             fontColor={viewMode === 'light' ? formData.lightStyle.headings.color : formData.darkStyle.headings.color}
             fontSize={viewMode === 'light' ? formData.lightStyle.headings.fontSize : formData.darkStyle.headings.fontSize}
             fontType={viewMode === 'light' ? formData.lightStyle.headings.fortFamily : formData.darkStyle.headings.fortFamily}
             onChange={(type, e) => {onChange('headings', type, e);}}
           />
           <FontSetting
-            label={'Labels'}
+            label={i18nValues.t("setting_labels.labels")}
             fontColor={viewMode === 'light' ? formData.lightStyle.labels.color : formData.darkStyle.labels.color}
             fontSize={viewMode === 'light' ? formData.lightStyle.labels.fontSize : formData.darkStyle.labels.fontSize}
             fontType={viewMode === 'light' ? formData.lightStyle.labels.fortFamily : formData.darkStyle.labels.fortFamily}
             onChange={(type, e) => {onChange('labels', type, e);}}
           />
           <FontSetting
-            label={'Values'}
+            label={i18nValues.t("setting_labels.values")}
             fontColor={viewMode === 'light' ? formData.lightStyle.values.color : formData.darkStyle.values.color}
             fontSize={viewMode === 'light' ? formData.lightStyle.values.fontSize : formData.darkStyle.values.fontSize}
             fontType={viewMode === 'light' ? formData.lightStyle.values.fortFamily : formData.darkStyle.values.fortFamily}
             onChange={(type, e) => {onChange('values', type, e);}}
           />
           <FontSetting
-            label={'Button Text'}
+            label={i18nValues.t("setting_labels.button_text")}
             fontColor={viewMode === 'light' ? formData.lightStyle.buttonTexts.color : formData.darkStyle.buttonTexts.color}
             fontSize={viewMode === 'light' ? formData.lightStyle.buttonTexts.fontSize : formData.darkStyle.buttonTexts.fontSize}
             fontType={viewMode === 'light' ? formData.lightStyle.buttonTexts.fortFamily : formData.darkStyle.buttonTexts.fortFamily}

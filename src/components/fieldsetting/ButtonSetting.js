@@ -13,13 +13,6 @@ import SettingIcon from './common/SettingIconPicker';
 import SettingRadioGroup from './common/SettingRadioGroup';
 import SettingDropdown from './common/SettingDropdown';
 
-const iconPositions = [
-  'left',
-  'right',
-  'above',
-  'below',
-];
-
 const buttonFunctions = [
   'formSubmit',
 ];
@@ -28,6 +21,14 @@ const ButtonSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
+  const i18nValues = formStore(state => state.i18nValues);
+
+  const iconPositions = [
+    {name: i18nValues.t("setting_labels.left"), value: 'left'},
+    {name: i18nValues.t("setting_labels.right"), value: 'right'},
+    {name: i18nValues.t("setting_labels.above"), value: 'above'},
+    {name: i18nValues.t("setting_labels.below"), value: 'below'},
+  ];
 
   const onChange = (key, value) => {
     const tempMeta = JSON.parse(JSON.stringify(element.meta));
@@ -43,46 +44,46 @@ const ButtonSetting = ({element, index, onClick}) => {
 
   return (
     <>
-      <SettingHeader title={'Button Settings'} />
+      <SettingHeader title={i18nValues.t("setting_labels.button_settings")} />
       <SettingDropdown
-        title={'Function'}
+        title={i18nValues.t("setting_labels.functions")}
         options={buttonFunctions}
         onChange={onChange}
         keyName={'formSubmit'}
         defaultValue={'formSubmit'}
       />
       <SettingSwitch
-        title={'Round'}
+        title={i18nValues.t("setting_labels.round")}
         value={element.meta.isRound}
         onChange={onChange}
         keyName={'isRound'}
-        description={'Make sure to make round button.'}
+        description={i18nValues.t("setting_labels.round_description")}
       />
       <ColorPicker
         color={element.meta.backgroundColor || colors.colorButton}
-        label={'Background Color'}
+        label={i18nValues.t("setting_labels.background_color")}
         selectColor={e => {
           onChange('backgroundColor', e);
         }}
       />
       <SettingSwitch
-        title={'Visible Text'}
+        title={i18nValues.t("setting_labels.visible_text")}
         value={element.meta.isText}
         onChange={onChange}
         keyName={'isText'}
-        description={'Make sure to show text.'}
+        description={i18nValues.t("setting_labels.visible_text_description")}
       />
       {
         element.meta.isText && (
           <>
             <SettingLabel
-              title={'Text'}
+              title={i18nValues.t("setting_labels.text")}
               label={element.meta.title}
               onChange={onChange}
               keyName={'title'}
             />
             <FontSetting
-              label={'Font'}
+              label={i18nValues.t("setting_labels.font")}
               fontColor={element.meta.color || '#FFFFFF'}
               fontSize={element.meta.fontSize}
               fontType={element.meta.fontFamily}
@@ -92,29 +93,29 @@ const ButtonSetting = ({element, index, onClick}) => {
         )
       }
       <SettingSwitch
-        title={'Visible Icon'}
+        title={i18nValues.t("setting_labels.visible_icon")}
         value={element.meta.isIcon}
         onChange={onChange}
         keyName={'isIcon'}
-        description={'Make sure to show icon.'}
+        description={i18nValues.t("setting_labels.visible_icon_description")}
       />
       {
         element.meta.isIcon && (
           <>
             <SettingIcon
-              title={'Icon'}
+              title={i18nValues.t("setting_labels.icon")}
               onChange={onChange}
               icon={element.meta.icon || 'account'}
               keyName={'icon'}
             />
             <SettingNumber
-              title={'Icon Size'}
+              title={i18nValues.t("setting_labels.icon_size")}
               value={element.meta.iconSize.toString()}
               onChange={(keyName, value) => onChange(keyName, parseInt(value, 10))}
               keyName={'iconSize'}
             />
             <SettingRadioGroup
-              title={'Icon Position'}
+              title={i18nValues.t("setting_labels.icon_position")}
               options={iconPositions}
               value={element.meta.iconPosition}
               onChange={onChange}
@@ -123,7 +124,6 @@ const ButtonSetting = ({element, index, onClick}) => {
           </>
         )
       }
-      
       <SettingDuplicate index={index} element={element} />
     </>
   );

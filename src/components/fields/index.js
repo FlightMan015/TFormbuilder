@@ -156,6 +156,7 @@ const MemoField = ({element, index, onSelect, selected, isLastField}) => {
   const viewMode = formStore(state => state.viewMode);
   const validation = formStore(state => state.validation);
   const formValidation = formStore(state => state.formValidation);
+  const i18nValues = formStore(state => state.i18nValues);
 
   useEffect(() => {
     if (selected)
@@ -201,7 +202,7 @@ const MemoField = ({element, index, onSelect, selected, isLastField}) => {
       onClick={type => onClickAction(type)}
       onSelect={onSelect}
       isLastField={isLastField}
-    />), [JSON.stringify(element), JSON.stringify(index), selected, JSON.stringify(formData.lightStyle), JSON.stringify(formData.darkStyle), viewMode, validation[element.field_name], formValidation]);
+    />), [JSON.stringify(element), JSON.stringify(index), selected, JSON.stringify(formData.lightStyle), JSON.stringify(formData.darkStyle), viewMode, validation[element.field_name], formValidation, i18nValues.locale]);
 };
 
 const styles = StyleSheet.create({

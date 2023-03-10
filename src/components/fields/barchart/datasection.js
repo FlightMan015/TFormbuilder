@@ -12,9 +12,11 @@ import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/Feather';
 import { datatypes } from '../../../constant';
 import {IconButton, useTheme} from 'react-native-paper';
+import formStore from '../../../store/formStore';
 
 const BarChartDataSection = ({data, onChangeData}) => {
   const {colors, fonts} = useTheme();
+  const i18nValues = formStore(state => state.i18nValues);
   const [openLabel, setOpenLabel] = useState(true);
   const [newLabel, setNewLabel] = useState('');
   const [newLabelValid, setNewLabelValid] = useState(false);
@@ -103,7 +105,7 @@ const BarChartDataSection = ({data, onChangeData}) => {
         <Text style={{
           ...styles.text,
           color: fonts.labels.color,
-        }}>X Value</Text>
+        }}>{i18nValues.t("setting_labels.x_value")}</Text>
         <View style={globalStyles.fieldheader}>
           <View style={globalStyles.iconsContainer}>
             <IconButton
@@ -160,7 +162,7 @@ const BarChartDataSection = ({data, onChangeData}) => {
             underlineColorAndroid="transparent"
             onChangeText={onChangeLabel}
             editable
-            placeholder="Please input X value"
+            placeholder={i18nValues.t("placeholders.input_x_value")}
             placeholderTextColor={'grey'}
             value={data.labels[labelStatus.labelIndex] || ''}
           />
@@ -172,14 +174,14 @@ const BarChartDataSection = ({data, onChangeData}) => {
               style={globalStyles.opacityStyle(colors)}
               onPress={onClickAddNewLabel}
               disabled={newLabelValid ? false : true}>
-              <Text style={styles.textBtnStyle}>Add</Text>
+              <Text style={styles.textBtnStyle}>{i18nValues.t("setting_labels.add")}</Text>
             </TouchableOpacity>
             <TextInput
               style={globalStyles.textBoxNewLine(colors, fonts)}
               underlineColorAndroid="transparent"
               onChangeText={onChangeNewLabel}
               editable
-              placeholder="new X value"
+              placeholder={i18nValues.t("placeholders.new_x_value")}
               placeholderTextColor={'grey'}
               value={newLabel}
             />
@@ -190,7 +192,7 @@ const BarChartDataSection = ({data, onChangeData}) => {
         <Text style={{
           ...styles.text,
           color: fonts.labels.color,
-        }}>Y Value</Text>
+        }}>{i18nValues.t("setting_labels.y_value")}</Text>
         <View>
           <TextInput
             keyboardType="numeric"
@@ -198,7 +200,7 @@ const BarChartDataSection = ({data, onChangeData}) => {
             underlineColorAndroid="transparent"
             onChangeText={onChangeY}
             editable
-            placeholder="Please input Y value"
+            placeholder={i18nValues.t("placeholders.input_y_value")}
             placeholderTextColor={'grey'}
             value={
               data.datasets[0].data[labelStatus.labelIndex]

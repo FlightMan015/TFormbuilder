@@ -9,7 +9,7 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import { menuItems, newFormData } from '../constant';
+import { menuItems, newFormData, languages } from '../constant';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PatternBackgroundView from '../common/PatternBackgroundView';
 import SelectDropdown from 'react-native-select-dropdown';
@@ -24,6 +24,9 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
   const visibleDlg = formStore(state => state.visibleDlg);
   const setVisibleDlg = formStore(state => state.setVisibleDlg);
   const setFormValue = formStore(state => state.setFormValue);
+  const i18nValues = formStore(state => state.i18nValues);
+  const seti18nValues = formStore(state => state.seti18nValues);
+  const preview = formStore(state => state.preview);
   const [open, setOpen] = useState(true);
 
   const formNames = formDatas.map((item, index) => {
@@ -84,7 +87,7 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
                           <Icon name={item.icon} size={18} color={'white'} />
                         </View>
                         <View style={styles.fieldText}>
-                          <Text style={styles.fieldNameText}>{item.name}</Text>
+                          <Text style={styles.fieldNameText}>{i18nValues.t(`menu_labels.${item.name}`)}</Text>
                         </View>
                       </View>
                     </MenuOption>
@@ -96,15 +99,54 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
           {/* <Text style={styles.title(fonts)}>{formData.title}</Text> */}
           <View style={{flex: 1, flexDirection: 'row-reverse'}}>
             <View style={styles.subView}>
-              <IconButton
-                icon="cog-outline"
-                size={size.s20}
-                iconColor={fonts.headings.color}
-                onPress={() => {
-                  setSettingType('formSetting');
-                  setOpenSetting(true);
-                }}
-              />
+              <Menu>
+                <MenuTrigger>
+                  <IconButton
+                    icon="earth"
+                    size={size.s20}
+                    iconColor={fonts.headings.color}
+                  />
+                </MenuTrigger>
+                <MenuOptions>
+                  {languages.map((item, index) => {
+                    return (
+                      <MenuOption key={index} style={{padding: 0}} onSelect={() => {
+                        const tempValues = {...i18nValues};
+                        tempValues.locale = item.code;
+                        seti18nValues(tempValues);
+                      }}>
+                        <View
+                          key={index}
+                          style={styles.fieldListItem}>
+                          <View style={styles.fieldIcon}>
+                            {
+                              item.code === i18nValues.locale && (
+                                <Icon name="check" size={18} color={'white'} />
+                              )
+                            }
+                          </View>
+                          <View style={styles.fieldText}>
+                            <Text style={styles.fieldNameText}>{item.name}</Text>
+                          </View>
+                        </View>
+                      </MenuOption>
+                    );
+                  })}
+                </MenuOptions>
+              </Menu>
+              {
+                !preview && (
+                  <IconButton
+                    icon="cog-outline"
+                    size={size.s20}
+                    iconColor={fonts.headings.color}
+                    onPress={() => {
+                      setSettingType('formSetting');
+                      setOpenSetting(true);
+                    }}
+                  />
+                )
+              }
               <Avatar.Image size={40} style={{marginHorizontal: 5}} source={formData.logo ? {uri: formData.logo} : require('../assets/icon_images/user_avatar.png')} />
             </View>
             <SelectDropdown

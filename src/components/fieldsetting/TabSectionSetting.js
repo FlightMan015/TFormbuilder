@@ -14,6 +14,7 @@ const TabSectionSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
+  const i18nValues = formStore(state => state.i18nValues);
 
   const onChange = (key, value) => {
     const tempMeta = JSON.parse(JSON.stringify(element.meta));
@@ -29,17 +30,17 @@ const TabSectionSetting = ({element, index, onClick}) => {
 
   return (
     <>
-      <SettingHeader title={'Tab Section Settings'} />
-      <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
+      <SettingHeader title={i18nValues.t("setting_labels.tab_section_settings")} />
+      <SettingLabel title={i18nValues.t("setting_labels.label")} label={element.meta.title} onChange={onChange} keyName={'title'}/>
       <SettingSwitch
-        title={'Hide label'}
+        title={i18nValues.t("setting_labels.hide_label")}
         value={element.meta.hide_title}
         onChange={onChange}
         keyName={'hide_title'}
-        description={'Make sure to show label.'}
+        description={i18nValues.t("setting_labels.hide_label_description")}
       />
       <View style={styles.settingView}>
-        <Text style={styles.titleLabel}>Tabs</Text>
+        <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.tabs")}</Text>
         {
           element.meta.childs.map((child, childIndex) => {
             return (
@@ -73,7 +74,7 @@ const TabSectionSetting = ({element, index, onClick}) => {
         }
         <TextButton
           style={styles.addCardBtn}
-          text="New tab"
+          text={i18nValues.t("setting_labels.new_tab")}
           textStyle={styles.addCardText}
           onPress={() => {
             setFormData({

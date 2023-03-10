@@ -13,6 +13,7 @@ const BitmapDrawingDlg = () => {
   const {colors, fonts} = useTheme();
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const i18nValues = formStore(state => state.i18nValues);
   const visible = useDrawingStore(state => state.visibleBitmapDrawingDlg);
   const setVisible = useDrawingStore(state => state.setVisibleBitmapDrawingDlg);
   const [newMarker, setNewMarker] = useState({name: '', link: ''});
@@ -31,13 +32,13 @@ const BitmapDrawingDlg = () => {
 
   return (
     <Dialog visible={visible} onDismiss={init} style={{...styles.dialog, backgroundColor: colors.card}}>
-      <Text style={{...fonts.headings, marginBottom: 10}}>New Marker</Text>
+      <Text style={{...fonts.headings, marginBottom: 10}}>{i18nValues.t("setting_labels.new_marker")}</Text>
       <Text style={{...fonts.values, color: fonts.labels.color, marginTop: 10, marginBottom: 5}}>{'Name'}</Text>
       <TextInput
         style={styles.textInput(colors, fonts)}
         underlineColorAndroid="transparent"
         editable
-        placeholder={'Marker name'}
+        placeholder={i18nValues.t("placeholders.marker_name")}
         placeholderTextColor={colors.placeholder}
         value={newMarker.name}
         onChangeText={e => setNewMarker({...newMarker, name: e})}
@@ -47,7 +48,7 @@ const BitmapDrawingDlg = () => {
         style={styles.textInput(colors, fonts)}
         underlineColorAndroid="transparent"
         editable
-        placeholder={'Hyperlink url'}
+        placeholder={i18nValues.t("placeholders.hyper_link_url")}
         placeholderTextColor={colors.placeholder}
         value={newMarker.link}
         onChangeText={e => setNewMarker({...newMarker, link: e})}
@@ -55,16 +56,16 @@ const BitmapDrawingDlg = () => {
       <DrawingPanel svgPosition={getSvgPosition} />
       <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
         <TextButton
-          text='Save'
+          text={i18nValues.t("setting_labels.save")}
           onPress={() => {
             const imageData = useDrawingStore.getState().bitmapImageData;
             const completedPaths = useDrawingStore.getState().completedPaths;
             if (completedPaths.length === 0) {
-              Alert.alert('Warning', 'Please draw a marker.');
+              Alert.alert(i18nValues.t("warnings.warning"), i18nValues.t("warnings.draw_marker"));
             } else if (!newMarker.name) {
-              Alert.alert('Warning', 'Please type name.');
+              Alert.alert(i18nValues.t("warnings.warning"), i18nValues.t("warnings.type_name"));
             } else if (!newMarker.link) {
-              Alert.alert('Warning', 'Please type link url.');
+              Alert.alert(i18nValues.t("warnings.warning"), i18nValues.t("warnings.type_link_uri"));
             } else {
               const paths = [...completedPaths];
               const element = {...imageData.element};
@@ -95,7 +96,7 @@ const BitmapDrawingDlg = () => {
           style={styles.actionButton(colors)}
         />
         <TextButton
-          text='Cancel'
+          text={i18nValues.t("setting_labels.cancel")}
           onPress={init}
           textStyle={styles.actionButtonText}
           style={styles.actionButton(colors)}

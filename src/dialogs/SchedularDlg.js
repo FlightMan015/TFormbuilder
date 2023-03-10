@@ -17,6 +17,7 @@ const SchedularDlg = () => {
   const setFormValue = formStore(state => state.setFormValue);
   const visibleSchedularDlg = formStore(state => state.visibleSchedularDlg);
   const setVisibleSchedularDlg = formStore(state => state.setVisibleSchedularDlg);
+  const i18nValues = formStore(state => state.i18nValues);
   const [newScheduleData, setNewScheduleData] = useState({
     dateString: '',
     name: '',
@@ -235,11 +236,11 @@ const SchedularDlg = () => {
       onDismiss={cancel}
       style={{...styles.dialog, backgroundColor: colors.card}}>
       <Text style={{...fonts.headings, marginBottom: 10}}>
-        {visibleSchedularDlg.type === addTypes.editEvent ? 'Update entry' : 'New entry'}
+        {visibleSchedularDlg.type === addTypes.editEvent ? i18nValues.t("setting_labels.update_entry") : i18nValues.t("setting_labels.new_entry")}
       </Text>
       <View>
         <View style={styles.field}>
-          <Text style={styles.label(fonts)}>Date</Text>
+          <Text style={styles.label(fonts)}>{i18nValues.t("setting_labels.date")}</Text>
           <TextInput
             style={styles.nameInput(colors, fonts)}
             value={new Date(newScheduleData.date).toISOString().substring(0, 10)}
@@ -252,7 +253,7 @@ const SchedularDlg = () => {
         </View>
         <View style={styles.timeContainer}>
           <View style={styles.startTime}>
-            <Text style={styles.label(fonts)}>Start time</Text>
+            <Text style={styles.label(fonts)}>{i18nValues.t("setting_labels.start_time")}</Text>
             <TextInput
               style={styles.nameInput(colors, fonts)}
               onPressIn={() => {
@@ -276,7 +277,7 @@ const SchedularDlg = () => {
             />
           </View>
           <View style={styles.startTime}>
-            <Text style={styles.label(fonts)}>End time</Text>
+            <Text style={styles.label(fonts)}>{i18nValues.t("setting_labels.end_time")}</Text>
             <TextInput
               style={styles.nameInput(colors, fonts)}
               onPressIn={() => {
@@ -301,7 +302,7 @@ const SchedularDlg = () => {
           </View>
         </View>
         <View style={styles.field}>
-          <Text style={styles.label(fonts)}>Full Name</Text>
+          <Text style={styles.label(fonts)}>{i18nValues.t("setting_labels.full_name")}</Text>
           <TextInput
             style={styles.nameInput(colors, fonts)}
             placeholder="Enter full name"
@@ -311,7 +312,7 @@ const SchedularDlg = () => {
           />
         </View>
         <View style={styles.field}>
-          <Text style={styles.label(fonts)}>Title</Text>
+          <Text style={styles.label(fonts)}>{i18nValues.t("setting_labels.title")}</Text>
           <TextInput
             style={styles.nameInput(colors, fonts)}
             placeholder="Enter title"
@@ -321,7 +322,7 @@ const SchedularDlg = () => {
           />
         </View>
         <View style={styles.field}>
-          <Text style={styles.label(fonts)}>Description</Text>
+          <Text style={styles.label(fonts)}>{i18nValues.t("setting_labels.description")}</Text>
           <TextInput
             style={styles.nameInput(colors, fonts)}
             placeholder="Enter description"
@@ -355,7 +356,7 @@ const SchedularDlg = () => {
       </View>
       <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
         <TextButton
-          text={visibleSchedularDlg.type === addTypes.editEvent ? 'Update' : 'Add'}
+          text={visibleSchedularDlg.type === addTypes.editEvent ? i18nValues.t("setting_labels.update") : i18nValues.t("setting_labels.add")}
           onPress={() => addSchedule()}
           textStyle={styles.actionButtonText}
           style={styles.actionButton(colors)}
@@ -363,7 +364,7 @@ const SchedularDlg = () => {
         {
           visibleSchedularDlg.type === addTypes.editEvent && (
             <TextButton
-              text='Remove'
+              text={i18nValues.t("setting_labels.remove")}
               onPress={deleteSchedule}
               textStyle={styles.actionButtonText}
               style={styles.actionButton(colors)}
@@ -371,7 +372,7 @@ const SchedularDlg = () => {
           )
         }
         <TextButton
-          text='Cancel'
+          text={i18nValues.t("setting_labels.cancel")}
           onPress={cancel}
           textStyle={styles.actionButtonText}
           style={styles.actionButton(colors)}

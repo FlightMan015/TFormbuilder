@@ -45,44 +45,44 @@ const SchedularSetting = ({element, index, onClick}) => {
 
   return (
     <>
-      <SettingHeader title={'Schedular Settings'} />
-      <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
+      <SettingHeader title={i18nValues.t("setting_labels.schedular_settings")} />
+      <SettingLabel title={i18nValues.t("setting_labels.label")} label={element.meta.title} onChange={onChange} keyName={'title'}/>
       <SettingSwitch
-        title={'Hide label'}
+        title={i18nValues.t("setting_labels.hide_label")}
         value={element.meta.hide_title}
         onChange={onChange}
         keyName={'hide_title'}
-        description={'Make sure to show label.'}
+        description={i18nValues.t("setting_labels.hide_label_description")}
       />
       <SettingSwitch
-        title={'Is Mandatory'}
+        title={i18nValues.t("setting_labels.is_mandatory")}
         value={element.is_mandatory}
         onChange={onChange}
         keyName={'is_mandatory'}
       />
       <FontSetting
-        label={'Month Font'}
+        label={i18nValues.t("setting_labels.month_text_font")}
         fontColor={element.meta.monthFont.color}
         fontSize={element.meta.monthFont.fontSize}
         fontType={element.meta.monthFont.fontFamily}
         onChange={(type, e) => {onChangeFont('monthFont', type, e);}}
       />
       <FontSetting
-        label={'Date Font'}
+        label={i18nValues.t("setting_labels.date_text_font")}
         fontColor={element.meta.dateFont.color}
         fontSize={element.meta.dateFont.fontSize}
         fontType={element.meta.dateFont.fontFamily}
         onChange={(type, e) => {onChangeFont('dateFont', type, e);}}
       />
       <FontSetting
-        label={'Day Font'}
+        label={i18nValues.t("setting_labels.day_text_font")}
         fontColor={element.meta.dayFont.color}
         fontSize={element.meta.dayFont.fontSize}
         fontType={element.meta.dayFont.fontFamily}
         onChange={(type, e) => {onChangeFont('dayFont', type, e);}}
       />
       <FontSetting
-        label={'Schedule Text Font'}
+        label={i18nValues.t("setting_labels.schedule_text_font")}
         fontColor={element.meta.scheduleFont.color}
         fontSize={element.meta.scheduleFont.fontSize}
         fontType={element.meta.scheduleFont.fontFamily}

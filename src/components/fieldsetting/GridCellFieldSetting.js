@@ -5,6 +5,7 @@ import {color} from '../../theme/styles';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/Feather';
 import {componentName, newFieldData} from '../../constant';
+import formStore from '../../store/formStore';
 
 const types = {
   title: 'title',
@@ -29,6 +30,7 @@ const GridCellFieldSetting = props => {
   const {colors} = useTheme();
   const [newCellField, setNewCellField] = useState({name: '', type: 'image'});
   const [open, setOpen] = useState(true);
+  const i18nValues = formStore(state => state.i18nValues);
 
   const tableFieldItem = ({item, index, isFirst, isLast}) => {
     return (
@@ -57,7 +59,7 @@ const GridCellFieldSetting = props => {
 									color: '#FFFFFF',
 									borderColor: color.GREY,
 								}}>
-								TextBox
+								{i18nValues.t("setting_labels.textbox")}
 							</Text>
 						)
 					}
@@ -70,7 +72,7 @@ const GridCellFieldSetting = props => {
 									color: '#FFFFFF',
 									borderColor: color.GREY,
 								}}>
-								Date
+								{i18nValues.t("setting_labels.date")}
 							</Text>
 						)
 					}
@@ -83,7 +85,7 @@ const GridCellFieldSetting = props => {
 									color: '#FFFFFF',
 									borderColor: color.GREY,
 								}}>
-								Time
+								{i18nValues.t("setting_labels.time")}
 							</Text>
 						)
 					}
@@ -96,7 +98,7 @@ const GridCellFieldSetting = props => {
 									color: '#FFFFFF',
 									borderColor: color.GREY,
 								}}>
-								DropDown
+								{i18nValues.t("setting_labels.dropdown")}
 							</Text>
 						)
 					}
@@ -109,7 +111,7 @@ const GridCellFieldSetting = props => {
 									color: '#FFFFFF',
 									borderColor: color.GREY,
 								}}>
-								Image
+								{i18nValues.t("setting_labels.image")}
 							</Text>
 						)
 					}
@@ -180,12 +182,12 @@ const GridCellFieldSetting = props => {
 
   return (
 		<View style={styles.settingView}>
-			<Text style={styles.titleLabel}>Cell Fields</Text>
+			<Text style={styles.titleLabel}>{i18nValues.t("setting_labels.cell_fields")}</Text>
 			<View style={styles.tableField}>
-				<Text style={styles.tableFieldNo}>No</Text>
-				<Text style={styles.tableFieldName}>Name</Text>
-				<Text style={styles.tableFieldType}>Type</Text>
-				<Text style={styles.tableFieldAction}>Action</Text>
+				<Text style={styles.tableFieldNo}>{i18nValues.t("setting_labels.no")}</Text>
+				<Text style={styles.tableFieldName}>{i18nValues.t("setting_labels.name")}</Text>
+				<Text style={styles.tableFieldType}>{i18nValues.t("setting_labels.type")}</Text>
+				<Text style={styles.tableFieldAction}>{i18nValues.t("setting_labels.action")}</Text>
 			</View>
 			{
 				fields.map((field, i) =>{
@@ -227,7 +229,7 @@ const GridCellFieldSetting = props => {
 				<TextInput
 					style={{...styles.newTableFieldName}}
 					underlineColorAndroid="transparent"
-					placeholder="...new field name"
+					placeholder={i18nValues.t("setting_labels.new_field_name")}
 					placeholderTextColor={color.GREY}
 					onChangeText={e => {
 						setNewCellField({
@@ -258,7 +260,7 @@ const GridCellFieldSetting = props => {
 					buttonTextStyle={{color: '#FFFFFF', fontSize: 14}}
 					selectedRowStyle={{backgroundColor: '#bbf'}}
 					selectedRowTextStyle={{color: colors.border}}
-					defaultButtonText="Field Type"
+					defaultButtonText={i18nValues.t("setting_labels.field_type")}
 					onFocus={() => setOpen(false)}
 					onBlur={() => setOpen(true)}
 					renderDropdownIcon={

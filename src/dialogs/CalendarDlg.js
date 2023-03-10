@@ -28,6 +28,7 @@ const CalendarDlg = () => {
   const [timeType, setTimeType] = useState('');
   const visibleCalendarDlg = formStore(state => state.visibleCalendarDlg);
   const setVisibleCalendarDlg = formStore(state => state.setVisibleCalendarDlg);
+  const i18nValues = formStore(state => state.i18nValues);
 
   useEffect(() => {
     if (visibleCalendarDlg.eventType === addTypes.editEvent) {
@@ -96,11 +97,11 @@ const CalendarDlg = () => {
   const addSchedule = () => {
     let warning = '';
     if (newScheduleData.name === '') {
-      warning = 'Please input the name.';
+      warning = i18nValues.t("warnings.input_name");
     } else if (newScheduleData.title === '') {
-      warning = 'Please input the title.';
+      warning = i18nValues.t("warnings.input_title");
     } else if (newScheduleData.description === '') {
-      warning = 'Please input the content.';
+      warning = i18nValues.t("warnings.input_content");
     } else if (newScheduleData.startTime && newScheduleData.endTime) {
       if (
         (typeof newScheduleData.startTime === 'string' &&
@@ -116,13 +117,13 @@ const CalendarDlg = () => {
       }
     }
     if (warning !== '') {
-      Alert.alert('Warning', warning, [
+      Alert.alert(i18nValues.t("warnings.warning"), warning, [
         {
-          text: 'Cancel',
+          text: i18nValues.t("setting_labels.cancel"),
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
+        {text: i18nValues.t("setting_labels.ok"), onPress: () => console.log('OK Pressed')},
       ]);
     } else {
       cancel();
@@ -187,12 +188,12 @@ const CalendarDlg = () => {
       onDismiss={cancel}
       style={{...styles.dialog, backgroundColor: colors.card}}>
       <Text style={{...fonts.headings, marginVertical: 15}}>
-        {visibleCalendarDlg.eventType === addTypes.editEvent ? 'Edit entry' : 'New entry'}
+        {visibleCalendarDlg.eventType === addTypes.editEvent ? i18nValues.t("setting_labels.edit_entry") : i18nValues.t("setting_labels.new_entry")}
       </Text>
       <View>
         <View style={styles.timeContainer}>
           <View style={styles.startTime}>
-            <Text style={styles.label(fonts)}>Start time</Text>
+            <Text style={styles.label(fonts)}>{i18nValues.t("setting_labels.start_time")}</Text>
             <TextInput
               style={styles.nameInput(colors, fonts)}
               onPressIn={() => {
@@ -216,7 +217,7 @@ const CalendarDlg = () => {
             />
           </View>
           <View style={styles.startTime}>
-            <Text style={styles.label(fonts)}>End time</Text>
+            <Text style={styles.label(fonts)}>{i18nValues.t("setting_labels.end_time")}</Text>
             <TextInput
               style={styles.nameInput(colors, fonts)}
               onPressIn={() => {
@@ -251,30 +252,30 @@ const CalendarDlg = () => {
           )}
         </View>
         <View style={styles.field}>
-          <Text style={styles.label(fonts)}>Full Name</Text>
+          <Text style={styles.label(fonts)}>{i18nValues.t("setting_labels.full_name")}</Text>
           <TextInput
             style={styles.nameInput(colors, fonts)}
-            placeholder="Enter full name"
+            placeholder={i18nValues.t("placeholders.enter_full_name")}
             placeholderTextColor={colors.placeholder}
             onChangeText={e => onChangeNewData(e, 'name')}
             value={newScheduleData.name}
           />
         </View>
         <View style={styles.field}>
-          <Text style={styles.label(fonts)}>Title</Text>
+          <Text style={styles.label(fonts)}>{i18nValues.t("setting_labels.title")}</Text>
           <TextInput
             style={styles.nameInput(colors, fonts)}
-            placeholder="Enter title"
+            placeholder={i18nValues.t("placeholders.enter_title")}
             placeholderTextColor={colors.placeholder}
             onChangeText={e => onChangeNewData(e, 'title')}
             value={newScheduleData.title}
           />
         </View>
         <View style={styles.field}>
-          <Text style={styles.label(fonts)}>Description</Text>
+          <Text style={styles.label(fonts)}>{i18nValues.t("setting_labels.description")}</Text>
           <TextInput
             style={styles.nameInput(colors, fonts)}
-            placeholder="Enter description"
+            placeholder={i18nValues.t("placeholders.enter_description")}
             placeholderTextColor={colors.placeholder}
             multiline={true}
             numberOfLines={2}
@@ -285,13 +286,13 @@ const CalendarDlg = () => {
       </View>
       <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 15}}>
         <TextButton
-          text={visibleCalendarDlg.eventType === addTypes.editEvent ? 'Update' : 'Add'}
+          text={visibleCalendarDlg.eventType === addTypes.editEvent ? i18nValues.t("setting_labels.update") : i18nValues.t("setting_labels.add")}
           onPress={() => addSchedule()}
           textStyle={styles.actionButtonText}
           style={styles.actionButton(colors)}
         />
         <TextButton
-          text='Cancel'
+          text={i18nValues.t("setting_labels.cancel")}
           onPress={cancel}
           textStyle={styles.actionButtonText}
           style={styles.actionButton(colors)}

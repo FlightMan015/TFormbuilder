@@ -55,6 +55,7 @@ const buttonStyles = [
 const CardListSetting = props => {
   const {element, index, onClick} = props;  
   const {colors, size} = useTheme();
+  const i18nValues = formStore(state => state.i18nValues);
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
   const updateFormData = formStore(state => state.updateFormData);
@@ -99,7 +100,7 @@ const CardListSetting = props => {
         settingType==='slider' && (
           <>
             <View style={styles.menuHeader}>
-              <Text style={styles.menuTitle}>Card Slider Settings</Text>
+              <Text style={styles.menuTitle}>{i18nValues.t("setting_labels.card_slider_settings")}</Text>
               <IconButton
                 icon="close"
                 size={20}
@@ -112,13 +113,13 @@ const CardListSetting = props => {
             <View style={styles.settingTab}>
               <TextButton
                 style={styles.tab(selectedTab === 'general')}
-                text="GENERAL"
+                text={i18nValues.t("setting_labels.general")}
                 textStyle={styles.tabText(selectedTab === 'general')}
                 onPress={() => setSelectedTab('general')}
               />
               <TextButton
                 style={styles.tab(selectedTab === 'style')}
-                text="STYLE"
+                text={i18nValues.t("setting_labels.style")}
                 textStyle={styles.tabText(selectedTab === 'style')}
                 onPress={() => setSelectedTab('style')}
               />
@@ -126,46 +127,46 @@ const CardListSetting = props => {
             {selectedTab === 'general' && (
               <>
                 <SettingLabel
-                  title={'Card List Title'}
+                  title={i18nValues.t("setting_labels.card_list_title")}
                   label={element.meta.title}
                   onChange={onChange}
                   keyName={'title'}
                 />
                 <SettingLabel
-                  title={'Button Text'}
+                  title={i18nValues.t("setting_labels.button_text")}
                   label={element.meta.buttonText}
                   onChange={onChange}
                   keyName={'buttonText'}
                 />
                 <SettingSwitch
-                  title={'Hide Label'}
+                  title={i18nValues.t("setting_labels.hide_label")}
                   value={element.meta.hide_title}
                   onChange={onChange}
                   keyName={'hide_title'}
-                  description={'Make sure to show label.'}
+                  description={i18nValues.t("setting_labels.hide_label_description")}
                 />
                 <SettingSwitch
-                  title={'Is Mandatory'}
+                  title={i18nValues.t("setting_labels.is_mandatory")}
                   value={element.is_mandatory}
                   onChange={onChange}
                   keyName={'is_mandatory'}
                 />
                 <SettingSwitch
-                  title={'Auto Play'}
+                  title={i18nValues.t("setting_labels.auto_play")}
                   value={element.meta.autoplay}
                   onChange={onChange}
                   keyName={'autoplay'}
-                  description={'Make sure to slide automatically.'}
+                  description={i18nValues.t("setting_labels.auto_play_description")}
                 />
                 <SettingSwitch
-                  title={'Visible Page Dots'}
+                  title={i18nValues.t("setting_labels.visible_page_dots")}
                   value={element.meta.visibleDots}
                   onChange={onChange}
                   keyName={'visibleDots'}
-                  description={'Make sure to show page dots.'}
+                  description={i18nValues.t("setting_labels.visible_page_dots_description")}
                 />
                 <View style={styles.settingView}>
-                  <Text style={styles.titleLabel}>Card Template</Text>
+                  <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.card_template")}</Text>
                   <View style={styles.cardStyle}>
                     <IconButton
                       icon="image-outline"
@@ -240,7 +241,7 @@ const CardListSetting = props => {
                   </ScrollView>
                   <TextButton
                     style={styles.addCardBtn}
-                    text="New card"
+                    text={i18nValues.t("setting_labels.new_card")}
                     textStyle={styles.addCardText}
                     onPress={() => {
                       const tempElement = JSON.parse(JSON.stringify(element));
@@ -250,7 +251,7 @@ const CardListSetting = props => {
                   />
                 </View>
                 <View style={styles.settingView}>
-                  <Text style={styles.titleLabel}>Duplicate Element</Text>
+                  <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.duplicate_element")}</Text>
                   <IconButton
                     icon="content-duplicate"
                     size={35}
@@ -259,7 +260,7 @@ const CardListSetting = props => {
                     onPress={() => {}}
                   />
                   <Text style={styles.description1}>
-                    Clone selected elements with all saved properties.
+                  {i18nValues.t("setting_labels.duplicate_element_description")}
                   </Text>
                 </View>
               </>
@@ -274,11 +275,11 @@ const CardListSetting = props => {
                   }}
                 /> */}
                 <View style={styles.settingView}>
-                  <Text style={styles.titleLabel}>Card Corner</Text>
+                  <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.card_corner")}</Text>
                   <View style={styles.settingTab}>
                     <TextButton
                       style={styles.textButton(element.meta.cardCorner === 'default')}
-                      text="DEFAULT"
+                      text={i18nValues.t("setting_labels.default")}
                       textStyle={styles.textButtonText('#FFFFFF')}
                       onPress={() => {
                         onChange('cardCorner', 'default');
@@ -286,7 +287,7 @@ const CardListSetting = props => {
                     />
                     <TextButton
                       style={styles.textButton(element.meta.cardCorner === 'rounded')}
-                      text="ROUNDED"
+                      text={i18nValues.t("setting_labels.rounded")}
                       textStyle={styles.textButtonText('#FFFFFF')}
                       onPress={() => {
                         onChange('cardCorner', 'rounded');
@@ -295,11 +296,11 @@ const CardListSetting = props => {
                   </View>
                 </View>
                 <View style={styles.settingView}>
-                  <Text style={styles.titleLabel}>Card Width</Text>
+                  <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.card_width")}</Text>
                   <View style={styles.settingTab}>
                     <TextButton
                       style={styles.textButton(element.meta.cardWidth === 'auto')}
-                      text="AUTO"
+                      text={i18nValues.t("setting_labels.auto")}
                       textStyle={styles.textButtonText('#FFFFFF')}
                       onPress={() => {
                         onChange('cardWidth', 'auto');
@@ -307,7 +308,7 @@ const CardListSetting = props => {
                     />
                     <TextButton
                       style={styles.textButton(element.meta.cardWidth === 'full')}
-                      text="FULL"
+                      text={i18nValues.t("setting_labels.full")}
                       textStyle={styles.textButtonText('#FFFFFF')}
                       onPress={() => {
                         onChange('cardWidth', 'full');
@@ -316,36 +317,36 @@ const CardListSetting = props => {
                   </View>
                 </View>
                 <FontSetting
-                  label={'Title Font'}
+                  label={i18nValues.t("setting_labels.title_font")}
                   fontColor={element.meta.titleFont.color}
                   fontSize={element.meta.titleFont.fontSize}
                   fontType={element.meta.titleFont.fontFamily}
                   onChange={(type, e) => {onChangeFont('titleFont', type, e);}}
                 />
                 <FontSetting
-                  label={'Description Font'}
+                  label={i18nValues.t("setting_labels.description_font")}
                   fontColor={element.meta.descriptionFont.color}
                   fontSize={element.meta.descriptionFont.fontSize}
                   fontType={element.meta.descriptionFont.fontFamily}
                   onChange={(type, e) => {onChangeFont('descriptionFont', type, e);}}
                 />
                 <FontSetting
-                  label={'Button Text Font'}
+                  label={i18nValues.t("setting_labels.button_text_font")}
                   fontColor={element.meta.buttonTextFont.color}
                   fontSize={element.meta.buttonTextFont.fontSize}
                   fontType={element.meta.buttonTextFont.fontFamily}
                   onChange={(type, e) => {onChangeFont('buttonTextFont', type, e);}}
                 />
                 <SettingSwitch
-                  title={'Gradient Background'}
+                  title={i18nValues.t("setting_labels.gradient_background")}
                   value={element.meta.isGradientBackground}
                   onChange={onChange}
                   keyName={'isGradientBackground'}
-                  description={'Make sure to show gradient.'}
+                  description={i18nValues.t("setting_labels.gradient_background_description")}
                 />
                 <ColorPicker
                   color={element.meta.buttonBackgroundStartColor}
-                  label={element.meta.isGradientBackground ? 'Button Background Start Color' : 'Button Background Color'}
+                  label={element.meta.isGradientBackground ? i18nValues.t("setting_labels.card_list_button_background_start_color") : i18nValues.t("setting_labels.card_list_button_background_color")}
                   selectColor={e => {
                     if (!element.meta.isGradientBackground) {
                       onChange('buttonBackgroundStartColor', e);
@@ -359,7 +360,7 @@ const CardListSetting = props => {
                   element.meta.isGradientBackground && (
                     <ColorPicker
                       color={element.meta.buttonBackgroundEndColor}
-                      label={'Button Background End Color'}
+                      label={i18nValues.t("setting_labels.card_list_button_background_end_color")}
                       selectColor={e => {
                         onChange('buttonBackgroundEndColor', e);
                       }}
@@ -376,7 +377,7 @@ const CardListSetting = props => {
         settingType==='card' && (
           <>
             <View style={styles.menuHeader}>
-              <Text style={styles.menuTitle}>Card Settings</Text>
+              <Text style={styles.menuTitle}>{i18nValues.t("setting_labels.card_setting")}</Text>
               <IconButton
                 icon="close"
                 size={20}
@@ -390,7 +391,7 @@ const CardListSetting = props => {
               cardData.current >= 0 && (
                 <>
                   <View style={styles.settingView}>
-                    <Text style={styles.titleLabel}>Card Title</Text>
+                    <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.card_title")}</Text>
                     <TextInput
                       style={styles.title}
                       value={element.meta.cardDatas[cardData.current].title}
@@ -402,7 +403,7 @@ const CardListSetting = props => {
                     />
                   </View>
                   <View style={styles.settingView}>
-                    <Text style={styles.titleLabel}>Card SubTitle</Text>
+                    <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.card_subtitle")}</Text>
                     <TextInput
                       style={styles.title}
                       value={element.meta.cardDatas[cardData.current].subTitle}
@@ -414,7 +415,7 @@ const CardListSetting = props => {
                     />
                   </View>
                   <View style={styles.settingView}>
-                    <Text style={styles.titleLabel}>Card Description</Text>
+                    <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.card_description")}</Text>
                     <TextInput
                       style={styles.title}
                       value={element.meta.cardDatas[cardData.current].description}
@@ -426,7 +427,7 @@ const CardListSetting = props => {
                     />
                   </View>
                   <View style={styles.settingView}>
-                    <Text style={styles.titleLabel}>Hyper Link</Text>
+                    <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.hyper_link")}</Text>
                     <TextInput
                       style={styles.title}
                       value={element.meta.cardDatas[cardData.current].hyperlink}
@@ -438,7 +439,7 @@ const CardListSetting = props => {
                     />
                   </View>
                   <View style={styles.settingView}>
-                    <Text style={styles.titleLabel}>Image</Text>
+                    <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.image")}</Text>
                     <View style={{width: '100%', height: 170, justifyContent: 'center', backgroundColor: '#626E81', borderWidth: 1, borderColor: '#303339'}}>
                       {element.meta.cardDatas[cardData.current].image && (
                         <ResizedImage uri={element.meta.cardDatas[cardData.current].image} maxWidth={250} maxHeight={168} />
@@ -452,7 +453,7 @@ const CardListSetting = props => {
                     </View>
                     <TextButton
                       style={styles.addCardBtn}
-                      text="Select Image"
+                      text={i18nValues.t("setting_labels.select_image")}
                       textStyle={styles.addCardText}
                       onPress={() => {
                         DocumentPicker.pick({

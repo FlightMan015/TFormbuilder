@@ -19,6 +19,7 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
 
   const {colors, fonts} = useTheme();
   const preview = formStore(state => state.preview);
+  const i18nValues = formStore(state => state.i18nValues);
   const [openLine, setOpenLine] = useState(true);
   const [openLabel, setOpenLabel] = useState(true);
   const [lineStatus, setLineStatus] = useState({
@@ -256,7 +257,7 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
   return (
     <View style={{...styles.sectionContainer, borderColor: colors.border}}>
       <View>
-        <Text style={{...styles.text(fonts)}}>Series</Text>
+        <Text style={{...styles.text(fonts)}}>{i18nValues.t("setting_labels.series")}</Text>
         <View style={globalStyles.fieldheader}>
           <View style={globalStyles.iconsContainer}>
             <IconButton
@@ -319,14 +320,14 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
                 onPress={onClickChangeLine}
                 // disabled={newLineValid ? false : true}
               >
-                <Text style={styles.textBtnStyle}>Change</Text>
+                <Text style={styles.textBtnStyle}>{i18nValues.t("setting_labels.change")}</Text>
               </TouchableOpacity>
               <TextInput
                 style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeLine}
                 editable
-                placeholder="Series name"
+                placeholder={i18nValues.t("placeholders.series_name")}
                 placeholderTextColor={'grey'}
                 value={changeLine || ''}
                 // showSoftInputOnFocus={false}
@@ -380,7 +381,7 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
             <View
               flexDirection="row"
               style={{marginHorizontal: 10, justifyContent: 'flex-end'}}>
-              <Text style={globalStyles.label}>{'RGB color'}</Text>
+              <Text style={globalStyles.label}>{i18nValues.t("setting_labels.rgb_color")}</Text>
               <Switch
                 color={colors.colorButton}
                 value={isRGBcolor}
@@ -397,14 +398,14 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
                 style={globalStyles.opacityStyle(colors)}
                 onPress={onClickAddNewLine}
                 disabled={newLineValid ? false : true}>
-                <Text style={styles.textBtnStyle}>Add</Text>
+                <Text style={styles.textBtnStyle}>{i18nValues.t("setting_labels.add")}</Text>
               </TouchableOpacity>
               <TextInput
                 style={globalStyles.textBoxNewLine(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={onChangeNewLine}
                 editable
-                placeholder="new series name"
+                placeholder={i18nValues.t("placeholders.new_series_name")}
                 placeholderTextColor={'grey'}
                 value={newLine}
                 // showSoftInputOnFocus={false}
@@ -458,7 +459,7 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
             <View
               flexDirection="row"
               style={{marginHorizontal: 10, justifyContent: 'flex-end'}}>
-              <Text style={globalStyles.label}>{'RGB color'}</Text>
+              <Text style={globalStyles.label}>{i18nValues.t("setting_labels.rgb_color")}</Text>
               <Switch
                 color={colors.colorButton}
                 value={isRGBcolor}
@@ -469,7 +470,7 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
         )}
       </View>
       <View>
-        <Text style={{...styles.text(fonts)}}>X Value</Text>
+        <Text style={{...styles.text(fonts)}}>{i18nValues.t("setting_labels.x_value")}</Text>
         <View style={globalStyles.fieldheader}>
           <View style={globalStyles.iconsContainer}>
             <IconButton
@@ -518,7 +519,7 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
             dropdownIconPosition="right"
             onFocus={e => setOpenLabel(false)}
             onBlur={e => setOpenLabel(true)}
-            defaultButtonText="Select X value - Label"
+            defaultButtonText={i18nValues.t("setting_labels.select_x_value")}
             defaultValueByIndex={labelStatus.labelIndex}
             // search={true}
           />
@@ -531,7 +532,7 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
             underlineColorAndroid="transparent"
             onChangeText={onChangeLabel}
             editable
-            placeholder="Please input X value"
+            placeholder={i18nValues.t("placeholders.input_x_value")}
             value={data.labels[labelStatus.labelIndex] || ''}
             // showSoftInputOnFocus={false}
           />
@@ -543,14 +544,14 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
               style={globalStyles.opacityStyle(colors)}
               onPress={onClickAddNewLabel}
               disabled={newLabelValid ? false : true}>
-              <Text style={styles.textBtnStyle}>Add</Text>
+              <Text style={styles.textBtnStyle}>{i18nValues.t("setting_labels.add")}</Text>
             </TouchableOpacity>
             <TextInput
               style={globalStyles.textBoxNewLine(colors, fonts)}
               underlineColorAndroid="transparent"
               onChangeText={onChangeNewLabel}
               editable
-              placeholder="new X value"
+              placeholder={i18nValues.t("placeholders.new_x_value")}
               placeholderTextColor={'grey'}
               value={newLabel}
               // showSoftInputOnFocus={false}
@@ -559,7 +560,7 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
         )}
       </View>
       <View>
-        <Text style={{...styles.text(fonts)}}>Y Value</Text>
+        <Text style={{...styles.text(fonts)}}>{i18nValues.t("setting_labels.y_value")}</Text>
         <View>
           <TextInput
             keyboardType="numeric"
@@ -569,7 +570,7 @@ const LineChartDataSection = ({data, onChangeData, role}) => {
             underlineColorAndroid="transparent"
             onChangeText={onChangeY}
             editable={('editAxes' in role && role.editAxes) || preview}
-            placeholder="Please input Y value"
+            placeholder={i18nValues.t("placeholders.input_y_value")}
             value={
               data.datasets[lineStatus.lineIndex]?.data[
                 labelStatus.labelIndex

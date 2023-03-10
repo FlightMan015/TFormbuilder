@@ -8,7 +8,7 @@
 
 import React, { useEffect } from 'react';
 import type {Node} from 'react';
-import {useColorScheme, PermissionsAndroid, Platform} from 'react-native';
+import {useColorScheme, PermissionsAndroid, Platform, StatusBar, SafeAreaView} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import FieldMenu from './src/components/FieldMenu';
 import Header from './src/components/Header';
@@ -75,7 +75,6 @@ const App: () => Node = () => {
   }
 
   const saveData = async (data) => {
-    console.log('form name--------------------', data.name);
     var path = `${RNFS.DocumentDirectoryPath}/TForm`;
     RNFS.mkdir(path);
     path += '/form_data.json';

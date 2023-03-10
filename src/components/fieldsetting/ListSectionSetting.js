@@ -12,6 +12,7 @@ const ListSectionSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
+  const i18nValues = formStore(state => state.i18nValues);
 
   const onChange = (key, value) => {
     const tempMeta = JSON.parse(JSON.stringify(element.meta));
@@ -27,22 +28,22 @@ const ListSectionSetting = ({element, index, onClick}) => {
 
   return (
     <>
-      <SettingHeader title={'List Section Settings'} />
+      <SettingHeader title={i18nValues.t("setting_labels.list_section_settings")} />
       <SettingSwitch
-        title={'Hide label'}
+        title={i18nValues.t("setting_labels.hide_label")}
         value={element.meta.hide_title}
         onChange={onChange}
         keyName={'hide_title'}
-        description={'Make sure to show label.'}
+        description={i18nValues.t("setting_labels.hide_label_description")}
       />
-      <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
+      <SettingLabel title={i18nValues.t("setting_labels.label")} label={element.meta.title} onChange={onChange} keyName={'title'}/>
       <GridCellFieldSetting fields={element.meta.cellFields} changeData={onChange} />
       <SettingSwitch
-        title={'Vertical alignment'}
+        title={i18nValues.t("setting_labels.vertical_alignment")}
         value={element.meta.listVerticalAlign}
         onChange={onChange}
         keyName={'listVerticalAlign'}
-        description={'Make sure to align vertically.'}
+        description={i18nValues.t("setting_labels.vertical_alignment_description")}
       />
       <SettingDuplicate index={index} element={element} />
     </>

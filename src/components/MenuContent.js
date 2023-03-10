@@ -15,6 +15,7 @@ const MenuContent = () => {
   const indexToAdd = formStore(state => state.indexToAdd);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const i18nValues = formStore(state => state.i18nValues);
 
   const selectMenu = component => {
     const field_name = newFieldData[component].field_name + '-' + Date.now() + '-0';
@@ -50,7 +51,7 @@ const MenuContent = () => {
   return useMemo(() => (
     <View style={styles.menuContainer}>
       <View style={styles.menuHeader}>
-        <Text style={styles.menuTitle}>Form Fields</Text>
+        <Text style={styles.menuTitle}>{i18nValues.t("setting_labels.form_fields")}</Text>
         <IconButton
           icon="close"
           size={20}
@@ -63,7 +64,7 @@ const MenuContent = () => {
           if (!('groupIndex' in indexToAdd) || !('groupIndex' in indexToAdd && index == 0)) {
             return (
               <View key={index}>
-                <Text style={styles.subHeader}>{item.name}</Text>
+                <Text style={styles.subHeader}>{i18nValues.t(`field_labels.${item.name}`)}</Text>
                 {item.items.map((subItem, subIndex) => {
                   return (
                     <TouchableOpacity
@@ -76,7 +77,7 @@ const MenuContent = () => {
                         <Icon name={subItem.icon} size={18} color={'white'} />
                       </View>
                       <View style={styles.fieldText}>
-                        <Text style={styles.fieldNameText}>{subItem.name}</Text>
+                        <Text style={styles.fieldNameText}>{i18nValues.t(`field_labels.${subItem.name}`)}</Text>
                       </View>
                     </TouchableOpacity>
                   );
@@ -87,7 +88,7 @@ const MenuContent = () => {
         })}
       </ScrollView>
     </View>
-  ), [JSON.stringify(indexToAdd), JSON.stringify(formData)]);
+  ), [JSON.stringify(indexToAdd), JSON.stringify(formData), i18nValues.locale]);
 };
 
 const styles = StyleSheet.create({

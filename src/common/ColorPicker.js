@@ -4,6 +4,7 @@ import { useTheme } from 'react-native-paper';
 import TextButton from './TextButton';
 import { ColorPicker } from 'react-native-color-picker';
 import { invertColor } from '../utils';
+import formStore from '../store/formStore';
 
 const colorStyles = [
   '#0A1551',
@@ -24,6 +25,7 @@ const colorStyles = [
 
 const CustomColorPicker = ({color, label, selectColor}) => {
   const {colors} = useTheme();
+  const i18nValues = formStore(state => state.i18nValues);
   const [visibleColors, setVisibleColors] = useState(false);
   const [colorTab, setColorTab] = useState('styles');
   const [visibleColorPicker, setVisibleColorPicker] = useState(false);
@@ -32,7 +34,7 @@ const CustomColorPicker = ({color, label, selectColor}) => {
       <Text style={styles.titleLabel}>{label}</Text>
       <TextButton
         style={styles.background(color)}
-        text="CHANGE COLOR"
+        text={i18nValues.t("setting_labels.change_color")}
         textStyle={styles.textButtonText(
           invertColor(color),
         )}
@@ -48,7 +50,7 @@ const CustomColorPicker = ({color, label, selectColor}) => {
                 ...styles.colortab(colorTab === 'styles'),
                 borderTopLeftRadius: 7,
               }}
-              text="COLOR STYLES"
+              text={i18nValues.t("setting_labels.color_styles")}
               textStyle={styles.tabText(colorTab === 'styles')}
               onPress={() => setColorTab('styles')}
             />
@@ -57,7 +59,7 @@ const CustomColorPicker = ({color, label, selectColor}) => {
                 ...styles.colortab(colorTab === 'customize'),
                 borderTopRightRadius: 7,
               }}
-              text="CUSTOMIZE"
+              text={i18nValues.t("setting_labels.customize")}
               textStyle={styles.tabText(colorTab === 'customize')}
               onPress={() => setColorTab('customize')}
             />

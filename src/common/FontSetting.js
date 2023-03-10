@@ -6,6 +6,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/Feather';
 import TextButton from './TextButton';
 import { invertColor } from '../utils';
+import formStore from '../store/formStore';
 
 const fontTypes = [
 	'PublicSans-Black',
@@ -49,6 +50,7 @@ const colorStyles = [
 
 const FontSetting = ({label, fontType, fontSize, fontColor, onChange}) => {
   const {colors} = useTheme();
+  const i18nValues = formStore(state => state.i18nValues);
   const [open, setOpen] = useState(true);
 	const [visibleColors, setVisibleColors] = useState(false);
   const [colorTab, setColorTab] = useState('styles');
@@ -56,7 +58,7 @@ const FontSetting = ({label, fontType, fontSize, fontColor, onChange}) => {
   return (
 		<View style={styles.settingView}>
 			<Text style={styles.titleLabel}>{label}</Text>
-			<Text style={styles.titleLabel1}>Font Type</Text>
+			<Text style={styles.titleLabel1}>{i18nValues.t("setting_labels.font_type")}</Text>
       <SelectDropdown
         data={fontTypes}
         onSelect={e => {
@@ -77,10 +79,10 @@ const FontSetting = ({label, fontType, fontSize, fontColor, onChange}) => {
         dropdownIconPosition="right"
         onFocus={() => setOpen(false)}
         onBlur={() => setOpen(true)}
-        defaultButtonText="Select Option"
+        defaultButtonText={i18nValues.t("setting_labels.select_option")}
         defaultValue={fontType}
       />
-			<Text style={styles.titleLabel1}>Font Size</Text>
+			<Text style={styles.titleLabel1}>{i18nValues.t("setting_labels.font_size")}</Text>
 			<TextInput
 				style={styles.title}
 				value={fontSize.toString() || '14'}
@@ -91,10 +93,10 @@ const FontSetting = ({label, fontType, fontSize, fontColor, onChange}) => {
           }
 				}}
 			/>
-			<Text style={styles.titleLabel1}>Font Color</Text>
+			<Text style={styles.titleLabel1}>{i18nValues.t("setting_labels.font_color")}</Text>
       <TextButton
         style={styles.background(fontColor)}
-        text="CHANGE COLOR"
+        text={i18nValues.t("setting_labels.change_color")}
         textStyle={styles.textButtonText(
           invertColor(fontColor),
         )}
@@ -110,7 +112,7 @@ const FontSetting = ({label, fontType, fontSize, fontColor, onChange}) => {
                 ...styles.colortab(colorTab === 'styles'),
                 borderTopLeftRadius: 7,
               }}
-              text="COLOR STYLES"
+              text={i18nValues.t("setting_labels.color_styles")}
               textStyle={styles.tabText(colorTab === 'styles')}
               onPress={() => setColorTab('styles')}
             />
@@ -119,7 +121,7 @@ const FontSetting = ({label, fontType, fontSize, fontColor, onChange}) => {
                 ...styles.colortab(colorTab === 'customize'),
                 borderTopRightRadius: 7,
               }}
-              text="CUSTOMIZE"
+              text={i18nValues.t("setting_labels.customize")}
               textStyle={styles.tabText(colorTab === 'customize')}
               onPress={() => setColorTab('customize')}
             />

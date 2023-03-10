@@ -5,10 +5,11 @@ import formStore from '../../../store/formStore';
 
 const SettingDuplicate = ({index, element}) => {
   const {colors, size} = useTheme();
+  const i18nValues = formStore(state => state.i18nValues);
 
   return (
     <View style={styles.settingView}>
-      <Text style={styles.titleLabel}>Duplicate Element</Text>
+      <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.duplicate_element")}</Text>
       <IconButton
         icon="content-duplicate"
         size={35}
@@ -17,7 +18,7 @@ const SettingDuplicate = ({index, element}) => {
         onPress={() => {}}
       />
       <Text style={styles.description1}>
-        Clone selected elements with all saved properties.
+        {i18nValues.t("setting_labels.duplicate_element_description")}
       </Text>
     </View>
   );

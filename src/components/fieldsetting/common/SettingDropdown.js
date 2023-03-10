@@ -3,9 +3,11 @@ import {useTheme} from 'react-native-paper';
 import {View, StyleSheet, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import SelectDropdown from 'react-native-select-dropdown';
+import formStore from '../../../store/formStore';
 
 const SettingDropdown = ({title, options, onChange, keyName, defaultValue}) => {
   const {colors, fonts} = useTheme();
+  const i18nValues = formStore(state => state.i18nValues);
   const [open, setOpen] = useState(true);
 
   return (
@@ -31,7 +33,7 @@ const SettingDropdown = ({title, options, onChange, keyName, defaultValue}) => {
         dropdownIconPosition="right"
         onFocus={() => setOpen(false)}
         onBlur={() => setOpen(true)}
-        defaultButtonText="Select Option"
+        defaultButtonText={i18nValues.t("setting_labels.select_option")}
         defaultValue={defaultValue}
       />
     </View>

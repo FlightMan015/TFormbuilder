@@ -14,6 +14,7 @@ const FieldAction = () => {
 	const setOpenSetting = formStore(state => state.setOpenSetting);
   const setFormData = formStore(state => state.setFormData);
   const formData = formStore(state => state.formData);
+  const i18nValues = formStore(state => state.i18nValues);
   const [event, setEvent] = useState({name: '', rule: '', state: false});
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const FieldAction = () => {
                 <View style={styles.item}>
                   <TextButton
                     style={styles.addCardBtn}
-                    text={e}
+                    text={i18nValues.t(`events.${e}`)}
                     textStyle={styles.addCardText}
                     onPress={() => {
                       if (event.name === e) {
@@ -65,7 +66,7 @@ const FieldAction = () => {
                   event.name === e && event.state && (
                     <TextInput
                       style={styles.ruleText}
-                      placeholder='Input rule...'
+                      placeholder={i18nValues.t("placeholders.input_rule")}
                       placeholderTextColor={colors.placeholder}
                       multiline
                       numberOfLines={3}

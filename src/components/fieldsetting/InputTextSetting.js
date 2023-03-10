@@ -12,6 +12,7 @@ const InputTextSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
+  const i18nValues = formStore(state => state.i18nValues);
 
   const onChange = (key, value) => {
     if (key === 'is_mandatory') {
@@ -38,38 +39,38 @@ const InputTextSetting = ({element, index, onClick}) => {
 
   return (
     <>
-      <SettingHeader title={'TextInput Settings'} />
+      <SettingHeader title={i18nValues.t("setting_labels.textinput_settings")} />
       <SettingLabel
-        title={'Label'}
+        title={i18nValues.t("setting_labels.label")}
         label={element.meta.title}
         onChange={onChange}
         keyName={'title'}
       />
       <SettingSwitch
-        title={'Hide label'}
+        title={i18nValues.t("setting_labels.hide_label")}
         value={element.meta.hide_title}
         onChange={onChange}
         keyName={'hide_title'}
-        description={'Make sure to show label.'}
+        description={i18nValues.t("setting_labels.hide_label_description")}
       />
       <SettingSwitch
-        title={'Is Mandatory'}
+        title={i18nValues.t("setting_labels.is_mandatory")}
         value={element.is_mandatory}
         onChange={onChange}
         keyName={'is_mandatory'}
       />
       <SettingLabel
-        title={'Placeholder'}
+        title={i18nValues.t("setting_labels.placeholder")}
         label={element.meta.placeholder}
         onChange={onChange}
         keyName={'placeholder'}
       />
       <SettingSwitch
-        title={'Multiline'}
+        title={i18nValues.t("setting_labels.multiline")}
         value={element.meta.multiline}
         onChange={onChange}
         keyName={'multiline'}
-        description={'Make sure to show multiline.'}
+        description={i18nValues.t("setting_labels.multiline_description")}
       />
       <SettingDuplicate index={index} element={element} />
     </>

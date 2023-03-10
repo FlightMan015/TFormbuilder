@@ -7,9 +7,11 @@ import ResizedImage from '../../../common/ResizedImage';
 import DocumentPicker, {
   types,
 } from 'react-native-document-picker';
+import formStore from '../../../store/formStore';
 
 const SettingImage = ({title, imageUri, onSelect, keyName}) => {
   const {colors, size} = useTheme();
+  const i18nValues = formStore(state => state.i18nValues);
   const [imageSelectTab, setImageSelectTab] = useState('upload');
 
   return (
@@ -21,7 +23,7 @@ const SettingImage = ({title, imageUri, onSelect, keyName}) => {
             ...styles.colortab(imageSelectTab === 'upload'),
             borderTopLeftRadius: 7,
           }}
-          text="Upload"
+          text={i18nValues.t("setting_labels.upload")}
           textStyle={styles.tabText(imageSelectTab === 'upload')}
           onPress={() => setImageSelectTab('upload')}
         />
@@ -30,7 +32,7 @@ const SettingImage = ({title, imageUri, onSelect, keyName}) => {
             ...styles.colortab(imageSelectTab === 'url'),
             borderTopRightRadius: 7,
           }}
-          text="Url"
+          text={i18nValues.t("setting_labels.uri")}
           textStyle={styles.tabText(imageSelectTab === 'url')}
           onPress={() => setImageSelectTab('url')}
         />
@@ -51,7 +53,7 @@ const SettingImage = ({title, imageUri, onSelect, keyName}) => {
             </View>
             <TextButton
               style={styles.addCardBtn}
-              text="Select Image"
+              text={i18nValues.t("setting_labels.select_image")}
               textStyle={styles.addCardText}
               onPress={() => {
                 DocumentPicker.pick({
@@ -67,7 +69,7 @@ const SettingImage = ({title, imageUri, onSelect, keyName}) => {
       {
         imageSelectTab === 'url' && (
           <View style={styles.settingView1}>
-            <Text style={styles.titleLabel}>Image Url</Text>
+            <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.image_uri")}</Text>
             <TextInput
               style={{...styles.title, backgroundColor: '#626E81'}}
               value={imageUri}

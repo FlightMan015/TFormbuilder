@@ -11,6 +11,7 @@ const BitmapEditLinkDlg = () => {
   const setVisibleDlg = useDrawingStore(state => state.setVisibleDlg);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const i18nValues = formStore(state => state.i18nValues);
 
   const {colors, fonts} = useTheme();
   const [linkData, setLinkData] = useState({name: '', link: ''});
@@ -35,8 +36,8 @@ const BitmapEditLinkDlg = () => {
       }
       onDismiss={cancel}
       style={{borderRadius: 10, backgroundColor: colors.card, paddingHorizontal: 15}}>
-      <Text style={{...fonts.headings, marginBottom: 10}}>Update Marker</Text>
-      <Text style={fonts.labels}>{'Name'}</Text>
+      <Text style={{...fonts.headings, marginBottom: 10}}>{i18nValues.t("setting_labels.update_marker")}</Text>
+      <Text style={fonts.labels}>{i18nValues.t("setting_labels.name")}</Text>
       <TextInput
         style={styles.textInput(colors, fonts)}
         onChangeText={e =>
@@ -46,27 +47,27 @@ const BitmapEditLinkDlg = () => {
           })
         }
         editable
-        placeholder={'Marker name'}
+        placeholder={i18nValues.t("placeholders.marker_name")}
         placeholderTextColor={colors.placeholder}
         value={linkData.name}
       />
-      <Text style={fonts.labels}>{'Link'}</Text>
+      <Text style={fonts.labels}>{i18nValues.t("setting_labels.link")}</Text>
       <TextInput
         style={styles.textInput(colors, fonts)}
         onChangeText={e => setLinkData({...linkData, link: e})}
         editable
-        placeholder={'Hyperlink url'}
+        placeholder={i18nValues.t("placeholders.hyper_link_url")}
         placeholderTextColor={colors.placeholder}
         value={linkData.link}
       />
       <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
         <TextButton
-          text='Save'
+          text={i18nValues.t("setting_labels.save")}
           onPress={() => {
             if (!linkData.name) {
-              Alert.alert('Warning', 'Please type the name.');
+              Alert.alert(i18nValues.t("warnings.warning"), i18nValues.t("warnings.type_name"));
             } else if (!linkData.link) {
-              Alert.alert('Warning', 'Please type the link.');
+              Alert.alert(i18nValues.t("warnings.warning"), i18nValues.t("warnings.type_link_uri"));
             } else {
               const tempElement = {...visibleDlg.bitmapElement};
               const tempSVG = JSON.parse(
@@ -89,7 +90,7 @@ const BitmapEditLinkDlg = () => {
           style={styles.actionButton(colors)}
         />
         <TextButton
-          text='Cancel'
+          text={i18nValues.t("setting_labels.cancel")}
           onPress={cancel}
           textStyle={styles.actionButtonText}
           style={styles.actionButton(colors)}

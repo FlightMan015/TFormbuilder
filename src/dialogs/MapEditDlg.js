@@ -11,6 +11,7 @@ const MapEditDlg = () => {
   const setVisibleMapDlg = formStore(state => state.setVisibleMapDlg);
 	const formValue = formStore(state => state.formValue);
 	const setFormValue = formStore(state => state.setFormValue);
+  const i18nValues = formStore(state => state.i18nValues);
   const initialMapData = {
     pointIndex: 0,
     fenceIndex: 0,
@@ -39,7 +40,7 @@ const MapEditDlg = () => {
   const changeMapData = () => {
     if (visibleMapDlg.mapEditData.type === 'point') {
       if (!mapData.title) {
-        Alert.alert('Warning', 'Please input the title.');
+        Alert.alert(i18nValues.t("warnings.warning"), i18nValues.t("warnings.input_title"));
       } else {
 				const tempData = {...formValue[mapData.element.field_name]};
 				const pointIndex = mapData.pointIndex;
@@ -60,7 +61,7 @@ const MapEditDlg = () => {
 
     if (visibleMapDlg.mapEditData.type === 'fence') {
       if (!mapData.title) {
-        Alert.alert('Warning', 'Please input the title.');
+        Alert.alert(i18nValues.t("warnings.warning"), i18nValues.t("warnings.input_title"));
       } else {
 				const tempData = {...formValue[mapData.element.field_name]};
 				const pointIndex = mapData.pointIndex;
@@ -87,33 +88,33 @@ const MapEditDlg = () => {
       style={{...styles.dialog, backgroundColor: colors.card}}>
       {visibleMapDlg.mapEditData && visibleMapDlg.mapEditData.type === 'point' && (
 				<Text style={{...fonts.headings, marginBottom: 10}}>
-					Edit Point
+					{i18nValues.t("setting_labels.edit_point")}
 				</Text>
       )}
       {visibleMapDlg.mapEditData && visibleMapDlg.mapEditData.type === 'fence' && (
 				<Text style={{...fonts.headings, marginBottom: 10}}>
-					Edit Fence
+					{i18nValues.t("setting_labels.edit_fence")}
 				</Text>
       )}
-			<Text style={{...fonts.values, color: fonts.labels.color}}>{'Title'}</Text>
+			<Text style={{...fonts.values, color: fonts.labels.color}}>{i18nValues.t("setting_labels.title")}</Text>
 			<TextInput
 				style={styles.nameInput(colors, fonts)}
 				underlineColorAndroid="transparent"
 				onChangeText={e => onChangeMapData(e, 'title')}
 				editable
-				placeholder={'title'}
+				placeholder={i18nValues.t("placeholders.title")}
 				placeholderTextColor={colors.placeholder}
 				value={mapData.title}
 			/>
 			{visibleMapDlg.mapEditData && visibleMapDlg.mapEditData.type === 'point' && (
 				<View>
-					<Text style={{...fonts.values, color: fonts.labels.color}}>{'Description'}</Text>
+					<Text style={{...fonts.values, color: fonts.labels.color}}>{i18nValues.t("setting_labels.description")}</Text>
 					<TextInput
 						style={styles.nameInput(colors, fonts)}
 						underlineColorAndroid="transparent"
 						onChangeText={e => onChangeMapData(e, 'description')}
 						editable
-						placeholder={'description'}
+						placeholder={i18nValues.t("placeholders.description")}
 						placeholderTextColor={colors.placeholder}
 						value={mapData.description}
 					/>
@@ -121,13 +122,13 @@ const MapEditDlg = () => {
 			)}
 			<View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
         <TextButton
-          text={'Ok'}
+          text={i18nValues.t("setting_labels.ok")}
           onPress={() => changeMapData()}
           textStyle={styles.actionButtonText}
           style={styles.actionButton(colors)}
         />
         <TextButton
-          text='Cancel'
+          text={i18nValues.t("setting_labels.cancel")}
           onPress={hideMapDlg}
           textStyle={styles.actionButtonText}
           style={styles.actionButton(colors)}

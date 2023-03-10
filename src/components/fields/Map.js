@@ -64,6 +64,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
   const preview = formStore(state => state.preview);
   const visibleMapDlg = formStore(state => state.visibleMapDlg);
   const setVisibleMapDlg = formStore(state => state.setVisibleMapDlg);
+  const i18nValues = formStore(state => state.i18nValues);
   const [searchQuery, setSearchQuery] = useState('');
   const [visibleSetPoint, setVisibleSetPoint] = useState(false);
   const [newPointData, setNewPointData] = useState({
@@ -572,9 +573,9 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <FieldLabel label={element.meta.title || 'Map'} visible={!element.meta.hide_title} />
+      <FieldLabel label={element.meta.title || i18nValues.t("field_labels.map")} visible={!element.meta.hide_title} />
       <Title
-        name="Map"
+        name={i18nValues.t("field_labels.map")}
         visible={visible.map}
         onPress={() => setVisible({...visible, map: !visible.map})}
       />
@@ -672,40 +673,40 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
             visible={visibleSetPoint}
             onDismiss={() => setVisibleSetPoint(false)}
             style={{...styles.dialog, backgroundColor: colors.card}}>
-            <Text style={{...fonts.headings, marginVertical: 15}}>New Location</Text>
+            <Text style={{...fonts.headings, marginVertical: 15}}>{i18nValues.t("setting_labels.new_location")}</Text>
             <Text style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
-              {'Title'}
+              {i18nValues.t("setting_labels.title")}
             </Text>
             <TextInput
               style={styles.textBox(colors, fonts)}
               underlineColorAndroid="transparent"
               onChangeText={e => onChangePointData(e, 'title')}
               editable
-              placeholder={'Point title'}
+              placeholder={i18nValues.t("placeholders.point_title")}
               placeholderTextColor={colors.placeholder}
               value={newPointData.title}
             />
             <Text style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
-              {'Description'}
+              {i18nValues.t("setting_labels.description")}
             </Text>
             <TextInput
               style={styles.textBox(colors, fonts)}
               underlineColorAndroid="transparent"
               onChangeText={e => onChangePointData(e, 'description')}
               editable
-              placeholder={'Point description'}
+              placeholder={i18nValues.t("placeholders.point_description")}
               placeholderTextColor={colors.placeholder}
               value={newPointData.description}
             />
             <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
               <TextButton
-                text='Add'
+                text={i18nValues.t("setting_labels.add")}
                 onPress={confirmPointData}
                 textStyle={styles.actionButtonText(colors)}
                 style={styles.actionButton(colors)}
               />
               <TextButton
-                text='Cancel'
+                text={i18nValues.t("setting_labels.cancel")}
                 onPress={() => setVisibleSetPoint(false)}
                 textStyle={styles.actionButtonText(colors)}
                 style={styles.actionButton(colors)}
@@ -716,16 +717,16 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
               visible={visibleSetFence}
               onDismiss={() => setVisibleSetFence(false)}
               style={{...styles.dialog, backgroundColor: colors.card}}>
-              <Text style={{...fonts.headings, marginBottom: 10}}>New Fence</Text>
+              <Text style={{...fonts.headings, marginBottom: 10}}>{i18nValues.t("setting_labels.new_fence")}</Text>
               <Text style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
-                {'Title'}
+                {i18nValues.t("setting_labels.title")}
               </Text>
               <TextInput
                 style={styles.textBox(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={e => onChangeFenceData(e, 'title')}
                 editable
-                placeholder={'Geofence title'}
+                placeholder={i18nValues.t("placeholders.geofence_title")}
                 placeholderTextColor={colors.placeholder}
                 value={newFenceData.title}
               />
@@ -741,14 +742,14 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
                 value={newFenceData.description}
               /> */}
               <Text style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
-                {'Radius'}
+                {i18nValues.t("setting_labels.radius")}
               </Text>
               <TextInput
                 style={styles.textBox(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={e => onChangeFenceData(e, 'radius')}
                 editable
-                placeholder={'Radius of geofence'}
+                placeholder={i18nValues.t("placeholders.radius_of_geofence")}
                 placeholderTextColor={colors.placeholder}
                 value={newFenceData.radius.toString()}
                 keyboardType="numeric"
@@ -756,12 +757,12 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
               />
               <View style={styles.colorLabel}>
                 <Text style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
-                  {'Color'}
+                  {i18nValues.t("setting_labels.color")}
                 </Text>
                 <View style={styles.colorLabel}>
                   <Text
                     style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
-                    {'RGB color'}
+                    {i18nValues.t("setting_labels.rgb_color")}
                   </Text>
                   <Switch
                     value={isRGBcolor}
@@ -828,13 +829,13 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
               )}
               <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
                 <TextButton
-                  text='Add'
+                  text={i18nValues.t("setting_labels.add")}
                   onPress={confirmFenceData}
                   textStyle={styles.actionButtonText(colors)}
                   style={styles.actionButton(colors)}
                 />
                 <TextButton
-                  text='Cancel'
+                  text={i18nValues.t("setting_labels.cancel")}
                   onPress={() => setVisibleSetFence(false)}
                   textStyle={styles.actionButtonText(colors)}
                   style={styles.actionButton(colors)}
@@ -845,16 +846,16 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
             visible={visibleSetPolygon}
             onDismiss={() => setVisibleSetPolygon(false)}
             style={{...styles.dialog, backgroundColor: colors.card}}>
-              <Text style={{...fonts.headings, marginBottom: 10}}>New Polygon Fence</Text>
+              <Text style={{...fonts.headings, marginBottom: 10}}>{i18nValues.t("setting_labels.new_polygon_fence")}</Text>
               <Text style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
-                {'Title'}
+                {i18nValues.t("setting_labels.title")}
               </Text>
               <TextInput
                 style={styles.textBox(colors, fonts)}
                 underlineColorAndroid="transparent"
                 onChangeText={e => setPolygonTitle(e)}
                 editable
-                placeholder={'Geofence title'}
+                placeholder={i18nValues.t("placeholders.geofence_title")}
                 placeholderTextColor={colors.placeholder}
                 value={polygonTitle}
               />
@@ -871,12 +872,12 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
               /> */}
               <View style={styles.colorLabel}>
                 <Text style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
-                  {'Color'}
+                  {i18nValues.t("setting_labels.color")}
                 </Text>
                 <View style={styles.colorLabel}>
                   <Text
                     style={{...fonts.values, color: fonts.labels.color, marginBottom: 5}}>
-                    {'RGB color'}
+                    {i18nValues.t("setting_labels.rgb_color")}
                   </Text>
                   <Switch
                     value={isRGBcolor}
@@ -943,7 +944,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
               )}
               <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
                 <TextButton
-                  text='Ok'
+                  text={i18nValues.t("setting_labels.ok")}
                   onPress={() => {
                     if (!polygonTitle) {
                       Alert.alert('Warning', 'Please input the title.');
@@ -955,7 +956,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
                   style={styles.actionButton(colors)}
                 />
                 <TextButton
-                  text='Cancel'
+                  text={i18nValues.t("setting_labels.cancel")}
                   onPress={() => {
                     setDrawPolygon(false);
                     setPolygonPointList([]);
@@ -1000,7 +1001,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
           )}
           {drawPolygon && (
             <TextButton
-              text='Finish'
+              text={i18nValues.t("setting_labels.finish")}
               onPress={finishDrawPolygon}
               textStyle={styles.finishButton}
               style={styles.drawPolytonBtn}
@@ -1009,7 +1010,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
         </View>
       )}
       <Title
-        name={`Points (${points.length})`}
+        name={`${i18nValues.t("setting_labels.points")} (${points.length})`}
         visible={visible.point}
         onPress={() => setVisible({...visible, point: !visible.point})}
       />
@@ -1090,7 +1091,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
         </View>
       )}
       <Title
-        name={`Geofences (${geofences.length})`}
+        name={`${i18nValues.t("setting_labels.geofences")} (${geofences.length})`}
         visible={visible.fence}
         onPress={() => setVisible({...visible, fence: !visible.fence})}
       />

@@ -13,12 +13,14 @@ const InputText = props => {
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const i18nValues = formStore(state => state.i18nValues);
+
   return (
     <View style={styles.container}>
       {
         role.view && (
           <>
-            <FieldLabel label={element.meta.title || 'TextInput'} visible={!element.meta.hide_title} />
+            <FieldLabel label={element.meta.title || i18nValues.t("field_labels.textbox")} visible={!element.meta.hide_title} />
             <TextInput
               style={{
                 ...styles.textBox,

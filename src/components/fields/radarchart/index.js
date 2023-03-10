@@ -16,6 +16,7 @@ const RadarChartField = ({element, index}) => {
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
   const updateFormData = formStore(state => state.updateFormData);
+  const i18nValues = formStore(state => state.i18nValues);
   const [chartWidth, setChartWidth] = useState(0);
   const [visible, setVisible] = useState(false);
 
@@ -175,7 +176,7 @@ const RadarChartField = ({element, index}) => {
       }
       <View>
         <Title
-          name="Datas"
+          name={i18nValues.t("setting_labels.datas")}
           onPress={() => setVisible(!visible)}
           visible={visible}
         />

@@ -9,6 +9,7 @@ import SettingSwitch from './common/SettingSwitch';
 const MapSetting = ({element, index}) => {
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
+  const i18nValues = formStore(state => state.i18nValues);
 
   const onChange = (key, value) => {
     if (key === 'is_mandatory') {
@@ -35,17 +36,17 @@ const MapSetting = ({element, index}) => {
 
   return (
     <>
-      <SettingHeader title={'Map Settings'} />
-      <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
+      <SettingHeader title={i18nValues.t("setting_labels.map_settings")} />
+      <SettingLabel title={i18nValues.t("setting_labels.label")} label={element.meta.title} onChange={onChange} keyName={'title'}/>
       <SettingSwitch
-        title={'Hide label'}
+        title={i18nValues.t("setting_labels.hide_label")}
         value={element.meta.hide_title}
         onChange={onChange}
         keyName={'hide_title'}
-        description={'Make sure to show label.'}
+        description={i18nValues.t("setting_labels.hide_label_description")}
       />
       <SettingSwitch
-        title={'Is Mandatory'}
+        title={i18nValues.t("setting_labels.is_mandatory")}
         value={element.is_mandatory}
         onChange={onChange}
         keyName={'is_mandatory'}

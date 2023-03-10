@@ -11,6 +11,7 @@ import DraggableFlatList, {
 } from 'react-native-draggable-flatlist';
 import {componentName, newFieldData} from '../../constant';
 import FieldLabel from '../../common/FieldLabel';
+import formStore from '../../store/formStore';
 
 const types = {
   title: 'title',
@@ -33,6 +34,7 @@ const fieldTypes = {
 const DataTableHeaderSetting = props => {
   const {fields, changeData} = props;
   const {colors} = useTheme();
+  const i18nValues = formStore(state => state.i18nValues);
   const [newCellField, setNewCellField] = useState({name: '', type: 'image'});
   const [open, setOpen] = useState(true);
   const [newMenuColumnOptions, setNewMenuColumnOptions] = useState(['option1', 'option2', 'option3']);
@@ -67,7 +69,7 @@ const DataTableHeaderSetting = props => {
 									color: '#FFFFFF',
 									borderColor: color.GREY,
 								}}>
-								Number
+								{i18nValues.t("setting_labels.number")}
 							</Text>
 						)
 					}
@@ -80,7 +82,7 @@ const DataTableHeaderSetting = props => {
 									color: '#FFFFFF',
 									borderColor: color.GREY,
 								}}>
-								Textbox
+								{i18nValues.t("setting_labels.textbox")}
 							</Text>
 						)
 					}
@@ -93,7 +95,7 @@ const DataTableHeaderSetting = props => {
 									color: '#FFFFFF',
 									borderColor: color.GREY,
 								}}>
-								Time
+								{i18nValues.t("setting_labels.time")}
 							</Text>
 						)
 					}
@@ -106,7 +108,7 @@ const DataTableHeaderSetting = props => {
 									color: '#FFFFFF',
 									borderColor: color.GREY,
 								}}>
-								Date
+								{i18nValues.t("setting_labels.date")}
 							</Text>
 						)
 					}
@@ -119,7 +121,7 @@ const DataTableHeaderSetting = props => {
 									color: '#FFFFFF',
 									borderColor: color.GREY,
 								}}>
-								Dropdown
+								{i18nValues.t("setting_labels.dropdown")}
 							</Text>
 						)
 					}
@@ -199,12 +201,12 @@ const DataTableHeaderSetting = props => {
 
   return (
 		<View style={styles.settingView}>
-			<Text style={styles.titleLabel}>Table Headers</Text>
+			<Text style={styles.titleLabel}>{i18nValues.t("setting_labels.table_headers")}</Text>
 			<View style={styles.tableField}>
-				<Text style={styles.tableFieldNo}>No</Text>
-				<Text style={styles.tableFieldName}>Name</Text>
-				<Text style={styles.tableFieldType}>Type</Text>
-				<Text style={styles.tableFieldAction}>Action</Text>
+				<Text style={styles.tableFieldNo}>{i18nValues.t("setting_labels.no")}</Text>
+				<Text style={styles.tableFieldName}>{i18nValues.t("setting_labels.name")}</Text>
+				<Text style={styles.tableFieldType}>{i18nValues.t("setting_labels.type")}</Text>
+				<Text style={styles.tableFieldAction}>{i18nValues.t("setting_labels.action")}</Text>
 			</View>
 			{/* <GestureHandlerRootView style={styles.gestureHandlerView}>
 				<DraggableFlatList
@@ -248,7 +250,7 @@ const DataTableHeaderSetting = props => {
 				<TextInput
 					style={{...styles.newTableFieldName}}
 					underlineColorAndroid="transparent"
-					placeholder="...new field name"
+					placeholder={i18nValues.t("placeholders.new_field_name")}
 					placeholderTextColor={color.GREY}
 					onChangeText={e => {
 						setNewCellField({
@@ -280,7 +282,7 @@ const DataTableHeaderSetting = props => {
 					buttonTextStyle={{color: '#FFFFFF', fontSize: 14}}
 					selectedRowStyle={{backgroundColor: '#bbf'}}
 					selectedRowTextStyle={{color: '#FFFFFF'}}
-					defaultButtonText="Field Type"
+					defaultButtonText={i18nValues.t("setting_labels.field_type")}
 					onFocus={() => setOpen(false)}
 					onBlur={() => setOpen(true)}
 					renderDropdownIcon={
@@ -293,7 +295,7 @@ const DataTableHeaderSetting = props => {
 			{
 				newCellField.type === 'menu' && (
 					<View>
-						<Text style={{color: '#FFFFFF'}}>New Menu Column Options</Text>
+						<Text style={{color: '#FFFFFF'}}>{i18nValues.t("setting_labels.new_menu_column_options")}</Text>
 						{
 							newMenuColumnOptions.map((option, optionIndex) => {
 								return (
@@ -355,7 +357,7 @@ const DataTableHeaderSetting = props => {
 							<TextInput
 								style={{flex: 1, color: '#FFFFFF', padding: 0, paddingLeft: 10}}
 								value={newOption}
-								placeholder='new option'
+								placeholder={i18nValues.t("setting_labels.new_option_placeholder")}
 								placeholderTextColor={'grey'}
 								onChangeText={setNewOption}
 							/>

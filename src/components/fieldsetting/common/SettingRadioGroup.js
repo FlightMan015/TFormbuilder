@@ -13,14 +13,14 @@ const SettingRadioGroup = ({title, options, value, keyName, onChange}) => {
           <View key={'group_option_' + index} style={styles.radioButton}>
             <RadioButton
               value="first"
-              status={ option === value ? 'checked' : 'unchecked' }
+              status={ option.value === value ? 'checked' : 'unchecked' }
               uncheckedColor='#FFFFFF'
               color={'#FFFFFF'}
               onPress={() => {
-                onChange(keyName, options[index])
+                onChange(keyName, options[index].value)
               }}
             />
-            <Text style={styles.text}>{option}</Text>
+            <Text style={styles.text}>{option.name}</Text>
           </View>
         ))
       }

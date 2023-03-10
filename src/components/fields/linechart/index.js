@@ -15,6 +15,7 @@ const LineChartSubField = ({element, index, onClickUpdateField}) => {
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const i18nValues = formStore(state => state.i18nValues);
   const [chartWidth, setChartWidth] = useState(0);
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState(formValue[element.field_name] || {labels: [], datasets: [], legend: []});
@@ -256,7 +257,7 @@ const LineChartSubField = ({element, index, onClickUpdateField}) => {
             }
             <View>
               <Title
-                name="Datas"
+                name={i18nValues.t("setting_labels.datas")}
                 onPress={() => setVisible(!visible)}
                 visible={visible}
               />

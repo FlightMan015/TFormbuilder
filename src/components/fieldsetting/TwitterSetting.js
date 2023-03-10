@@ -12,6 +12,7 @@ const TwitterSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
+  const i18nValues = formStore(state => state.i18nValues);
 
   const onChange = (key, value) => {
     const tempMeta = JSON.parse(JSON.stringify(element.meta));
@@ -27,21 +28,21 @@ const TwitterSetting = ({element, index, onClick}) => {
 
   return (
     <>
-      <SettingHeader title={'Twitter Settings'} />
-      <SettingLabel title={'Label'} label={element.meta.title} onChange={onChange} keyName={'title'}/>
+      <SettingHeader title={i18nValues.t("setting_labels.twitter_settings")} />
+      <SettingLabel title={i18nValues.t("setting_labels.label")} label={element.meta.title} onChange={onChange} keyName={'title'}/>
       <SettingSwitch
-        title={'Hide label'}
+        title={i18nValues.t("setting_labels.hide_label")}
         value={element.meta.hide_title}
         onChange={onChange}
         keyName={'hide_title'}
-        description={'Make sure to show label.'}
+        description={i18nValues.t("setting_labels.hide_label_description")}
       />
       <View style={styles.settingView}>
-        <Text style={styles.titleLabel}>Image Url</Text>
+        <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.image_uri")}</Text>
         <TextInput
           style={{...styles.title, backgroundColor: '#555F6E'}}
           value={element.meta.tweetUrl}
-          placeholder='url...'
+          placeholder={i18nValues.t("setting_labels.uri_")}
           onChangeText={newText => {
             onChange('tweetUrl', newText)
           }}
