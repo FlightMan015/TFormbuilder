@@ -34,7 +34,8 @@
             "stripe": "Stripe",
             "custom": "مخصص",
             "card_slider": "سلايدر البطاقة",
-            "voice_message": "رسالة صوتية"
+            "voice_message": "رسالة صوتية",
+            "header": "رأس"
         },
         "setting_labels": {
             "form_fields": "حقول النموذج",
@@ -199,6 +200,7 @@
             "time_settings": "اعدادات الوقت",
             "twitter_settings": "إعدادات Twitter",
             "voice_message_settings": "إعدادات الرسائل الصوتية",
+            "header_settings": "إعدادات الرأس",
             "new_marker": "علامة جديدة",
             "update_marker": "علامة التحديث",
             "save": "يحفظ",
@@ -219,7 +221,10 @@
             "remove": "يزيل",
             "new_location": "موقع جديد",
             "new_fence": "سياج جديد",
-            "new_polygon_fence": "سياج مضلع جديد"
+            "new_polygon_fence": "سياج مضلع جديد",
+            "header_text": "نص العنوان",
+            "text_align": "محاذاة النص",
+            "width": "عرض"
         },
         "warnings": {
             "warning": "تحذير",

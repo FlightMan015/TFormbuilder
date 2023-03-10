@@ -52,7 +52,7 @@ const Card2 = ({
 
   return (
     <TouchableOpacity
-      style={styles.card2(cardCorner, cardWidthValue, cardHeight)}
+      style={styles.card2(cardCorner, cardWidthValue, element.meta.cardWidth === 'auto' ? cardHeight : null)}
       onPress={() => {
         DocumentPicker.pick({
           type: types.images,
@@ -78,7 +78,7 @@ const Card2 = ({
         imageUri && (
           <ResizedImage
             uri={imageUri}
-            maxHeight={cardHeight}
+            maxHeight={element.meta.cardWidth === 'auto' ? cardHeight : null}
             maxWidth={cardWidthValue}
             borderRadius={cardCorner === 'default' ? 3 : 20}
           />

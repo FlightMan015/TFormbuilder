@@ -103,7 +103,12 @@ export const invertColor = hex => {
 // };
 
 export const handleImageSize = (width, height, maxWidth, maxHeight) => {
-  if (width >= height) {
+  if (!maxHeight) {
+    return {
+      width: maxWidth,
+      height: Math.ceil(height * maxWidth / width) 
+    }
+  } else if (width >= height) {
     var ratio = maxWidth / width;
     var h = Math.ceil(ratio * height);
 

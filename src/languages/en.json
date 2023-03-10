@@ -34,7 +34,8 @@
             "stripe": "Stripe",
             "custom": "Custom",
             "card_slider": "Card Slider",
-            "voice_message": "Voice Message"
+            "voice_message": "Voice Message",
+            "header": "Header"
         },
         "setting_labels": {
             "form_fields": "Form Fields",
@@ -199,6 +200,7 @@
             "time_settings": "Time Settings",
             "twitter_settings": "Twitter Settings",
             "voice_message_settings": "Voice Message Settings",
+            "header_settings": "Header Settings",
             "new_marker": "New Marker",
             "update_marker": "Update Marker",
             "save": "Save",
@@ -219,7 +221,10 @@
             "remove": "Remove",
             "new_location": "New Location",
             "new_fence": "New Fence",
-            "new_polygon_fence": "New Polygon Fence"
+            "new_polygon_fence": "New Polygon Fence",
+            "header_text": "Header Text",
+            "text_align": "Text Align",
+            "width": "Width"
         },
         "warnings": {
             "warning": "Warning",

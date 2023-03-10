@@ -25,10 +25,10 @@ const CardSlider = props => {
   const CarouselPagination = () => {
     if (formValue[element.field_name]?.length > 0) {
       return (
-        <View style={{flexDirection: 'row', justifyContent: 'center', paddingVertical: 5}}>
+        <View style={{flexDirection: 'row', justifyContent: 'center', paddingVertical: 15}}>
           {
             Array.from({length: formValue[element.field_name].length}, (_, dotIndex) => {
-              return <View key={dotIndex} style={{width: 6, height: 6, borderRadius: 5, marginHorizontal: 1, backgroundColor: activeSlide === dotIndex ? fonts.values.color : 'grey'}} />
+              return <View key={dotIndex} style={{width: activeSlide === dotIndex ? 18 : 6, height: 6, borderRadius: 5, marginHorizontal: 3, backgroundColor: activeSlide === dotIndex ? fonts.values.color : 'grey'}} />
             })
           }
         </View>

@@ -24,6 +24,7 @@ import Twitter from './Twitter';
 import Stripe from './Stripe';
 import VoiceMessage from './VoiceMessage';
 import Schedular from './scheduler';
+import Header from './Header';
 
 const componentMap = {
   [componentName.IMAGE]: {
@@ -63,9 +64,9 @@ const componentMap = {
   [componentName.FILE_UPLOAD]: {
     component: FileUpload,
   },
-  // // [componentName.HEADER]: {
-  // //   component: Header,
-  // // },
+  [componentName.HEADER]: {
+    component: Header,
+  },
   [componentName.LINECHART]: {
     component: LineChart,
   },

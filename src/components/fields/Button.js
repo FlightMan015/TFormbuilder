@@ -52,7 +52,7 @@ const Button = props => {
               }}
               disabled={!role.edit && !preview}
               style={{
-                ...styles.touchableContainer,
+                ...styles.touchableContainer(element.meta.width),
                 backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
@@ -86,11 +86,11 @@ const Button = props => {
               }}
               disabled={!role.edit && !preview}
               style={{
-                ...styles.touchableContainer1,
+                ...styles.touchableContainer1(element.meta.width),
                 backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
-              <View style={styles.touchableContainer1}>
+              <View style={styles.touchableContainer1(element.meta.width)}>
                 {element.meta.isIcon && element.meta.icon?.family === 'Ionicons' && (
                   <Ionicons name={element.meta.icon.icon} size={element.meta.iconSize} color={element.meta.color || color.WHITE} />
                 )}
@@ -122,11 +122,11 @@ const Button = props => {
               }}
               disabled={!role.edit && !preview}
               style={{
-                ...styles.touchableContainer1,
+                ...styles.touchableContainer1(element.meta.width),
                 backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
-              <View style={styles.touchableContainer1}>
+              <View style={styles.touchableContainer1(element.meta.width)}>
                 {element.meta.isText &&
                   <Text
                     style={{
@@ -158,7 +158,7 @@ const Button = props => {
               }}
               disabled={!role.edit && !preview}
               style={{
-                ...styles.touchableContainer,
+                ...styles.touchableContainer(element.meta.width),
                 backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
@@ -192,11 +192,11 @@ const Button = props => {
               }}
               disabled={!role.edit && !preview}
               style={{
-                ...styles.touchableContainer,
+                ...styles.touchableContainer(element.meta.width),
                 backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
-              <View style={{...styles.touchableContainer1, width: '100%'}}>
+              <View style={{...styles.touchableContainer1(element.meta.width), width: '100%'}}>
                 {element.meta.isIcon && element.meta.icon?.family === 'Ionicons' && (
                   <Ionicons name={element.meta.icon.icon} size={element.meta.iconSize} color={element.meta.color || color.WHITE} />
                 )}
@@ -239,20 +239,22 @@ const styles = StyleSheet.create({
     padding: 5,
     color: colors.text,
   }),
-  touchableContainer: {
+  touchableContainer: autoWidth => ({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'center',
     justifyContent: 'space-around',
     paddingHorizontal: 15,
     paddingVertical: 10,
-  },
-  touchableContainer1: {
+    width: autoWidth === 'auto' ? '65%' : null
+  }),
+  touchableContainer1: autoWidth => ({
     alignItems: 'center',
     alignSelf: 'center',
     paddingHorizontal: 10,
     paddingVertical: 2,
-  },
+    width: autoWidth === 'auto' ? '65%' : null
+  }),
   buttonText: {
     paddingHorizontal: 10,
   },

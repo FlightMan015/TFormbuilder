@@ -138,6 +138,26 @@ export const newFormData = {
   checkedRoles: [],
 };
 
+const newHeaderData = {
+  component: componentName.HEADER,
+  field_name: 'header',
+  is_mandatory: false,
+  meta: {
+    header: 'New Header',
+    textAlign: 'center',
+    font: {
+      fontSize: 18,
+      color: '#0000FF',
+      fontFamily: 'PublicSans-Bold'
+    }
+  },
+  role: [{name: 'admin', edit: true, view: true}],
+  action: {create: false, update: false, read: false, delete: false},
+  event: {
+
+  }
+}
+
 const newInputTextData = {
   component: componentName.TEXT_INPUT,
   field_name: 'textbox',
@@ -697,6 +717,7 @@ const newButtonData = {
     backgroundColor: '',
     iconPosition: 'left',
     function: 'formSubmit',
+    width: 'fit_content'
   },
   role: [{name: 'admin', view: true, edit: true}],
   action: {create: false, update: false, read: false, delete: false},
@@ -974,6 +995,7 @@ export const newFieldData = {
   [componentName.TWITTER]: newTwitterData,
   [componentName.VOICEMESSAGE]: newVoiceMessage,
   [componentName.SCHEDULAR]: newSchedularData,
+  [componentName.HEADER]: newHeaderData,
 };
 
 export const datatypes = {
@@ -1086,6 +1108,11 @@ export const fieldMenuData = {
     {
       name: 'input',
       items: [
+        {
+          name: 'header',
+          key: componentName.HEADER,
+          icon: 'image',
+        },
         {
           name: 'textbox',
           key: componentName.TEXT_INPUT,

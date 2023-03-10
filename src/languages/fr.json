@@ -34,7 +34,8 @@
             "stripe": "Stripe",
             "custom": "Coutume",
             "card_slider": "Curseur de carte",
-            "voice_message": "Message vocal"
+            "voice_message": "Message vocal",
+            "header": "Entête"
         },
         "setting_labels": {
             "form_fields": "Champs de formulaire",
@@ -200,6 +201,7 @@
             "time_settings": "Paramètres de temps",
             "twitter_settings": "Paramètres Twitter",
             "voice_message_settings": "Paramètres des messages vocaux",
+            "header_settings": "Paramètres d'en-tête",
             "new_marker": "Nouveau marqueur",
             "update_marker": "Mettre à jour le marqueur",
             "save": "Sauvegarder",
@@ -220,7 +222,10 @@
             "remove": "Retirer",
             "new_location": "Nouvel emplacement",
             "new_fence": "Nouvelle clôture",
-            "new_polygon_fence": "Nouvelle clôture polygonale"
+            "new_polygon_fence": "Nouvelle clôture polygonale",
+            "header_text": "En-tête",
+            "text_align": "Alignement du texte",
+            "width": "Largeur"
         },
         "warnings": {
             "warning": "Avertissement",

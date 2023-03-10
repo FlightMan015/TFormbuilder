@@ -24,6 +24,7 @@ import StripeSetting from './StripeSetting';
 import VoiceMessageSetting from './VoiceMessageSetting';
 import SchedularSetting from './SchedularSetting';
 import ListSectionSetting from './ListSectionSetting';
+import HeaderSetting from './HeaderSetting';
 
 const componentMap = {
   [componentName.CARDSLIDER]: {
@@ -100,6 +101,9 @@ const componentMap = {
   },
   [componentName.LISTSECTION]: {
     component: ListSectionSetting,
+  },
+  [componentName.HEADER]: {
+    component: HeaderSetting,
   },
 };
 

@@ -12,6 +12,7 @@ import FontSetting from '../../common/FontSetting';
 import SettingIcon from './common/SettingIconPicker';
 import SettingRadioGroup from './common/SettingRadioGroup';
 import SettingDropdown from './common/SettingDropdown';
+import SettingWidth from './common/SettingWidth';
 
 const buttonFunctions = [
   'formSubmit',
@@ -58,6 +59,12 @@ const ButtonSetting = ({element, index, onClick}) => {
         onChange={onChange}
         keyName={'isRound'}
         description={i18nValues.t("setting_labels.round_description")}
+      />
+      <SettingWidth
+        title={i18nValues.t("setting_labels.width")}
+        width={element.meta.width}
+        onChange={onChange}
+        keyName={'width'}
       />
       <ColorPicker
         color={element.meta.backgroundColor || colors.colorButton}
