@@ -37,6 +37,11 @@ const MenuContent = () => {
     if (component === componentName.RADARCHART) {
       setFormValue({...formValue, [field_name]: newFieldData[component].meta.data});
     }
+    if (component === componentName.QUESTIONANDANSWER) {
+      const newQAValues = [];
+      newFieldData[component].meta.answers.map(() => newQAValues.push(false));
+      setFormValue({...formValue, [field_name]: newQAValues});
+    }
     setFormData({...formData, data: addField(component, field_name, formData, indexToAdd, )});
   };
 

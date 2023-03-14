@@ -41,8 +41,9 @@ const CardSlider = props => {
       {
         role.view && (
           <>
-            <FieldLabel label={element.meta.title || 'Card List'} visible={!element.meta.hide_title} />
-            {formValue[element.field_name]?.length > 0 && (
+            <FieldLabel label={element.meta.title || i18nValues.t("field_labels.card_slider")} visible={!element.meta.hide_title} />
+            {
+              !element.meta.verticalAlign && formValue[element.field_name]?.length > 0 && (
               <Carousel
                 ref={c => {
                   _carousel.current = c;
@@ -82,7 +83,7 @@ const CardSlider = props => {
                         element={element}
                         cardIndex={item.dataIndex}
                       />
-                  );
+                    );
                   }
                 }}
                 sliderWidth={ScreenWidth - 24}
@@ -106,10 +107,58 @@ const CardSlider = props => {
             )}
 
             {
-              element.meta.visibleDots && (
+              !element.meta.verticalAlign && element.meta.visibleDots && (
                 <CarouselPagination />
               )
             }
+
+            {
+              element.meta.verticalAlign && formValue[element.field_name]?.length > 0 &&
+              formValue[element.field_name].map((item, itemIndex) => {
+                console.log('item--------', item);
+                if (element.meta.cardtemplate === 'card1') {
+                  return (
+                    <View key={itemIndex} style={{width: '90%', alignSelf: 'center', marginVertical: 10}}>
+                      <Card1
+                        title={item.title}
+                        subTitle={item.subTitle}
+                        description={item.description}
+                        hyperlink={item.hyperlink}
+                        imageUri={item.image}
+                        backgroundColor={element.meta.cardBackgroundColor}
+                        cardCorner={element.meta.cardCorner}
+                        cardWidth={element.meta.cardWidth}
+                        titleFont={element.meta.titleFont}
+                        descriptionFont={element.meta.descriptionFont}
+                        buttonBackgroundStartColor={element.meta.buttonBackgroundStartColor}
+                        buttonBackgroundEndColor={element.meta.buttonBackgroundEndColor}
+                        buttonTextFont={element.meta.buttonTextFont}
+                        buttonText={element.meta.buttonText}
+                        isGradientBackground={element.meta.isGradientBackground}
+                        element={element}
+                        cardIndex={itemIndex}                        
+                      />
+                    </View>
+                  );
+                }
+                if (element.meta.cardtemplate === 'card2') {
+                  return (
+                    <View key={itemIndex} style={{width: '90%', alignSelf: 'center', marginVertical: 10, alignItems: 'center'}}>
+                      <Card2
+                        key={itemIndex}
+                        hyperlink={item.hyperlink}
+                        imageUri={item.image}
+                        cardCorner={element.meta.cardCorner}
+                        cardWidth={element.meta.cardWidth}
+                        element={element}
+                        cardIndex={itemIndex}
+                      />
+                    </View> 
+                  );
+                }
+              })
+            }
+
             {(preview || role.edit) && (
               <View style={styles.renderContainer}>
                 <IconButton

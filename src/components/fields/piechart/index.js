@@ -130,7 +130,7 @@ const PieChartSubField = ({element, index, onClickUpdateField}) => {
       {
         role.view && (
           <>
-            <FieldLabel label={element.meta.title || 'Pie Chart'} visible={!element.meta.hide_title} />
+            <FieldLabel label={element.meta.title || i18nValues.t("field_labels.pie_chart")} visible={!element.meta.hide_title} />
             {
               !(data.length > 0) && (
                 <Text style={styles.noDataText(fonts)}>No data to show. Please click 'Datas' to add the data.</Text>

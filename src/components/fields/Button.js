@@ -223,7 +223,6 @@ const Button = props => {
           </>
         )
       }
-      
     </View>
   );
 };

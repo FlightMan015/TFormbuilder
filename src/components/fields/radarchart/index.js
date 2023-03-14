@@ -163,7 +163,7 @@ const RadarChartField = ({element, index}) => {
 
   return (
     <View style={styles.container} onLayout={onLayout}>
-      <FieldLabel label={element.meta.title || 'Radar Chart'} visible={!element.meta.hide_title} />
+      <FieldLabel label={element.meta.title || i18nValues.t("field_labels.radar_chart")} visible={!element.meta.hide_title} />
       {
         !(meta.data.datasets?.length > 0) && (
           <Text style={styles.noDataText(fonts)}>No data to show. Please click 'Datas' to add the data.</Text>

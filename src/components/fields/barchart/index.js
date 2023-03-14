@@ -118,7 +118,7 @@ const BarChartSubField = ({element, index, onClickUpdateField}) => {
       {
         role.view && (
           <>
-            <FieldLabel label={element.meta.title || 'Bar Chart'} visible={!element.meta.hide_title} />
+            <FieldLabel label={element.meta.title || i18nValues.t("field_labels.bar_chart")} visible={!element.meta.hide_title} />
             <BarChart
               style={styles.barchart}
               data={data}

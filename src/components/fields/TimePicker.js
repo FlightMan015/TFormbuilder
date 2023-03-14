@@ -21,7 +21,7 @@ const TimePicker = ({element}) => {
       {
         role.view && (
           <>
-            <FieldLabel label={element.meta.title || 'Time'} visible={!element.meta.hide_title} />
+            <FieldLabel label={element.meta.title || i18nValues.t("field_labels.time")} visible={!element.meta.hide_title} />
             <View style={styles.mainView(colors)}>
               <Text style={styles.text(fonts)}>
                 {time.toLocaleTimeString()}

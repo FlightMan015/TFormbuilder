@@ -184,7 +184,7 @@ const Bitmap = ({element, index}) => {
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.bitmapContainer}>
-        <FieldLabel label={element.meta.title || 'Bitmap'} visible={!element.meta.hide_title} />
+        <FieldLabel label={element.meta.title || i18nValues.t("field_labels.bitmap")} visible={!element.meta.hide_title} />
         <View style={styles.selectImageContainer(colors)}>
           <View style={{flexDirection: 'row'}}>
             {(role.edit || preview) && (

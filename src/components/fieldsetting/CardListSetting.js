@@ -17,6 +17,7 @@ import SettingSwitch from './common/SettingSwitch';
 import SettingLabel from './common/SettingLabel';
 import ColorPicker from '../../common/ColorPicker';
 import FontSetting from '../../common/FontSetting';
+import SettingDropdownOptions from './common/SettingDropdownOptions';
 
 const colorStyles = [
   '#0A1551',
@@ -132,6 +133,13 @@ const CardListSetting = props => {
                   onChange={onChange}
                   keyName={'title'}
                 />
+                <SettingSwitch
+                  title={i18nValues.t("setting_labels.align_vertical")}
+                  value={element.meta.verticalAlign}
+                  onChange={onChange}
+                  keyName={'verticalAlign'}
+                  description={i18nValues.t("setting_labels.vertical_alignment_description")}
+                />
                 <SettingLabel
                   title={i18nValues.t("setting_labels.button_text")}
                   label={element.meta.buttonText}
@@ -194,7 +202,7 @@ const CardListSetting = props => {
                 </View>
                 <View style={styles.settingView}>
                   <Text style={styles.titleLabel}>Cards</Text>
-                  <ScrollView style={{maxHeight: 400}} showsVerticalScrollIndicator>
+                  <View>
                     {element.meta.cardDatas.map((card, cardIndex) => {
                       return (
                         <View key={cardIndex}>
@@ -238,7 +246,7 @@ const CardListSetting = props => {
                         </View>
                       );
                     })}
-                  </ScrollView>
+                  </View>
                   <TextButton
                     style={styles.addCardBtn}
                     text={i18nValues.t("setting_labels.new_card")}
@@ -249,6 +257,49 @@ const CardListSetting = props => {
                       updateFormData(index, tempElement);
                     }}
                   />
+                </View>
+                <SettingSwitch
+                  title={i18nValues.t("setting_labels.visible_additional_data")}
+                  value={element.meta.visibleAdditionalData}
+                  onChange={onChange}
+                  keyName={'visibleAdditionalData'}
+                  description={i18nValues.t("setting_labels.visible_additional_data_description")}
+                />
+                <SettingDropdownOptions
+                  title={i18nValues.t("setting_labels.additional_datanames")}
+                  options={element.meta.additionalDatas.dataNames}
+                  onChange={(key, value) => onChangeFont('additionalDatas', key, value)}
+                  keyName={'dataNames'}
+                  buttonText={i18nValues.t("setting_labels.new_data")}
+                />
+                <View style={styles.settingView}>
+                  <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.footer")}</Text>
+                  <View style={styles.settingTab}>
+                    <TextButton
+                      style={styles.textButton1(element.meta.footer === 'button')}
+                      text={i18nValues.t("field_labels.button")}
+                      textStyle={styles.textButtonText('#FFFFFF')}
+                      onPress={() => {
+                        onChange('footer', 'button');
+                      }}
+                    />
+                    <TextButton
+                      style={styles.textButton1(element.meta.footer === 'footer')}
+                      text={i18nValues.t("setting_labels.footer")}
+                      textStyle={styles.textButtonText('#FFFFFF')}
+                      onPress={() => {
+                        onChange('footer', 'footer');
+                      }}
+                    />
+                    <TextButton
+                      style={styles.textButton1(element.meta.footer === 'null')}
+                      text={i18nValues.t("setting_labels.none")}
+                      textStyle={styles.textButtonText('#FFFFFF')}
+                      onPress={() => {
+                        onChange('footer', 'null');
+                      }}
+                    />
+                  </View>
                 </View>
                 <View style={styles.settingView}>
                   <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.duplicate_element")}</Text>
@@ -367,6 +418,13 @@ const CardListSetting = props => {
                     />
                   )
                 }
+                <SettingSwitch
+                  title={i18nValues.t("setting_labels.additional_data_vertical_align")}
+                  value={element.meta.additionalDatas.titleValueVerticalAlign}
+                  onChange={(key, value) => onChangeFont('additionalDatas', key, value)}
+                  keyName={'titleValueVerticalAlign'}
+                  description={i18nValues.t("setting_labels.vertical_alignment")}
+                />
               </>
             )}
           </>
@@ -578,6 +636,14 @@ const styles = StyleSheet.create({
   },
   textButton: selected => ({
     width: 100,
+    padding: 10,
+    backgroundColor: selected ? '#0099FF' : '#555F6E',
+    borderWidth: 1,
+    borderRadius: 3,
+    borderColor: '#303339',
+  }),
+  textButton1: selected => ({
+    width: 80,
     padding: 10,
     backgroundColor: selected ? '#0099FF' : '#555F6E',
     borderWidth: 1,

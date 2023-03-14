@@ -44,7 +44,7 @@ const FileUpload = props => {
       {
         role.view && (
           <>
-            <FieldLabel label={element.meta.title || 'File Upload'} visible={!element.meta.hide_title} />
+            <FieldLabel label={element.meta.title || i18nValues.t("field_labels.file_upload")} visible={!element.meta.hide_title} />
             {
               (role.edit || preview) && (
                 <TouchableOpacity

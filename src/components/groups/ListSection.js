@@ -31,7 +31,7 @@ const ListSection = ({
 
   return (
     <View style={styles.container}>
-      <FieldLabel label={element.meta.title || 'List Section'} visible={!element.meta.hide_title} />
+      <FieldLabel label={element.meta.title || i18nValues.t("field_labels.list_section")} visible={!element.meta.hide_title} />
       <ScrollView style={{width: '100%'}} horizontal>
         <View style={{flexDirection: element.meta.listVerticalAlign ? 'column' : 'row', alignItems: 'center'}}>
           {

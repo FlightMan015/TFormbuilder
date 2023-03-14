@@ -25,6 +25,11 @@ import Stripe from './Stripe';
 import VoiceMessage from './VoiceMessage';
 import Schedular from './scheduler';
 import Header from './Header';
+import QuestionAndAnswers from './QuestionAndAnswers';
+import Contact from './Contact';
+import NavigationButton from './NavigationButton';
+import Notification from './Notification';
+import DataCard from './DataCard';
 
 const componentMap = {
   [componentName.IMAGE]: {
@@ -118,6 +123,21 @@ const componentMap = {
   },
   [componentName.VOICEMESSAGE]: {
     component: VoiceMessage,
+  },
+  [componentName.QUESTIONANDANSWER]: {
+    component: QuestionAndAnswers,
+  },
+  [componentName.CONTACT]: {
+    component: Contact,
+  },
+  [componentName.NAVIGATIONBUTTON]: {
+    component: NavigationButton,
+  },
+  [componentName.NOTIFICATION]: {
+    component: Notification,
+  },
+  [componentName.DATACARD]: {
+    component: DataCard,
   },
 };
 

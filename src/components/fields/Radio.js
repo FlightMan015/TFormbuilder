@@ -15,12 +15,14 @@ const Radio = props => {
   const setFormValue = formStore(state => state.setFormValue);
   const preview = formStore(state => state.preview);
 
+  console.log(typeof(radioButton.selected));
+
   return (
     <View style={styles.container}>
       {
         role.view && (
           <>
-            <FieldLabel label={element.meta.title || 'Radio Group'} visible={!element.meta.hide_title} />
+            <FieldLabel label={element.meta.title || i18nValues.t("field_labels.radio_group")} visible={!element.meta.hide_title} />
             <View style={styles.radioGroup(colors)}>
               {element.meta.options.map((item, index) => (
                 <View key={index} style={styles.radioContainer}>

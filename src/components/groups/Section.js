@@ -20,7 +20,7 @@ const Section = ({
   const role = element.role.find(e => e.name === userRole);
   return (
     <View style={styles.container}>
-      <FieldLabel label={element.meta.title || 'Section'} visible={!element.meta.hide_title} />
+      <FieldLabel label={element.meta.title || i18nValues.t("field_labels.section")} visible={!element.meta.hide_title} />
       <View style={styles.tabContent(colors)}>
         {element.meta.childs.map((child, childindex) => {
           return (

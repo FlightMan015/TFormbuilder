@@ -48,11 +48,23 @@ export const componentName = {
   CARD: 'CARD',
   TWITTER: 'TWITTER',
   VOICEMESSAGE: 'VPOCEMESSAGE',
+  QUESTIONANDANSWER: "QUESTIONANDANSWER",
+  CONTACT: "CONTACT",
+  NAVIGATIONBUTTON: "NAVIGATIONBUTTON",
+  NOTIFICATION: "NOTIFICATION",
+  DATACARD: "DATACARD"
 };
 
 export const radioButton = {
   selected: require('./assets/icon_images/selectedRadio.png'),
   unselected: require('./assets/icon_images/unselectedRadio.png'),
+};
+
+export const navigationButtonImages = {
+  find_doctor: require('./assets/icon_images/find_doctor.png'),
+  online_consultation: require('./assets/icon_images/online_consultation.png'),
+  visiting_history: require('./assets/icon_images/visiting_history.png'),
+  x_ray_report: require('./assets/icon_images/x_ray_report.png'),
 };
 
 export const emptyImage = require('./assets/icon_images/imageIcon.png');
@@ -147,7 +159,7 @@ const newHeaderData = {
     textAlign: 'center',
     font: {
       fontSize: 18,
-      color: '#0000FF',
+      color: '#4195B4',
       fontFamily: 'PublicSans-Bold'
     }
   },
@@ -468,7 +480,7 @@ const newSchedularData = {
       fontFamily: 'PublicSans-Regular',
     },
     scheduleFont: {
-      color: '#080808',
+      color: '#FFFFFF',
       fontSize: 12,
       fontFamily: 'PublicSans-Regular',
     },
@@ -861,6 +873,7 @@ export const newCardSlider = {
   is_mandatory: false,
   meta: {
     title: 'Card List',
+    verticalAlign: false,
     buttonText: 'Button',
     autoplay: false,
     visibleDots: true,
@@ -879,7 +892,7 @@ export const newCardSlider = {
     },
     descriptionFont: {
       color: '#888888',
-      fontSize: 14,
+      fontSize: 12,
       fontFamily: 'PublicSans-Regular',
     },
     buttonTextFont: {
@@ -908,6 +921,12 @@ export const newCardSlider = {
         description: 'Description 3',
       },
     ],
+    visibleAdditionalData: true,
+    additionalDatas: {
+      titleValueVerticalAlign: true,
+      dataNames: ['title1', 'title2', 'title3']
+    },
+    footer: 'button',
   },
   role: [{name: 'admin', view: true, edit: true}],
   action: {create: false, update: false, read: false, delete: false},
@@ -962,6 +981,150 @@ export const newCard = {
   hyperlink: '',
 }
 
+export const newQuestionAndAnswer = {
+  component: componentName.QUESTIONANDANSWER,
+  field_name: 'question_and_answer',
+  is_mandatory: false,
+  meta: {
+    title: 'Question And Answer',
+    question: "What's your gender?",
+    answers: ['male', 'female'],
+    answerAlign: 'row',
+    checkedColor: '#0000FF'
+  },
+  role: [{name: 'admin', view: true, edit: true}],
+  action: {create: false, update: false, read: false, delete: false},
+  event: {
+    onChecked: '',
+  },
+}
+
+export const newContactData = {
+  component: componentName.CONTACT,
+  field_name: 'contact',
+  is_mandatory: false,
+  meta: {
+    title: 'Contacts',
+    name1: 'Sunday - Thursday',
+    content1: '9:00 am - 9:00 pm',
+    name2: 'Saturday - Friday',
+    content2: 'Closed',
+    otherContacts: [
+      {name: 'Twitter', icon: 'twitter', uri: ''},
+      {name: 'Facebook', icon: 'facebook', uri: ''},
+      {name: 'Instagram', icon: 'instagram', uri: ''},
+      {name: 'Snapchat', icon: 'snapchat-ghost', uri: ''}
+    ],
+    nameFont: {
+      color: '#4195B4',
+      fontSize: 16,
+      fontFamily: 'PublicSans-SemiBold'
+    },
+    contentFont: {
+      color: '#959595',
+      fontSize: 14,
+      fontFamily: 'PublicSans-Regular'
+    }
+  },
+  role: [{name: 'admin', view: true, edit: true}],
+  action: {create: false, update: false, read: false, delete: false},
+  event: {
+    onChecked: '',
+  },
+}
+
+export const newNavigationButtonData = {
+  component: componentName.NAVIGATIONBUTTON,
+  field_name: 'navigation_button',
+  is_mandatory: false,
+  meta: {
+    title: 'Navigation Buttons',
+    buttons: [
+      {text1: 'Find', text2: 'Doctor', iconImage: ''},
+      {text1: 'Online', text2: 'Consultation', iconImage: ''},
+      {text1: 'Visitings', text2: 'History', iconImage: ''},
+      {text1: 'X-ray', text2: 'Reports', iconImage: ''}
+    ],
+    firstTextFont: {
+      color: '#4195B4',
+      fontSize: 14,
+      fontFamily: 'PublicSans-Regular'
+    },
+    secondTextFont: {
+      color: '#4195B4',
+      fontSize: 16,
+      fontFamily: 'PublicSans-Bold'
+    }
+  },
+  role: [{name: 'admin', view: true, edit: true}],
+  action: {create: false, update: false, read: false, delete: false},
+  event: {
+    onChecked: '',
+  },
+}
+
+export const newNavButton = {
+  text1: 'First Text',
+  text2: 'Second Text',
+  iconImage: '',
+}
+
+export const newNotificationData = {
+  component: componentName.NOTIFICATION,
+  field_name: 'notification',
+  is_mandatory: false,
+  meta: {
+    title: 'Notification',
+    imageUri: '',
+    name: 'Name',
+    description: 'Description',
+    nameFont: {
+      color: '#4195B4',
+      fontSize: 16,
+      fontFamily: 'PublicSans-Bold'
+    },
+    descriptionFont: {
+      color: '#4195B4',
+      fontSize: 12,
+      fontFamily: 'PublicSans-Regular'
+    },
+    additionalDatas: [
+      {name: 'Doctor', content: 'Saleh Ahmed'},
+      {name: 'Type', content: 'Consultation'}
+    ]
+  },
+  role: [{name: 'admin', view: true, edit: true}],
+  action: {create: false, update: false, read: false, delete: false},
+  event: {
+    onChecked: '',
+  },
+}
+
+export const newDataCardData = {
+  component: componentName.DATACARD,
+  field_name: 'data_card',
+  is_mandatory: false,
+  meta: {
+    title: 'Data Card',
+    datas: ['Doctor', 'Type'],
+    nameFont: {
+      color: '#888888',
+      fontSize: 14,
+      fontFamily: 'PublicSans-Regular'
+    },
+    descriptionFont: {
+      color: '#4195B4',
+      fontSize: 14,
+      fontFamily: 'PublicSans-Regular'
+    },
+  },
+  role: [{name: 'admin', view: true, edit: true}],
+  action: {create: false, update: false, read: false, delete: false},
+  event: {
+    onChecked: '',
+  },
+}
+
 export const newFieldData = {
   [componentName.TEXT_INPUT]: newInputTextData,
   [componentName.DATE_PICKER]: newInputDateData,
@@ -996,6 +1159,11 @@ export const newFieldData = {
   [componentName.VOICEMESSAGE]: newVoiceMessage,
   [componentName.SCHEDULAR]: newSchedularData,
   [componentName.HEADER]: newHeaderData,
+  [componentName.QUESTIONANDANSWER]: newQuestionAndAnswer,
+  [componentName.CONTACT]: newContactData,
+  [componentName.NAVIGATIONBUTTON]: newNavigationButtonData,
+  [componentName.NOTIFICATION]: newNotificationData,
+  [componentName.DATACARD]: newDataCardData,
 };
 
 export const datatypes = {
@@ -1162,6 +1330,31 @@ export const fieldMenuData = {
           name: 'image',
           key: componentName.IMAGE,
           icon: 'image',
+        },
+        {
+          name: 'question_and_answer',
+          key: componentName.QUESTIONANDANSWER,
+          icon: 'help-circle',
+        },
+        {
+          name: 'contact',
+          key: componentName.CONTACT,
+          icon: 'user',
+        },
+        {
+          name: 'navigation_button',
+          key: componentName.NAVIGATIONBUTTON,
+          icon: 'navigation',
+        },
+        {
+          name: 'notification',
+          key: componentName.NOTIFICATION,
+          icon: 'message-circle',
+        },
+        {
+          name: 'data_card',
+          key: componentName.DATACARD,
+          icon: 'info',
         },
       ],
     },

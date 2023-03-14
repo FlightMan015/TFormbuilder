@@ -21,7 +21,7 @@ const TabSection = ({
   const role = element.role.find(e => e.name === userRole);
   return (
     <View style={styles.container}>
-      <FieldLabel label={element.meta.title || 'Tab Section'} visible={!element.meta.hide_title} />
+      <FieldLabel label={element.meta.title || i18nValues.t("field_labels.tab_section")} visible={!element.meta.hide_title} />
       <DynamicTabView
         data={element.meta.childs}
         renderTab={(item, tabIndex) => {

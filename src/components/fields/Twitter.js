@@ -46,7 +46,7 @@ const Twitter = props => {
 
   return (     
     <ScrollView style={{ height: 350, width: '100%', padding: 5 }}>
-      <FieldLabel label={element.meta.title || 'Twitter View'} visible={!element.meta.hide_title} />
+      <FieldLabel label={element.meta.title || i18nValues.t("field_labels.twitter")} visible={!element.meta.hide_title} />
       {renderEmbed()}
     </ScrollView>
   );

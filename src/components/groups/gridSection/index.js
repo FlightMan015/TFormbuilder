@@ -74,14 +74,6 @@ const Grid = props => {
     }
   };
 
-  const onChangeFieldValue = value => {
-    const tempElement = JSON.parse(JSON.stringify(element));
-    const tempChild = tempElement.meta.childs[cellData.cellIndex];
-    tempElement.meta.childs[cellData.cellIndex] = {...tempChild, ...value};
-
-    onClickUpdateField(index, tempElement);
-  };
-
   const onLayoutFlatList = e => {
     const flatListWidth = e.nativeEvent.layout.width;
     const numOfColumns = Math.round(flatListWidth / 130);
@@ -92,7 +84,7 @@ const Grid = props => {
 
   return (
     <View style={styles.container}>
-      <FieldLabel label={element.meta.title || 'Grid Section'} visible={!element.meta.hide_title} />
+      <FieldLabel label={element.meta.title || i18nValues.t("field_labels.grid_section")} visible={!element.meta.hide_title} />
       {cellData.viewGrid && (
         <View style={styles.gridView}>
           <View style={styles.gridSeries} onLayout={e => onLayoutFlatList(e)}>

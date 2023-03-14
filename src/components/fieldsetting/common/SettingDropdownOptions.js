@@ -2,9 +2,11 @@ import React from 'react';
 import {useTheme, IconButton} from 'react-native-paper';
 import {View, StyleSheet, Text, TextInput} from 'react-native';
 import TextButton from '../../../common/TextButton';
+import formStore from '../../../store/formStore';
 
-const SettingDropdownOptions = ({title, options, onChange, keyName}) => {
+const SettingDropdownOptions = ({title, options, onChange, keyName, buttonText}) => {
   const {colors, size} = useTheme();
+  const i18nValues = formStore(state => state.i18nValues);
 
   return (
     <View style={styles.settingView}>
@@ -39,7 +41,7 @@ const SettingDropdownOptions = ({title, options, onChange, keyName}) => {
       }
       <TextButton
         style={styles.addCardBtn}
-        text="New tab"
+        text={buttonText || i18nValues.t("setting_labels.new_tab")}
         textStyle={styles.addCardText}
         onPress={() => {
           const tempChilds = JSON.parse(JSON.stringify(options));

@@ -22,7 +22,7 @@ const DropDown = props => {
       {
         role.view && (
           <>
-            <FieldLabel label={element.meta.title || 'Dropdown'} visible={!element.meta.hide_title} />
+            <FieldLabel label={element.meta.title || i18nValues.t("field_labels.dropdown")} visible={!element.meta.hide_title} />
             <SelectDropdown
               data={element.meta.options}
               onSelect={e => {

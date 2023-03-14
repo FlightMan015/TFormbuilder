@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {
   View,
   Text,
@@ -48,6 +48,7 @@ const Card1 = (props) => {
   const preview = formStore(state => state.preview);
   const i18nValues = formStore(state => state.i18nValues);
   const cardInfoHeight = cardWidth === 'auto' ? ((ScreenWidth - 15) * 75 / 100) > 300 ? 130 : ((ScreenWidth - 15) * 75 / 100 * 9 / 16 - 40) : (ScreenWidth - 30) * 9 / 16 - 60;
+  const [visibleAddData, setVisibleAddData] = useState(false);
 
   const handlePress = useCallback(async () => {
     // await Linking.openSettings();
@@ -64,8 +65,8 @@ const Card1 = (props) => {
   }, [hyperlink]);
 
   return (
-    <View style={styles.card}>
-      <View style={styles.info(colors, cardCorner, cardInfoHeight)}>
+    <TouchableOpacity style={styles.card} onPress={() => {setVisibleAddData(!visibleAddData)}} disabled={!((element.meta.footer === 'null' || element.meta.footer === 'footer') && element.meta.visibleAdditionalData)}>
+      <View style={styles.info(colors, cardCorner, cardInfoHeight, (element.meta.footer === 'null' || (element.meta.footer === 'footer' && !visibleAddData)))}>
         <TouchableOpacity
           style={styles.emptyImageView(cardCorner, cardInfoHeight, fonts, imageUri)}
           disabled={!(role.edit || preview)}
@@ -112,7 +113,7 @@ const Card1 = (props) => {
               }}
             />
             <TextInput
-              style={{...titleFont, padding: 0, paddingVertical: 0}}
+              style={{...titleFont, padding: 0, paddingVertical: 0, fontSize: descriptionFont.fontSize}}
               value={subTitle}
               placeholder={i18nValues.t("placeholders.subtitle")}
               editable={(role.edit || preview)}
@@ -176,17 +177,92 @@ const Card1 = (props) => {
           )
         }
       </View>
-      <GradientButton
-        text={buttonText || 'Button'}
-        textStyle={buttonTextFont}
-        style={styles.button(cardCorner)}
-        colors={[buttonBackgroundStartColor, isGradientBackground? buttonBackgroundEndColor : buttonBackgroundStartColor]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0.5 }}
-        onPress={handlePress}
-        disabled={(!hyperlink || !(role.edit || preview))}
-      />
-    </View>);
+      {
+        visibleAddData &&
+        element.meta.visibleAdditionalData && element.meta.additionalDatas.dataNames.length > 0 &&
+        element.meta.additionalDatas.dataNames.map((dataName, nameIndex) => (
+          <View key={nameIndex} style={{backgroundColor: colors.card, paddingHorizontal: 20}}>
+            <View
+              style={{
+                flexDirection: element.meta.additionalDatas.titleValueVerticalAlign === true ? 'column' : 'row',
+                borderTopWidth: element.meta.additionalDatas.titleValueVerticalAlign === true ? 1 : 0,
+                borderTopColor: titleFont.color,
+                alignItems: element.meta.additionalDatas.titleValueVerticalAlign === false ? 'center' : 'flex-start',
+                paddingVertical: 5,
+              }}>
+              <Text style={{
+                width: element.meta.additionalDatas.titleValueVerticalAlign === false ? cardInfoHeight - 40 : '100%'
+              }}>{dataName}</Text>
+              <TextInput
+                style={element.meta.additionalDatas.titleValueVerticalAlign === false ? {flex: 1, padding: 0, paddingLeft: 10} : {width: '100%', padding: 0}}
+                value={formValue[element.field_name][cardIndex][dataName] || ''}
+                multiline
+                placeholder={'... ' + dataName}
+                numberOfLines={2}
+                editable
+                onChange={e => {
+                  e.persist();
+                  const newData = [...formValue[element.field_name]];
+                  const newCardData = {...newData[cardIndex], [dataName]: e};
+                  newData.splice(cardIndex, 1, newCardData);
+                  setFormValue({...formValue, [element.field_name]: newData});
+                  // if (element.event.onChangeCard) {
+                  //   Alert.alert('Rule Action', `Fired onChangeCard action. rule - ${element.event.onChangeCard}.`);
+                  // }
+                }}
+              />
+            </View>
+          </View>
+        ))
+      }
+      {
+        element.meta.footer === 'button' && (
+          <GradientButton
+            text={buttonText || 'Button'}
+            textStyle={buttonTextFont}
+            style={styles.button(cardCorner)}
+            colors={[buttonBackgroundStartColor, isGradientBackground? buttonBackgroundEndColor : buttonBackgroundStartColor]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0.5 }}
+            onPress={e => {
+              if (!element.meta.visibleAdditionalData) {
+                handlePress(e)
+              } else {
+                setVisibleAddData(!visibleAddData);
+              }
+            }}
+            disabled={element.meta.visibleAdditionalData ? false : (!hyperlink || !(role.edit || preview))}
+          />
+        )
+      }
+      
+      {
+        visibleAddData && element.meta.footer === 'footer' && (
+          <View
+            style={styles.footer(cardCorner, colors)}
+          >
+            {/* <Text style={{...titleFont, borderTopWidth: 1, paddingTop: 10, paddingBottom: 15, borderTopColor: titleFont.color}}>{formValue[element.field_name][cardIndex].footerText || 'The end text'}</Text> */}
+            <TextInput
+              style={{...titleFont, borderTopWidth: 1, paddingTop: 10, paddingBottom: 15, borderTopColor: titleFont.color}}
+              value={formValue[element.field_name][cardIndex].footerText || 'The end text'}
+              multiline
+              numberOfLines={2}
+              placeholder={'... ' + i18nValues.t('setting_labels.footer')}
+              onChange={e => {
+                e.persist();
+                const newData = [...formValue[element.field_name]];
+                const newCardData = {...newData[cardIndex], footerText: e};
+                newData.splice(cardIndex, 1, newCardData);
+                setFormValue({...formValue, [element.field_name]: newData});
+                // if (element.event.onChangeCard) {
+                //   Alert.alert('Rule Action', `Fired onChangeCard action. rule - ${element.event.onChangeCard}.`);
+                // }
+              }}
+            />
+          </View>
+        )
+      }
+    </TouchableOpacity>);
 };
 
 const styles = StyleSheet.create({
@@ -194,7 +270,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: cardCorner === 'default' ? 3 : 20,
   }),
-  info: (colors, cardCorner, cardInfoHeight) => ({
+  info: (colors, cardCorner, cardInfoHeight, bottomCorner) => ({
     height: cardInfoHeight,
     flexDirection: 'row',
     alignItems: 'center',
@@ -202,6 +278,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.card,
     borderTopRightRadius: cardCorner === 'default' ? 3 : 20,
     borderTopLeftRadius: cardCorner === 'default' ? 3 : 20,
+    borderBottomRightRadius: bottomCorner ? cardCorner === 'default' ? 3 : 20 : 0,
+    borderBottomLeftRadius: bottomCorner ? cardCorner === 'default' ? 3 : 20 : 0,
   }),
   image: cardCorner => ({
     width: '35%',
@@ -231,6 +309,13 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderBottomRightRadius: cardCorner === 'default' ? 3 : 20,
     borderBottomLeftRadius: cardCorner === 'default' ? 3 : 20,
+  }),
+  footer: (cardCorner, colors) => ({
+    width: '100%',
+    paddingHorizontal: 20,
+    borderBottomRightRadius: cardCorner === 'default' ? 3 : 20,
+    borderBottomLeftRadius: cardCorner === 'default' ? 3 : 20,
+    backgroundColor: colors.card,
   }),
 });
 

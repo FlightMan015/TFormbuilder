@@ -6,13 +6,13 @@ import formStore from '../../store/formStore';
 import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import SettingSwitch from './common/SettingSwitch';
-import FontSetting from '../../common/FontSetting';
+import SettingDropdownOptions from './common/SettingDropdownOptions';
+import ColorPicker from '../../common/ColorPicker';
 
-const SchedularSetting = ({element, index, onClick}) => {
+const QuestionAndAnswerSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
-  const updateFormData = formStore(state => state.updateFormData);
   const i18nValues = formStore(state => state.i18nValues);
 
   const onChange = (key, value) => {
@@ -38,15 +38,9 @@ const SchedularSetting = ({element, index, onClick}) => {
     }
   };
 
-  const onChangeFont = (key, subkey, value) => {
-    const tempMeta = {...element.meta};
-    const subdata = {...tempMeta[key], [subkey]: value};
-    updateFormData(index, {...element, meta: {...tempMeta, [key]: subdata}});
-  };
-
   return (
     <>
-      <SettingHeader title={i18nValues.t("setting_labels.schedular_settings")} />
+      <SettingHeader title={i18nValues.t("setting_labels.question_and_answer_settings")} />
       <SettingLabel title={i18nValues.t("setting_labels.label")} label={element.meta.title} onChange={onChange} keyName={'title'}/>
       <SettingSwitch
         title={i18nValues.t("setting_labels.hide_label")}
@@ -61,37 +55,31 @@ const SchedularSetting = ({element, index, onClick}) => {
         onChange={onChange}
         keyName={'is_mandatory'}
       />
-      <FontSetting
-        label={i18nValues.t("setting_labels.month_text_font")}
-        fontColor={element.meta.monthFont.color}
-        fontSize={element.meta.monthFont.fontSize}
-        fontType={element.meta.monthFont.fontFamily}
-        onChange={(type, e) => {onChangeFont('monthFont', type, e);}}
+      {/* <SettingLabel title={i18nValues.t("setting_labels.question")} label={element.meta.question} onChange={onChange} keyName={'question'}/> */}
+      <SettingDropdownOptions title={i18nValues.t("setting_labels.answer")} options={element.meta.answers} onChange={onChange} keyName={'answers'} />
+      <SettingSwitch
+        title={i18nValues.t("setting_labels.answer_alignment")}
+        value={element.meta.answerAlign === 'row' ? false : true}
+        onChange={(key, value) => {
+          if (value) {
+            onChange(key, 'column');
+          } else {
+            onChange(key, 'row');
+          }
+        }}
+        keyName={'answerAlign'}
+        description={i18nValues.t("setting_labels.align_vertical")}
       />
-      <FontSetting
-        label={i18nValues.t("setting_labels.date_text_font")}
-        fontColor={element.meta.dateFont.color}
-        fontSize={element.meta.dateFont.fontSize}
-        fontType={element.meta.dateFont.fontFamily}
-        onChange={(type, e) => {onChangeFont('dateFont', type, e);}}
-      />
-      <FontSetting
-        label={i18nValues.t("setting_labels.day_text_font")}
-        fontColor={element.meta.dayFont.color}
-        fontSize={element.meta.dayFont.fontSize}
-        fontType={element.meta.dayFont.fontFamily}
-        onChange={(type, e) => {onChangeFont('dayFont', type, e);}}
-      />
-      <FontSetting
-        label={i18nValues.t("setting_labels.schedule_text_font")}
-        fontColor={element.meta.scheduleFont.color}
-        fontSize={element.meta.scheduleFont.fontSize}
-        fontType={element.meta.scheduleFont.fontFamily}
-        onChange={(type, e) => {onChangeFont('scheduleFont', type, e);}}
+      <ColorPicker
+        color={element.meta.checkedColor}
+        label={i18nValues.t("setting_labels.checked_color")}
+        selectColor={e => {
+          onChange('checkedColor', e);
+        }}
       />
       <SettingDuplicate index={index} element={element} />
     </>
   );
 };
 
-export default SchedularSetting;
+export default QuestionAndAnswerSetting;

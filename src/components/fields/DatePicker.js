@@ -20,7 +20,7 @@ const DatePicker = ({element}) => {
       {
         role.view && (
           <>
-            <FieldLabel label={element.meta.title || 'Date'} visible={!element.meta.hide_title} />
+            <FieldLabel label={element.meta.title || i18nValues.t("field_labels.date")} visible={!element.meta.hide_title} />
             <View style={styles.mainView(colors)}>
               <Text style={styles.text(fonts)}>
                 {(element.field_name in formValue  && formValue[element.field_name]) ? formValue[element.field_name]: new Date(Date.now()).toISOString().split('T')[0]}

@@ -25,7 +25,7 @@ const ImageField = ({element}) => {
       {
         role.view && (
           <>
-            <FieldLabel label={element.meta.title || 'Image'} visible={!element.meta.hide_title} />
+            <FieldLabel label={element.meta.title || i18nValues.t("field_labels.image")} visible={!element.meta.hide_title} />
             <View>
               {
                 formValue[element.field_name] && (

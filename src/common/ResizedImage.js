@@ -20,7 +20,7 @@ const ResizedImage = ({uri, maxWidth, maxHeight, borderRadius}) => {
   return (
     <Image
       style={{width: imageSize.width, height: imageSize.height, alignSelf: 'center', borderRadius}}
-      source={{uri: uri}}
+      source={typeof(uri) !== 'string' ? uri : {uri: uri}}
     />
   );
 };

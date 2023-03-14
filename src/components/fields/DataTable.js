@@ -82,7 +82,7 @@ const DataTableBody = props => {
       {
         role.view && (
           <>
-            <FieldLabel label={element.meta.title || 'Data Table'} visible={!element.meta.hide_title} />
+            <FieldLabel label={element.meta.title || i18nValues.t("field_labels.data_table")} visible={!element.meta.hide_title} />
             <DataTableContext.Provider value={{tableData, setTableData: setTableValue, cellWidth}}>
               <ScrollView horizontal={true} style={styles.scrollView}>
                 <Table

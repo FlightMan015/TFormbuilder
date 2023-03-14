@@ -233,7 +233,7 @@ const LineChartSubField = ({element, index, onClickUpdateField}) => {
       {
         role.view && (
           <>
-            <FieldLabel label={element.meta.title || 'Line Chart'} visible={!element.meta.hide_title} />
+            <FieldLabel label={element.meta.title || i18nValues.t("field_labels.line_chart")} visible={!element.meta.hide_title} />
             {
               (data.labels.length === 0 || data.legend.length === 0) && (
                 <Text style={styles.noDataText(fonts)}>No data to show. Please click 'Datas' to add the data.</Text>

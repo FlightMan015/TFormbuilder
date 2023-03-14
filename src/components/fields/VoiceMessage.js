@@ -114,7 +114,7 @@ const VoiceMessage = ({element}) => {
       {
         role.view && (
           <>
-            <FieldLabel label={element.meta.title || 'Voice Message'} visible={!element.meta.hide_title} />
+            <FieldLabel label={element.meta.title || i18nValues.t("field_labels.voice_message")} visible={!element.meta.hide_title} />
             {
               (role.edit || preview) && (
                 <View style={styles.mainView(colors)}>

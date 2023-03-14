@@ -25,6 +25,11 @@ import VoiceMessageSetting from './VoiceMessageSetting';
 import SchedularSetting from './SchedularSetting';
 import ListSectionSetting from './ListSectionSetting';
 import HeaderSetting from './HeaderSetting';
+import QuestionAndAnswerSetting from './QuestionAndAnswerSetting';
+import ContactSetting from './ContactSetting';
+import NavigationButtonSetting from './NavigationButtonSetting';
+import NotificationSetting from './NotificationSetting';
+import DataCardSetting from './DataCardSetting';
 
 const componentMap = {
   [componentName.CARDSLIDER]: {
@@ -105,6 +110,21 @@ const componentMap = {
   [componentName.HEADER]: {
     component: HeaderSetting,
   },
+  [componentName.QUESTIONANDANSWER]: {
+    component: QuestionAndAnswerSetting,
+  },
+  [componentName.CONTACT]: {
+    component: ContactSetting,
+  },
+  [componentName.NAVIGATIONBUTTON]: {
+    component: NavigationButtonSetting,
+  },
+  [componentName.NOTIFICATION]: {
+    component: NotificationSetting,
+  },
+  [componentName.DATACARD]: {
+    component: DataCardSetting,
+  }
 };
 
 export const getSettingComponent = id => componentMap[id]?.component || null;
