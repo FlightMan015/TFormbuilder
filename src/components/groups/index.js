@@ -38,18 +38,18 @@ const Group = props => {
   };
 
   return (
-    <View>
+    <View style={{width: element.meta.field_width}}>
       {
         role.view && (
           <>
             <View
-              style={styles.field(colors, (selected && !preview))}
+              style={styles.field(colors, (selected && !preview && (userRole === 'admin' || userRole === 'builder')))}
               onStartShouldSetResponder={() => {
                 if(!selected) onSelect(index);
               }}>
               <GroupComponent element={element} index={index} selected={selected} onSelect={e => onSelect(e)} preview={preview} />
             </View>
-            {(selected && !preview) && (
+            {((userRole === 'admin' || userRole === 'builder') && selected && !preview) && (
               <Animated.View style={{...styles.setIcons, opacity}}>
                 {
                   index.groupIndex > 0 && (

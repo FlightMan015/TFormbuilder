@@ -38,6 +38,7 @@ const Bitmap = ({element, index}) => {
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
   const preview = formStore(state => state.preview);
+  const i18nValues = formStore(state => state.i18nValues);
   // Array of completed paths from global state
   // const completedPaths = useDrawingStore(state => state.completedPaths);
   // const completedPaths = JSON.parse(JSON.stringify(element.meta.paths));
@@ -344,6 +345,7 @@ const styles = StyleSheet.create({
   imageName: (fonts) => ({
     borderRadius: 10,
     paddingLeft: 10,
+    paddingVertical: 10,
     ...fonts.values,
   }),
   selectImageContainer: colors => ({

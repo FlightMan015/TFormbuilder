@@ -53,6 +53,14 @@ const FileUploadSetting = ({element, index, onClick}) => {
         onChange={onChange}
         keyName={'is_mandatory'}
       />
+      <SettingSwitch
+        title={i18nValues.t("setting_labels.small_width")}
+        value={element.meta.field_width === '50%'}
+        onChange={(key, value) => {
+          onChange(key, value ? '50%' : '100%');
+        }}
+        keyName={'field_width'}
+      />
       <SettingSwitch title={i18nValues.t("setting_labels.multiple_selection")} value={element.meta.multi_select} onChange={onChange} keyName={'multi_select'} />
       <SettingDuplicate index={index} element={element} />
     </>

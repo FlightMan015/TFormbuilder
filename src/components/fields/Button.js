@@ -21,6 +21,7 @@ const Button = props => {
   const role = element.role.find(e => e.name === userRole);
 
   const onClick = () => {
+    console.log('formValue---------------------------------------------', formValue)
     if (element.meta.function === 'formSubmit') {
       if (!submit) {
         setSubmit(true);
@@ -53,7 +54,7 @@ const Button = props => {
               disabled={!role.edit && !preview}
               style={{
                 ...styles.touchableContainer(element.meta.width),
-                backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,
+                backgroundColor: element.meta.backgroundColor || colors.colorButton,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
               {element.meta.isIcon && element.meta.icon?.family === 'Ionicons' && (
@@ -87,7 +88,7 @@ const Button = props => {
               disabled={!role.edit && !preview}
               style={{
                 ...styles.touchableContainer1(element.meta.width),
-                backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,
+                backgroundColor: element.meta.backgroundColor || colors.colorButton,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
               <View style={styles.touchableContainer1(element.meta.width)}>
@@ -123,7 +124,7 @@ const Button = props => {
               disabled={!role.edit && !preview}
               style={{
                 ...styles.touchableContainer1(element.meta.width),
-                backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,
+                backgroundColor: element.meta.backgroundColor || colors.colorButton,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
               <View style={styles.touchableContainer1(element.meta.width)}>
@@ -159,7 +160,7 @@ const Button = props => {
               disabled={!role.edit && !preview}
               style={{
                 ...styles.touchableContainer(element.meta.width),
-                backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,
+                backgroundColor: element.meta.backgroundColor || colors.colorButton,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
               {element.meta.isText &&
@@ -193,7 +194,7 @@ const Button = props => {
               disabled={!role.edit && !preview}
               style={{
                 ...styles.touchableContainer(element.meta.width),
-                backgroundColor: role.edit ? element.meta.backgroundColor || colors.colorButton : colors.icon,
+                backgroundColor: element.meta.backgroundColor || colors.colorButton,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
               <View style={{...styles.touchableContainer1(element.meta.width), width: '100%'}}>

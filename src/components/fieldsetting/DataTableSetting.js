@@ -7,6 +7,7 @@ import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import SettingSwitch from './common/SettingSwitch';
 import DataTableHeaderSetting from './DataTableHeaderSetting';
+import ColorPicker from '../../common/ColorPicker';
 
 const DataTableSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
@@ -42,6 +43,42 @@ const DataTableSetting = ({element, index, onClick}) => {
         value={element.is_mandatory}
         onChange={onChange}
         keyName={'is_mandatory'}
+      />
+      <ColorPicker
+        color={element.meta.backgroundColor || colors.card}
+        label={i18nValues.t("setting_labels.background_color")}
+        selectColor={e => {
+          onChange('backgroundColor', e);
+        }}
+      />
+      <ColorPicker
+        color={element.meta.borderColor}
+        label={i18nValues.t("setting_labels.border_color")}
+        selectColor={e => {
+          onChange('borderColor', e);
+        }}
+      />
+      <SettingSwitch
+        title={i18nValues.t("setting_labels.vertical_border")}
+        value={element.meta.verticalBorder}
+        onChange={onChange}
+        keyName={'verticalBorder'}
+        description={i18nValues.t("setting_labels.vertical_border_description")}
+      />
+      <SettingSwitch
+        title={i18nValues.t("setting_labels.horizontal_border")}
+        value={element.meta.horizontalBorder}
+        onChange={onChange}
+        keyName={'horizontalBorder'}
+        description={i18nValues.t("setting_labels.horizontal_border_description")}
+      />
+      <SettingSwitch
+        title={i18nValues.t("setting_labels.small_width")}
+        value={element.meta.field_width === '50%'}
+        onChange={(key, value) => {
+          onChange(key, value ? '50%' : '100%');
+        }}
+        keyName={'field_width'}
       />
       <DataTableHeaderSetting fields={element.meta.headers} changeData={onChange} />
       <SettingDuplicate index={index} element={element} />

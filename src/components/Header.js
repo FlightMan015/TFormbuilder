@@ -20,6 +20,7 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
   const setOpenSetting = formStore(state => state.setOpenSetting);
   const formData = formStore(state => state.formData);
   const formDatas = formStore(state => state.formDatas);
+  const formValues = formStore(state => state.formValues);
   const setFormData = formStore(state => state.setFormData);
   const visibleDlg = formStore(state => state.visibleDlg);
   const setVisibleDlg = formStore(state => state.setVisibleDlg);
@@ -27,6 +28,7 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
   const i18nValues = formStore(state => state.i18nValues);
   const seti18nValues = formStore(state => state.seti18nValues);
   const preview = formStore(state => state.preview);
+  const userRole = formStore(state => state.userRole);
   const [open, setOpen] = useState(true);
 
   const formNames = formDatas.map((item, index) => {
@@ -47,47 +49,93 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
       <View style={{position: 'absolute', width: '100%', height: '100%'}}>
         <View style={{height: Platform.OS === 'ios' ? 25 : 0}}></View>
         <View style={styles.titleBar}>
-          <View style={styles.subView}>
+          {
+            (userRole === 'admin' || userRole === 'builder') && (
+              <View style={styles.subView}>
+                <Menu>
+                  <MenuTrigger>
+                    <IconButton
+                      icon="menu"
+                      size={size.s20}
+                      iconColor={fonts.headings.color}
+                    />
+                  </MenuTrigger>
+                  <MenuOptions>
+                    {menuItems.map((item, index) => {
+                      return (
+                        <MenuOption key={index} style={{padding: 0}} onSelect={() => {
+                          switch (item.name) {
+                            case menuItems[0].name:
+                              setFormData(newFormData);
+                              setFormValue({});
+                              break;
+                            case menuItems[1].name:
+                              console.log(formData);
+                              saveForm(formData);
+                              break;
+                            case menuItems[2].name:
+                              setVisibleDlg({...visibleDlg, saveForm: true, rename: false, oldName: formData.name});
+                              break;
+                            case menuItems[3].name:
+                              setVisibleDlg({...visibleDlg, saveForm: true, rename: true, oldName: formData.name});
+                              break;
+                            case menuItems[4].name:
+                              deleteForm(formData.name);
+                              break;
+                            case menuItems[5].name:
+                              deleteForm(formData.name);
+                              break;
+                          }
+                        }}>
+                          <View
+                            key={index}
+                            style={styles.fieldListItem}>
+                            <View style={styles.fieldIcon}>
+                              <Icon name={item.icon} size={18} color={'white'} />
+                            </View>
+                            <View style={styles.fieldText}>
+                              <Text style={styles.fieldNameText}>{i18nValues.t(`menu_labels.${item.name}`)}</Text>
+                            </View>
+                          </View>
+                        </MenuOption>
+                      );
+                    })}
+                  </MenuOptions>
+                </Menu>
+              </View>
+            )
+          }
+
+        {
+          !(userRole === 'admin' || userRole === 'builder') && (
             <Menu>
               <MenuTrigger>
                 <IconButton
-                  icon="menu"
+                  icon="earth"
                   size={size.s20}
                   iconColor={fonts.headings.color}
                 />
               </MenuTrigger>
               <MenuOptions>
-                {menuItems.map((item, index) => {
+                {languages.map((item, index) => {
                   return (
                     <MenuOption key={index} style={{padding: 0}} onSelect={() => {
-                      switch (item.name) {
-                        case menuItems[0].name:
-                          setFormData(newFormData);
-                          setFormValue({});
-                          break;
-                        case menuItems[1].name:
-                          console.log(formData);
-                          saveForm(formData);
-                          break;
-                        case menuItems[2].name:
-                          setVisibleDlg({...visibleDlg, saveForm: true, rename: false, oldName: formData.name});
-                          break;
-                        case menuItems[3].name:
-                          setVisibleDlg({...visibleDlg, saveForm: true, rename: true, oldName: formData.name});
-                          break;
-                        case menuItems[4].name:
-                          deleteForm(formData.name);
-                          break;
-                      }
+                      const tempValues = {...i18nValues};
+                      tempValues.locale = item.code;
+                      seti18nValues(tempValues);
                     }}>
                       <View
                         key={index}
                         style={styles.fieldListItem}>
                         <View style={styles.fieldIcon}>
-                          <Icon name={item.icon} size={18} color={'white'} />
+                          {
+                            item.code === i18nValues.locale && (
+                              <Icon name="check" size={18} color={'white'} />
+                            )
+                          }
                         </View>
                         <View style={styles.fieldText}>
-                          <Text style={styles.fieldNameText}>{i18nValues.t(`menu_labels.${item.name}`)}</Text>
+                          <Text style={styles.fieldNameText}>{item.name}</Text>
                         </View>
                       </View>
                     </MenuOption>
@@ -95,47 +143,54 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
                 })}
               </MenuOptions>
             </Menu>
-          </View>
+          )
+        }
+          
           {/* <Text style={styles.title(fonts)}>{formData.title}</Text> */}
           <View style={{flex: 1, flexDirection: 'row-reverse'}}>
             <View style={styles.subView}>
-              <Menu>
-                <MenuTrigger>
-                  <IconButton
-                    icon="earth"
-                    size={size.s20}
-                    iconColor={fonts.headings.color}
-                  />
-                </MenuTrigger>
-                <MenuOptions>
-                  {languages.map((item, index) => {
-                    return (
-                      <MenuOption key={index} style={{padding: 0}} onSelect={() => {
-                        const tempValues = {...i18nValues};
-                        tempValues.locale = item.code;
-                        seti18nValues(tempValues);
-                      }}>
-                        <View
-                          key={index}
-                          style={styles.fieldListItem}>
-                          <View style={styles.fieldIcon}>
-                            {
-                              item.code === i18nValues.locale && (
-                                <Icon name="check" size={18} color={'white'} />
-                              )
-                            }
+            {
+              (userRole === 'admin' || userRole === 'builder') && (
+                <Menu>
+                  <MenuTrigger>
+                    <IconButton
+                      icon="earth"
+                      size={size.s20}
+                      iconColor={fonts.headings.color}
+                    />
+                  </MenuTrigger>
+                  <MenuOptions>
+                    {languages.map((item, index) => {
+                      return (
+                        <MenuOption key={index} style={{padding: 0}} onSelect={() => {
+                          const tempValues = {...i18nValues};
+                          tempValues.locale = item.code;
+                          seti18nValues(tempValues);
+                        }}>
+                          <View
+                            key={index}
+                            style={styles.fieldListItem}>
+                            <View style={styles.fieldIcon}>
+                              {
+                                item.code === i18nValues.locale && (
+                                  <Icon name="check" size={18} color={'white'} />
+                                )
+                              }
+                            </View>
+                            <View style={styles.fieldText}>
+                              <Text style={styles.fieldNameText}>{item.name}</Text>
+                            </View>
                           </View>
-                          <View style={styles.fieldText}>
-                            <Text style={styles.fieldNameText}>{item.name}</Text>
-                          </View>
-                        </View>
-                      </MenuOption>
-                    );
-                  })}
-                </MenuOptions>
-              </Menu>
+                        </MenuOption>
+                      );
+                    })}
+                  </MenuOptions>
+                </Menu>
+              )
+            }
+              
               {
-                !preview && (
+                (userRole === 'admin' || userRole === 'builder') && !preview && (
                   <IconButton
                     icon="cog-outline"
                     size={size.s20}
@@ -154,6 +209,8 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
               onSelect={e => {
                 const tempFormData = formDatas.find(data => data.name === e);
                 setFormData(tempFormData);
+                const tempFormValue = formValues.find(data => Object.keys(data)[0] === e);
+                setFormValue(tempFormValue ? tempFormValue[e] : {});
               }}
               dropdownStyle={styles.dropdown(colors)}
               rowStyle={styles.rowStyle}

@@ -12,6 +12,7 @@ const NavigationButton = props => {
   const {element} = props;
   const {colors, fonts} = useTheme();
   const userRole = formStore(state => state.userRole);
+  const i18nValues = formStore(state => state.i18nValues);
   const role = element.role.find(e => e.name === userRole);
   const [btnWidth, setBtnWidth] = useState(0);
 
@@ -29,7 +30,7 @@ const NavigationButton = props => {
               {
                 element.meta.buttons.map((button, index) => (
                   <View key={index} style={{padding: 15, width: '50%'}}>
-                    <TouchableOpacity style={{borderRadius: 20, alignItems: 'center', backgroundColor: colors.card, paddingVertical: 15}} onLayout={onLayout}>
+                    <TouchableOpacity style={{borderRadius: 30, alignItems: 'center', backgroundColor: colors.card, paddingVertical: 15}} onLayout={onLayout}>
                       {
                         button.iconImage && (
                           <ResizedImage

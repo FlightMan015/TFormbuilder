@@ -157,13 +157,20 @@ const newHeaderData = {
   meta: {
     header: 'New Header',
     textAlign: 'center',
+    field_width: '100%',
     font: {
       fontSize: 18,
       color: '#4195B4',
       fontFamily: 'PublicSans-Bold'
     }
   },
-  role: [{name: 'admin', edit: true, view: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
 
@@ -180,8 +187,15 @@ const newInputTextData = {
     placeholder: 'Enter text..',
     numberOfLines: '1',
     multiline: false,
+    field_width: '100%'
   },
-  role: [{name: 'admin', edit: true, view: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onSubmitEditing: '',
@@ -198,8 +212,15 @@ const newInputDateData = {
   meta: {
     title: 'Date',
     hide_title: false,
+    field_width: '100%',
   },
-  role: [{name: 'admin', edit: true, view: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChangeDate: '',
@@ -215,8 +236,15 @@ const newDropDownData = {
     hide_title: false,
     options: ['Option1', 'Option2', 'Option3'],
     search: false,
+    field_width: '100%',
   },
-  role: [{name: 'admin', edit: true, view: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onSelect: '',
@@ -230,8 +258,15 @@ const newInputTimeData = {
   meta: {
     title: 'Time',
     hide_title: false,
+    field_width: '100%',
   },
-  role: [{name: 'admin', edit: true, view: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChangeTime: '',
@@ -246,8 +281,15 @@ const newFileUploadData = {
     title: 'File Upload',
     hide_title: false,
     multi_select: false,
+    field_width: '100%',
   },
-  role: [{name: 'admin', edit: true, view: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onSelectFile: '',
@@ -261,6 +303,7 @@ const newLineChartData = {
   meta: {
     title: 'Line Chart',
     hide_title: false,
+    field_width: '100%',
     data: {
       labels: ['Jan', 'Feb', 'Mar'],
       datasets: [
@@ -282,8 +325,13 @@ const newLineChartData = {
       legend: ['Rainy Days', 'Sunny days'],
     },
   },
-  // role: [{name: 'admin', view: true, editAxis: true, editSeries: true}],
-  role: [{name: 'admin', view: true, editSeries: true, editAxes: true}],
+  role: [
+    {name: 'admin', view: true, editSeries: true, editAxes: true},
+    {name: 'builder', view: true, editSeries: true, editAxes: true},
+    {name: 'reviewer', view: true, editSeries: false, editAxes: false},
+    {name: 'approver', view: true, editSeries: false, editAxes: false},
+    {name: 'submitter', view: true, editSeries: true, editAxes: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewSeries: '',
@@ -303,6 +351,7 @@ const newBarChartData = {
   meta: {
     title: 'Bar Chart',
     hide_title: false,
+    field_width: '100%',
     data: {
       labels: ['Jan', 'Feb', 'Mar'],
       datasets: [
@@ -312,7 +361,13 @@ const newBarChartData = {
       ],
     },
   },
-  role: [{name: 'admin', edit: true, view: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewLabel: '',
@@ -329,6 +384,7 @@ const newPieChartData = {
   meta: {
     title: 'Pie Chart',
     hide_title: false,
+    field_width: '100%',
     data: [
       {
         name: 'Part1',
@@ -374,7 +430,13 @@ const newPieChartData = {
       },
     ],
   },
-  role: [{name: 'admin', edit: true, view: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewLabel: '',
@@ -391,6 +453,7 @@ const newRadarChartData = {
   meta: {
     title: 'Radar Chart',
     hide_title: false,
+    field_width: '100%',
     data: {
       datasets: [
         {axis1: 140, axis2: 250, axis3: 70, axis4: 40, axis5: 50},
@@ -401,7 +464,13 @@ const newRadarChartData = {
       colors: ['#ff0000', '#00ff00', '#0000ff'],
     },
   },
-  role: [{name: 'admin', view: true, editAxes: true, editSeries: true}],
+  role: [
+    {name: 'admin', view: true, editSeries: true, editAxes: true},
+    {name: 'builder', view: true, editSeries: true, editAxes: true},
+    {name: 'reviewer', view: true, editSeries: false, editAxes: false},
+    {name: 'approver', view: true, editSeries: false, editAxes: false},
+    {name: 'submitter', view: true, editSeries: true, editAxes: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewSeries: '',
@@ -421,12 +490,19 @@ const newMapData = {
   meta: {
     title: 'Map',
     hide_title: false,
+    field_width: '100%',
     data: {
       points: [],
       geofences: [],
     },
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewPoint: '',
@@ -445,9 +521,16 @@ const newCalendarData = {
   meta: {
     title: 'Calendar',
     hide_title: false,
+    field_width: '100%',
     items: {},
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewSchedule: '',
@@ -464,6 +547,7 @@ const newSchedularData = {
   meta: {
     title: 'Schedular',
     hide_title: false,
+    field_width: '100%',
     monthFont: {
       color: '#4195B4',
       fontSize: 15,
@@ -472,7 +556,7 @@ const newSchedularData = {
     dateFont: {
       color: '#4195B4',
       fontSize: 14,
-      fontFamily: 'PublicSans-Regular',
+      fontFamily: 'PublicSans-Bold',
     },
     dayFont: {
       color: '#4195B4',
@@ -485,7 +569,13 @@ const newSchedularData = {
       fontFamily: 'PublicSans-Regular',
     },
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewSchedule: '',
@@ -503,8 +593,15 @@ const newGroupData = {
     childs: [],
     option: false,
     is_tab: false,
+    field_width: '100%',
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   event: {},
 };
 
@@ -516,6 +613,7 @@ const newGridData = {
     hide_title: false,
     childs: [],
     option: false,
+    field_width: '100%',
     cellData: {
       height: 100,
       numColumns: 3,
@@ -524,7 +622,13 @@ const newGridData = {
     cellFields: [],
     verticalAlign: true,
   },
-  role: [{name: 'admin', view: true, edit: true, define: true}],
+  role: [
+    {name: 'admin', view: true, edit: true, define: true},
+    {name: 'builder', view: true, edit: false, define: true},
+    {name: 'reviewer', view: true, edit: false, define: true},
+    {name: 'approver', view: true, edit: false, define: true},
+    {name: 'submitter', view: true, edit: true, define: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChangeCellData: '',
@@ -544,8 +648,15 @@ const newListSectionData = {
     cellFields: [],
     listVerticalAlign: true,
     cellVerticalAlign: false,
+    field_width: '100%',
   },
-  role: [{name: 'admin', view: true, edit: true, define: true}],
+  role: [
+    {name: 'admin', view: true, edit: true, define: true},
+    {name: 'builder', view: true, edit: false, define: true},
+    {name: 'reviewer', view: true, edit: false, define: true},
+    {name: 'approver', view: true, edit: false, define: true},
+    {name: 'submitter', view: true, edit: true, define: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChangeCellData: '',
@@ -560,6 +671,7 @@ const newTabSectionData = {
   meta: {
     title: 'New Tab Section',
     hide_title: false,
+    field_width: '100%',
     childs: [
       {
         component: componentName.TAB,
@@ -588,7 +700,13 @@ const newTabSectionData = {
     ],
     option: false,
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   event: {},
 };
 
@@ -609,8 +727,15 @@ const newBitMapData = {
     hide_title: false,
     paths: [],
     svgs: [],
+    field_width: '100%',
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewMarker: '',
@@ -627,6 +752,7 @@ const newDataTableData = {
   meta: {
     title: 'Data Table',
     hide_title: false,
+    field_width: '100%',
     headers: [
       {name: 'id', type: 'num'},
       {name: 'name', type: 'text'},
@@ -638,8 +764,18 @@ const newDataTableData = {
         data: {is_mandatory: false, options: ['menu1', 'menu2']},
       },
     ],
+    backgroundColor: '',
+    borderColor: '#808080',
+    verticalBorder: false,
+    horizontalBorder: false,
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewEntry: '',
@@ -655,13 +791,20 @@ const newRadioButtonData = {
   meta: {
     title: 'Radio Group',
     hide_title: false,
+    field_width: '100%',
     options: [
       'option1',
       'option2',
       'option3'
     ],
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onSelect: '',
@@ -675,6 +818,7 @@ const newGaugeChartData = {
   meta: {
     title: 'Gauge Chart',
     hide_title: false,
+    field_width: '100%',
     data: {
       minValue: 0,
       maxValue: 100,
@@ -685,7 +829,13 @@ const newGaugeChartData = {
       height: 200,
     },
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChangeValue: '',
@@ -699,13 +849,20 @@ const newSliderData = {
   meta: {
     title: 'Slider',
     hide_title: false,
+    field_width: '100%',
     data: {
       minValue: 0,
       maxValue: 10,
       step: 1,
     },
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChangeValue: '',
@@ -718,6 +875,7 @@ const newButtonData = {
   is_mandatory: false,
   meta: {
     title: 'Button',
+    field_width: '100%',
     isText: true,
     isIcon: true,
     icon: '',
@@ -731,7 +889,13 @@ const newButtonData = {
     function: 'formSubmit',
     width: 'fit_content'
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onPress: '',
@@ -745,9 +909,19 @@ const newImageData = {
   meta: {
     title: 'Image',
     hide_title: false,
-    uri: '',
+    field_width: '100%',
+    width: '30%',
+    maxWidth: '200',
+    maxHeight: '150',
+    uri: 'https://www.google.com/imgres?imgurl=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F536%2F218%2Foriginal%2Fflat-modern-family-tree-vector-template.jpg&imgrefurl=https%3A%2F%2Fwww.vecteezy.com%2Ffree-vector%2Ffamily-tree&tbnid=rqs5xnKcthRS5M&vet=12ahUKEwivzIDF0N39AhXSxyoKHURvBQsQMygbegUIARCqAg..i&docid=wkdbsHFvqt9DRM&w=2800&h=2800&q=tree%20image&ved=2ahUKEwivzIDF0N39AhXSxyoKHURvBQsQMygbegUIARCqAg',
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onSelectImage: '',
@@ -761,11 +935,18 @@ const newCompositeData = {
   meta: {
     title: 'Composite',
     hide_title: false,
+    field_width: '100%',
     numberofColumns: 4,
     spacing: 2,
     data: [],
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateCell: '',
@@ -815,12 +996,19 @@ export const newPaymentData = {
   meta: {
     title: 'Payment',
     hide_title: false,
+    field_width: '100%',
     buttonText: 'Pay',
     price: 10,
     server_url: 'https://parseapi.back4app.com/functions/checkout',
     currency: 'eur',
   },
-  role: [{name: 'admin', read: true, pay: true}],
+  role: [
+    {name: 'admin', view: true, pay: true},
+    {name: 'builder', view: true, pay: true},
+    {name: 'reviewer', view: true, pay: false},
+    {name: 'approver', view: true, pay: false},
+    {name: 'submitter', view: true, pay: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onSuccessPayment: '',
@@ -834,12 +1022,19 @@ export const newPopupData = {
   meta: {
     title: 'Pop Up',
     hide_title: false,
+    field_width: '100%',
     buttonText: 'Open Popup',
     popupTitle: 'Setting',
     childs: [],
     option: false,
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onClick: '',
@@ -853,6 +1048,7 @@ export const newEmbeddedData = {
   meta: {
     title: 'Custom',
     hide_title: false,
+    field_width: '100%',
     buttonText: 'Send Result',
     apiUrl: '',
     header: {},
@@ -860,7 +1056,13 @@ export const newEmbeddedData = {
     useAPIForm: false,
     response: [],
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onClick: '',
@@ -874,6 +1076,7 @@ export const newCardSlider = {
   meta: {
     title: 'Card List',
     verticalAlign: false,
+    field_width: '100%',
     buttonText: 'Button',
     autoplay: false,
     visibleDots: true,
@@ -881,13 +1084,18 @@ export const newCardSlider = {
     buttonBackgroundStartColor: '#3A88B2',
     buttonBackgroundEndColor: '#84DCD2', 
     cardtemplate: 'card1',
-    cardCorner: 'default',
+    cardCorner: 'rounded',
     cardWidth: 'auto',
     cardBackgroundColor: '#FFFFFF',
     selectedCardIndex: -1,
     titleFont: {
       color: '#5AB7C4',
       fontSize: 15,
+      fontFamily: 'PublicSans-Bold',
+    },
+    subTitleFont: {
+      color: '#5AB7C4',
+      fontSize: 13,
       fontFamily: 'PublicSans-Regular',
     },
     descriptionFont: {
@@ -928,7 +1136,13 @@ export const newCardSlider = {
     },
     footer: 'button',
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateCard: '',
@@ -943,9 +1157,16 @@ export const newTwitterData = {
   is_mandatory: false,
   meta: {
     title: 'Twitter',
+    field_width: '100%',
     tweetUrl: 'https://twitter.com/MMKK02887216',
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onClick: '',
@@ -960,8 +1181,15 @@ export const newVoiceMessage = {
     title: 'Voice Message',
     hide_title: false,
     audio_uri: '',
+    field_width: '100%',
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateMessage: '',
@@ -987,12 +1215,19 @@ export const newQuestionAndAnswer = {
   is_mandatory: false,
   meta: {
     title: 'Question And Answer',
+    field_width: '100%',
     question: "What's your gender?",
     answers: ['male', 'female'],
     answerAlign: 'row',
-    checkedColor: '#0000FF'
+    checkedColor: '#4195B4'
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChecked: '',
@@ -1005,6 +1240,7 @@ export const newContactData = {
   is_mandatory: false,
   meta: {
     title: 'Contacts',
+    field_width: '100%',
     name1: 'Sunday - Thursday',
     content1: '9:00 am - 9:00 pm',
     name2: 'Saturday - Friday',
@@ -1026,7 +1262,13 @@ export const newContactData = {
       fontFamily: 'PublicSans-Regular'
     }
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChecked: '',
@@ -1039,6 +1281,7 @@ export const newNavigationButtonData = {
   is_mandatory: false,
   meta: {
     title: 'Navigation Buttons',
+    field_width: '100%',
     buttons: [
       {text1: 'Find', text2: 'Doctor', iconImage: ''},
       {text1: 'Online', text2: 'Consultation', iconImage: ''},
@@ -1056,7 +1299,13 @@ export const newNavigationButtonData = {
       fontFamily: 'PublicSans-Bold'
     }
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChecked: '',
@@ -1075,6 +1324,7 @@ export const newNotificationData = {
   is_mandatory: false,
   meta: {
     title: 'Notification',
+    field_width: '100%',
     imageUri: '',
     name: 'Name',
     description: 'Description',
@@ -1093,7 +1343,13 @@ export const newNotificationData = {
       {name: 'Type', content: 'Consultation'}
     ]
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChecked: '',
@@ -1106,6 +1362,7 @@ export const newDataCardData = {
   is_mandatory: false,
   meta: {
     title: 'Data Card',
+    field_width: '100%',
     datas: ['Doctor', 'Type'],
     nameFont: {
       color: '#888888',
@@ -1118,7 +1375,13 @@ export const newDataCardData = {
       fontFamily: 'PublicSans-Regular'
     },
   },
-  role: [{name: 'admin', view: true, edit: true}],
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChecked: '',
@@ -1421,16 +1684,16 @@ export const fieldMenuData = {
           key: componentName.TWITTER,
           icon: 'twitter',
         },
-        {
-          name: 'stripe',
-          key: componentName.PAYMENT,
-          icon: 'dollar-sign',
-        },
-        {
-          name: 'custom',
-          key: componentName.EMBEDDED,
-          icon: 'download',
-        },
+        // {
+        //   name: 'stripe',
+        //   key: componentName.PAYMENT,
+        //   icon: 'dollar-sign',
+        // },
+        // {
+        //   name: 'custom',
+        //   key: componentName.EMBEDDED,
+        //   icon: 'download',
+        // },
       ],
     },
     {
@@ -1482,4 +1745,5 @@ export const menuItems = [
   {name: 'save_as', icon: 'content-save-edit-outline'},
   {name: 'rename', icon: 'pencil-outline'},
   {name: 'delete', icon: 'delete-forever-outline'},
+  {name: 'new_field', icon: 'focus-field'},
 ];

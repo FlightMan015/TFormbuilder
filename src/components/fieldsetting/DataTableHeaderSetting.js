@@ -29,6 +29,7 @@ const fieldTypes = {
   date : 'date',
   menu : 'menu',
 	text : 'text',
+	checkbox : 'checkbox',
 };
 
 const DataTableHeaderSetting = props => {
@@ -49,6 +50,8 @@ const DataTableHeaderSetting = props => {
           <TextInput
             style={{...styles.tableFieldName, color: '#FFFFFF'}}
             underlineColorAndroid="transparent"
+			// multiline
+			// numberOfLines={2}
             onChangeText={e => {
               const tempHeader = JSON.parse(JSON.stringify(fields));
               const changedData = {
@@ -122,6 +125,19 @@ const DataTableHeaderSetting = props => {
 									borderColor: color.GREY,
 								}}>
 								{i18nValues.t("setting_labels.dropdown")}
+							</Text>
+						)
+					}
+					{
+						item.type === 'checkbox' && (
+							<Text
+								onPress={() => {}}
+								style={{
+									...styles.typeText,
+									color: '#FFFFFF',
+									borderColor: color.GREY,
+								}}>
+								{i18nValues.t("setting_labels.checkbox")}
 							</Text>
 						)
 					}

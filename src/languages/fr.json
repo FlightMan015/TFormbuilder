@@ -259,7 +259,18 @@
             "none": "Aucun",
             "notification_setting": "Paramètre de notification",
             "name_font": "Police du nom",
-            "data_card_setting": "Réglage de la carte de données"
+            "data_card_setting": "Réglage de la carte de données",
+            "login": "Connexion",
+            "sub_title_font": "Police des sous-titres",
+            "checkbox": "Case à cocher",
+            "border_color": "Couleur de la bordure",
+            "vertical_border": "Bordure verticale",
+            "horizontal_border": "Bordure horizontale",
+            "vertical_border_description": "Assurez-vous d'afficher la bordure verticale",
+            "horizontal_border_description": "Assurez-vous d'afficher la bordure horizontale",
+            "small_width": "Petite largeur",
+            "max_width": "Largeur maximale",
+            "max_height": "Hauteur maximum"
         },
         "warnings": {
             "warning": "Avertissement",
@@ -299,7 +310,8 @@
             "save": "Sauvegarder",
             "save_as": "Enregistrer sous",
             "rename": "Renommer",
-            "delete": "Supprimer"
+            "delete": "Supprimer",
+            "new_field": "Nouveau champ"
         },
         "events": {
             "onSubmitEditing": "onSubmitEditing",

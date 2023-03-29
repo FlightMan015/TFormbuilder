@@ -89,6 +89,14 @@ const SchedularSetting = ({element, index, onClick}) => {
         fontType={element.meta.scheduleFont.fontFamily}
         onChange={(type, e) => {onChangeFont('scheduleFont', type, e);}}
       />
+      <SettingSwitch
+        title={i18nValues.t("setting_labels.small_width")}
+        value={element.meta.field_width === '50%'}
+        onChange={(key, value) => {
+          onChange(key, value ? '50%' : '100%');
+        }}
+        keyName={'field_width'}
+      />
       <SettingDuplicate index={index} element={element} />
     </>
   );

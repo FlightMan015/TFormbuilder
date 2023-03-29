@@ -18,6 +18,7 @@ import SettingLabel from './common/SettingLabel';
 import ColorPicker from '../../common/ColorPicker';
 import FontSetting from '../../common/FontSetting';
 import SettingDropdownOptions from './common/SettingDropdownOptions';
+import SettingImage from './common/SettingImage';
 
 const colorStyles = [
   '#0A1551',
@@ -57,6 +58,8 @@ const CardListSetting = props => {
   const {element, index, onClick} = props;  
   const {colors, size} = useTheme();
   const i18nValues = formStore(state => state.i18nValues);
+  const formValue = formStore(state => state.formValue);
+  const setFormValue = formStore(state => state.setFormValue);
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
   const updateFormData = formStore(state => state.updateFormData);
@@ -203,7 +206,7 @@ const CardListSetting = props => {
                 <View style={styles.settingView}>
                   <Text style={styles.titleLabel}>Cards</Text>
                   <View>
-                    {element.meta.cardDatas.map((card, cardIndex) => {
+                    {formValue[element.field_name] && formValue[element.field_name].map((card, cardIndex) => {
                       return (
                         <View key={cardIndex}>
                           <TouchableOpacity
@@ -375,6 +378,13 @@ const CardListSetting = props => {
                   onChange={(type, e) => {onChangeFont('titleFont', type, e);}}
                 />
                 <FontSetting
+                  label={i18nValues.t("setting_labels.sub_title_font")}
+                  fontColor={element.meta.subTitleFont.color}
+                  fontSize={element.meta.subTitleFont.fontSize}
+                  fontType={element.meta.subTitleFont.fontFamily}
+                  onChange={(type, e) => {onChangeFont('subTitleFont', type, e);}}
+                />
+                <FontSetting
                   label={i18nValues.t("setting_labels.description_font")}
                   fontColor={element.meta.descriptionFont.color}
                   fontSize={element.meta.descriptionFont.fontSize}
@@ -446,17 +456,22 @@ const CardListSetting = props => {
               />
             </View>
             {
-              cardData.current >= 0 && (
+              formValue[element.field_name] && cardData.current >= 0 && (
                 <>
                   <View style={styles.settingView}>
                     <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.card_title")}</Text>
                     <TextInput
                       style={styles.title}
-                      value={element.meta.cardDatas[cardData.current].title}
+                      value={formValue[element.field_name][cardData.current].title}
                       onChangeText={newText => {
-                        const tempElement = JSON.parse(JSON.stringify(element));
-                        tempElement.meta.cardDatas[cardData.current].title = newText;
-                        updateFormData(index, tempElement);
+                        // const tempElement = JSON.parse(JSON.stringify(element));
+                        // tempElement.meta.cardDatas[cardData.current].title = newText;
+                        // updateFormData(index, tempElement);
+
+                        const newData = [...formValue[element.field_name]];
+                        const newCardData = {...newData[cardData.current], title: newText};
+                        newData.splice(cardData.current, 1, newCardData);
+                        setFormValue({...formValue, [element.field_name]: newData});
                       }}
                     />
                   </View>
@@ -464,11 +479,16 @@ const CardListSetting = props => {
                     <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.card_subtitle")}</Text>
                     <TextInput
                       style={styles.title}
-                      value={element.meta.cardDatas[cardData.current].subTitle}
+                      value={formValue[element.field_name][cardData.current].subTitle}
                       onChangeText={newText => {
-                        const tempElement = JSON.parse(JSON.stringify(element));
-                        tempElement.meta.cardDatas[cardData.current].subTitle = newText;
-                        updateFormData(index, tempElement);
+                        // const tempElement = JSON.parse(JSON.stringify(element));
+                        // tempElement.meta.cardDatas[cardData.current].subTitle = newText;
+                        // updateFormData(index, tempElement);
+
+                        const newData = [...formValue[element.field_name]];
+                        const newCardData = {...newData[cardData.current], subTitle: newText};
+                        newData.splice(cardData.current, 1, newCardData);
+                        setFormValue({...formValue, [element.field_name]: newData});
                       }}
                     />
                   </View>
@@ -476,11 +496,18 @@ const CardListSetting = props => {
                     <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.card_description")}</Text>
                     <TextInput
                       style={styles.title}
-                      value={element.meta.cardDatas[cardData.current].description}
+                      value={formValue[element.field_name][cardData.current].description}
+                      multiline
+                      numberOfLines={2}
                       onChangeText={newText => {
-                        const tempElement = JSON.parse(JSON.stringify(element));
-                        tempElement.meta.cardDatas[cardData.current].description = newText;
-                        updateFormData(index, tempElement);
+                        // const tempElement = JSON.parse(JSON.stringify(element));
+                        // tempElement.meta.cardDatas[cardData.current].description = newText;
+                        // updateFormData(index, tempElement);
+
+                        const newData = [...formValue[element.field_name]];
+                        const newCardData = {...newData[cardData.current], description: newText};
+                        newData.splice(cardData.current, 1, newCardData);
+                        setFormValue({...formValue, [element.field_name]: newData});
                       }}
                     />
                   </View>
@@ -488,46 +515,30 @@ const CardListSetting = props => {
                     <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.hyper_link")}</Text>
                     <TextInput
                       style={styles.title}
-                      value={element.meta.cardDatas[cardData.current].hyperlink}
+                      value={formValue[element.field_name][cardData.current].hyperlink}
                       onChangeText={newText => {
-                        const tempElement = JSON.parse(JSON.stringify(element));
-                        tempElement.meta.cardDatas[cardData.current].hyperlink = newText;
-                        updateFormData(index, tempElement);
+                        // const tempElement = JSON.parse(JSON.stringify(element));
+                        // tempElement.meta.cardDatas[cardData.current].hyperlink = newText;
+                        // updateFormData(index, tempElement);
+
+                        const newData = [...formValue[element.field_name]];
+                        const newCardData = {...newData[cardData.current], hyperlink: newText};
+                        newData.splice(cardData.current, 1, newCardData);
+                        setFormValue({...formValue, [element.field_name]: newData});
                       }}
                     />
                   </View>
-                  <View style={styles.settingView}>
-                    <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.image")}</Text>
-                    <View style={{width: '100%', height: 170, justifyContent: 'center', backgroundColor: '#626E81', borderWidth: 1, borderColor: '#303339'}}>
-                      {element.meta.cardDatas[cardData.current].image && (
-                        <ResizedImage uri={element.meta.cardDatas[cardData.current].image} maxWidth={250} maxHeight={168} />
-                      )}
-                      {!element.meta.cardDatas[cardData.current].image && (
-                        <Image
-                          style={{width: 100, height: 100, alignSelf: 'center'}}
-                          source={emptyImage}
-                        />
-                      )}
-                    </View>
-                    <TextButton
-                      style={styles.addCardBtn}
-                      text={i18nValues.t("setting_labels.select_image")}
-                      textStyle={styles.addCardText}
-                      onPress={() => {
-                        DocumentPicker.pick({
-                          type: types.images,
-                        }).then(result => {
-                          const tempElement = JSON.parse(JSON.stringify(element));
-                          if (
-                            tempElement.meta.cardDatas[cardData.current].image !== result[0].uri
-                          ) {
-                            tempElement.meta.cardDatas[cardData.current].image = result[0].uri;
-                            updateFormData(index, tempElement);
-                          }
-                        }).catch({});
-                      }}
-                    />
-                  </View>
+                  <SettingImage
+                    title={i18nValues.t("setting_labels.image")}
+                    imageUri={formValue[element.field_name][cardData.current].image}
+                    keyName={'image'}
+                    onSelect={(keyname, value) => {
+                      const newData = [...formValue[element.field_name]];
+                      const newCardData = {...newData[cardData.current], [keyname]: value};
+                      newData.splice(cardData.current, 1, newCardData);
+                      setFormValue({...formValue, [element.field_name]: newData});
+                    }}
+                  />
                   <TouchableOpacity style={styles.settingView} onPress={() => setSettingType('slider')}>
                     <Text style={{color: '#FFFFFF', textAlign: 'center', alignContent: 'center'}}>Go to card slider setting</Text>
                   </TouchableOpacity>
@@ -580,7 +591,7 @@ const styles = StyleSheet.create({
     color: selected ? '#FFFFFF' : '#CBCCCD',
   }),
   title: {
-    height: 40,
+    minHeight: 40,
     fontSize: 16,
     color: '#FFFFFF',
     borderWidth: 1,

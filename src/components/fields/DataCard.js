@@ -11,6 +11,8 @@ const DataCard = props => {
   const userRole = formStore(state => state.userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const preview = formStore(state => state.preview);
+  const i18nValues = formStore(state => state.i18nValues);
   const role = element.role.find(e => e.name === userRole);
 
   return (
@@ -30,6 +32,7 @@ const DataCard = props => {
                     value={formValue[element.field_name]? formValue[element.field_name][d] : ''}
                     style={{width: '60%', padding: 5, ...element.meta.descriptionFont, textAlign: 'right'}}
                     placeholder={`...${d}`}
+                    editable={role.edit || preview}
                     onChangeText={e => {
                       const tempValue = formValue[element.field_name];
                       setFormValue({...formValue, [element.field_name]:{...tempValue, [d]: e}});

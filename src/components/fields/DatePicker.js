@@ -13,6 +13,7 @@ const DatePicker = ({element}) => {
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
   const preview = formStore(state => state.preview);
+  const i18nValues = formStore(state => state.i18nValues);
   const [visible, setVisible] = useState(false);
 
   return (
@@ -23,7 +24,7 @@ const DatePicker = ({element}) => {
             <FieldLabel label={element.meta.title || i18nValues.t("field_labels.date")} visible={!element.meta.hide_title} />
             <View style={styles.mainView(colors)}>
               <Text style={styles.text(fonts)}>
-                {(element.field_name in formValue  && formValue[element.field_name]) ? formValue[element.field_name]: new Date(Date.now()).toISOString().split('T')[0]}
+                {(element.field_name in formValue  && formValue[element.field_name]) ? formValue[element.field_name].replace(new RegExp('-', 'g'), '/') : new Date(Date.now()).toISOString().split('T')[0].replace(new RegExp('-', 'g'), '/')}
               </Text>
               {(role.edit  || preview) && (
                 <IconButton

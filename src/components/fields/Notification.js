@@ -12,6 +12,7 @@ const Notification = props => {
   const {element} = props;
   const {colors, fonts} = useTheme();
   const userRole = formStore(state => state.userRole);
+  const i18nValues = formStore(state => state.i18nValues);
   const role = element.role.find(e => e.name === userRole);
   const [visible, setVisible] = useState(false);
 
@@ -22,7 +23,7 @@ const Notification = props => {
           <>
             <FieldLabel label={element.meta.title || i18nValues.t("field_labels.notification")} visible={!element.meta.hide_title} />
             <TouchableOpacity
-              style={{flexDirection: 'row', backgroundColor: colors.card, borderRadius: 15, alignItems: 'center', paddingVertical: 10, paddingLeft: 10, borderBottomLeftRadius: visible ? 0 : 15, borderBottomRightRadius: visible ? 0 : 15}}
+              style={{flexDirection: 'row', backgroundColor: colors.card, borderRadius: 20, alignItems: 'center', paddingVertical: 15, paddingLeft: 10, borderBottomLeftRadius: visible ? 0 : 20, borderBottomRightRadius: visible ? 0 : 20}}
               onPress={() => setVisible(!visible)}
               disabled={element.meta.additionalDatas.length === 0}
             >
@@ -45,7 +46,7 @@ const Notification = props => {
             </TouchableOpacity>
             {
               visible && (
-                <View style={{backgroundColor: colors.card, borderBottomLeftRadius: 15, borderBottomRightRadius: 15, paddingBottom: 10}}>
+                <View style={{backgroundColor: colors.card, borderBottomLeftRadius: 20, borderBottomRightRadius: 20, paddingBottom: 10}}>
                   {
                     element.meta.additionalDatas.length > 0 &&
                     element.meta.additionalDatas.map((data, nameIndex) => (

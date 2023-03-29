@@ -18,6 +18,7 @@ const ImageField = ({element}) => {
   const preview = formStore(state => state.preview);
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
+  const i18nValues = formStore(state => state.i18nValues);
   const setFormValue = formStore(state => state.setFormValue);
 
   return (
@@ -32,8 +33,8 @@ const ImageField = ({element}) => {
                   <>
                     <ResizedImage
                       uri={formValue[element.field_name][0].uri}
-                      maxHeight={screenWidth * 9 / 16}
-                      maxWidth={screenWidth}
+                      maxHeight={parseInt(element.meta.maxWidth, 10)}
+                      maxWidth={parseInt(element.meta.maxHeight, 10) === 0 ? null : parseInt(element.meta.maxHeight, 10)}
                     />
                     {(role.edit || preview) && <IconButton
                       icon="image-edit"

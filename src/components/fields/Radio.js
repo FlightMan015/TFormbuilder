@@ -14,6 +14,7 @@ const Radio = props => {
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
   const preview = formStore(state => state.preview);
+  const i18nValues = formStore(state => state.i18nValues);
 
   console.log(typeof(radioButton.selected));
 

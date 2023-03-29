@@ -6,7 +6,7 @@ import MemoField from '../../fields';
 import {IconButton, useTheme} from 'react-native-paper';
 import { color } from '../../../theme/styles';
 import formStore from '../../../store/formStore';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import FieldLabel from '../../../common/FieldLabel';
 
 const Grid = props => {
@@ -15,6 +15,7 @@ const Grid = props => {
   const onClickDeleteField = formStore(state => state.deleteFormData);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
   const userRole = formStore(state => state.userRole);
+  const i18nValues = formStore(state => state.i18nValues);
   const role = element.role.find(e => e.name === userRole);
   const {colors, fonts} = useTheme();
   const [cellData, setCellData] = useState({viewGrid: true, data: []});

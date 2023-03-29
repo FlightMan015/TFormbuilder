@@ -25,7 +25,7 @@ const QuestionAndAnswers = props => {
             <View style={{flexDirection: element.meta.answerAlign, flexWrap: 'wrap'}}>
                 { 
                   element.meta.answers.map((answer, index) => (
-                      <View key={index} style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <View key={index} style={{flexDirection: 'row', alignItems: 'center', paddingRight: 15}}>
                           <Checkbox
                               color={element.meta.checkedColor}
                               status={formValue[element.field_name][index] ? 'checked' : 'unchecked'}

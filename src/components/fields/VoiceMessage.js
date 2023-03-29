@@ -15,6 +15,7 @@ const VoiceMessage = ({element}) => {
   const role = element.role.find(e => e.name === userRole);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
+  const i18nValues = formStore(state => state.i18nValues);
 	const [recordTime, setRecordTime] = useState(0);
 	const [recordSecs, setRecordSecs] = useState(0);
 	const [recordingActive, setRecordingActive] = useState(false);

@@ -6,6 +6,7 @@ import formStore from '../../store/formStore';
 import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import SettingSwitch from './common/SettingSwitch';
+import SettingNumber from './common/SettingNumber';
 
 const ImageSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
@@ -48,6 +49,16 @@ const ImageSetting = ({element, index, onClick}) => {
         description={i18nValues.t("setting_labels.hide_label_description")}
       />
       <SettingSwitch title={i18nValues.t("setting_labels.is_mandatory")} value={element.is_mandatory} onChange={onChange} keyName={'is_mandatory'} />
+      <SettingSwitch
+        title={i18nValues.t("setting_labels.small_width")}
+        value={element.meta.field_width === '50%'}
+        onChange={(key, value) => {
+          onChange(key, value ? '50%' : '100%');
+        }}
+        keyName={'field_width'}
+      />
+      <SettingNumber title={i18nValues.t("setting_labels.max_width")} value={element.meta.maxWidth} onChange={onChange} keyName={'maxWidth'}/>
+      <SettingNumber title={i18nValues.t("setting_labels.max_height")} value={element.meta.maxHeight} onChange={onChange} keyName={'maxHeight'}/>
       <SettingDuplicate index={index} element={element} />
     </>
   );

@@ -8,6 +8,7 @@ import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import FontSetting from '../../common/FontSetting';
 import SettingSwitch from './common/SettingSwitch';
+import SettingImage from './common/SettingImage';
 import { emptyImage, newNavButton } from '../../constant';
 import TextButton from '../../common/TextButton';
 import DocumentPicker, {
@@ -21,6 +22,7 @@ const NavigationButtonSetting = ({element, index, onClick}) => {
   const i18nValues = formStore(state => state.i18nValues);
   const updateFormData = formStore(state => state.updateFormData);
   const [selectedButtonIndex, setSelectedButtonIndex] = useState(-1);
+  const [settingType, setSettingType] = useState('NavigationSetting');
 
   const onChange = (key, value) => {
     console.log(key, value);
@@ -43,89 +45,157 @@ const NavigationButtonSetting = ({element, index, onClick}) => {
 
   return (
     <>
-      <SettingHeader title={i18nValues.t("setting_labels.navigation_setting")} />
-      <SettingLabel
-        title={i18nValues.t("setting_labels.label")}
-        label={element.meta.title}
-        onChange={onChange}
-        keyName={'title'}
-      />
-      <SettingSwitch
-        title={i18nValues.t("setting_labels.hide_label")}
-        value={element.meta.hide_title}
-        onChange={onChange}
-        keyName={'hide_title'}
-        description={i18nValues.t("setting_labels.hide_label_description")}
-      />
-      <FontSetting
-        label={i18nValues.t("setting_labels.first_text_font")}
-        fontColor={element.meta.firstTextFont.color}
-        fontSize={element.meta.firstTextFont.fontSize}
-        fontType={element.meta.firstTextFont.fontFamily}
-        onChange={(type, e) => {onChangeFont('firstTextFont', type, e);}}
-      />
-      <FontSetting
-        label={i18nValues.t("setting_labels.second_text_font")}
-        fontColor={element.meta.secondTextFont.color}
-        fontSize={element.meta.secondTextFont.fontSize}
-        fontType={element.meta.secondTextFont.fontFamily}
-        onChange={(type, e) => {onChangeFont('secondTextFont', type, e);}}
-      />
-      <View style={styles.settingView}>
-        <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.buttons")}</Text>
-        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-          {element.meta.buttons.map((button, buttonIndex) => {
-            return (
-              <View key={buttonIndex}>
-                <TouchableOpacity
-                  key={buttonIndex}
-                  style={styles.cardItemStyle}
-                  onPress={() => {
-                    setSelectedButtonIndex(buttonIndex);
-                    DocumentPicker.pick({
-                      type: types.images,
-                    })
-                      .then(result => {
-                        const tempElement = {...element};
-                        tempElement.meta.buttons.splice(buttonIndex, 1, {...button, iconImage: result[0].uri});
-                        updateFormData(index, tempElement);
-                      })
-                      .catch({});
-                  }}
-                  activeOpacity={0.8}>
-                  <Image style={styles.cardImage} source={button.iconImage ? {uri: button.iconImage} : emptyImage} />
-                  <TextInput value={button.text1} style={{...styles.cardTitle, ...element.meta.firstTextFont, padding: 0}} />
-                  <TextInput value={button.text2} style={{...styles.cardSubTitle, ...element.meta.secondTextFont, padding: 0}} />
-                </TouchableOpacity>
-                {selectedButtonIndex === buttonIndex && <View style={{flexDirection: 'row', width: '100%', justifyContent: 'flex-end', position: 'absolute'}}>
-                  <IconButton
-                    icon="delete-outline"
-                    size={20}
-                    iconColor="#FFFFFF"
-                    style={{backgroundColor: '#FF4947'}}
-                    onPress={() => {
-                      const tempElement = {...element};
-                      tempElement.meta.buttons.splice(buttonIndex, 1);
-                      updateFormData(index, tempElement);
-                    }}
-                  />
-                </View>}
+      {
+        settingType === 'NavigationSetting' && (
+          <>
+            <SettingHeader title={i18nValues.t("setting_labels.navigation_setting")} />
+            <SettingLabel
+              title={i18nValues.t("setting_labels.label")}
+              label={element.meta.title}
+              onChange={onChange}
+              keyName={'title'}
+            />
+            <SettingSwitch
+              title={i18nValues.t("setting_labels.hide_label")}
+              value={element.meta.hide_title}
+              onChange={onChange}
+              keyName={'hide_title'}
+              description={i18nValues.t("setting_labels.hide_label_description")}
+            />
+            <FontSetting
+              label={i18nValues.t("setting_labels.first_text_font")}
+              fontColor={element.meta.firstTextFont.color}
+              fontSize={element.meta.firstTextFont.fontSize}
+              fontType={element.meta.firstTextFont.fontFamily}
+              onChange={(type, e) => {onChangeFont('firstTextFont', type, e);}}
+            />
+            <FontSetting
+              label={i18nValues.t("setting_labels.second_text_font")}
+              fontColor={element.meta.secondTextFont.color}
+              fontSize={element.meta.secondTextFont.fontSize}
+              fontType={element.meta.secondTextFont.fontFamily}
+              onChange={(type, e) => {onChangeFont('secondTextFont', type, e);}}
+            />
+            <View style={styles.settingView}>
+              <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.buttons")}</Text>
+              <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                {element.meta.buttons.map((button, buttonIndex) => {
+                  return (
+                    <View key={buttonIndex}>
+                      <TouchableOpacity
+                        key={buttonIndex}
+                        style={styles.cardItemStyle}
+                        onPress={() => {
+                          setSelectedButtonIndex(buttonIndex);
+                          // DocumentPicker.pick({
+                          //   type: types.images,
+                          // })
+                          //   .then(result => {
+                          //     const tempElement = {...element};
+                          //     tempElement.meta.buttons.splice(buttonIndex, 1, {...button, iconImage: result[0].uri});
+                          //     updateFormData(index, tempElement);
+                          //   })
+                          //   .catch({});
+                        }}
+                        activeOpacity={0.8}>
+                        <Image style={styles.cardImage} source={button.iconImage ? {uri: button.iconImage} : emptyImage} />
+                        <Text style={{...styles.cardTitle, ...element.meta.firstTextFont, padding: 0}}>{button.text1}</Text>
+                        <Text style={{...styles.cardSubTitle, ...element.meta.secondTextFont, padding: 0}}>{button.text2}</Text>
+                      </TouchableOpacity>
+                      {selectedButtonIndex === buttonIndex && 
+                        <View style={{flexDirection: 'row', width: '100%', justifyContent: 'flex-end', position: 'absolute'}}>
+                          <IconButton
+                            icon="pencil-outline"
+                            size={20}
+                            iconColor="#FFFFFF"
+                            style={{backgroundColor: '#78BB07'}}
+                            onPress={() => {
+                              setSettingType('Cell');
+                            }}
+                          />
+                          <IconButton
+                            icon="delete-outline"
+                            size={20}
+                            iconColor="#FFFFFF"
+                            style={{backgroundColor: '#FF4947'}}
+                            onPress={() => {
+                              const tempElement = {...element};
+                              tempElement.meta.buttons.splice(buttonIndex, 1);
+                              updateFormData(index, tempElement);
+                            }}
+                          />
+                        </View>}
+                    </View>
+                  );
+                })}
               </View>
-            );
-          })}
-        </View>
-        <TextButton
-          style={styles.addCardBtn}
-          text={i18nValues.t("setting_labels.new_button")}
-          textStyle={styles.addCardText}
-          onPress={() => {
-            const tempElement = {...element};
-            tempElement.meta.cardDatas.push(newNavButton);
-            updateFormData(index, tempElement);
-          }}
-        />
-      </View>
-      <SettingDuplicate index={index} element={element} />
+              <TextButton
+                style={styles.addCardBtn}
+                text={i18nValues.t("setting_labels.new_button")}
+                textStyle={styles.addCardText}
+                onPress={() => {
+                  const tempElement = {...element};
+                  tempElement.meta.buttons.push(newNavButton);
+                  updateFormData(index, tempElement);
+                }}
+              />
+            </View>
+            <SettingDuplicate index={index} element={element} />
+          </>
+        )
+      }
+      {
+        settingType === 'Cell' && (
+          <>
+            <SettingHeader title={i18nValues.t("setting_labels.card_setting")} />
+            <SettingImage
+              title={i18nValues.t("setting_labels.icon")}
+              imageUri={element.meta.buttons[selectedButtonIndex].iconImage}
+              keyName={'iconImage'}
+              onSelect={(keyname, value) => {
+                const tempElement = {...element};
+                const tempButtonData = {...tempElement.meta.buttons[selectedButtonIndex]};
+                tempElement.meta.buttons.splice(selectedButtonIndex, 1, {...tempButtonData, iconImage: value});
+                updateFormData(index, tempElement);
+              }}
+            />
+            <SettingLabel
+              title={i18nValues.t("setting_labels.label")}
+              label={element.meta.buttons[selectedButtonIndex].text1}
+              onChange={(keyname, value) => {
+                const tempElement = {...element};
+                const tempButtonData = {...tempElement.meta.buttons[selectedButtonIndex]};
+                tempElement.meta.buttons.splice(selectedButtonIndex, 1, {...tempButtonData, text1: value});
+                updateFormData(index, tempElement);
+              }}
+              keyName={'text1'}
+            />
+            <SettingLabel
+              title={i18nValues.t("setting_labels.label")}
+              label={element.meta.buttons[selectedButtonIndex].text2}
+              onChange={(keyname, value) => {
+                const tempElement = {...element};
+                const tempButtonData = {...tempElement.meta.buttons[selectedButtonIndex]};
+                tempElement.meta.buttons.splice(selectedButtonIndex, 1, {...tempButtonData, text2: value});
+                updateFormData(index, tempElement);
+              }}
+              keyName={'text2'}
+            />
+            <SettingSwitch
+              title={i18nValues.t("setting_labels.small_width")}
+              value={element.meta.field_width === '50%'}
+              onChange={(key, value) => {
+                onChange(key, value ? '50%' : '100%');
+              }}
+              keyName={'field_width'}
+            />
+            <TouchableOpacity style={styles.settingView} onPress={() => setSettingType('NavigationSetting')}>
+              <Text style={{color: '#FFFFFF', textAlign: 'center', alignContent: 'center'}}>Go to navigation buttons setting</Text>
+            </TouchableOpacity>
+          </>
+        )
+      }
+      
     </>
   );
 };

@@ -8,11 +8,19 @@ import DocumentPicker, {
   types,
 } from 'react-native-document-picker';
 import formStore from '../../../store/formStore';
+import { useEffect } from 'react';
 
 const SettingImage = ({title, imageUri, onSelect, keyName}) => {
   const {colors, size} = useTheme();
   const i18nValues = formStore(state => state.i18nValues);
   const [imageSelectTab, setImageSelectTab] = useState('upload');
+  const [newImageUri, setNewImageUri] = useState('');
+
+  useEffect(() => {
+    if (imageSelectTab === 'url') {
+      setNewImageUri(imageUri);
+    }
+  }, [imageSelectTab]);
 
   return (
     <View style={styles.settingView}>
@@ -72,10 +80,18 @@ const SettingImage = ({title, imageUri, onSelect, keyName}) => {
             <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.image_uri")}</Text>
             <TextInput
               style={{...styles.title, backgroundColor: '#626E81'}}
-              value={imageUri}
+              value={newImageUri}
               placeholder='url...'
               onChangeText={newText => {
-                onSelect(keyName, newText)
+                setNewImageUri(newText);
+              }}
+            />
+            <TextButton
+              style={styles.addCardBtn}
+              text={i18nValues.t("setting_labels.change")}
+              textStyle={styles.addCardText}
+              onPress={() => {
+                onSelect(keyName, newImageUri);
               }}
             />
           </View>
@@ -87,7 +103,7 @@ const SettingImage = ({title, imageUri, onSelect, keyName}) => {
 
 const styles = StyleSheet.create({
   title: {
-    width: 200,
+    width: '100%',
     height: 40,
     fontSize: 16,
     color: '#FFFFFF',

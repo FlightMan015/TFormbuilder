@@ -20,6 +20,7 @@ const ListSection = ({
   const role = element.role.find(e => e.name === userRole);
   const updateFormData = formStore(state => state.updateFormData);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
+  const i18nValues = formStore(state => state.i18nValues);
 
   const onChangeFieldValue = (value, selectedCellIndex) => {
     // const tempElement = JSON.parse(JSON.stringify(element));

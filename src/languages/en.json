@@ -258,7 +258,18 @@
             "none": "None",
             "notification_setting": "Notification Setting",
             "name_font": "Name Font",
-            "data_card_setting": "Data Card Setting"
+            "data_card_setting": "Data Card Setting",
+            "login": "Log in",
+            "sub_title_font": "Subtitle Font",
+            "checkbox": "Checkbox",
+            "border_color": "Border Color",
+            "vertical_border": "Vertical Border",
+            "horizontal_border": "Horizontal Border",
+            "vertical_border_description": "Make sure to show vertical border",
+            "horizontal_border_description": "Make sure to show horizontal border",
+            "small_width": "Small Width",
+            "max_width": "Max Width",
+            "max_height": "Max Height"
         },
         "warnings": {
             "warning": "Warning",
@@ -298,7 +309,8 @@
             "save": "Save",
             "save_as": "Save As",
             "rename": "Rename",
-            "delete": "Delete"
+            "delete": "Delete",
+            "new_field": "New Field"
         },
         "events": {
             "onSubmitEditing": "onSubmitEditing",

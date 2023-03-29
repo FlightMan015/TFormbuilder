@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { WebView } from 'react-native-webview';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import FieldLabel from '../../common/FieldLabel';
+import formStore from '../../store/formStore';
 
 const Twitter = props => {
  const { element } = props;
  const [embedHTML, setEmbedHTML] = useState(null);
+ const i18nValues = formStore(state => state.i18nValues);
 
   const setupEmbed = async() => {
     // pass in the Twitter Web URL

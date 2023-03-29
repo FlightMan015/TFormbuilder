@@ -11,6 +11,7 @@ const Contact = props => {
   const {colors, fonts} = useTheme();
   const userRole = formStore(state => state.userRole);
   const role = element.role.find(e => e.name === userRole);
+  const i18nValues = formStore(state => state.i18nValues);
 
   const handlePress = async (url) => {
     // await Linking.openSettings();

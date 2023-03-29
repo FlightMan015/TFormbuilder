@@ -258,7 +258,18 @@
             "none": "لا أحد",
             "notification_setting": "إعداد الإخطار",
             "name_font": "خط الاسم",
-            "data_card_setting": "إعداد بطاقة البيانات"
+            "data_card_setting": "إعداد بطاقة البيانات",
+            "login": "تسجيل الدخول",
+            "sub_title_font": "خط الترجمة",
+            "checkbox": "خانة اختيار",
+            "border_color": "لون الحدود",
+            "vertical_border": "حد عمودي",
+            "horizontal_border": "حد أفقي",
+            "vertical_border_description": "تأكد من إظهار الحدود الرأسية",
+            "horizontal_border_description": "تأكد من إظهار الحدود الأفقية",
+            "small_width": "عرض صغير",
+            "max_width": "العرض الأقصى",
+            "max_height": "اقصى ارتفاع"
         },
         "warnings": {
             "warning": "تحذير",
@@ -298,7 +309,8 @@
             "save": "يحفظ",
             "save_as": "حفظ باسم",
             "rename": "إعادة تسمية",
-            "delete": "يمسح"
+            "delete": "يمسح",
+            "new_field": "حقل جديد"
         },
         "events": {
             "onSubmitEditing": "عند التقديم التحرير",

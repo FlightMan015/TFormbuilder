@@ -13,6 +13,7 @@ const TimePicker = ({element}) => {
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
   const preview = formStore(state => state.preview);
+  const i18nValues = formStore(state => state.i18nValues);
   const [visible, setVisible] = useState(false);
   const [time, setTime] = useState((element.field_name in formValue  && formValue[element.field_name]) ? new Date(formValue[element.field_name]) : new Date(Date.now()));
 

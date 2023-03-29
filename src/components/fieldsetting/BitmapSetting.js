@@ -11,6 +11,7 @@ const BitmapSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
+  const i18nValues = formStore(state => state.i18nValues);
 
   const onChange = (key, value) => {
     if (key === 'is_mandatory') {
@@ -51,6 +52,14 @@ const BitmapSetting = ({element, index, onClick}) => {
         value={element.is_mandatory}
         onChange={onChange}
         keyName={'is_mandatory'}
+      />
+      <SettingSwitch
+        title={i18nValues.t("setting_labels.small_width")}
+        value={element.meta.field_width === '50%'}
+        onChange={(key, value) => {
+          onChange(key, value ? '50%' : '100%');
+        }}
+        keyName={'field_width'}
       />
       <SettingDuplicate index={index} element={element} />
     </>

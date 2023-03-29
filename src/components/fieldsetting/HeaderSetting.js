@@ -7,6 +7,7 @@ import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import SettingTextAlign from './common/SettingTextAlign';
 import FontSetting from '../../common/FontSetting';
+import SettingSwitch from './common/SettingSwitch';
 
 const HeaderSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
@@ -50,6 +51,14 @@ const HeaderSetting = ({element, index, onClick}) => {
         fontSize={element.meta.font.fontSize}
         fontType={element.meta.font.fortFamily}
         onChange={(type, e) => {onChangeFont('font', type, e);}}
+      />
+      <SettingSwitch
+        title={i18nValues.t("setting_labels.small_width")}
+        value={element.meta.field_width === '50%'}
+        onChange={(key, value) => {
+          onChange(key, value ? '50%' : '100%');
+        }}
+        keyName={'field_width'}
       />
       <SettingDuplicate index={index} element={element} />
     </>

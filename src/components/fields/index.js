@@ -57,12 +57,12 @@ const Field = props => {
   };
 
   return (
-    <View>
+    <View style={{width: element.meta.field_width}}>
       {
         role.view && (
           <>
             <View
-              style={styles.field(colors, (selected && !preview))}
+              style={styles.field(colors, (selected && !preview && (userRole === 'admin' || userRole === 'builder')))}
               onStartShouldSetResponder={() => {
                 onSelect(index);
               }}>
@@ -71,7 +71,7 @@ const Field = props => {
                 <Text style={styles.note(colors, fonts)}>{element.meta.title} field is required.</Text>
               )}
             </View>
-            {(selected && !preview) && (
+            {((userRole === 'admin' || userRole === 'builder') && selected && !preview) && (
               <Animated.View style={{...styles.setIcons, opacity, backgroundColor: colors.background, borderRadius: 20}}>
                 {
                   index.childIndex > 0 && (
@@ -108,6 +108,7 @@ const Field = props => {
                     onClick('action');
                   }}
                 />
+                
                 <IconButton
                   icon="account-outline"
                   size={24}
@@ -117,6 +118,7 @@ const Field = props => {
                     onClick('role');
                   }}
                 />
+                
                 <IconButton
                   icon="cog-outline"
                   size={24}
@@ -218,7 +220,7 @@ const styles = StyleSheet.create({
     borderColor: visibleBorder ? '#0087E0' : colors.background,
     borderRadius: 5,
     borderWidth: visibleBorder ? 2 : 0,
-    marginVertical: 3,
+    // marginVertical: 3,
     // zIndex: 0,
   }),
   note: (colors, fonts) => ({

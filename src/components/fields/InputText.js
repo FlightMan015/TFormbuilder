@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {View, StyleSheet, TextInput, Alert} from 'react-native';
+import {View, StyleSheet, TextInput, Alert, Text, Image} from 'react-native';
 import {useTheme} from 'react-native-paper';
 import formStore from '../../store/formStore';
 import FieldLabel from '../../common/FieldLabel';
+import {radioButton} from '../../constant';
 
 const InputText = props => {
   const {element} = props;
@@ -66,7 +67,7 @@ const InputText = props => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 5,
+    padding: 5
   },
   textBox: {
     borderWidth: 1,

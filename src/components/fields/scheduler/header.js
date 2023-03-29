@@ -47,12 +47,14 @@ const SchedularHeader = ({selectedMonth, onClick, element}) => {
 
 const styles = StyleSheet.create({
     containter: colors => ({
+        width: '70%',
         flexDirection: 'row',
         backgroundColor: colors.card,
         borderRadius: 100,
         alignItems: 'center',
         alignSelf: 'center',
         marginBottom: 10,
+        justifyContent: 'space-between',
     }),
     text: font => ({
         ...font,

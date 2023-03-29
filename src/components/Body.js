@@ -24,6 +24,7 @@ const Body = props => {
   const setOpenSetting = formStore(state => state.setOpenSetting);
   const preview = formStore(state => state.preview);
   const setPreview = formStore(state => state.setPreview);
+  const userRole = formStore(state => state.userRole);
   const navigation = useNavigation();
   const status = useDrawerStatus();
 
@@ -62,7 +63,7 @@ const Body = props => {
       </View>
       <View style={{flex: 1, position: 'absolute', width: '100%', height: '100%'}}>
         <ScrollView style={styles.container(colors)}>
-          <View style={{paddingBottom: 50}}>
+          <View style={{flexDirection: 'row', paddingBottom: 50, flexWrap: 'wrap'}}>
             {formData.data.map((field, index) => {
               if (field.component !== componentName.TABSECTION && field.component !== componentName.GROUP && field.component !== componentName.GRID && field.component !== componentName.LISTSECTION) {
                 return (
@@ -89,7 +90,7 @@ const Body = props => {
           </View>
         </ScrollView>
         {
-          !preview && (
+          (userRole === 'admin' || userRole === 'builder') && !preview && (
             <IconButton
               icon="plus"
               size={size.s30}
@@ -102,24 +103,30 @@ const Body = props => {
             />
           )
         }
-        <IconButton
-          icon={preview ? 'pencil-outline' : 'eye-outline'}
-          size={size.s30}
-          iconColor={colors.card}
-          style={styles.previewForm(colors)}
-          onPress={() => {
-            setPreview(!preview);
-          }}
-        />
-        <IconButton
-          icon="code-json"
-          size={size.s30}
-          iconColor={colors.card}
-          style={styles.previewJSON(colors)}
-          onPress={() => {
-            setVisibleJsonDlg(true);
-          }}
-        />
+        {
+          (userRole === 'admin' || userRole === 'builder') && (
+            <>
+              <IconButton
+                icon={preview ? 'pencil-outline' : 'eye-outline'}
+                size={size.s30}
+                iconColor={colors.card}
+                style={styles.previewForm(colors)}
+                onPress={() => {
+                  setPreview(!preview);
+                }}
+              />
+              <IconButton
+                icon="code-json"
+                size={size.s30}
+                iconColor={colors.card}
+                style={styles.previewJSON(colors)}
+                onPress={() => {
+                  setVisibleJsonDlg(true);
+                }}
+              />
+            </>
+          )
+        }
       </View>
     </View>
   );

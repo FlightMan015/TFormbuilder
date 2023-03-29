@@ -14,6 +14,7 @@ const Schedular = ({element, index}) => {
     const formValue = formStore(state => state.formValue);
     const userRole = formStore(state => state.userRole);
     const preview = formStore(state => state.preview);
+    const i18nValues = formStore(state => state.i18nValues);
     const role = element.role.find(e => e.name === userRole);
     const setVisibleSchedularDlg = formStore(state => state.setVisibleSchedularDlg);
     const [date, setDate] = useState(new Date(Date.now()).toISOString().split('T')[0]);
@@ -51,11 +52,12 @@ const styles = StyleSheet.create({
         padding: 5,
     },
     button: colors => ({
-        marginTop: 10,
+        marginTop: 30,
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 50,
         backgroundColor: colors.colorButton,
+        width: '70%'
     }),
 });
 

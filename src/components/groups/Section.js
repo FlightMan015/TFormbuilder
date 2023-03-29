@@ -17,7 +17,9 @@ const Section = ({
   const setOpenMenu = formStore(state => state.setOpenMenu);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
   const userRole = formStore(state => state.userRole);
+  const i18nValues = formStore(state => state.i18nValues);
   const role = element.role.find(e => e.name === userRole);
+
   return (
     <View style={styles.container}>
       <FieldLabel label={element.meta.title || i18nValues.t("field_labels.section")} visible={!element.meta.hide_title} />

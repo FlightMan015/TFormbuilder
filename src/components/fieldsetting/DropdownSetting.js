@@ -49,6 +49,14 @@ const DropdownSetting = ({element, index, onClick}) => {
         description={i18nValues.t("setting_labels.hide_label_description")}
       />
       <SettingSwitch title={i18nValues.t("setting_labels.is_mandatory")} value={element.is_mandatory} onChange={onChange} keyName={'is_mandatory'} />
+      <SettingSwitch
+        title={i18nValues.t("setting_labels.small_width")}
+        value={element.meta.field_width === '50%'}
+        onChange={(key, value) => {
+          onChange(key, value ? '50%' : '100%');
+        }}
+        keyName={'field_width'}
+      />
       <SettingDropdownOptions title={i18nValues.t("setting_labels.options")} options={element.meta.options} onChange={onChange} keyName={'options'} />
       <SettingDuplicate index={index} element={element} />
     </>
