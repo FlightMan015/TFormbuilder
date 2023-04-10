@@ -1,16 +1,10 @@
 import React, {useEffect, useMemo} from 'react';
 import {useTheme, IconButton} from 'react-native-paper';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Animated,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, View, Text, Animated, TouchableOpacity} from 'react-native';
 import {getComponent} from './componentMap';
 import formStore from '../../store/formStore';
 import {useNavigation} from '@react-navigation/native';
-import { deleteField, moveDown, moveUp } from '../../actions/formdata';
+import {deleteField, moveDown, moveUp} from '../../actions/formdata';
 
 const Field = props => {
   const {element, index, selected, onClick, onSelect, isLastField} = props;
@@ -28,7 +22,11 @@ const Field = props => {
   const formValidation = formStore(state => state.formValidation);
   const setFormValidation = formStore(state => state.setFormValidation);
 
-  if (formValidation && element.is_mandatory && !formValue[element.field_name]) {
+  if (
+    formValidation &&
+    element.is_mandatory &&
+    !formValue[element.field_name]
+  ) {
     setFormValidation(false);
   }
 
@@ -39,7 +37,7 @@ const Field = props => {
       setValidation({...validation, [element.field_name]: true});
     }
   }, [element.is_mandatory, !!formValue[element.field_name]]);
- 
+
   const fadeOut = () => {
     Animated.timing(opacity, {
       toValue: 0,
@@ -58,90 +56,98 @@ const Field = props => {
 
   return (
     <View style={{width: element.meta.field_width}}>
-      {
-        role.view && (
-          <>
-            <View
-              style={styles.field(colors, (selected && !preview && (userRole === 'admin' || userRole === 'builder')))}
-              onStartShouldSetResponder={() => {
-                onSelect(index);
-              }}>
-              <FieldComponent element={element} index={index} selected={selected} />
-              {(element.is_mandatory && !validation[element.field_name] && submit) && (
-                <Text style={styles.note(colors, fonts)}>{element.meta.title} field is required.</Text>
+      {role.view && (
+        <>
+          <View
+            style={styles.field(colors, selected && !preview && role.edit)}
+            onStartShouldSetResponder={() => {
+              onSelect(index);
+            }}>
+            <FieldComponent
+              element={element}
+              index={index}
+              selected={selected}
+            />
+            {element.is_mandatory &&
+              !validation[element.field_name] &&
+              submit && (
+                <Text style={styles.note(colors, fonts)}>
+                  {element.meta.title} field is required.
+                </Text>
               )}
-            </View>
-            {((userRole === 'admin' || userRole === 'builder') && selected && !preview) && (
-              <Animated.View style={{...styles.setIcons, opacity, backgroundColor: colors.background, borderRadius: 20}}>
-                {
-                  index.childIndex > 0 && (
-                    <IconButton
-                      icon="chevron-up"
-                      size={24}
-                      iconColor={'#fff'}
-                      style={{margin: 3, backgroundColor: '#0A1551'}}
-                      onPress={() => {
-                        onClick('moveup');
-                      }}
-                    />
-                  )
-                }
-                {
-                  !isLastField && (
-                    <IconButton
-                      icon="chevron-down"
-                      size={24}
-                      iconColor={'#fff'}
-                      style={{margin: 3, backgroundColor: '#0A1551'}}
-                      onPress={() => {
-                        onClick('movedown');
-                      }}
-                    />
-                  )
-                }
+          </View>
+          {role.edit && selected && !preview && (
+            <Animated.View
+              style={{
+                ...styles.setIcons,
+                opacity,
+                backgroundColor: colors.background,
+                borderRadius: 20,
+              }}>
+              {index.childIndex > 0 && (
                 <IconButton
-                  icon="play-outline"
+                  icon="chevron-up"
                   size={24}
                   iconColor={'#fff'}
                   style={{margin: 3, backgroundColor: '#0A1551'}}
                   onPress={() => {
-                    onClick('action');
+                    onClick('moveup');
                   }}
                 />
-                
+              )}
+              {!isLastField && (
                 <IconButton
-                  icon="account-outline"
+                  icon="chevron-down"
                   size={24}
                   iconColor={'#fff'}
                   style={{margin: 3, backgroundColor: '#0A1551'}}
                   onPress={() => {
-                    onClick('role');
+                    onClick('movedown');
                   }}
                 />
-                
-                <IconButton
-                  icon="cog-outline"
-                  size={24}
-                  iconColor={'#fff'}
-                  style={{margin: 3, backgroundColor: '#0086DE'}}
-                  onPress={() => {
-                    onClick('setting');
-                  }}
-                />
-                <IconButton
-                  icon="delete-outline"
-                  size={24}
-                  iconColor={'#fff'}
-                  style={{margin: 3, backgroundColor: '#FF6150'}}
-                  onPress={() => {
-                    onClick('delete');
-                  }}
-                />
-              </Animated.View>
-            )}
-          </>
-        )
-      }
+              )}
+              <IconButton
+                icon="play-outline"
+                size={24}
+                iconColor={'#fff'}
+                style={{margin: 3, backgroundColor: '#0A1551'}}
+                onPress={() => {
+                  onClick('action');
+                }}
+              />
+
+              <IconButton
+                icon="account-outline"
+                size={24}
+                iconColor={'#fff'}
+                style={{margin: 3, backgroundColor: '#0A1551'}}
+                onPress={() => {
+                  onClick('role');
+                }}
+              />
+
+              <IconButton
+                icon="cog-outline"
+                size={24}
+                iconColor={'#fff'}
+                style={{margin: 3, backgroundColor: '#0086DE'}}
+                onPress={() => {
+                  onClick('setting');
+                }}
+              />
+              <IconButton
+                icon="delete-outline"
+                size={24}
+                iconColor={'#fff'}
+                style={{margin: 3, backgroundColor: '#FF6150'}}
+                onPress={() => {
+                  onClick('delete');
+                }}
+              />
+            </Animated.View>
+          )}
+        </>
+      )}
     </View>
   );
 };
@@ -161,8 +167,7 @@ const MemoField = ({element, index, onSelect, selected, isLastField}) => {
   const i18nValues = formStore(state => state.i18nValues);
 
   useEffect(() => {
-    if (selected)
-      setSelectedField(element);
+    if (selected) setSelectedField(element);
   }, [JSON.stringify(element), selected]);
 
   const onClickAction = type => {
@@ -196,15 +201,29 @@ const MemoField = ({element, index, onSelect, selected, isLastField}) => {
     }
   };
 
-  return useMemo(() => (
-    <Field
-      element={element}
-      index={index}
-      selected={selected}
-      onClick={type => onClickAction(type)}
-      onSelect={onSelect}
-      isLastField={isLastField}
-    />), [JSON.stringify(element), JSON.stringify(index), selected, JSON.stringify(formData.lightStyle), JSON.stringify(formData.darkStyle), viewMode, validation[element.field_name], formValidation, i18nValues.locale]);
+  return useMemo(
+    () => (
+      <Field
+        element={element}
+        index={index}
+        selected={selected}
+        onClick={type => onClickAction(type)}
+        onSelect={onSelect}
+        isLastField={isLastField}
+      />
+    ),
+    [
+      JSON.stringify(element),
+      JSON.stringify(index),
+      selected,
+      JSON.stringify(formData.lightStyle),
+      JSON.stringify(formData.darkStyle),
+      viewMode,
+      validation[element.field_name],
+      formValidation,
+      i18nValues.locale,
+    ],
+  );
 };
 
 const styles = StyleSheet.create({

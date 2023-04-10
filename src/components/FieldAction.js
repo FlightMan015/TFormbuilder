@@ -1,9 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text, TouchableOpacity, TextInput} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
 import {useTheme, IconButton} from 'react-native-paper';
 import formStore from '../store/formStore';
 import TextButton from '../common/TextButton';
-import { updateField } from '../actions/formdata';
+import {updateField} from '../actions/formdata';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const FieldAction = () => {
@@ -11,7 +17,7 @@ const FieldAction = () => {
   const {colors} = useTheme();
   const element = formStore(state => state.selectedField);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
-	const setOpenSetting = formStore(state => state.setOpenSetting);
+  const setOpenSetting = formStore(state => state.setOpenSetting);
   const setFormData = formStore(state => state.setFormData);
   const formData = formStore(state => state.formData);
   const i18nValues = formStore(state => state.i18nValues);
@@ -21,78 +27,77 @@ const FieldAction = () => {
     setEvents({...element.event});
   }, [JSON.stringify(element)]);
 
-	return (
-		<View>
-			<View style={styles.menuHeader}>
-				<Text style={styles.menuTitle}>{element.meta.title + ' Actions'}</Text>
-				<IconButton
-					icon="close"
-					size={20}
-					iconColor="#FFFFFF"
-					onPress={() => {
+  return (
+    <View>
+      <View style={styles.menuHeader}>
+        <Text style={styles.menuTitle}>{element.meta.title + ' Actions'}</Text>
+        <IconButton
+          icon="close"
+          size={20}
+          iconColor="#FFFFFF"
+          onPress={() => {
             setOpenSetting(false);
-					}}
-				/>
-			</View>
-      <View style={styles.settingView}>
-        {
-          Object.keys(events).map((e, eventIndex) => {
-            return (
-              <View key={eventIndex}>
-                <View style={styles.item}>
-                  <TextButton
-                    style={styles.addCardBtn}
-                    text={i18nValues.t(`events.${e}`)}
-                    textStyle={styles.addCardText}
-                    onPress={() => {
-                      if (event.name === e) {
-                        setEvent({
-                          ...event,
-                          name: e,
-                          state: !event.state,
-                        })
-                      } else {
-                        setEvent({
-                          ...event,
-                          name: e,
-                          state: true,
-                        })
-                      }
-                    }}
-                  />
-                  {events[e] && <Icon name="check" size={18} color="#FFFFFF" />}
-                </View>
-                {
-                  event.name === e && event.state && (
-                    <TextInput
-                      style={styles.ruleText}
-                      placeholder={i18nValues.t("placeholders.input_rule")}
-                      placeholderTextColor={colors.placeholder}
-                      multiline
-                      numberOfLines={3}
-                      value={events[e]}
-                      onChangeText={newText => {
-                        const tempEvent = JSON.parse(JSON.stringify(element.event));
-                        const newElement = {...element, event: {...tempEvent, [e]: newText}};
-                        setFormData({
-                          ...formData,
-                          data: updateField(
-                            formData,
-                            selectedFieldIndex,
-                            newElement,
-                          ),
-                        });
-                      }}
-                    />
-                  )
-                }
-              </View>
-            );
-          })
-        }
+          }}
+        />
       </View>
-		</View>
-	);
+      <View style={styles.settingView}>
+        {Object.keys(events).map((e, eventIndex) => {
+          return (
+            <View key={eventIndex}>
+              <View style={styles.item}>
+                <TextButton
+                  style={styles.addCardBtn}
+                  text={i18nValues.t(`events.${e}`)}
+                  textStyle={styles.addCardText}
+                  onPress={() => {
+                    if (event.name === e) {
+                      setEvent({
+                        ...event,
+                        name: e,
+                        state: !event.state,
+                      });
+                    } else {
+                      setEvent({
+                        ...event,
+                        name: e,
+                        state: true,
+                      });
+                    }
+                  }}
+                />
+                {events[e] && <Icon name="check" size={18} color="#FFFFFF" />}
+              </View>
+              {event.name === e && event.state && (
+                <TextInput
+                  style={styles.ruleText}
+                  placeholder={i18nValues.t('placeholders.input_rule')}
+                  placeholderTextColor={colors.placeholder}
+                  multiline
+                  numberOfLines={3}
+                  value={events[e]}
+                  onChangeText={newText => {
+                    const tempEvent = JSON.parse(JSON.stringify(element.event));
+                    const newElement = {
+                      ...element,
+                      event: {...tempEvent, [e]: newText},
+                    };
+                    setFormData({
+                      ...formData,
+                      data: updateField(
+                        formData,
+                        selectedFieldIndex,
+                        newElement,
+                      ),
+                    });
+                  }}
+                />
+              )}
+            </View>
+          );
+        })}
+      </View>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -100,7 +105,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-	menuHeader: {
+  menuHeader: {
     height: 50,
     flexDirection: 'row',
     justifyContent: 'space-between',

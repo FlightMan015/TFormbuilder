@@ -1,7 +1,7 @@
 import create from 'zustand';
-import { updateField, addField, deleteField } from '../actions/formdata';
-import { newFormData } from '../constant';
-import { I18n } from 'i18n-js';
+import {updateField, addField, deleteField} from '../actions/formdata';
+import {newFormData} from '../constant';
+import {I18n} from 'i18n-js';
 import en from '../languages/en.json';
 import ar from '../languages/ar.json';
 import fr from '../languages/fr.json';
@@ -11,7 +11,7 @@ const i18n = new I18n({
   ...ar,
   ...fr,
 });
-i18n.defaultLocale = "en";
+i18n.defaultLocale = 'en';
 
 const formStore = create(set => ({
   formData: newFormData,
@@ -31,9 +31,24 @@ const formStore = create(set => ({
   setIndexToAdd: newIndexToAdd => set(() => ({indexToAdd: newIndexToAdd})),
   settingType: 'setting',
   setSettingType: newType => set(() => ({settingType: newType})),
-  updateFormData: (index, newField) => set(state => ({formData: {...state.formData, data: updateField(state.formData, index, newField)}})),
-  addFormData: (index, component) => set(state => ({formData: {...state.formData, data: addField(component, state.formData, index)}})),
-  deleteFormData: (index) => set(state => ({formData: {...state.formData, data: deleteField(state.formData, index)}})),
+  updateFormData: (index, newField) =>
+    set(state => ({
+      formData: {
+        ...state.formData,
+        data: updateField(state.formData, index, newField),
+      },
+    })),
+  addFormData: (index, component) =>
+    set(state => ({
+      formData: {
+        ...state.formData,
+        data: addField(component, state.formData, index),
+      },
+    })),
+  deleteFormData: index =>
+    set(state => ({
+      formData: {...state.formData, data: deleteField(state.formData, index)},
+    })),
   roles: [
     {name: 'builder'},
     {name: 'submitter'},
@@ -60,13 +75,16 @@ const formStore = create(set => ({
   validation: {},
   setValidation: newValidation => set(() => ({validation: newValidation})),
   formValidation: true,
-  setFormValidation: newFormValidation => set(() => ({formValidation: newFormValidation})),
+  setFormValidation: newFormValidation =>
+    set(() => ({formValidation: newFormValidation})),
   visibleCalendarDlg: {},
-  setVisibleCalendarDlg: newVisible => set(() => ({visibleCalendarDlg: newVisible})),
+  setVisibleCalendarDlg: newVisible =>
+    set(() => ({visibleCalendarDlg: newVisible})),
   visibleMapDlg: {},
   setVisibleMapDlg: newVisible => set(() => ({visibleMapDlg: newVisible})),
   visibleSchedularDlg: {},
-  setVisibleSchedularDlg: newVisible => set(() => ({visibleSchedularDlg: newVisible})),
+  setVisibleSchedularDlg: newVisible =>
+    set(() => ({visibleSchedularDlg: newVisible})),
   i18nValues: i18n,
   seti18nValues: newI18nValues => set(() => ({i18nValues: newI18nValues})),
 }));
