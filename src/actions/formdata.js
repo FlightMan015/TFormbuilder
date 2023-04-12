@@ -8,8 +8,6 @@ export const addField = (
   indexes,
   addInfo,
 ) => {
-  const groupIndex = indexes.groupIndex;
-  const tabIndex = indexes.tabIndex;
   const tempNewFieldData = JSON.parse(JSON.stringify(newFieldData[type]));
   // if (tempNewFieldData.role) {
   //   previousFormData.checkedRoles.map(e => {
@@ -32,32 +30,20 @@ export const addField = (
     field_name,
     ...addInfo,
   };
-  const tempFormData = JSON.parse(JSON.stringify(previousFormData.data));
-  if (
-    previousFormData.formTabIndex === undefined ||
-    previousFormData.formTabIndex === -1
-  ) {
-    if (groupIndex >= 0 && tabIndex >= 0) {
-      tempFormData[groupIndex].meta.childs[tabIndex].meta.childs.push(newData);
-    } else if (groupIndex >= 0) {
-      tempFormData[groupIndex].meta.childs.push(newData);
-    } else {
-      tempFormData.push(newData);
-    }
-  } else {
-    const formTabIndex = previousFormData.formTabIndex;
-    if (groupIndex >= 0 && tabIndex >= 0) {
-      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs[
-        tabIndex
-      ].meta.childs.push(newData);
-    } else if (groupIndex >= 0) {
-      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs.push(
-        newData,
-      );
-    } else {
-      tempFormData[formTabIndex].meta.data.push(newData);
+  const tempFormData = [...previousFormData.data];
+  // if (
+  //   previousFormData.formTabIndex === undefined ||
+  //   previousFormData.formTabIndex === -1
+  // ) {
+  let currentElement = tempFormData;
+  for (let i = 0; i < indexes.length - 1; i++) {
+    currentElement = currentElement[indexes[i]];
+    if (i < indexes.length - 1) {
+      currentElement = currentElement.meta.childs;
     }
   }
+  currentElement.splice(indexes[indexes.length - 1], 0, newData);
+
   return tempFormData;
 };
 
@@ -111,54 +97,19 @@ export const deleteField = (previousFormData, indexes) => {
 };
 
 export const updateField = (previousFormData, indexes, updatedField) => {
-  const groupIndex = indexes.groupIndex;
-  const tabIndex = indexes.tabIndex;
-  const childIndex = indexes.childIndex;
-  const tempFormData = JSON.parse(JSON.stringify(previousFormData.data));
 
-  if (
-    previousFormData.formTabIndex === undefined ||
-    previousFormData.formTabIndex === -1
-  ) {
-    if (groupIndex >= 0 && tabIndex >= 0 && childIndex >= 0) {
-      tempFormData[groupIndex].meta.childs[tabIndex].meta.childs.splice(
-        childIndex,
-        1,
-        updatedField,
-      );
-    } else if (groupIndex >= 0 && tabIndex >= 0) {
-      tempFormData[groupIndex].meta.childs.splice(tabIndex, 1, updatedField);
-    } else if (groupIndex >= 0 && childIndex >= 0) {
-      tempFormData[groupIndex].meta.childs.splice(childIndex, 1, updatedField);
-    } else if (groupIndex >= 0) {
-      tempFormData.splice(groupIndex, 1, updatedField);
-    } else if (childIndex >= 0) {
-      tempFormData.splice(childIndex, 1, updatedField);
-    }
-  } else {
-    const formTabIndex = previousFormData.formTabIndex;
-    if (groupIndex >= 0 && tabIndex >= 0 && childIndex >= 0) {
-      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs[
-        tabIndex
-      ].meta.childs.splice(childIndex, 1, updatedField);
-    } else if (groupIndex >= 0 && tabIndex >= 0) {
-      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs.splice(
-        tabIndex,
-        1,
-        updatedField,
-      );
-    } else if (groupIndex >= 0 && childIndex >= 0) {
-      tempFormData[formTabIndex].meta.data[groupIndex].meta.childs.splice(
-        childIndex,
-        1,
-        updatedField,
-      );
-    } else if (groupIndex >= 0) {
-      tempFormData[formTabIndex].meta.data.splice(groupIndex, 1, updatedField);
-    } else if (childIndex >= 0) {
-      tempFormData[formTabIndex].meta.data.splice(childIndex, 1, updatedField);
+  const tempFormData = [...previousFormData.data];
+
+  let currentElement = tempFormData;
+  
+  for (let i = 0; i < indexes.length - 1; i++) {
+    currentElement = currentElement[indexes[i]];
+    if (i < indexes.length - 1) {
+      currentElement = currentElement.meta.childs;
     }
   }
+  currentElement.splice(indexes[indexes.length - 1], 1, updatedField);
+  
   return tempFormData;
 };
 

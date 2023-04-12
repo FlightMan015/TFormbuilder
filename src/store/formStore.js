@@ -18,7 +18,7 @@ const formStore = create(set => ({
   setFormData: newFormData => set(() => ({formData: newFormData})),
   preview: false,
   setPreview: newRenderMode => set(() => ({preview: newRenderMode})),
-  selectedFieldIndex: {},
+  selectedFieldIndex: [],
   setSelectedFieldIndex: newIndex =>
     set(() => ({selectedFieldIndex: newIndex})),
   selectedField: null,
@@ -27,7 +27,7 @@ const formStore = create(set => ({
   setOpenMenu: newOpenMenu => set(() => ({openMenu: newOpenMenu})),
   openSetting: false,
   setOpenSetting: newOpenSetting => set(() => ({openSetting: newOpenSetting})),
-  indexToAdd: {},
+  indexToAdd: [],
   setIndexToAdd: newIndexToAdd => set(() => ({indexToAdd: newIndexToAdd})),
   settingType: 'setting',
   setSettingType: newType => set(() => ({settingType: newType})),

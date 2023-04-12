@@ -1,7 +1,7 @@
 import React from 'react';
 import {useTheme} from 'react-native-paper';
 import SettingHeader from './common/SettingHeader';
-import { updateField } from '../../actions/formdata';
+import {updateField} from '../../actions/formdata';
 import formStore from '../../store/formStore';
 import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
@@ -19,11 +19,10 @@ const HeaderSetting = ({element, index, onClick}) => {
     const tempMeta = JSON.parse(JSON.stringify(element.meta));
     setFormData({
       ...formData,
-      data: updateField(
-        formData,
-        index,
-        {...element, meta: {...tempMeta, [key]: value}},
-      ),
+      data: updateField(formData, index, {
+        ...element,
+        meta: {...tempMeta, [key]: value},
+      }),
     });
   };
 
@@ -32,28 +31,40 @@ const HeaderSetting = ({element, index, onClick}) => {
     const fontData = {...element.meta[key]};
     setFormData({
       ...formData,
-      data: updateField(
-        formData,
-        index,
-        {...element, meta: {...tempMeta, [key]: {...fontData, [type]: value}}},
-      ),
+      data: updateField(formData, index, {
+        ...element,
+        meta: {...tempMeta, [key]: {...fontData, [type]: value}},
+      }),
     });
-  }
+  };
 
   return (
     <>
-      <SettingHeader title={i18nValues.t("setting_labels.header_settings")} />
-      <SettingLabel title={i18nValues.t("setting_labels.header_text")} label={element.meta.header} onChange={onChange} keyName={'header'} multiline={true}/>
-      <SettingTextAlign title={i18nValues.t("setting_labels.text_align")} textAlign={element.meta.textAlign} onChange={onChange} keyName={'textAlign'} />
+      <SettingHeader title={i18nValues.t('setting_labels.header_settings')} />
+      <SettingLabel
+        title={i18nValues.t('setting_labels.header_text')}
+        label={element.meta.header}
+        onChange={onChange}
+        keyName={'header'}
+        multiline={true}
+      />
+      <SettingTextAlign
+        title={i18nValues.t('setting_labels.text_align')}
+        textAlign={element.meta.textAlign}
+        onChange={onChange}
+        keyName={'textAlign'}
+      />
       <FontSetting
-        label={i18nValues.t("setting_labels.font")}
+        label={i18nValues.t('setting_labels.font')}
         fontColor={element.meta.font.color}
         fontSize={element.meta.font.fontSize}
         fontType={element.meta.font.fortFamily}
-        onChange={(type, e) => {onChangeFont('font', type, e);}}
+        onChange={(type, e) => {
+          onChangeFont('font', type, e);
+        }}
       />
       <SettingSwitch
-        title={i18nValues.t("setting_labels.small_width")}
+        title={i18nValues.t('setting_labels.small_width')}
         value={element.meta.field_width === '50%'}
         onChange={(key, value) => {
           onChange(key, value ? '50%' : '100%');

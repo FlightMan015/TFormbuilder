@@ -12,17 +12,16 @@ const Header = props => {
 
   return (
     <View>
-      {
-        role.view && (
-          <Text style={{
+      {role.view && (
+        <Text
+          style={{
             textAlign: element.meta.textAlign,
             ...fonts.headings,
             ...element.meta.font,
           }}>
-            {element.meta.header}
-          </Text>
-        )
-      }
+          {element.meta.header}
+        </Text>
+      )}
     </View>
   );
 };

@@ -1,25 +1,21 @@
-import React, { useEffect, useMemo } from 'react';
-import { useTheme, IconButton } from 'react-native-paper';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Animated,
-  TouchableOpacity,
-} from 'react-native';
-import { getComponent } from './componentMap';
+import React, {useEffect, useMemo} from 'react';
+import {useTheme, IconButton} from 'react-native-paper';
+import {StyleSheet, View, Text, Animated, TouchableOpacity} from 'react-native';
+import {getComponent} from './componentMap';
 import formStore from '../../store/formStore';
-import { useNavigation } from '@react-navigation/native';
-import { deleteField, moveDown, moveUp } from '../../actions/formdata';
+import {useNavigation} from '@react-navigation/native';
+import {deleteField, moveDown, moveUp} from '../../actions/formdata';
 
 const Group = props => {
-  const {element, index, selected, onClick, onSelect, isLastGroup} = props;
+  const {element, index, selected, onClick, onSelect, isLastGroup, isFirstGroup} = props;
   const {colors, size} = useTheme();
   const userRole = formStore(state => state.userRole);
   const preview = formStore(state => state.preview);
   const role = element.role.find(e => e.name === userRole);
   const GroupComponent = getComponent(element.component);
   const opacity = new Animated.Value(1);
+
+  const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
 
   const fadeOut = () => {
     Animated.timing(opacity, {
@@ -39,82 +35,110 @@ const Group = props => {
 
   return (
     <View style={{width: element.meta.field_width}}>
-      {
-        role.view && (
-          <>
-            <View
-              style={styles.field(colors, (selected && !preview && (userRole === 'admin' || userRole === 'builder')))}
-              onStartShouldSetResponder={() => {
-                if(!selected) onSelect(index);
-              }}>
-              <GroupComponent element={element} index={index} selected={selected} onSelect={e => onSelect(e)} preview={preview} />
-            </View>
-            {((userRole === 'admin' || userRole === 'builder') && selected && !preview) && (
-              <Animated.View style={{...styles.setIcons, opacity}}>
-                {
-                  index.groupIndex > 0 && (
-                    <IconButton
-                      icon="chevron-up"
-                      size={24}
-                      iconColor={'#fff'}
-                      style={{margin: 3, backgroundColor: '#0A1551'}}
-                      onPress={() => {
-                        onClick('moveup');
-                      }}
-                    />
-                  )
+      {role.view && (
+        <>
+          <View
+            style={styles.field(
+              colors,
+              selected &&
+                !preview &&
+                (userRole === 'admin' || userRole === 'builder'),
+            )}
+            onStartShouldSetResponder={() => {
+              if (selectedFieldIndex.length === 0) {
+                onSelect(index.slice(0, 1));
+              } else {
+                let samePos = -1;
+
+                for (let i = 0; i < Math.min(index.length, selectedFieldIndex.length); i++) {
+                  if (index[i] !== selectedFieldIndex[i]) {
+                    break;
+                  }
+                  samePos = i;
                 }
-                {
-                  !isLastGroup && (
-                    <IconButton
-                      icon="chevron-down"
-                      size={24}
-                      iconColor={'#fff'}
-                      style={{margin: 3, backgroundColor: '#0A1551'}}
-                      onPress={() => {
-                        onClick('movedown');
-                      }}
-                    />
-                  )
+
+                if (Math.min(index.length, selectedFieldIndex.length) - 1 === samePos) {
+                  if (index.length > selectedFieldIndex.length) {
+                    onSelect(index.slice(0, samePos + 2));
+                  } else if (index.length < selectedFieldIndex.length) {
+                    onSelect(index.slice(0, samePos + 1));
+                  }
+                } else {
+                  onSelect(index.slice(0, samePos + 2));
                 }
+              }
+
+              return true;
+            }}>
+            <GroupComponent
+              element={element}
+              index={index}
+              selected={selected}
+              onSelect={e => onSelect(e)}
+              preview={preview}
+            />
+          </View>
+          {role.edit && selected && !preview && (
+            <Animated.View style={{...styles.setIcons, opacity}}>
+              {!isFirstGroup && (
                 <IconButton
-                  icon="account-outline"
+                  icon="chevron-up"
                   size={24}
                   iconColor={'#fff'}
                   style={{margin: 3, backgroundColor: '#0A1551'}}
                   onPress={() => {
-                    onClick('role');
+                    onClick('moveup');
                   }}
                 />
+              )}
+              {!isLastGroup && (
                 <IconButton
-                  icon="cog-outline"
+                  icon="chevron-down"
                   size={24}
                   iconColor={'#fff'}
-                  style={{margin: 3, backgroundColor: '#0086DE'}}
+                  style={{margin: 3, backgroundColor: '#0A1551'}}
                   onPress={() => {
-                    onSelect(index);
-                    onClick('setting');
+                    onClick('movedown');
                   }}
                 />
-                <IconButton
-                  icon="delete-outline"
-                  size={24}
-                  iconColor={'#fff'}
-                  style={{margin: 3, backgroundColor: '#FF6150'}}
-                  onPress={() => {
-                    onClick('delete');
-                  }}
-                />
-              </Animated.View>
-            )}
-          </>
-        )
-      }
+              )}
+              <IconButton
+                icon="account-outline"
+                size={24}
+                iconColor={'#fff'}
+                style={{margin: 3, backgroundColor: '#0A1551'}}
+                onPress={() => {
+                  onClick('role');
+                }}
+              />
+              <IconButton
+                icon="cog-outline"
+                size={24}
+                iconColor={'#fff'}
+                style={{margin: 3, backgroundColor: '#0086DE'}}
+                onPress={() => {
+                  onSelect(index);
+                  onClick('setting');
+                }}
+              />
+              <IconButton
+                icon="delete-outline"
+                size={24}
+                iconColor={'#fff'}
+                style={{margin: 3, backgroundColor: '#FF6150'}}
+                onPress={() => {
+                  onClick('delete');
+                }}
+              />
+            </Animated.View>
+          )}
+        </>
+      )}
     </View>
   );
 };
 
-const MemoGroup = ({element, index, onSelect, selected, isLastGroup}) => {
+const MemoGroup = ({element, index, onSelect, selected, isLastGroup, isFirstGroup}) => {
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
   const setSelectedField = formStore(state => state.setSelectedField);
@@ -124,8 +148,7 @@ const MemoGroup = ({element, index, onSelect, selected, isLastGroup}) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (selected)
-      setSelectedField(element);
+    if (selected) setSelectedField(element);
   }, [JSON.stringify(element), selected]);
 
   const onClickAction = type => {
@@ -161,6 +184,7 @@ const MemoGroup = ({element, index, onSelect, selected, isLastGroup}) => {
         onClick={type => onClickAction(type)}
         onSelect={onSelect}
         isLastGroup={isLastGroup}
+        isFirstGroup={isFirstGroup}
       />
     ),
     [JSON.stringify(element), JSON.stringify(index), selected],

@@ -1,99 +1,143 @@
-import React, { useEffect, useMemo } from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {IconButton} from 'react-native-paper';
 import {componentName, fieldMenuData, newFieldData} from '../constant';
 import Icon from 'react-native-vector-icons/Feather';
 import formStore from '../store/formStore';
-import { useDrawerStatus } from '@react-navigation/drawer';
-import { addField } from '../actions/formdata';
-import { ScrollView } from 'react-native-gesture-handler';
+import {useDrawerStatus} from '@react-navigation/drawer';
+import {addField} from '../actions/formdata';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const MenuContent = () => {
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
   const setOpenMenu = formStore(state => state.setOpenMenu);
-  const indexToAdd = formStore(state => state.indexToAdd);
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
   const i18nValues = formStore(state => state.i18nValues);
+  const selectedField = formStore(state => state.selectedField);
+  const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
 
   const selectMenu = component => {
-    const field_name = newFieldData[component].field_name + '-' + Date.now() + '-0';
+    const field_name = newFieldData[component].field_name + '-' + Date.now();
     if (component === componentName.DATE_PICKER) {
-      setFormValue({...formValue, [field_name]: new Date(Date.now()).toISOString().split('T')[0]});
+      setFormValue({
+        ...formValue,
+        [field_name]: new Date(Date.now()).toISOString().split('T')[0],
+      });
     }
     if (component === componentName.TIME_PICKER) {
-      setFormValue({...formValue, [field_name]: new Date(Date.now()).toLocaleString()});
+      setFormValue({
+        ...formValue,
+        [field_name]: new Date(Date.now()).toLocaleString(),
+      });
     }
     if (component === componentName.LINECHART) {
-      setFormValue({...formValue, [field_name]: newFieldData[component].meta.data});
+      setFormValue({
+        ...formValue,
+        [field_name]: newFieldData[component].meta.data,
+      });
     }
     if (component === componentName.BARCHART) {
-      setFormValue({...formValue, [field_name]: newFieldData[component].meta.data});
+      setFormValue({
+        ...formValue,
+        [field_name]: newFieldData[component].meta.data,
+      });
     }
     if (component === componentName.PIECHART) {
-      setFormValue({...formValue, [field_name]: newFieldData[component].meta.data});
+      setFormValue({
+        ...formValue,
+        [field_name]: newFieldData[component].meta.data,
+      });
     }
     if (component === componentName.RADARCHART) {
-      setFormValue({...formValue, [field_name]: newFieldData[component].meta.data});
+      setFormValue({
+        ...formValue,
+        [field_name]: newFieldData[component].meta.data,
+      });
     }
     if (component === componentName.QUESTIONANDANSWER) {
       const newQAValues = [];
       newFieldData[component].meta.answers.map(() => newQAValues.push(false));
       setFormValue({...formValue, [field_name]: newQAValues});
     }
-    setFormData({...formData, data: addField(component, field_name, formData, indexToAdd, )});
+    let indexToAdd = [];
+    if (selectedField) {
+      if (selectedField?.component === componentName.GROUP) {
+        indexToAdd = [
+          ...selectedFieldIndex,
+          selectedField.meta.childs.length - 1,
+        ];
+      } else {
+        let tempIndex = [...selectedFieldIndex];
+        tempIndex[tempIndex.length - 1] = tempIndex[tempIndex.length - 1] + 1;
+        indexToAdd = tempIndex;
+      }
+    }
+    console.log('==========selectedfield');
+    console.log(selectedField);
+    console.log('==========indexToAdd');
+    console.log(indexToAdd);
+    setFormData({
+      ...formData,
+      data: addField(component, field_name, formData, indexToAdd),
+    });
   };
 
   const status = useDrawerStatus();
 
   useEffect(() => {
     if (status === 'closed') {
-      setOpenMenu(false)
+      setOpenMenu(false);
     }
   }, [status]);
 
-  return useMemo(() => (
-    <View style={styles.menuContainer}>
-      <View style={styles.menuHeader}>
-        <Text style={styles.menuTitle}>{i18nValues.t("setting_labels.form_fields")}</Text>
-        <IconButton
-          icon="close"
-          size={20}
-          iconColor="#FFFFFF"
-          onPress={() => setOpenMenu(false)}
-        />
+  return useMemo(
+    () => (
+      <View style={styles.menuContainer}>
+        <View style={styles.menuHeader}>
+          <Text style={styles.menuTitle}>
+            {i18nValues.t('setting_labels.form_fields')}
+          </Text>
+          <IconButton
+            icon="close"
+            size={20}
+            iconColor="#FFFFFF"
+            onPress={() => setOpenMenu(false)}
+          />
+        </View>
+        <ScrollView style={styles.menuBody} persistentScrollbar>
+          {fieldMenuData.items.map((item, index) => (
+            <View key={index}>
+              <Text style={styles.subHeader}>
+                {i18nValues.t(`field_labels.${item.name}`)}
+              </Text>
+              {item.items.map((subItem, subIndex) => {
+                return (
+                  <TouchableOpacity
+                    key={subIndex}
+                    style={styles.fieldListItem}
+                    onPress={() => {
+                      selectMenu(subItem.key);
+                    }}>
+                    <View style={styles.fieldIcon}>
+                      <Icon name={subItem.icon} size={18} color={'white'} />
+                    </View>
+                    <View style={styles.fieldText}>
+                      <Text style={styles.fieldNameText}>
+                        {i18nValues.t(`field_labels.${subItem.name}`)}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          ))}
+        </ScrollView>
       </View>
-      <ScrollView style={styles.menuBody} persistentScrollbar>
-        {fieldMenuData.items.map((item, index) => {
-          if (!('groupIndex' in indexToAdd) || !('groupIndex' in indexToAdd && index == 0)) {
-            return (
-              <View key={index}>
-                <Text style={styles.subHeader}>{i18nValues.t(`field_labels.${item.name}`)}</Text>
-                {item.items.map((subItem, subIndex) => {
-                  return (
-                    <TouchableOpacity
-                      key={subIndex}
-                      style={styles.fieldListItem}
-                      onPress={() => {
-                        selectMenu(subItem.key);
-                      }}>
-                      <View style={styles.fieldIcon}>
-                        <Icon name={subItem.icon} size={18} color={'white'} />
-                      </View>
-                      <View style={styles.fieldText}>
-                        <Text style={styles.fieldNameText}>{i18nValues.t(`field_labels.${subItem.name}`)}</Text>
-                      </View>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-            );
-          }
-        })}
-      </ScrollView>
-    </View>
-  ), [JSON.stringify(indexToAdd), JSON.stringify(formData), i18nValues.locale]);
+    ),
+    [JSON.stringify(formData), i18nValues.locale],
+  );
 };
 
 const styles = StyleSheet.create({

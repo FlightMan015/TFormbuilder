@@ -4,10 +4,10 @@ import {StyleSheet, Dimensions, View, Text} from 'react-native';
 import formStore from '../store/formStore';
 import MemoField from './fields';
 import MemoGroup from './groups';
-import { useNavigation } from '@react-navigation/native';
-import { useDrawerStatus } from '@react-navigation/drawer';
-import { componentName, radioButton } from '../constant';
-import { ScrollView, FlatList } from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
+import {useDrawerStatus} from '@react-navigation/drawer';
+import {componentName, radioButton} from '../constant';
+import {ScrollView, FlatList} from 'react-native-gesture-handler';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import PatternBackgroundView from '../common/PatternBackgroundView';
 
@@ -59,21 +59,37 @@ const Body = props => {
   return (
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>
-        <PatternBackgroundView imageWidth={20} imageHeight={20} imageUri={formData.lightStyle.backgroundPatternImage} backgroundColor={colors.background}/>
+        <PatternBackgroundView
+          imageWidth={20}
+          imageHeight={20}
+          imageUri={formData.lightStyle.backgroundPatternImage}
+          backgroundColor={colors.background}
+        />
       </View>
-      <View style={{flex: 1, position: 'absolute', width: '100%', height: '100%'}}>
+      <View
+        style={{flex: 1, position: 'absolute', width: '100%', height: '100%'}}>
         <ScrollView style={styles.container(colors)}>
-          <View style={{flexDirection: 'row', paddingBottom: 50, flexWrap: 'wrap'}}>
+          <View
+            style={{flexDirection: 'row', paddingBottom: 50, flexWrap: 'wrap'}}>
             {formData.data.map((field, index) => {
-              if (field.component !== componentName.TABSECTION && field.component !== componentName.GROUP && field.component !== componentName.GRID && field.component !== componentName.LISTSECTION) {
+              if (
+                field.component !== componentName.TABSECTION &&
+                field.component !== componentName.GROUP &&
+                field.component !== componentName.GRID &&
+                field.component !== componentName.LISTSECTION
+              ) {
                 return (
                   <MemoField
                     key={index}
-                    onSelect={() => onSelect({childIndex: index})}
+                    onSelect={() => onSelect([index])}
                     element={field}
-                    index={{childIndex: index}}
-                    selected={!('groupIndex' in selectedFieldIndex) && 'childIndex' in selectedFieldIndex && selectedFieldIndex.childIndex === index}
-                    isLastField={(index + 1) === formData.data.length} />
+                    index={[index]}
+                    selected={
+                      JSON.stringify([index]) === JSON.stringify(selectedFieldIndex)
+                    }
+                    isFirstField={index === 0}
+                    isLastField={index + 1 === formData.data.length}
+                  />
                 );
               } else {
                 return (
@@ -81,52 +97,52 @@ const Body = props => {
                     key={index}
                     onSelect={e => onSelect(e)}
                     element={field}
-                    index={{groupIndex: index}}
-                    selected={'groupIndex' in selectedFieldIndex && selectedFieldIndex.groupIndex === index}
-                    isLastGroup={(index + 1) === formData.data.length} />
+                    index={[index]}
+                    selected={
+                      JSON.stringify([index]) === JSON.stringify(selectedFieldIndex)
+                    }
+                    isFirstGroup={index === 0}
+                    isLastGroup={index + 1 === formData.data.length}
+                  />
                 );
               }
             })}
           </View>
         </ScrollView>
-        {
-          (userRole === 'admin' || userRole === 'builder') && !preview && (
+        {(userRole === 'admin' || userRole === 'builder') && !preview && (
+          <IconButton
+            icon="plus"
+            size={size.s30}
+            iconColor={colors.card}
+            style={styles.addFieldButton(colors)}
+            onPress={() => {
+              setIndexToAdd({});
+              setOpenMenu(!openMenu);
+            }}
+          />
+        )}
+        {(userRole === 'admin' || userRole === 'builder') && (
+          <>
             <IconButton
-              icon="plus"
+              icon={preview ? 'pencil-outline' : 'eye-outline'}
               size={size.s30}
               iconColor={colors.card}
-              style={styles.addFieldButton(colors)}
+              style={styles.previewForm(colors)}
               onPress={() => {
-                setIndexToAdd({});
-                setOpenMenu(!openMenu);
+                setPreview(!preview);
               }}
             />
-          )
-        }
-        {
-          (userRole === 'admin' || userRole === 'builder') && (
-            <>
-              <IconButton
-                icon={preview ? 'pencil-outline' : 'eye-outline'}
-                size={size.s30}
-                iconColor={colors.card}
-                style={styles.previewForm(colors)}
-                onPress={() => {
-                  setPreview(!preview);
-                }}
-              />
-              <IconButton
-                icon="code-json"
-                size={size.s30}
-                iconColor={colors.card}
-                style={styles.previewJSON(colors)}
-                onPress={() => {
-                  setVisibleJsonDlg(true);
-                }}
-              />
-            </>
-          )
-        }
+            <IconButton
+              icon="code-json"
+              size={size.s30}
+              iconColor={colors.card}
+              style={styles.previewJSON(colors)}
+              onPress={() => {
+                setVisibleJsonDlg(true);
+              }}
+            />
+          </>
+        )}
       </View>
     </View>
   );

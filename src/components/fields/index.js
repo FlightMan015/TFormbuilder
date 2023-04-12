@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {deleteField, moveDown, moveUp} from '../../actions/formdata';
 
 const Field = props => {
-  const {element, index, selected, onClick, onSelect, isLastField} = props;
+  const {element, index, selected, onClick, onSelect, isLastField, isFirstField} = props;
   const {colors, fonts} = useTheme();
   const userRole = formStore(state => state.userRole);
   const preview = formStore(state => state.preview);
@@ -21,6 +21,7 @@ const Field = props => {
   const validation = formStore(state => state.validation);
   const formValidation = formStore(state => state.formValidation);
   const setFormValidation = formStore(state => state.setFormValidation);
+  const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
 
   if (
     formValidation &&
@@ -61,7 +62,30 @@ const Field = props => {
           <View
             style={styles.field(colors, selected && !preview && role.edit)}
             onStartShouldSetResponder={() => {
-              onSelect(index);
+              if (selectedFieldIndex.length === 0) {
+                onSelect(index.slice(0, 1));
+              } else {
+                let samePos = -1;
+
+                for (let i = 0; i < Math.min(index.length, selectedFieldIndex.length); i++) {
+                  if (index[i] !== selectedFieldIndex[i]) {
+                    break;
+                  }
+                  samePos = i;
+                }
+
+                if (Math.min(index.length, selectedFieldIndex.length) - 1 === samePos) {
+                  if (index.length > selectedFieldIndex.length) {
+                    onSelect(index.slice(0, samePos + 2));
+                  } else if (index.length < selectedFieldIndex.length) {
+                    onSelect(index.slice(0, samePos + 1));
+                  }
+                } else {
+                  onSelect(index.slice(0, samePos + 2));
+                }
+              }
+
+              return true;
             }}>
             <FieldComponent
               element={element}
@@ -84,7 +108,7 @@ const Field = props => {
                 backgroundColor: colors.background,
                 borderRadius: 20,
               }}>
-              {index.childIndex > 0 && (
+              {!isFirstField && (
                 <IconButton
                   icon="chevron-up"
                   size={24}
@@ -152,7 +176,7 @@ const Field = props => {
   );
 };
 
-const MemoField = ({element, index, onSelect, selected, isLastField}) => {
+const MemoField = ({element, index, onSelect, selected, isLastField, isFirstField}) => {
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
   const setSelectedField = formStore(state => state.setSelectedField);
@@ -210,6 +234,7 @@ const MemoField = ({element, index, onSelect, selected, isLastField}) => {
         onClick={type => onClickAction(type)}
         onSelect={onSelect}
         isLastField={isLastField}
+        isFirstField={isFirstField}
       />
     ),
     [

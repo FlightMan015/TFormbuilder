@@ -1,61 +1,60 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import MemoField from '../fields';
+import MemoGroup from '../groups';
 import {IconButton, useTheme} from 'react-native-paper';
 import formStore from '../../store/formStore';
+import {componentName} from '../../constant';
 import FieldLabel from '../../common/FieldLabel';
 
-const Section = ({
-  element,
-  index,
-  selected,
-  preview,
-  onSelect,
-}) => {
+const Section = ({element, index, selected, preview, onSelect}) => {
   const {colors, fonts} = useTheme();
-  const setIndexToAdd = formStore(state => state.setIndexToAdd);
-  const setOpenMenu = formStore(state => state.setOpenMenu);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
-  const userRole = formStore(state => state.userRole);
   const i18nValues = formStore(state => state.i18nValues);
-  const role = element.role.find(e => e.name === userRole);
 
   return (
     <View style={styles.container}>
-      <FieldLabel label={element.meta.title || i18nValues.t("field_labels.section")} visible={!element.meta.hide_title} />
+      <FieldLabel
+        label={element.meta.title || i18nValues.t('field_labels.section')}
+        visible={!element.meta.hide_title}
+      />
       <View style={styles.tabContent(colors)}>
         {element.meta.childs.map((child, childindex) => {
-          return (
-            <MemoField
-              key={childindex}
-              index={{
-                ...index,
-                childIndex: childindex,
-              }}
-              element={child}
-              onSelect={e => onSelect(e)}
-              selected={selected && 'childIndex' in selectedFieldIndex && selectedFieldIndex.childIndex === childindex}
-              isLastField={element.meta.childs.length === (childindex + 1)}
-            />
-          );
+          if (
+            child.component !== componentName.TABSECTION &&
+            child.component !== componentName.GROUP &&
+            child.component !== componentName.GRID &&
+            child.component !== componentName.LISTSECTION
+          ) {
+            return (
+              <MemoField
+                key={childindex}
+                index={[...index, childindex]}
+                element={child}
+                onSelect={e => onSelect(e)}
+                selected={
+                  JSON.stringify([...index, childindex]) === JSON.stringify(selectedFieldIndex)
+                }
+                isFirstField={childindex === 0}
+                isLastField={element.meta.childs.length === childindex + 1}
+              />
+            );
+          } else {
+            return (
+              <MemoGroup
+                key={childindex}
+                onSelect={e => onSelect(e)}
+                element={child}
+                index={[...index, childindex]}
+                selected={
+                  JSON.stringify([...index, childindex]) === JSON.stringify(selectedFieldIndex)
+                }
+                isFirstGroup={childindex === 0}
+                isLastGroup={element.meta.childs.length === childindex + 1}
+              />
+            );
+          }
         })}
-        {(preview || role.edit) && (
-          <View style={styles.renderContainer}>
-            <IconButton
-              icon="plus"
-              size={20}
-              iconColor={colors.card}
-              style={{
-                ...styles.iconBtn,
-                backgroundColor: colors.colorButton,
-              }}
-              onPress={() => {
-                setIndexToAdd(index);
-                setOpenMenu(true);
-              }}
-            />
-          </View>
-        )}
       </View>
     </View>
   );
@@ -81,6 +80,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   tabContent: colors => ({
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     padding: 5,
   }),
 });
