@@ -10,12 +10,14 @@ import {componentName, radioButton} from '../constant';
 import {ScrollView, FlatList} from 'react-native-gesture-handler';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import PatternBackgroundView from '../common/PatternBackgroundView';
+import {moveDown, moveUp} from '../actions/formdata';
 
 const Body = props => {
   const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
   const setSelectedFieldIndex = formStore(state => state.setSelectedFieldIndex);
+  const setSelectedField = formStore(state => state.setSelectedField);
   const setVisibleJsonDlg = formStore(state => state.setVisibleJsonDlg);
   const setIndexToAdd = formStore(state => state.setIndexToAdd);
   const setOpenMenu = formStore(state => state.setOpenMenu);
@@ -25,6 +27,11 @@ const Body = props => {
   const preview = formStore(state => state.preview);
   const setPreview = formStore(state => state.setPreview);
   const userRole = formStore(state => state.userRole);
+  const deleteFormData = formStore(state => state.deleteFormData);
+  const setFormData = formStore(state => state.setFormData);
+  const setSettingType = formStore(state => state.setSettingType);
+  const selectedField = formStore(state => state.selectedField);
+
   const navigation = useNavigation();
   const status = useDrawerStatus();
 
@@ -54,6 +61,71 @@ const Body = props => {
 
   const onSelect = fieldIndex => {
     setSelectedFieldIndex(fieldIndex);
+
+    let currentElement = formData.data;
+
+    for (let i = 0; i < fieldIndex.length; i++) {
+      currentElement = currentElement[fieldIndex[i]];
+      if (i < fieldIndex.length - 1) {
+        currentElement = currentElement.meta.childs;
+      }
+    }
+
+    setSelectedField(currentElement);
+  };
+
+  const getElementByIndex = index => {
+    let currentElement = formData.data;
+
+    for (let i = 0; i < index.length; i++) {
+      currentElement = currentElement[index[i]];
+      if (i < index.length - 1) {
+        currentElement = currentElement.meta.childs;
+      }
+    }
+
+    return currentElement;
+  };
+
+  const checkIfLastField = index => {
+    if (index.length === 1) {
+      return formData.data.length === index[0] + 1;
+    }
+
+    let currentElement = formData.data;
+
+    for (let i = 0; i < index.length; i++) {
+      currentElement = currentElement[index[i]];
+      if (i < index.length - 1) {
+        currentElement = currentElement.meta.childs;
+      }
+    }
+
+    return getElementByIndex(index.slice(0, index.length - 1))?.meta?.childs.length === index[index.length - 1] + 1;
+  };
+
+  const onClick = type => {
+    if (type === 'delete') {
+      setSelectedFieldIndex([]);
+      deleteFormData(selectedFieldIndex);
+    }
+    if (type === 'setting') {
+      // setSelectedField(element);
+      setSettingType('setting');
+      navigation.getParent('RightDrawer').openDrawer();
+    }
+    if (type === 'moveup') {
+      setFormData({...formData, data: moveUp(formData, selectedFieldIndex)});
+      setSelectedFieldIndex([...selectedFieldIndex.slice(0, selectedFieldIndex.length - 1), selectedFieldIndex[selectedFieldIndex.length - 1] - 1]);
+    }
+    if (type === 'movedown') {
+      setFormData({...formData, data: moveDown(formData, selectedFieldIndex)});
+      setSelectedFieldIndex([...selectedFieldIndex.slice(0, selectedFieldIndex.length - 1), selectedFieldIndex[selectedFieldIndex.length - 1] + 1]);
+    }
+    if (type === 'role') {
+      setSettingType('role');
+      navigation.getParent('RightDrawer').openDrawer();
+    }
   };
 
   return (
@@ -69,44 +141,96 @@ const Body = props => {
       <View
         style={{flex: 1, position: 'absolute', width: '100%', height: '100%'}}>
         <ScrollView style={styles.container(colors)}>
-          <View
-            style={{flexDirection: 'row', paddingBottom: 50, flexWrap: 'wrap'}}>
-            {formData.data.map((field, index) => {
-              if (
-                field.component !== componentName.TABSECTION &&
+          <View style={{paddingBottom: 50}}>
+            {formData.data.map((field, index) => (
+              <View key={index}>
+                {field.component !== componentName.TABSECTION &&
                 field.component !== componentName.GROUP &&
                 field.component !== componentName.GRID &&
-                field.component !== componentName.LISTSECTION
-              ) {
-                return (
+                field.component !== componentName.LISTSECTION ? (
                   <MemoField
                     key={index}
                     onSelect={() => onSelect([index])}
                     element={field}
                     index={[index]}
                     selected={
-                      JSON.stringify([index]) === JSON.stringify(selectedFieldIndex)
+                      JSON.stringify([index]) ===
+                      JSON.stringify(selectedFieldIndex)
                     }
                     isFirstField={index === 0}
                     isLastField={index + 1 === formData.data.length}
                   />
-                );
-              } else {
-                return (
+                ) : (
                   <MemoGroup
                     key={index}
                     onSelect={e => onSelect(e)}
                     element={field}
                     index={[index]}
                     selected={
-                      JSON.stringify([index]) === JSON.stringify(selectedFieldIndex)
+                      JSON.stringify([index]) ===
+                      JSON.stringify(selectedFieldIndex)
                     }
                     isFirstGroup={index === 0}
                     isLastGroup={index + 1 === formData.data.length}
                   />
-                );
-              }
-            })}
+                )}
+                {selectedField?.role.find(e => e.name === userRole)?.edit &&
+                  index === selectedFieldIndex[0] && !preview && (
+                  <View style={{...styles.setIcons}}>
+                    {selectedFieldIndex[selectedFieldIndex.length - 1] !== 0  && (
+                      <IconButton
+                        icon="chevron-up"
+                        size={24}
+                        iconColor={'#fff'}
+                        style={{margin: 3, backgroundColor: '#0A1551'}}
+                        onPress={() => {
+                          onClick('moveup');
+                        }}
+                      />
+                    )}
+                    {!checkIfLastField(selectedFieldIndex) && (
+                      <IconButton
+                        icon="chevron-down"
+                        size={24}
+                        iconColor={'#fff'}
+                        style={{margin: 3, backgroundColor: '#0A1551'}}
+                        onPress={() => {
+                          onClick('movedown');
+                        }}
+                      />
+                    )}
+                    <IconButton
+                      icon="account-outline"
+                      size={24}
+                      iconColor={'#fff'}
+                      style={{margin: 3, backgroundColor: '#0A1551'}}
+                      onPress={() => {
+                        onClick('role');
+                      }}
+                    />
+                    <IconButton
+                      icon="cog-outline"
+                      size={24}
+                      iconColor={'#fff'}
+                      style={{margin: 3, backgroundColor: '#0086DE'}}
+                      onPress={() => {
+                        // onSelect(index);
+                        onClick('setting');
+                      }}
+                    />
+                    <IconButton
+                      icon="delete-outline"
+                      size={24}
+                      iconColor={'#fff'}
+                      style={{margin: 3, backgroundColor: '#FF6150'}}
+                      onPress={() => {
+                        onClick('delete');
+                      }}
+                    />
+                  </View>
+                )}
+              </View>
+            ))}
           </View>
         </ScrollView>
         {(userRole === 'admin' || userRole === 'builder') && !preview && (
@@ -149,6 +273,14 @@ const Body = props => {
 };
 
 const styles = StyleSheet.create({
+  setIcons: {
+    marginTop: 10,
+    flexDirection: 'row',
+    alignSelf: 'center',
+    // position: 'absolute',
+    // bottom: -50,
+    // zIndex: 999,
+  },
   container: colors => ({
     flex: 1,
     paddingHorizontal: 5,

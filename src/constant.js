@@ -594,6 +594,7 @@ const newGroupData = {
     option: false,
     is_tab: false,
     field_width: '100%',
+    verticalAlign: true,
   },
   role: [
     {name: 'admin', view: true, edit: true},

@@ -18,7 +18,7 @@ const Section = ({element, index, selected, preview, onSelect}) => {
         label={element.meta.title || i18nValues.t('field_labels.section')}
         visible={!element.meta.hide_title}
       />
-      <View style={styles.tabContent(colors)}>
+      <View style={styles.tabContent(colors, element.meta.verticalAlign)}>
         {element.meta.childs.map((child, childindex) => {
           if (
             child.component !== componentName.TABSECTION &&
@@ -79,8 +79,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  tabContent: colors => ({
-    flexDirection: 'row',
+  tabContent: (colors, verticalAlign) => ({
+    flexDirection: verticalAlign ? 'column' : 'row',
     flexWrap: 'wrap',
     padding: 5,
   }),

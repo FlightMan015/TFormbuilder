@@ -44,6 +44,13 @@ const SectionSetting = ({element, index, onClick}) => {
         }}
         keyName={'field_width'}
       />
+      <SettingSwitch
+        title={i18nValues.t("setting_labels.align_vertical")}
+        value={element.meta.verticalAlign}
+        onChange={onChange}
+        keyName={'verticalAlign'}
+        description={i18nValues.t("setting_labels.vertical_alignment_description")}
+      />
       <SettingDuplicate index={index} element={element} />
     </>
   );

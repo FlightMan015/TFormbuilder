@@ -78,60 +78,6 @@ const Group = props => {
               preview={preview}
             />
           </View>
-          {role.edit && selected && !preview && (
-            <Animated.View style={{...styles.setIcons, opacity}}>
-              {!isFirstGroup && (
-                <IconButton
-                  icon="chevron-up"
-                  size={24}
-                  iconColor={'#fff'}
-                  style={{margin: 3, backgroundColor: '#0A1551'}}
-                  onPress={() => {
-                    onClick('moveup');
-                  }}
-                />
-              )}
-              {!isLastGroup && (
-                <IconButton
-                  icon="chevron-down"
-                  size={24}
-                  iconColor={'#fff'}
-                  style={{margin: 3, backgroundColor: '#0A1551'}}
-                  onPress={() => {
-                    onClick('movedown');
-                  }}
-                />
-              )}
-              <IconButton
-                icon="account-outline"
-                size={24}
-                iconColor={'#fff'}
-                style={{margin: 3, backgroundColor: '#0A1551'}}
-                onPress={() => {
-                  onClick('role');
-                }}
-              />
-              <IconButton
-                icon="cog-outline"
-                size={24}
-                iconColor={'#fff'}
-                style={{margin: 3, backgroundColor: '#0086DE'}}
-                onPress={() => {
-                  onSelect(index);
-                  onClick('setting');
-                }}
-              />
-              <IconButton
-                icon="delete-outline"
-                size={24}
-                iconColor={'#fff'}
-                style={{margin: 3, backgroundColor: '#FF6150'}}
-                onPress={() => {
-                  onClick('delete');
-                }}
-              />
-            </Animated.View>
-          )}
         </>
       )}
     </View>
@@ -142,6 +88,7 @@ const MemoGroup = ({element, index, onSelect, selected, isLastGroup, isFirstGrou
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
   const setSelectedField = formStore(state => state.setSelectedField);
+  const selectedField = formStore(state => state.selectedField);
   const setSettingType = formStore(state => state.setSettingType);
   // const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
   const setSelectedFieldIndex = formStore(state => state.setSelectedFieldIndex);
@@ -149,31 +96,7 @@ const MemoGroup = ({element, index, onSelect, selected, isLastGroup, isFirstGrou
 
   useEffect(() => {
     if (selected) setSelectedField(element);
-  }, [JSON.stringify(element), selected]);
-
-  const onClickAction = type => {
-    if (type === 'delete') {
-      setSelectedFieldIndex({});
-      setFormData({...formData, data: deleteField(formData, index)});
-    }
-    if (type === 'setting') {
-      // setSelectedField(element);
-      setSettingType('setting');
-      navigation.getParent('RightDrawer').openDrawer();
-    }
-    if (type === 'moveup') {
-      setFormData({...formData, data: moveUp(formData, index)});
-      setSelectedFieldIndex({...index, groupIndex: index.groupIndex - 1});
-    }
-    if (type === 'movedown') {
-      setFormData({...formData, data: moveDown(formData, index)});
-      setSelectedFieldIndex({...index, groupIndex: index.groupIndex + 1});
-    }
-    if (type === 'role') {
-      setSettingType('role');
-      navigation.getParent('RightDrawer').openDrawer();
-    }
-  };
+  }, [JSON.stringify(element)]);
 
   return useMemo(
     () => (
