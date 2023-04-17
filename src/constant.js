@@ -21,6 +21,7 @@ export const componentName = {
   TIME_PICKER: 'input_time',
   FILE_UPLOAD: 'file_upload',
   HEADER: 'header',
+  SPACE: 'space',
   GROUP: 'group',
   LINECHART: 'line_chart',
   BARCHART: 'bar_chart',
@@ -75,6 +76,7 @@ export const skipValidationForFields = [
   'image-with-link',
   'read-only-text',
   'header',
+  'space',
   'line-chart',
   'bar-chart',
   'pie-chart',
@@ -166,7 +168,7 @@ const newHeaderData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -174,6 +176,27 @@ const newHeaderData = {
   action: {create: false, update: false, read: false, delete: false},
   event: {
 
+  }
+}
+
+const newSpaceData = {
+  component: componentName.SPACE,
+  field_name: 'space',
+  is_mandatory: false,
+  meta: {
+    width: 100,
+    height: 30,
+    backgroundColor: '#FFFF00',
+  },
+  role: [
+    {name: 'admin', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
+    {name: 'reviewer', view: true, edit: false},
+    {name: 'approver', view: true, edit: false},
+    {name: 'submitter', view: true, edit: true},
+  ],
+  action: {create: false, update: false, read: false, delete: false},
+  event: {
   }
 }
 
@@ -191,7 +214,7 @@ const newInputTextData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -216,7 +239,7 @@ const newInputDateData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -240,7 +263,7 @@ const newDropDownData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -262,7 +285,7 @@ const newInputTimeData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -285,7 +308,7 @@ const newFileUploadData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -363,7 +386,7 @@ const newBarChartData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -432,7 +455,7 @@ const newPieChartData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -498,7 +521,7 @@ const newMapData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -526,7 +549,7 @@ const newCalendarData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -571,7 +594,7 @@ const newSchedularData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -598,7 +621,7 @@ const newGroupData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -703,7 +726,7 @@ const newTabSectionData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -732,7 +755,7 @@ const newBitMapData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -772,7 +795,7 @@ const newDataTableData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -801,7 +824,7 @@ const newRadioButtonData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -832,7 +855,7 @@ const newGaugeChartData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -859,7 +882,7 @@ const newSliderData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -892,7 +915,7 @@ const newButtonData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -918,7 +941,7 @@ const newImageData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -943,7 +966,7 @@ const newCompositeData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -1031,7 +1054,7 @@ export const newPopupData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -1059,7 +1082,7 @@ export const newEmbeddedData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -1139,7 +1162,7 @@ export const newCardSlider = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -1163,7 +1186,7 @@ export const newTwitterData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -1186,7 +1209,7 @@ export const newVoiceMessage = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -1224,7 +1247,7 @@ export const newQuestionAndAnswer = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -1265,7 +1288,7 @@ export const newContactData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -1302,7 +1325,7 @@ export const newNavigationButtonData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -1346,7 +1369,7 @@ export const newNotificationData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -1378,7 +1401,7 @@ export const newDataCardData = {
   },
   role: [
     {name: 'admin', view: true, edit: true},
-    {name: 'builder', view: true, edit: true},
+    {name: 'builder', view: true, edit: false},
     {name: 'reviewer', view: true, edit: false},
     {name: 'approver', view: true, edit: false},
     {name: 'submitter', view: true, edit: true},
@@ -1423,6 +1446,7 @@ export const newFieldData = {
   [componentName.VOICEMESSAGE]: newVoiceMessage,
   [componentName.SCHEDULAR]: newSchedularData,
   [componentName.HEADER]: newHeaderData,
+  [componentName.SPACE]: newSpaceData,
   [componentName.QUESTIONANDANSWER]: newQuestionAndAnswer,
   [componentName.CONTACT]: newContactData,
   [componentName.NAVIGATIONBUTTON]: newNavigationButtonData,
@@ -1452,6 +1476,7 @@ export const datatypes = {
   dropdownAddNewOption: 'dropdownAddNewOption',
   dropdownRemoveOption: 'dropdownRemoveOption',
   header: 'header',
+  space: 'space',
   placeholder: 'placeholder',
   multiline: 'multiline',
   numberOfLine: 'numberOfLine',
@@ -1540,6 +1565,11 @@ export const fieldMenuData = {
     {
       name: 'input',
       items: [
+        {
+          name: 'space',
+          key: componentName.SPACE,
+          icon: 'image',
+        },
         {
           name: 'header',
           key: componentName.HEADER,

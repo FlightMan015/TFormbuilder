@@ -25,6 +25,7 @@ import VoiceMessageSetting from './VoiceMessageSetting';
 import SchedularSetting from './SchedularSetting';
 import ListSectionSetting from './ListSectionSetting';
 import HeaderSetting from './HeaderSetting';
+import SpaceSetting from './SpaceSetting';
 import QuestionAndAnswerSetting from './QuestionAndAnswerSetting';
 import ContactSetting from './ContactSetting';
 import NavigationButtonSetting from './NavigationButtonSetting';
@@ -109,6 +110,9 @@ const componentMap = {
   },
   [componentName.HEADER]: {
     component: HeaderSetting,
+  },
+  [componentName.SPACE]: {
+    component: SpaceSetting,
   },
   [componentName.QUESTIONANDANSWER]: {
     component: QuestionAndAnswerSetting,

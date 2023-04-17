@@ -177,6 +177,18 @@ const Body = props => {
                 {selectedField?.role.find(e => e.name === userRole)?.edit &&
                   index === selectedFieldIndex[0] && !preview && (
                   <View style={{...styles.setIcons}}>
+                    {(userRole === 'admin' || userRole === 'builder') && !preview && (
+                      <IconButton
+                        icon="plus"
+                        size={24}
+                        iconColor={colors.card}
+                        style={{margin: 3, backgroundColor: colors.colorButton}}
+                        onPress={() => {
+                          setIndexToAdd([]);
+                          setOpenMenu(!openMenu);
+                        }}
+                      />
+                    )}
                     {selectedFieldIndex[selectedFieldIndex.length - 1] !== 0  && (
                       <IconButton
                         icon="chevron-up"
@@ -240,7 +252,7 @@ const Body = props => {
             iconColor={colors.card}
             style={styles.addFieldButton(colors)}
             onPress={() => {
-              setIndexToAdd({});
+              setIndexToAdd([formData.data.length]);
               setOpenMenu(!openMenu);
             }}
           />

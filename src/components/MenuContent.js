@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {IconButton} from 'react-native-paper';
 import {componentName, fieldMenuData, newFieldData} from '../constant';
@@ -17,6 +17,7 @@ const MenuContent = () => {
   const i18nValues = formStore(state => state.i18nValues);
   const selectedField = formStore(state => state.selectedField);
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
+  const indexToAdd = formStore(state => state.indexToAdd);
 
   const selectMenu = component => {
     const field_name = newFieldData[component].field_name + '-' + Date.now();
@@ -61,26 +62,27 @@ const MenuContent = () => {
       newFieldData[component].meta.answers.map(() => newQAValues.push(false));
       setFormValue({...formValue, [field_name]: newQAValues});
     }
-    let indexToAdd = [];
-    if (selectedField) {
-      if (selectedField?.component === componentName.GROUP) {
-        indexToAdd = [
-          ...selectedFieldIndex,
-          selectedField.meta.childs.length - 1,
-        ];
-      } else {
-        let tempIndex = [...selectedFieldIndex];
-        tempIndex[tempIndex.length - 1] = tempIndex[tempIndex.length - 1] + 1;
-        indexToAdd = tempIndex;
+
+    let tempIndexToAdd = [...indexToAdd];
+
+    if (tempIndexToAdd.length === 0) {
+      if (selectedField) {
+        if (selectedField?.component === componentName.GROUP) {
+          tempIndexToAdd = [
+            ...selectedFieldIndex,
+            selectedField.meta.childs.length - 1,
+          ];
+        } else {
+          let tempIndex = [...selectedFieldIndex];
+          tempIndex[tempIndex.length - 1] = tempIndex[tempIndex.length - 1] + 1;
+          tempIndexToAdd = tempIndex;
+        }
       }
     }
-    console.log('==========selectedfield');
-    console.log(selectedField);
-    console.log('==========indexToAdd');
-    console.log(indexToAdd);
+
     setFormData({
       ...formData,
-      data: addField(component, field_name, formData, indexToAdd),
+      data: addField(component, field_name, formData, tempIndexToAdd),
     });
   };
 
@@ -136,7 +138,7 @@ const MenuContent = () => {
         </ScrollView>
       </View>
     ),
-    [JSON.stringify(formData), i18nValues.locale],
+    [JSON.stringify(formData), i18nValues.locale, JSON.stringify(indexToAdd)],
   );
 };
 

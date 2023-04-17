@@ -26,6 +26,7 @@ import Stripe from './Stripe';
 import VoiceMessage from './VoiceMessage';
 import Schedular from './scheduler';
 import Header from './Header';
+import Space from './Space';
 import QuestionAndAnswers from './QuestionAndAnswers';
 import Contact from './Contact';
 import NavigationButton from './NavigationButton';
@@ -72,6 +73,9 @@ const componentMap = {
   },
   [componentName.HEADER]: {
     component: Header,
+  },
+  [componentName.SPACE]: {
+    component: Space,
   },
   [componentName.LINECHART]: {
     component: LineChart,
