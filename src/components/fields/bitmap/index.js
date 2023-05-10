@@ -356,8 +356,6 @@ const Bitmap = ({element, index}) => {
     }
   };
 
-  console.log(imageSize.width, imageSize.height);
-
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.bitmapContainer(element)}>
@@ -888,7 +886,6 @@ const Bitmap = ({element, index}) => {
           tabState.markers && (
             <Text style={{textAlign: 'center'}}>
               {
-                // console.log(selectedMarkerType)
                 Object.keys(selectedMarkerType).length > 0 ? selectedMarkerType.useDrawingFunc ? i18nValues.t("warnings.draw_marker") : i18nValues.t("warnings.click_marker_point") : i18nValues.t("warnings.select_marker_type")
               }
             </Text>

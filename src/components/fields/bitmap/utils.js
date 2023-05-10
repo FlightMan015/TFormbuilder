@@ -137,7 +137,6 @@ const makeImageSvgFromData = (data, options) => {
 
 function clickHandle(e) { 
   e.preventDefault();
-  console.log('Handled');
 } 
 
 const makeImageSvgFromNewData = (data, options) => {
@@ -164,9 +163,9 @@ const makeImageSvgFromNewData = (data, options) => {
         options.maxPosition.y
       }" viewBox="0 0 ${options.maxPosition.x} ${
         options.maxPosition.y
-      }" fill="none" xmlns="http://www.w3.org/2000/svg" onClick="{console.log('bc')}">
+      }" fill="none" xmlns="http://www.w3.org/2000/svg">
       ${
-        `<rect x="${data.startPoint.x}" y="${data.startPoint.y}" width="${Math.abs(data.startPoint.x - data.endPoint.x)}" height="${Math.abs(data.startPoint.y - data.endPoint.y)}" stroke="red" fill="red" stroke-width="2"  onClick="{console.log('bc')}" />`
+        `<rect x="${data.startPoint.x}" y="${data.startPoint.y}" width="${Math.abs(data.startPoint.x - data.endPoint.x)}" height="${Math.abs(data.startPoint.y - data.endPoint.y)}" stroke="red" fill="red" stroke-width="2" />`
       }
     </svg>`;
   }
@@ -176,7 +175,7 @@ const makeImageSvgFromNewData = (data, options) => {
       }" viewBox="0 0 ${options.maxPosition.x} ${
         options.maxPosition.y
       }" fill="none" xmlns="http://www.w3.org/2000/svg">
-      ${`<ellipse cx="${data.startPoint.x + Math.abs((data.startPoint.x - data.endPoint.x)/2)}" cy="${data.startPoint.y + Math.abs((data.startPoint.y - data.endPoint.y)/2)}" rx="${Math.abs((data.startPoint.x - data.endPoint.x)/2)}" ry="${Math.abs((data.startPoint.y - data.endPoint.y)/2)}" stroke="red" stroke-width="2"  onPress="${console.log('onpress-------ellipse')}" />`
+      ${`<ellipse cx="${data.startPoint.x + Math.abs((data.startPoint.x - data.endPoint.x)/2)}" cy="${data.startPoint.y + Math.abs((data.startPoint.y - data.endPoint.y)/2)}" rx="${Math.abs((data.startPoint.x - data.endPoint.x)/2)}" ry="${Math.abs((data.startPoint.y - data.endPoint.y)/2)}" stroke="red" stroke-width="2" />`
       }
     </svg>`;
   }

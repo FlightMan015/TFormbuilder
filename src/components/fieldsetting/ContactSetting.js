@@ -19,7 +19,6 @@ const ContactSetting = ({element, index, onClick}) => {
   const updateFormData = formStore(state => state.updateFormData);
 
   const onChange = (key, value) => {
-    console.log(key, value);
     const tempMeta = JSON.parse(JSON.stringify(element.meta));
     setFormData({
       ...formData,

@@ -801,7 +801,6 @@ const MarkerTypes = ({element, index, imageSize, imageData}) => {
             <View style={styles.dlgContent}>
               {
                 svgMarkerTypes.map((marker, markerTypeIndex) => {
-                  console.log('--------------------------marker', marker);
                   const markerWidth = marker.maxPoint.x - marker.minPoint.x;
                   const markerHeight = marker.maxPoint.y - marker.minPoint.y;
                   const svgSize = 40;
@@ -838,7 +837,6 @@ const MarkerTypes = ({element, index, imageSize, imageData}) => {
                             marker.data.map((svgMarker, svgMarkerIndex) => {
                               if (svgMarker.name === MarkerShapes[0].name && svgMarker.pathData.length > 0) {
                                 return svgMarker.pathData.map((item, itemIndex) => {
-                                  console.log('join path----------------', item.join(''));
                                   return <Path
                                     key={`marker-path-${itemIndex}`}
                                     d={item.join('')}

@@ -144,7 +144,6 @@ const CheckBoxCell = ({data, rowIndex, colIndex, actionRule, element, lastRow}) 
   const role = element.role.find(e => e.name === userRole);
   const preview = formStore(state => state.preview);
   const [visible, setVisible] = useState(false);
-  console.log('data--------', data);
   return (
     <View key={rowIndex} style={{
       width: '100%',

@@ -12,8 +12,6 @@ const Section = ({element, index, selected, preview, onSelect}) => {
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
   const i18nValues = formStore(state => state.i18nValues);
 
-  console.log('=====================field_width', typeof element.meta.field_width, element.meta.field_width.indexOf('%'))
-
   return (
     <TouchableOpacity style={styles.container(element)} disabled={!preview && !element.meta.isButton}>
       <FieldLabel

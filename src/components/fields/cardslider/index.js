@@ -117,7 +117,6 @@ const CardSlider = props => {
             {
               element.meta.verticalAlign && formValue[element.field_name]?.length > 0 &&
               formValue[element.field_name].map((item, itemIndex) => {
-                console.log('item--------', item);
                 if (element.meta.cardtemplate === 'card1') {
                   return (
                     <View key={itemIndex} style={{width: '90%', alignSelf: 'center', marginVertical: 10}}>

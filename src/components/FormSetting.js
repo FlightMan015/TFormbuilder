@@ -85,12 +85,10 @@ const FormSetting = () => {
   const onCheckRole = index => {
     const tempRoles = [...roleDatas];
     const selectedItem = tempRoles[index];
-    console.log(selectedItem.check, typeof selectedItem.check);
     tempRoles[index] = {
       ...selectedItem,
       check: !selectedItem.check,
     };
-    console.log(tempRoles);
     // setRoleDatas(tempRoles);
     let tempCheckedRoles = [];
     // tempCheckedRoles.push({name: 'admin', check: true});

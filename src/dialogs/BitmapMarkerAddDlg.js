@@ -204,7 +204,6 @@ const BitmapMarkerAddDlg = () => {
                   <Checkbox
                     status={markerIdToAdd.id === marker.id ? 'checked' : 'unchecked'}
                     onPress={() => {
-                      console.log(marker);
                       setMarkerIdToAdd({...marker})
                     }}
                     color={colors.colorButton}

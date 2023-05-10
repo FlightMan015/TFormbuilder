@@ -21,7 +21,6 @@ const Button = props => {
   const role = element.role.find(e => e.name === userRole);
 
   const onClick = () => {
-    console.log('formValue---------------------------------------------', formValue)
     if (element.meta.function === 'formSubmit') {
       if (!submit) {
         setSubmit(true);

@@ -99,7 +99,6 @@ const Regions = ({element, index, imageData, imageSize}) => {
   useEffect(() => {
     if (regionCtrl.edit && selectedRegion) {
       const selectedRegionIndex = svgRegions.findIndex(e => e.id === selectedRegion.id);
-      console.log(selectedRegionIndex);
       svgRegions.splice(selectedRegionIndex, 1, selectedRegion);
       setSvgRegions([...svgRegions]);
     }
@@ -110,7 +109,6 @@ const Regions = ({element, index, imageData, imageSize}) => {
   };
 
   const onTouchStart = (event) => {
-    console.log('onTouchStart------------------------------------')
     setIsEnabled(false);
     setIsEnabledImageView(false);
     const locationX = event.nativeEvent.locationX;
@@ -150,7 +148,6 @@ const Regions = ({element, index, imageData, imageSize}) => {
   }
 
   const onTouchMove = (event) => {    
-    console.log('onTouchMove------------------------------------')
     const locationX = event.nativeEvent.locationX;
     const locationY = event.nativeEvent.locationY;
 
@@ -159,7 +156,6 @@ const Regions = ({element, index, imageData, imageSize}) => {
   };
 
   const onTouchEnd = (event) => {
-    console.log('onTouchEnd------------------------------------')
     const locationX = event.nativeEvent.locationX;
     const locationY = event.nativeEvent.locationY;
     touchEndPoint.current = {x: Math.floor(locationX), y: Math.floor(locationY)};

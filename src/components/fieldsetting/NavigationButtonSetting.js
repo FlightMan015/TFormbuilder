@@ -27,7 +27,6 @@ const NavigationButtonSetting = ({element, index, onClick}) => {
   const [settingType, setSettingType] = useState('NavigationSetting');
 
   const onChange = (key, value) => {
-    console.log(key, value);
     const tempMeta = JSON.parse(JSON.stringify(element.meta));
     setFormData({
       ...formData,

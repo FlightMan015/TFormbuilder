@@ -68,7 +68,6 @@ const DrawingPanel = ({svgPosition}) => {
   const onDrawingStart = useCallback(
     touchInfo => {
       const {x, y} = touchInfo;
-      console.log(drawType);
       if (drawType === shapes[0].name) {
         if (currentPath.current) {
           return;
@@ -99,7 +98,6 @@ const DrawingPanel = ({svgPosition}) => {
         tempPolygonData.push({x, y});
         setPolygonData(tempPolygonData);
         // setPolygonData([...polygonData, {x, y}]);
-        console.log(polygonData, '-------------------------')
       }
     },
     [stroke, drawType, JSON.stringify(polygonData)],

@@ -29,7 +29,6 @@ const ColumnCell = ({date, schedulesOfDate, onClick, index, element}) => {
             <Text style={{...element.meta.dayFont, marginBottom: 10}}>{new Date(date).toDateString().split(' ')[0]}</Text>
             {
                 sorted.map((schedule, eventindex) => {
-                    console.log(typeof(schedule.startTime));
                     return (
                         <TextButton
                             key={eventindex}

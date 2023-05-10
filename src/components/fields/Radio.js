@@ -16,8 +16,6 @@ const Radio = props => {
   const preview = formStore(state => state.preview);
   const i18nValues = formStore(state => state.i18nValues);
 
-  console.log(typeof(radioButton.selected));
-
   return (
     <View style={styles.container(element)}>
       {
