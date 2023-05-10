@@ -16,7 +16,7 @@ const QuestionAndAnswers = props => {
   const i18nValues = formStore(state => state.i18nValues);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(element)}>
       {
         role.view && (
           <>
@@ -49,9 +49,9 @@ const QuestionAndAnswers = props => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
 });
 
 QuestionAndAnswers.propTypes = {

@@ -11,6 +11,8 @@ import SettingSwitch from './common/SettingSwitch';
 import SettingImage from './common/SettingImage';
 import { emptyImage, newNavButton } from '../../constant';
 import TextButton from '../../common/TextButton';
+import SettingSectionWidth from './common/SettingSectionWidth';
+import SettingPadding from './common/SettingPadding';
 import DocumentPicker, {
   types,
 } from 'react-native-document-picker';
@@ -181,13 +183,19 @@ const NavigationButtonSetting = ({element, index, onClick}) => {
               }}
               keyName={'text2'}
             />
-            <SettingSwitch
-              title={i18nValues.t("setting_labels.small_width")}
-              value={element.meta.field_width === '50%'}
-              onChange={(key, value) => {
-                onChange(key, value ? '50%' : '100%');
-              }}
+            <SettingSectionWidth
+              title={i18nValues.t("setting_labels.width")}
+              value={element.meta.field_width}
+              onChange={onChange}
               keyName={'field_width'}
+            />
+            <SettingPadding
+              title={i18nValues.t("setting_labels.padding")}
+              top={element.meta.padding.paddingTop}
+              left={element.meta.padding.paddingLeft}
+              bottom={element.meta.padding.paddingBottom}
+              right={element.meta.padding.paddingRight}
+              onChange={onChange}
             />
             <TouchableOpacity style={styles.settingView} onPress={() => setSettingType('NavigationSetting')}>
               <Text style={{color: '#FFFFFF', textAlign: 'center', alignContent: 'center'}}>Go to navigation buttons setting</Text>

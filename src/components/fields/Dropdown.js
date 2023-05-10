@@ -19,7 +19,7 @@ const DropDown = props => {
   const [open, setOpen] = useState(true);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(element)}>
       {
         role.view && (
           <>
@@ -46,7 +46,7 @@ const DropDown = props => {
               dropdownIconPosition="right"
               onFocus={() => setOpen(false)}
               onBlur={() => setOpen(true)}
-              disabled={(role.edit || preview)? false : true}
+              disabled={!role.edit && !preview}
               defaultButtonText="Select Option"
               defaultValue={formValue[element.field_name] || ''}
             />
@@ -58,9 +58,9 @@ const DropDown = props => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding,
+  }),
   carouselTitle: colors => ({
     fontSize: 16,
     padding: 5,

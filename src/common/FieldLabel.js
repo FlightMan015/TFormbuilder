@@ -14,6 +14,7 @@ const FieldLabel = ({visible, label, is_mandatory}) => {
 
 const styles = StyleSheet.create({
   label: fonts => ({
+    // width: '100%',
     padding: 5,
     ...fonts.labels,
   }),

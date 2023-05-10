@@ -11,7 +11,7 @@ const Header = props => {
   const role = element.role.find(e => e.name === userRole);
 
   return (
-    <View>
+    <View style={styles.container(element)}>
       {role.view && (
         <Text
           style={{
@@ -27,9 +27,9 @@ const Header = props => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
 });
 
 Header.propTypes = {

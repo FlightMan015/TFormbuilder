@@ -77,6 +77,116 @@ const makeImageSvgFromPaths = (paths, options) => {
     </svg>`;
 };
 
+const makeImageSvgFromData = (data, options) => {
+  const newPaths = data.paths;
+  const rectangles = data.rectangles;
+  const ellipses = data.ellipses;
+  const lines = data.lines;
+  const polygons = data.polygons;
+  
+  return `<svg width="${options.maxPosition.x}" height="${
+    options.maxPosition.y
+  }" viewBox="0 0 ${options.maxPosition.x} ${
+    options.maxPosition.y
+  }" fill="none" xmlns="http://www.w3.org/2000/svg">
+    ${newPaths.map(
+      path => {
+        if (path.paint && path.path) {
+          let newPathMake = Skia.Path.Make();
+          newPathMake = path.path;
+          const mmm = `<path d="${newPathMake.toSVGString()}" stroke="red" stroke-width="${path.paint.getStrokeWidth()}" stroke-linecap="${path.paint.getStrokeCap()}" stroke-linejoin="${path.paint.getStrokeJoin()}"/>`;
+          return mmm;
+        } else {
+          return '';
+        }
+      },
+      // path.paint && path.path
+      //   ? `<path d="${path.path.toSVGString()}" stroke="red" stroke-width="${path.paint.getStrokeWidth()}" stroke-linecap="${path.paint.getStrokeCap()}" stroke-linejoin="${path.paint.getStrokeJoin()}"/>`
+      //   : ''
+    )}
+    ${
+      rectangles.map(rectangle => {
+        return `<rect x="${rectangle.startPoint.x}" y="${rectangle.startPoint.y}" width="${Math.abs(rectangle.startPoint.x - rectangle.endPoint.x)}" height="${Math.abs(rectangle.startPoint.y - rectangle.endPoint.y)}" stroke="red" stroke-width="2" />`;
+      })
+    }
+    ${
+      ellipses.map(ellipse => {
+        return `<ellipse cx="${ellipse.startPoint.x + Math.abs((ellipse.startPoint.x - ellipse.endPoint.x)/2)}" cy="${ellipse.startPoint.y + Math.abs((ellipse.startPoint.y - ellipse.endPoint.y)/2)}" rx="${Math.abs((ellipse.startPoint.x - ellipse.endPoint.x)/2)}" ry="${Math.abs((ellipse.startPoint.y - ellipse.endPoint.y)/2)}" stroke="red" stroke-width="2" />`;
+      })
+    }
+    ${
+      lines.map(line => {
+        return `<line x1="${line.startPoint.x}" y1="${line.startPoint.y}" x2="${line.endPoint.x}" y2="${line.endPoint.y}" stroke="red" strokeWidth="6" />`;
+      })
+    }
+    ${
+      polygons.map(polygon => {
+        var tempPointStr = '';
+        for(let i = 0; i < polygon.length; i++) {
+          if (i === 0) {
+            tempPointStr = tempPointStr + Math.floor(polygon[i].x) + ' ' + Math.floor(polygon[i].y);
+          } else {
+            tempPointStr = tempPointStr + ' ' + Math.floor(polygon[i].x) + ' ' + Math.floor(polygon[i].y);
+          }
+        }
+        return `<polygon fill="none" points="${tempPointStr}" stroke="red" strokeWidth="5" />`;
+      })
+    }
+    </svg>`;
+};
+
+function clickHandle(e) { 
+  e.preventDefault();
+  console.log('Handled');
+} 
+
+const makeImageSvgFromNewData = (data, options) => {
+  if (data.name === 'polygon') {
+    var tempPointStr = '';
+    for(let i = 0; i < data.length; i++) {
+      if (i === 0) {
+        tempPointStr = tempPointStr + Math.floor(data[i].x) + ' ' + Math.floor(data[i].y);
+      } else {
+        tempPointStr = tempPointStr + ' ' + Math.floor(data[i].x) + ' ' + Math.floor(data[i].y);
+      }
+    }
+    return `<svg width="${options.maxPosition.x}" height="${
+        options.maxPosition.y
+      }" viewBox="0 0 ${options.maxPosition.x} ${
+        options.maxPosition.y
+      }" fill="none" xmlns="http://www.w3.org/2000/svg">
+      ${`<polygon fill="none" points="${tempPointStr}" stroke="red" strokeWidth="5" />`
+      }
+    </svg>`;
+  }
+  if (data.name === 'rectangle') {
+    return `<svg width="${options.maxPosition.x}" height="${
+        options.maxPosition.y
+      }" viewBox="0 0 ${options.maxPosition.x} ${
+        options.maxPosition.y
+      }" fill="none" xmlns="http://www.w3.org/2000/svg" onClick="{console.log('bc')}">
+      ${
+        `<rect x="${data.startPoint.x}" y="${data.startPoint.y}" width="${Math.abs(data.startPoint.x - data.endPoint.x)}" height="${Math.abs(data.startPoint.y - data.endPoint.y)}" stroke="red" fill="red" stroke-width="2"  onClick="{console.log('bc')}" />`
+      }
+    </svg>`;
+  }
+  if (data.name === 'ellipse') {
+    return `<svg width="${options.maxPosition.x}" height="${
+        options.maxPosition.y
+      }" viewBox="0 0 ${options.maxPosition.x} ${
+        options.maxPosition.y
+      }" fill="none" xmlns="http://www.w3.org/2000/svg">
+      ${`<ellipse cx="${data.startPoint.x + Math.abs((data.startPoint.x - data.endPoint.x)/2)}" cy="${data.startPoint.y + Math.abs((data.startPoint.y - data.endPoint.y)/2)}" rx="${Math.abs((data.startPoint.x - data.endPoint.x)/2)}" ry="${Math.abs((data.startPoint.y - data.endPoint.y)/2)}" stroke="red" stroke-width="2"  onPress="${console.log('onpress-------ellipse')}" />`
+      }
+    </svg>`;
+  }
+  return `<svg width="${options.maxPosition.x}" height="${
+      options.maxPosition.y
+    }" viewBox="0 0 ${options.maxPosition.x} ${
+      options.maxPosition.y
+    }" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>`;
+};
+
 const handleImageSize = (width, height, maxWidth, maxHeight) => {
   if (width >= height) {
     var ratio = maxWidth / width;
@@ -142,4 +252,6 @@ export default {
   makeSvgFromPaths,
   handleImageSize,
   makeImageSvgFromPaths,
+  makeImageSvgFromData,
+  makeImageSvgFromNewData
 };

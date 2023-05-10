@@ -39,7 +39,7 @@ const Button = props => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(element)}>
       {
         role.view && (
           <>
@@ -51,9 +51,9 @@ const Button = props => {
                   Alert.alert('Rule Action', `Fired onPress action. rule - ${element.event.onPress}.`);
                 }
               }}
-              disabled={!role.edit && !preview}
+              disabled={role.setting && !preview}
               style={{
-                ...styles.touchableContainer(element.meta.width),
+                ...styles.touchableContainer(element.meta.width, element),
                 backgroundColor: element.meta.backgroundColor || colors.colorButton,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
@@ -85,13 +85,13 @@ const Button = props => {
                   Alert.alert('Rule Action', `Fired onPress action. rule - ${element.event.onPress}.`);
                 }
               }}
-              disabled={!role.edit && !preview}
+              disabled={role.setting && !preview}
               style={{
                 ...styles.touchableContainer1(element.meta.width),
                 backgroundColor: element.meta.backgroundColor || colors.colorButton,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
-              <View style={styles.touchableContainer1(element.meta.width)}>
+              <View style={styles.touchableContainer1(element.meta.width, element)}>
                 {element.meta.isIcon && element.meta.icon?.family === 'Ionicons' && (
                   <Ionicons name={element.meta.icon.icon} size={element.meta.iconSize} color={element.meta.color || color.WHITE} />
                 )}
@@ -121,13 +121,13 @@ const Button = props => {
                   Alert.alert('Rule Action', `Fired onPress action. rule - ${element.event.onPress}.`);
                 }
               }}
-              disabled={!role.edit && !preview}
+              disabled={role.setting && !preview}
               style={{
                 ...styles.touchableContainer1(element.meta.width),
                 backgroundColor: element.meta.backgroundColor || colors.colorButton,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
-              <View style={styles.touchableContainer1(element.meta.width)}>
+              <View style={styles.touchableContainer1(element.meta.width, element)}>
                 {element.meta.isText &&
                   <Text
                     style={{
@@ -157,9 +157,9 @@ const Button = props => {
                   Alert.alert('Rule Action', `Fired onPress action. rule - ${element.event.onPress}.`);
                 }
               }}
-              disabled={!role.edit && !preview}
+              disabled={role.setting && !preview}
               style={{
-                ...styles.touchableContainer(element.meta.width),
+                ...styles.touchableContainer(element.meta.width, element),
                 backgroundColor: element.meta.backgroundColor || colors.colorButton,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
@@ -191,13 +191,13 @@ const Button = props => {
                   Alert.alert('Rule Action', `Fired onPress action. rule - ${element.event.onPress}.`);
                 }
               }}
-              disabled={!role.edit && !preview}
+              disabled={role.setting && !preview}
               style={{
                 ...styles.touchableContainer(element.meta.width),
                 backgroundColor: element.meta.backgroundColor || colors.colorButton,
                 borderRadius: element.meta.isRound ? 1000 : 10,
               }}>
-              <View style={{...styles.touchableContainer1(element.meta.width), width: '100%'}}>
+              <View style={{...styles.touchableContainer1(element.meta.width, element), width: '100%'}}>
                 {element.meta.isIcon && element.meta.icon?.family === 'Ionicons' && (
                   <Ionicons name={element.meta.icon.icon} size={element.meta.iconSize} color={element.meta.color || color.WHITE} />
                 )}
@@ -229,31 +229,33 @@ const Button = props => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
+  container: element => ({
+    ...element.meta.padding,
     flexDirection: 'row',
     justifyContent: 'center',
-  },
+  }),
   carouselTitle: colors => ({
     fontSize: 16,
     padding: 5,
     color: colors.text,
   }),
-  touchableContainer: autoWidth => ({
+  touchableContainer: (autoWidth, element) => ({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'center',
     justifyContent: 'space-around',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    width: autoWidth === 'auto' ? '65%' : null
+    // paddingHorizontal: 15,
+    // paddingVertical: 10,
+    width: autoWidth === 'auto' ? '65%' : null,
+    ...element.meta.padding,
   }),
-  touchableContainer1: autoWidth => ({
+  touchableContainer1: (autoWidth, element) => ({
     alignItems: 'center',
     alignSelf: 'center',
     paddingHorizontal: 10,
     paddingVertical: 2,
-    width: autoWidth === 'auto' ? '65%' : null
+    width: autoWidth === 'auto' ? '65%' : null,
+    ...element?.meta.padding,
   }),
   buttonText: {
     paddingHorizontal: 10,

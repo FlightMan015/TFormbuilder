@@ -17,7 +17,7 @@ const DatePicker = ({element}) => {
   const [visible, setVisible] = useState(false);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(element)}>
       {
         role.view && (
           <>
@@ -26,16 +26,15 @@ const DatePicker = ({element}) => {
               <Text style={styles.text(fonts)}>
                 {(element.field_name in formValue  && formValue[element.field_name]) ? formValue[element.field_name].replace(new RegExp('-', 'g'), '/') : new Date(Date.now()).toISOString().split('T')[0].replace(new RegExp('-', 'g'), '/')}
               </Text>
-              {(role.edit  || preview) && (
-                <IconButton
-                  icon="calendar"
-                  iconColor={colors.colorButton}
-                  onPress={() => setVisible(true)}
-                  style={{
-                    ...styles.icon,
-                  }}
-                />
-              )}
+              <IconButton
+                icon="calendar"
+                iconColor={colors.colorButton}
+                onPress={() => setVisible(true)}
+                disabled={!role.edit && !preview}
+                style={{
+                  ...styles.icon,
+                }}
+              />
             </View>
             {visible && (
               <RNDateTimePicker
@@ -61,9 +60,9 @@ const DatePicker = ({element}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   mainView: (colors) => ({
     flexDirection: 'row',
     alignItems: 'center',

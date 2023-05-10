@@ -6,6 +6,8 @@ import formStore from '../../store/formStore';
 import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import SettingSwitch from './common/SettingSwitch';
+import SettingPadding from './common/SettingPadding';
+import SettingBitmapRegion from './common/SettingBitmapRegion';
 
 const BitmapSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
@@ -53,13 +55,27 @@ const BitmapSetting = ({element, index, onClick}) => {
         onChange={onChange}
         keyName={'is_mandatory'}
       />
-      <SettingSwitch
+      {/* <SettingSwitch
         title={i18nValues.t("setting_labels.small_width")}
         value={element.meta.field_width === '50%'}
         onChange={(key, value) => {
           onChange(key, value ? '50%' : '100%');
         }}
         keyName={'field_width'}
+      /> */}
+      <SettingPadding
+        title={i18nValues.t("setting_labels.padding")}
+        top={element.meta.padding.paddingTop}
+        left={element.meta.padding.paddingLeft}
+        bottom={element.meta.padding.paddingBottom}
+        right={element.meta.padding.paddingRight}
+        onChange={onChange}
+      />
+      <SettingBitmapRegion
+        userSelectableValue={element.meta.userSelectable}
+        selectedShowValue={element.meta.selectedShow}
+        defaultStateValue={element.meta.defaultState}
+        onChange={onChange}
       />
       <SettingDuplicate index={index} element={element} />
     </>

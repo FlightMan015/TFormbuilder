@@ -20,7 +20,7 @@ const Schedular = ({element, index}) => {
     const [date, setDate] = useState(new Date(Date.now()).toISOString().split('T')[0]);
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container(element)}>
             <FieldLabel label={element.meta.title || i18nValues.t("field_labels.schedular")} visible={!element.meta.hide_title} />
             <SchedularHeader selectedMonth={date} onClick={e => {setDate(e);}} element={element} />
             <SchedularBody element={element} schedules={formValue[element.field_name] || {}} schedulesOfMonth={sortByYearAndByMonth(formValue[element.field_name] || {})} year={date.substring(0,4)} month={date.substring(5,7)} />
@@ -48,9 +48,9 @@ const Schedular = ({element, index}) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 5,
-    },
+    container: element => ({
+        ...element.meta.padding
+    }),
     button: colors => ({
         marginTop: 30,
         paddingHorizontal: 20,

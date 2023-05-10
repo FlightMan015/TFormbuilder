@@ -32,56 +32,48 @@ const Group = props => {
       useNativeDriver: true,
     }).start();
   };
+  
+  if (role.view) {
+    return (
+      <View
+        style={styles.field(colors, selected && !preview && role.setting, element)}
+        onStartShouldSetResponder={() => {
+          if (selectedFieldIndex.length === 0) {
+            onSelect(index.slice(0, 1));
+          } else {
+            let samePos = -1;
 
-  return (
-    <View style={{width: element.meta.field_width}}>
-      {role.view && (
-        <>
-          <View
-            style={styles.field(
-              colors,
-              selected &&
-                !preview &&
-                (userRole === 'admin' || userRole === 'builder'),
-            )}
-            onStartShouldSetResponder={() => {
-              if (selectedFieldIndex.length === 0) {
-                onSelect(index.slice(0, 1));
-              } else {
-                let samePos = -1;
-
-                for (let i = 0; i < Math.min(index.length, selectedFieldIndex.length); i++) {
-                  if (index[i] !== selectedFieldIndex[i]) {
-                    break;
-                  }
-                  samePos = i;
-                }
-
-                if (Math.min(index.length, selectedFieldIndex.length) - 1 === samePos) {
-                  if (index.length > selectedFieldIndex.length) {
-                    onSelect(index.slice(0, samePos + 2));
-                  } else if (index.length < selectedFieldIndex.length) {
-                    onSelect(index.slice(0, samePos + 1));
-                  }
-                } else {
-                  onSelect(index.slice(0, samePos + 2));
-                }
+            for (let i = 0; i < Math.min(index.length, selectedFieldIndex.length); i++) {
+              if (index[i] !== selectedFieldIndex[i]) {
+                break;
               }
+              samePos = i;
+            }
 
-              return true;
-            }}>
-            <GroupComponent
-              element={element}
-              index={index}
-              selected={selected}
-              onSelect={e => onSelect(e)}
-              preview={preview}
-            />
-          </View>
-        </>
-      )}
-    </View>
-  );
+            if (Math.min(index.length, selectedFieldIndex.length) - 1 === samePos) {
+              if (index.length > selectedFieldIndex.length) {
+                onSelect(index.slice(0, samePos + 2));
+              } else if (index.length < selectedFieldIndex.length) {
+                onSelect(index.slice(0, samePos + 1));
+              }
+            } else {
+              onSelect(index.slice(0, samePos + 2));
+            }
+          }
+
+          return true;
+        }}>
+        <GroupComponent
+          element={element}
+          index={index}
+          selected={selected}
+          onSelect={e => onSelect(e)}
+          preview={preview}
+        />
+      </View>
+    );
+  }
+  
 };
 
 const MemoGroup = ({element, index, onSelect, selected, isLastGroup, isFirstGroup}) => {
@@ -123,11 +115,12 @@ const styles = StyleSheet.create({
     // bottom: -50,
     // zIndex: 999,
   },
-  field: (colors, visibleBorder) => ({
+  field: (colors, visibleBorder, element) => ({
     borderColor: visibleBorder ? '#0087E0' : colors.background,
     borderRadius: 5,
-    borderWidth: 2,
+    borderWidth: visibleBorder ? 2 : 0,
     marginVertical: 3,
+    width: element.meta.field_width.indexOf('%') === -1 ? parseInt(element.meta.field_width, 10) : element.meta.field_width,
   }),
 });
 

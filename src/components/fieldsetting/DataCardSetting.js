@@ -8,6 +8,8 @@ import SettingLabel from './common/SettingLabel';
 import FontSetting from '../../common/FontSetting';
 import SettingSwitch from './common/SettingSwitch';
 import SettingDropdownOptions from './common/SettingDropdownOptions';
+import SettingSectionWidth from './common/SettingSectionWidth';
+import SettingPadding from './common/SettingPadding';
 
 const DataCardSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
@@ -77,13 +79,19 @@ const DataCardSetting = ({element, index, onClick}) => {
         fontType={element.meta.descriptionFont.fortFamily}
         onChange={(type, e) => {onChangeFont('descriptionFont', type, e);}}
       />
-      <SettingSwitch
-        title={i18nValues.t("setting_labels.small_width")}
-        value={element.meta.field_width === '50%'}
-        onChange={(key, value) => {
-          onChange(key, value ? '50%' : '100%');
-        }}
+      <SettingSectionWidth
+        title={i18nValues.t("setting_labels.width")}
+        value={element.meta.field_width}
+        onChange={onChange}
         keyName={'field_width'}
+      />
+      <SettingPadding
+        title={i18nValues.t("setting_labels.padding")}
+        top={element.meta.padding.paddingTop}
+        left={element.meta.padding.paddingLeft}
+        bottom={element.meta.padding.paddingBottom}
+        right={element.meta.padding.paddingRight}
+        onChange={onChange}
       />
       <SettingDuplicate index={index} element={element} />
     </>

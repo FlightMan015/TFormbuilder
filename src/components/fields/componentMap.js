@@ -16,7 +16,7 @@ import Image from './Image';
 // import Embedded from './Embedded';
 import CardSlider from './cardslider';
 import Dropdown from './Dropdown';
-import Map from './Map';
+// import Map from './Map';
 import Calendar from './Calendar';
 // import DataTable from './DataTable';
 import DataTable from './datatable/index';
@@ -89,9 +89,9 @@ const componentMap = {
   [componentName.RADARCHART]: {
     component: RadarChart,
   },
-  [componentName.MAP]: {
-    component: Map,
-  },
+  // [componentName.MAP]: {
+  //   component: Map,
+  // },
   [componentName.CALENDAR]: {
     component: Calendar,
   },

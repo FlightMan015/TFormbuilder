@@ -33,31 +33,38 @@ const FormSetting = () => {
   const i18nValues = formStore(state => state.i18nValues);
 
   const {colors} = useTheme();
-  const [roleDatas, setRoleDatas] = useState(roles || []);
-  const [checkedRoles, setCheckedRoles] = useState(formData.checkedRoles || []);
+  const [roleDatas, setRoleDatas] = useState([]);
   const opacity = new Animated.Value(1);
-  const previousRoles = useRef(roles || []);
   const [selectedTab, setSelectedTab] = useState('general');
-
+  const ref = useRef();
 
   useEffect(() => {
-    if (formData.checkedRoles) {
-      const checkedRoleNames = formData.checkedRoles.map(checkedRole => checkedRole.name);
-      const tempRoles = roles.map(e => {
-        if (checkedRoleNames.indexOf(e.name) >= 0) {
-          return {
+    if (formData.checkedRoles.length > 0) {
+      const tempUncheckedRoles = [];
+      const tempCheckedRoles = [];
+      roles.map(e => {
+        const checkedRoleIndex = formData.checkedRoles.findIndex(checkedRole => checkedRole.name === e.name);
+        if (checkedRoleIndex >= 0) {
+          tempCheckedRoles.push({
             ...e,
             check: true,
-          };
+            checkedRoleIndex: checkedRoleIndex,
+          });
         } else {
-          return e;
+          tempUncheckedRoles.push(e);
         }
       });
-      setRoleDatas(tempRoles);
+      tempCheckedRoles.sort((a, b) => a.checkedRoleIndex - b.checkedRoleIndex);
+      const newRoles = [...tempCheckedRoles, ...tempUncheckedRoles];
+      setRoleDatas(newRoles);
     } else {
       setRoleDatas(roles);
     }
-  }, [roles, formData.checkedRoles]);
+  }, [JSON.stringify(roles), JSON.stringify(formData.checkedRoles)]);
+
+  const setIsEnabled = (bool) => {
+    ref.current && ref.current.setNativeProps({scrollEnabled: bool});
+  };
 
   const animate1 = () => {
     Animated.timing(opacity, {
@@ -76,18 +83,19 @@ const FormSetting = () => {
   };
 
   const onCheckRole = index => {
-    const tempRoles = JSON.parse(JSON.stringify(roleDatas));
+    const tempRoles = [...roleDatas];
     const selectedItem = tempRoles[index];
+    console.log(selectedItem.check, typeof selectedItem.check);
     tempRoles[index] = {
       ...selectedItem,
       check: !selectedItem.check,
     };
-    setRoleDatas(tempRoles);
-    const tempRoles1 = JSON.parse(JSON.stringify(tempRoles));
+    console.log(tempRoles);
+    // setRoleDatas(tempRoles);
     let tempCheckedRoles = [];
-    tempCheckedRoles.push({name: 'admin', check: true});
-    tempRoles1.map(e => {
-      if (e.check) {
+    // tempCheckedRoles.push({name: 'admin', check: true});
+    tempRoles.map(e => {
+      if (`${e.check}` === 'true') {
         const tempitem = e;
         // delete tempitem.check;
         tempCheckedRoles.push(tempitem);
@@ -97,180 +105,116 @@ const FormSetting = () => {
     setFormData({...formData,  checkedRoles: tempCheckedRoles});
   };
 
-  const onClickRoles = () => {
-    const tempFormData = JSON.parse(JSON.stringify(formData.data));
-    const newFormData = tempFormData.map(fieldData => {
-      const tempCheckedRoles = JSON.parse(JSON.stringify(checkedRoles));
-      let returnRoles = JSON.parse(JSON.stringify(tempCheckedRoles));
-      if (fieldData.component === componentName.GROUP) {
-        if (fieldData.meta.is_tab) {
-          const tempFieldData = JSON.parse(JSON.stringify(fieldData.meta.childs));
-          const newFieldData = tempFieldData.map(childData => {
-            const tempTabFieldData = JSON.parse(JSON.stringify(childData.meta.childs));
-            const newTabFieldData = tempTabFieldData.map(tabChildData => {
-              if (tabChildData.role) {
-                const oldRoles = JSON.parse(JSON.stringify(tabChildData.role));
-                const oldRolesNames = oldRoles.map(r => r.name);
-                returnRoles = tempCheckedRoles.map(checkedRole => {
-                  const sameIndex = oldRolesNames.indexOf(checkedRole.name);
-                  if (sameIndex >= 0) {
-                    return oldRoles[sameIndex];
-                  } else {
-                    if (fieldData.component === componentName.LINECHART || fieldData.component === componentName.RADARCHART) {
-                      return {...checkedRole, view: true, editSeries: false, editAxes: false};
-                    } else if (fieldData.component === componentName.PAYMENT) {
-                      return {...checkedRole, read: true, pay: false};
-                    } else {
-                      return {...checkedRole, view: true, edit: false};
-                    }
-                  }
-                });
-              }
-              const tempTabChildData = {
-                ...tabChildData,
-                role: returnRoles,
-              };
-              return tempTabChildData;
-            });
-            const tempTabData = {
-              ...childData,
-              meta: {
-                ...childData.meta,
-                childs: newTabFieldData,
-              },
-            };
-            return tempTabData;
-          });
-          const tempData = {
-            ...fieldData,
-            meta: {
-              ...fieldData.meta,
-              childs: newFieldData,
-            },
-          };
-          return tempData;
-        } else {
-          const tempFieldData = JSON.parse(JSON.stringify(fieldData.meta.childs));
-          const newFieldData = tempFieldData.map(childData => {
-            if (childData.role) {
-              const oldRoles = JSON.parse(JSON.stringify(childData.role));
-              const oldRolesNames = oldRoles.map(r => r.name);
-              returnRoles = tempCheckedRoles.map(checkedRole => {
-                const sameIndex = oldRolesNames.indexOf(checkedRole.name);
-                if (sameIndex >= 0) {
-                  return oldRoles[sameIndex];
-                } else {
-                  if (fieldData.component === componentName.LINECHART || fieldData.component === componentName.RADARCHART) {
-                    return {...checkedRole, view: true, editSeries: false, editAxes: false};
-                  } else if (fieldData.component === componentName.PAYMENT) {
-                    return {...checkedRole, read: true, pay: false};
-                  } else {
-                    return {...checkedRole, view: true, edit: false};
-                  }
-                }
-              });
-            }
-            const tempChildData = {
-              ...childData,
-              role: returnRoles,
-            };
-            return tempChildData;
-          });
-          const tempData = {
-            ...fieldData,
-            meta: {
-              ...fieldData.meta,
-              childs: newFieldData,
-            },
-          };
-          return tempData;
-        }
-      } else {
-        if (fieldData.role) {
-          const oldRoles = JSON.parse(JSON.stringify(fieldData.role));
-          const oldRolesNames = oldRoles.map(r => r.name);
-          returnRoles = tempCheckedRoles.map(checkedRole => {
-            const sameIndex = oldRolesNames.indexOf(checkedRole.name);
-            if (sameIndex >= 0) {
-              return oldRoles[sameIndex];
-            } else {
-              if (fieldData.component === componentName.LINECHART || fieldData.component === componentName.RADARCHART) {
-                return {...checkedRole, view: true, editSeries: false, editAxes: false};
-              } else if (fieldData.component === componentName.PAYMENT) {
-                return {...checkedRole, read: true, pay: false};
-              } else {
-                return {...checkedRole, view: true, edit: false};
-              }
-            }
-          });
-        }
-        const tempData = {
-          ...fieldData,
-          role: returnRoles,
-        };
-        return tempData;
-      }
-    });
-    const newFormTemplate = {
-      ...formData,
-      data: newFormData,
-      checkedRoles: checkedRoles,
-    };
-    setFormData(newFormTemplate);
-    hideDialog();
-  };
-
-  const onClickCancelDialog = () => {
-    hideDialog();
-    setRoleDatas(previousRoles.current);
+  const onChangeRoleOfFormLevel = (name, value) => {
+    const tempRole = [...roles];
+    const changedRoleIndex = roles.findIndex(e => e.name === name);
+    const oldRole = roles.find(e => e.name === name);
+    tempRole.splice(changedRoleIndex, 1, {...oldRole, ...value});
+    setRoles(tempRole);
   };
 
   const renderItem = ({item, drag, isActive, getIndex}) => {
     const index = getIndex();
-    const avatarIndex = index + 1;
-    return (
-      <ScaleDecorator>
-        <View style={styles.roleItem}>
-          <Animated.View style={{...styles.itemView, opacity}}>
-            <Icon
-              name="more-vertical"
-              size={20}
-              color={colors.placeholder}
-              style={styles.itemIcon(index)}
-            />
-            <Avatar.Text
-              size={20}
-              label={avatarIndex}
-              style={{...styles.itemAvatarText, backgroundColor: '#555F6E', borderColor: '#303339'}}
-              color={'#FFFFFF'}
-            />
-          </Animated.View>
-          <View style={styles.roleName}>
-            <Text style={styles.roleNameText}>{item.name}</Text>
-            <IconButton
-              icon="drag-horizontal"
-              size={20}
-              iconColor="#FFFFFF"
-              onPress={() => {}}
-              // onPressIn={drag}
-              onLongPress={drag}
-              style={styles.iconBtn}
-            />
+    // const avatarIndex = index + 1;
+    if (index === 0) {
+      return <></>;
+    } else
+      return (
+        <ScaleDecorator>
+          <View style={styles.roleItem}>
+            <Animated.View style={{...styles.itemView, opacity}}>
+              <Icon
+                name="more-vertical"
+                size={20}
+                color={colors.placeholder}
+                style={styles.itemIcon(index)}
+              />
+              <Avatar.Text
+                size={20}
+                label={index}
+                style={{...styles.itemAvatarText, backgroundColor: '#555F6E', borderColor: '#303339'}}
+                color={'#FFFFFF'}
+              />
+            </Animated.View>
+            <View style={styles.roleName}>
+              <Text style={styles.roleNameText}>{item.name}</Text>
+              <IconButton
+                icon="drag-horizontal"
+                size={20}
+                iconColor="#FFFFFF"
+                onPress={() => {}}
+                onLongPress={drag}
+                style={styles.iconBtn}
+              />
+            </View>
+            <Animated.View
+              style={{...styles.icon, opacity}}>
+              <Checkbox
+                status={item.check ? 'checked' : 'unchecked'}
+                color='#FFFFFF'
+                uncheckedColor='#303339'
+                onPress={() => {
+                  onCheckRole(index - 1);
+                }}
+              />
+            </Animated.View>
           </View>
-          <Animated.View
-            style={{...styles.icon, opacity}}>
-            <Checkbox
-              status={item.check ? 'checked' : 'unchecked'}
-              color='#FFFFFF'
-              uncheckedColor='#303339'
-              onPress={() => {
-                onCheckRole(index);
-              }}
-            />
-          </Animated.View>
-        </View>
-      </ScaleDecorator>
-    );
+          {/* {
+            item.check && (
+              <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                <Text>View</Text>
+                <Checkbox
+                  status={item.view ? 'checked' : 'unchecked'}
+                  color='#FFFFFF'
+                  uncheckedColor='#303339'
+                  onPress={() => {
+                    onChangeRoleOfFormLevel(
+                      item.name,
+                      {
+                        view: true,
+                        edit: false,
+                        setting: false
+                      }
+                    );
+                  }}
+                />
+                <Text>Edit</Text>
+                <Checkbox
+                  status={item.edit ? 'checked' : 'unchecked'}
+                  color='#FFFFFF'
+                  uncheckedColor='#303339'
+                  onPress={() => {
+                    onChangeRoleOfFormLevel(
+                      item.name,
+                      {
+                        view: false,
+                        edit: true,
+                        setting: false
+                      }
+                    );
+                  }}
+                />
+                <Text>Setting</Text>
+                <Checkbox
+                  status={item.setting ? 'checked' : 'unchecked'}
+                  color='#FFFFFF'
+                  uncheckedColor='#303339'
+                  onPress={() => {
+                    onChangeRoleOfFormLevel(
+                      item.name,
+                      {
+                        view: false,
+                        edit: false,
+                        setting: true
+                      }
+                    );
+                  }}
+                />
+              </View>
+            )
+          } */}
+        </ScaleDecorator>
+      );
   };
 
   const onChange = (key, subkey, value) => {
@@ -284,7 +228,7 @@ const FormSetting = () => {
   }
 
   return (
-    <ScrollView style={{flex: 1}}>
+    <View style={{flex: 1}}>
       <View style={styles.menuHeader}>
 				<Text style={styles.menuTitle}>{i18nValues.t("setting_labels.form_setting")}</Text>
 				<IconButton
@@ -311,8 +255,8 @@ const FormSetting = () => {
         />
       </View>
       {selectedTab === 'general' && (
-        <>
-          <View style={styles.settingView}>
+        <View style={{flex: 1, flexDirection: 'column-reverse'}}>
+          {/* <View style={styles.settingView}>
             <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.form_title")}</Text>
             <TextInput
               style={styles.title}
@@ -321,34 +265,42 @@ const FormSetting = () => {
                 setFormData({...formData, title: newText});
               }}
             />
-          </View>
-          <SettingImage
-            title={i18nValues.t("setting_labels.logo")}
-            imageUri={formData.logo}
-            keyName={'logo'}
-            onSelect={(keyname, value) => {
-              setFormData({...formData, [keyname]: value});
-            }}
-          />
-          {/* <View style={styles.settingView}>
-            <Text style={styles.titleLabel}>Roles</Text>
-            <GestureHandlerRootView style={styles.dragItem}>
+          </View> */}
+          <View style={styles.settingView}>
+            <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.workflow")}</Text>
+            {/* <GestureHandlerRootView style={styles.dragItem}> */}
               <DraggableFlatList
-                nestedScrollEnabled
-                data={roleDatas}
+                ref={ref}
+                data={[{}, ...roleDatas]}
                 onDragBegin={() => {
                   animate1();
                 }}
                 onDragEnd={({data}) => {
-                  setRoleDatas(data);
+                  const tempCheckedRoles = [];
+                  for(let i=1 ; i < data.length; i++) {
+                    if (data[i].check) {
+                      tempCheckedRoles.push(data[i]);
+                    }
+                  }
+                  setFormData({...formData,  checkedRoles: tempCheckedRoles});
                   animate2();
                 }}
                 keyExtractor={(item, i) => i}
                 renderItem={renderItem}
               />
-            </GestureHandlerRootView>
-          </View> */}
-        </>
+            {/* </GestureHandlerRootView> */}
+          </View>
+          <ScrollView style={{flex: 1}}>
+            <SettingImage
+              title={i18nValues.t("setting_labels.logo")}
+              imageUri={formData.logo}
+              keyName={'logo'}
+              onSelect={(keyname, value) => {
+                setFormData({...formData, [keyname]: value});
+              }}
+            />
+          </ScrollView>
+        </View>
       )}
       {selectedTab === 'style' && (
         <>
@@ -472,7 +424,7 @@ const FormSetting = () => {
           />
         </>
       )}
-    </ScrollView>
+    </View>
   );
 };
 
@@ -549,7 +501,7 @@ const styles = StyleSheet.create({
   itemIcon: index => ({
     alignSelf: 'center',
     marginBottom: 3,
-    opacity: index === 0 ? 0 : 1,
+    opacity: index === 1 ? 0 : 1,
   }),
   itemAvatarText: {
     alignSelf: 'center',

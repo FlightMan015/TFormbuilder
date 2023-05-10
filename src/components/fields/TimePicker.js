@@ -18,7 +18,7 @@ const TimePicker = ({element}) => {
   const [time, setTime] = useState((element.field_name in formValue  && formValue[element.field_name]) ? new Date(formValue[element.field_name]) : new Date(Date.now()));
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(element)}>
       {
         role.view && (
           <>
@@ -27,16 +27,15 @@ const TimePicker = ({element}) => {
               <Text style={styles.text(fonts)}>
                 {time.toLocaleTimeString()}
               </Text>
-              {(role.edit || preview) && (
-                <IconButton
-                  icon="alarm"
-                  iconColor={colors.colorButton}
-                  onPress={() => setVisible(true)}
-                  style={{
-                    ...styles.icon,
-                  }}
-                />
-              )}
+              <IconButton
+                icon="alarm"
+                iconColor={colors.colorButton}
+                onPress={() => setVisible(true)}
+                disabled={!preview && !role.edit}
+                style={{
+                  ...styles.icon,
+                }}
+              />
             </View>
             {visible && (
               <RNDateTimePicker
@@ -63,9 +62,9 @@ const TimePicker = ({element}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   mainView: (colors) => ({
     flexDirection: 'row',
     alignItems: 'center',

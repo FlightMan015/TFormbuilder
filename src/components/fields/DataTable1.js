@@ -79,7 +79,7 @@ const DataTableBody = props => {
   };
 
   return (
-    <View style={styles.container} onLayout={onLayout}>
+    <View style={styles.container(element)} onLayout={onLayout}>
       {
         role.view && (
           <>
@@ -202,9 +202,9 @@ const styles = StyleSheet.create({
     width: 38,
     margin: 0,
   },
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   carouselTitle: colors => ({
     fontSize: 16,
     padding: 5,

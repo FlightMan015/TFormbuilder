@@ -572,7 +572,7 @@ const MapChildComponent = ({element, index, onClickUpdateField}) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container(element)}>
       <FieldLabel label={element.meta.title || i18nValues.t("field_labels.map")} visible={!element.meta.hide_title} />
       <Title
         name={i18nValues.t("field_labels.map")}
@@ -1245,9 +1245,9 @@ const Map = ({element, index}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   carouselTitle: colors => ({
     fontSize: 16,
     padding: 5,
@@ -1450,7 +1450,6 @@ const styles = StyleSheet.create({
 });
 
 Map.propTypes = {
-  index: PropTypes.object,
   element: PropTypes.object,
 };
 

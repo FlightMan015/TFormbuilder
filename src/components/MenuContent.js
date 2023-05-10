@@ -65,12 +65,12 @@ const MenuContent = () => {
 
     let tempIndexToAdd = [...indexToAdd];
 
-    if (tempIndexToAdd.length === 0) {
+    if (indexToAdd.length === 0) {
       if (selectedField) {
         if (selectedField?.component === componentName.GROUP) {
           tempIndexToAdd = [
             ...selectedFieldIndex,
-            selectedField.meta.childs.length - 1,
+            selectedField.meta.childs.length,
           ];
         } else {
           let tempIndex = [...selectedFieldIndex];
@@ -78,6 +78,8 @@ const MenuContent = () => {
           tempIndexToAdd = tempIndex;
         }
       }
+    } else {
+      tempIndexToAdd = [formData.data.length];
     }
 
     setFormData({
@@ -138,7 +140,7 @@ const MenuContent = () => {
         </ScrollView>
       </View>
     ),
-    [JSON.stringify(formData), i18nValues.locale, JSON.stringify(indexToAdd)],
+    [JSON.stringify(formData), i18nValues.locale, JSON.stringify(indexToAdd), JSON.stringify(selectedFieldIndex)],
   );
 };
 

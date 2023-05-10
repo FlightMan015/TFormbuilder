@@ -41,31 +41,28 @@ const FileUpload = props => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(element)}>
       {
         role.view && (
           <>
             <FieldLabel label={element.meta.title || i18nValues.t("field_labels.file_upload")} visible={!element.meta.hide_title} />
-            {
-              (role.edit || preview) && (
-                <TouchableOpacity
-                  style={styles.browerBtn(fonts, colors)}
-                  onPress={() => {
-                      DocumentPicker.pick({
-                        presentationStyle: 'fullScreen',
-                        type: types.allFiles,
-                        allowMultiSelection: element.meta.multi_select,
-                      })
-                        .then(e => {
-                          setFormValue({...formValue, [element.field_name]: e})
-                        })
-                        .catch(handleError);
-                  }}>
-                  <Icon name="cloud-upload-outline" size={35} color={fonts.values.color} />
-                  <Text style={styles.browerBtnText(fonts)}>Browse Files</Text>
-                </TouchableOpacity>
-              )
-            }
+            <TouchableOpacity
+              style={styles.browerBtn(fonts, colors)}
+              disabled={!preview && !role.edit}
+              onPress={() => {
+                  DocumentPicker.pick({
+                    presentationStyle: 'fullScreen',
+                    type: types.allFiles,
+                    allowMultiSelection: element.meta.multi_select,
+                  })
+                    .then(e => {
+                      setFormValue({...formValue, [element.field_name]: e})
+                    })
+                    .catch(handleError);
+              }}>
+              <Icon name="cloud-upload-outline" size={35} color={fonts.values.color} />
+              <Text style={styles.browerBtnText(fonts)}>Browse Files</Text>
+            </TouchableOpacity>
             {!element.meta.multi_select && result && (
               <View style={styles.mainView(colors)}>
                 <Text style={styles.text(fonts)}>
@@ -73,23 +70,19 @@ const FileUpload = props => {
                     ? result[0].name
                     : 'Selected File'}
                 </Text>
-                {
-                  (role.edit || preview) && (
-                    <IconButton
-                      icon="close"
-                      iconColor={colors.colorButton}
-                      disabled={!(role.edit || preview)}
-                      onPress={() => {
-                        const tempFormValue = {...formValue};
-                        delete tempFormValue[element.field_name];
-                        setFormValue(tempFormValue);
-                      }}
-                      style={{
-                        ...styles.icon,
-                      }}
-                    />
-                  )
-                }
+                <IconButton
+                  icon="close"
+                  iconColor={colors.colorButton}
+                  disabled={!role.edit && !preview}
+                  onPress={() => {
+                    const tempFormValue = {...formValue};
+                    delete tempFormValue[element.field_name];
+                    setFormValue(tempFormValue);
+                  }}
+                  style={{
+                    ...styles.icon,
+                  }}
+                />
               </View>        
             )}
             {element.meta.multi_select && result && (
@@ -104,29 +97,25 @@ const FileUpload = props => {
                             style={{...styles.multiText, color: '#FFFFFF'}}>
                             {e.name}
                           </Text>
-                          {
-                            (role.edit || preview) && (
-                              <IconButton
-                                icon="close"
-                                size={15}
-                                iconColor={'#FFFFFF'}
-                                style={styles.closeBtn}
-                                disabled={!(role.edit || preview)}
-                                onPress={() => {
-                                  const tempValue = [...formValue[element.field_name]];
-                                  if (tempValue.length > 1) {
-                                    tempValue.splice(i, 1);
-                                    setFormValue({...formValue, [element.field_name]: tempValue});
-                                  } else {
-                                    const tempFormValue = {...formValue};
-                                    delete tempFormValue[element.field_name];
-                                    setFormValue(tempFormValue);
-                                  }
-                                  
-                                }}
-                              />
-                            )
-                          }
+                          <IconButton
+                            icon="close"
+                            size={15}
+                            iconColor={'#FFFFFF'}
+                            style={styles.closeBtn}
+                            disabled={!(role.edit || preview)}
+                            onPress={() => {
+                              const tempValue = [...formValue[element.field_name]];
+                              if (tempValue.length > 1) {
+                                tempValue.splice(i, 1);
+                                setFormValue({...formValue, [element.field_name]: tempValue});
+                              } else {
+                                const tempFormValue = {...formValue};
+                                delete tempFormValue[element.field_name];
+                                setFormValue(tempFormValue);
+                              }
+                              
+                            }}
+                          />
                         </View>
                       );
                     })}
@@ -141,9 +130,9 @@ const FileUpload = props => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   carouselTitle: colors => ({
     fontSize: 16,
     padding: 5,

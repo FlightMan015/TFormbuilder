@@ -17,7 +17,7 @@ const InputText = props => {
   const i18nValues = formStore(state => state.i18nValues);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(element)}>
       {role.view && (
         <>
           <FieldLabel
@@ -42,7 +42,7 @@ const InputText = props => {
               }
               setFormValue({...formValue, [element.field_name]: e});
             }}
-            editable={preview || !role.edit}
+            editable={preview || role.edit}
             placeholder={element.meta.placeholder || ''}
             placeholderTextColor={colors.placeholder}
             multiline={element.meta.multiline}
@@ -85,9 +85,9 @@ const InputText = props => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   textBox: {
     borderWidth: 1,
     borderRadius: 10,

@@ -16,6 +16,7 @@ const LineChartSubField = ({element, index, onClickUpdateField}) => {
   const formValue = formStore(state => state.formValue);
   const setFormValue = formStore(state => state.setFormValue);
   const i18nValues = formStore(state => state.i18nValues);
+  const preview = formStore(state => state.preview);
   const [chartWidth, setChartWidth] = useState(0);
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState(formValue[element.field_name] || {labels: [], datasets: [], legend: []});
@@ -229,7 +230,7 @@ const LineChartSubField = ({element, index, onClickUpdateField}) => {
   };
 
   return (
-    <View style={styles.container} onLayout={onLayout}>
+    <View style={styles.container(element)} onLayout={onLayout}>
       {
         role.view && (
           <>
@@ -255,17 +256,19 @@ const LineChartSubField = ({element, index, onClickUpdateField}) => {
                 />
               )
             }
-            <View>
-              <Title
-                name={i18nValues.t("setting_labels.datas")}
-                onPress={() => setVisible(!visible)}
-                visible={visible}
-              />
-              {visible && (
-                <LineChartDataSection data={data} onChangeData={onChangeData} role={role} />
-              )}
-            </View>
-          </> 
+            {(role.edit || preview) && (
+              <View>
+                <Title
+                  name={i18nValues.t("setting_labels.datas")}
+                  onPress={() => setVisible(!visible)}
+                  visible={visible}
+                />
+                {visible && (
+                  <LineChartDataSection data={data} onChangeData={onChangeData} role={role} />
+                )}
+              </View>
+            )}
+          </>
         )
       }
     </View>
@@ -278,9 +281,9 @@ const LineChartField = ({element, index}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   barchart: {
     marginVertical: 8,
     borderRadius: 16,

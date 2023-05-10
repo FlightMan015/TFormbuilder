@@ -27,6 +27,7 @@ import FormSaveDlg from './src/dialogs/FormSaveDlg';
 import SchedularDlg from './src/dialogs/SchedularDlg';
 import MapEditDlg from './src/dialogs/MapEditDlg';
 import LogIn from './src/components/LogIn';
+import BitmapMarkerAddDlg from './src/dialogs/BitmapMarkerAddDlg';
 
 const Stack = createNativeStackNavigator();
 
@@ -75,6 +76,9 @@ const HomeScreen = (props) => {
   createData();
 
   const saveData = async (data) => {
+    if (!data.id) {
+      data = {...data, id: `form-${Date.now()}`}
+    }
     var path = `${RNFS.ExternalDirectoryPath}/TForm`;
 
     RNFS.exists(path).then(exist => {
@@ -89,7 +93,7 @@ const HomeScreen = (props) => {
         RNFS.readFile(path1, 'utf8')
           .then((readdata) => {
             const tempformData = JSON.parse(readdata);
-            const index = tempformData.findIndex(e => e.name === data.name);
+            const index = tempformData.findIndex(e => e.id === data.id);
             if (index < 0) {
               tempformData.push(data);
             } else {
@@ -126,11 +130,11 @@ const HomeScreen = (props) => {
         RNFS.readFile(path2, 'utf8')
           .then((readdata) => {
             const tempValues = JSON.parse(readdata);
-            const index = tempValues.findIndex(e => Object.keys(e)[0] === data.name);
+            const index = tempValues.findIndex(e => e.formId === data.id);
             if (index < 0) {
-              tempValues.push({[data.name] : formValue});
+              tempValues.push({formId: data.id, value: formValue});
             } else {
-              tempValues.splice(index, 1, {[data.name] : formValue});
+              tempValues.splice(index, 1, {formId: data.id, value: formValue});
             }
             RNFS.writeFile(path2, JSON.stringify(tempValues), 'utf8')
               .then((success) => {
@@ -146,7 +150,7 @@ const HomeScreen = (props) => {
           });
       } else {
         const tempValues = [];
-        tempValues.push({[data.name] : formValue});
+        tempValues.push({formId: data.id, value: formValue});
         RNFS.writeFile(path2, JSON.stringify(tempValues), 'utf8')
           .then((success) => {
             console.log(path2, 'Success Save');
@@ -158,14 +162,14 @@ const HomeScreen = (props) => {
     });
   };
 
-  const deleteForm = (name) => {
+  const deleteForm = (formId) => {
     var path1 = `${RNFS.ExternalDirectoryPath}/TForm/form_data.json`;
     RNFS.exists(path1).then(exist => {
       if (exist) {
         RNFS.readFile(path1, 'utf8')
           .then((readdata) => {
             const tempformData = JSON.parse(readdata);
-            const deleteIndex = tempformData.findIndex(e => e.name === name);
+            const deleteIndex = tempformData.findIndex(e => e.id === formId);
             tempformData.splice(deleteIndex, 1);
 
             RNFS.writeFile(path1, JSON.stringify(tempformData), 'utf8')
@@ -189,7 +193,7 @@ const HomeScreen = (props) => {
         RNFS.readFile(path2, 'utf8')
           .then((readdata) => {
             const tempformData = JSON.parse(readdata);
-            const deleteIndex = tempformData.findIndex(e => Object.keys(e)[0] === name);
+            const deleteIndex = tempformData.findIndex(e => e.formId === formId);
             tempformData.splice(deleteIndex, 1);
 
             RNFS.writeFile(path2, JSON.stringify(tempformData), 'utf8')
@@ -216,7 +220,7 @@ const HomeScreen = (props) => {
           .then((readdata) => {
             const tempformData = JSON.parse(readdata);
             const changedIndex = tempformData.findIndex(
-              form => form.name === data.oldName,
+              form => form.id === data.id,
             );
             const changedFormData = Object.assign(tempformData[changedIndex]);
             const newFormData = {...changedFormData, name: data.newName};
@@ -238,34 +242,6 @@ const HomeScreen = (props) => {
           });
       }
     });
-
-    var path2 = `${RNFS.ExternalDirectoryPath}/TForm/value_data.json`;
-    RNFS.exists(path2).then(exist => {
-      if (exist) {
-        RNFS.readFile(path2, 'utf8')
-          .then((readdata) => {
-            const tempformData = JSON.parse(readdata);
-            const changedIndex = tempformData.findIndex(
-              value => Object.keys(value)[0] === data.oldName,
-            );
-            tempformData.splice(changedIndex, 1, {[data.newName]: formValue});
-
-            RNFS.writeFile(path2, JSON.stringify(tempformData), 'utf8')
-              .then((success) => {
-                console.log(path2, 'Successful Rename');
-
-                setFormValues(tempformData);
-                setFormValue(tempformData[changedIndex][data.newName]);
-              })
-              .catch((err) => {
-                console.log(path2, err.message);
-              });
-          })
-          .catch((err) => {
-            console.log(err.message);
-          });
-      }
-    });
   };
 
   return (
@@ -273,6 +249,7 @@ const HomeScreen = (props) => {
       <Header deleteForm={deleteForm} renameForm={renameForm} saveForm={saveData} />
       <FieldMenu />
       <BitmapDrawingDlg />
+      <BitmapMarkerAddDlg />
       <BitmapEditLinkDlg />
       <CalendarDlg />
       <FormJsonDlg />
@@ -284,7 +261,7 @@ const HomeScreen = (props) => {
 }
 
 const App: () => Node = () => {
-  
+
   const formData = formStore(state => state.formData);
   const viewMode = formStore(state => state.viewMode);
   const setFormDatas = formStore(state => state.setFormDatas);

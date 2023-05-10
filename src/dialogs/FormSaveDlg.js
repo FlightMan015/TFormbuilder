@@ -40,7 +40,7 @@ const FormSaveDlg = ({saveForm, renameForm}) => {
           text={i18nValues.t("setting_labels.save")}
           onPress={() => {
             if (visibleDlg.rename) {
-              renameForm({oldName: visibleDlg.oldName, newName: formData.name});
+              renameForm({id: visibleDlg.id, newName: formData.name});
               setVisibleDlg({...visibleDlg, saveForm: false});
             } else {
               saveForm(formData);

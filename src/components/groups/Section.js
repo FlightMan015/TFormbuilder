@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import MemoField from '../fields';
 import MemoGroup from '../groups';
 import {IconButton, useTheme} from 'react-native-paper';
@@ -12,13 +12,15 @@ const Section = ({element, index, selected, preview, onSelect}) => {
   const selectedFieldIndex = formStore(state => state.selectedFieldIndex);
   const i18nValues = formStore(state => state.i18nValues);
 
+  console.log('=====================field_width', typeof element.meta.field_width, element.meta.field_width.indexOf('%'))
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container(element)} disabled={!preview && !element.meta.isButton}>
       <FieldLabel
         label={element.meta.title || i18nValues.t('field_labels.section')}
         visible={!element.meta.hide_title}
       />
-      <View style={styles.tabContent(colors, element.meta.verticalAlign)}>
+      <View style={styles.content(colors, element)}>
         {element.meta.childs.map((child, childindex) => {
           if (
             child.component !== componentName.TABSECTION &&
@@ -56,14 +58,15 @@ const Section = ({element, index, selected, preview, onSelect}) => {
           }
         })}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    // padding: 5,
+    flexDirection: 'column',
+  }),
   iconBtn: {
     margin: 0,
     marginTop: 10,
@@ -79,10 +82,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  tabContent: (colors, verticalAlign) => ({
-    flexDirection: verticalAlign ? 'column' : 'row',
-    flexWrap: 'wrap',
-    padding: 5,
+  content: (colors, element) => ({
+    alignItems: element.meta.alignItems,
+    flexDirection: element.meta.verticalAlign ? 'column' : 'row',
+    ...element.meta.borderWidth,
+    borderRadius: element.meta.borderRadius,
+    borderColor: element.meta.borderColor,
+    ...element.meta.padding,
+    justifyContent: element.meta.allocation,
+    backgroundColor: element.meta.backgroundColor
   }),
 });
 

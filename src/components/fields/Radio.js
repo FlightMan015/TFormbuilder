@@ -19,7 +19,7 @@ const Radio = props => {
   console.log(typeof(radioButton.selected));
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(element)}>
       {
         role.view && (
           <>
@@ -36,7 +36,7 @@ const Radio = props => {
                     }}
                     hitSlop={styles.slop}
                     style={styles.buttonContainer}
-                    disabled={!(role.edit || preview)}
+                    disabled={!role.edit && !preview}
                     key={index}>
                     <Image
                       accessibilityLabel={`choose-option-${item}`}
@@ -60,9 +60,9 @@ const Radio = props => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   carouselTitle: colors => ({
     fontSize: 16,
     padding: 5,

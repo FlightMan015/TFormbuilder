@@ -50,10 +50,10 @@ const formStore = create(set => ({
       formData: {...state.formData, data: deleteField(state.formData, index)},
     })),
   roles: [
-    {name: 'builder'},
-    {name: 'submitter'},
-    {name: 'reviewer'},
-    {name: 'approver'},
+    {name: 'builder', view: false, edit: false, setting: true},
+    {name: 'submitter', view: false, edit: true, setting: false},
+    {name: 'reviewer', view: false, edit: true, setting: false},
+    {name: 'approver', view: true, edit: false, setting: false},
   ],
   setRoles: newRoles => set(() => ({roles: newRoles})),
   viewMode: 'light',
@@ -87,6 +87,9 @@ const formStore = create(set => ({
     set(() => ({visibleSchedularDlg: newVisible})),
   i18nValues: i18n,
   seti18nValues: newI18nValues => set(() => ({i18nValues: newI18nValues})),
+  visibleMarkerAddDlg: false,
+  setVisibleMarkerAddDlg: newVisible =>
+    set(() => ({visibleMarkerAddDlg: newVisible})),
 }));
 
 export default formStore;

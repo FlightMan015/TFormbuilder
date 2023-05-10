@@ -13,6 +13,8 @@ import SettingIcon from './common/SettingIconPicker';
 import SettingRadioGroup from './common/SettingRadioGroup';
 import SettingDropdown from './common/SettingDropdown';
 import SettingWidth from './common/SettingWidth';
+import SettingPadding from './common/SettingPadding';
+import SettingSectionWidth from './common/SettingSectionWidth';
 
 const buttonFunctions = [
   'formSubmit',
@@ -131,13 +133,19 @@ const ButtonSetting = ({element, index, onClick}) => {
           </>
         )
       }
-      <SettingSwitch
-        title={i18nValues.t("setting_labels.small_width")}
-        value={element.meta.field_width === '50%'}
-        onChange={(key, value) => {
-          onChange(key, value ? '50%' : '100%');
-        }}
+      <SettingSectionWidth
+        title={i18nValues.t("setting_labels.width")}
+        value={element.meta.field_width}
+        onChange={onChange}
         keyName={'field_width'}
+      />
+      <SettingPadding
+        title={i18nValues.t("setting_labels.padding")}
+        top={element.meta.padding.paddingTop}
+        left={element.meta.padding.paddingLeft}
+        bottom={element.meta.padding.paddingBottom}
+        right={element.meta.padding.paddingRight}
+        onChange={onChange}
       />
       <SettingDuplicate index={index} element={element} />
     </>

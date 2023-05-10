@@ -54,56 +54,50 @@ const Field = props => {
       useNativeDriver: true,
     }).start();
   };
-
-  return (
-    <View style={{width: element.meta.field_width}}>
-      {role.view && (
-        <>
-          <View
-            style={styles.field(colors, selected && !preview && role.edit)}
-            onStartShouldSetResponder={() => {
-              if (selectedFieldIndex.length === 0) {
-                onSelect(index.slice(0, 1));
-              } else {
-                let samePos = -1;
-
-                for (let i = 0; i < Math.min(index.length, selectedFieldIndex.length); i++) {
-                  if (index[i] !== selectedFieldIndex[i]) {
-                    break;
-                  }
-                  samePos = i;
-                }
-
-                if (Math.min(index.length, selectedFieldIndex.length) - 1 === samePos) {
-                  if (index.length > selectedFieldIndex.length) {
-                    onSelect(index.slice(0, samePos + 2));
-                  } else if (index.length < selectedFieldIndex.length) {
-                    onSelect(index.slice(0, samePos + 1));
-                  }
-                } else {
-                  onSelect(index.slice(0, samePos + 2));
-                }
+  if (role.view) {
+    return (
+      <View
+        style={styles.field(colors, selected && !preview && role.setting, element)}
+        onStartShouldSetResponder={() => {
+          if (selectedFieldIndex.length === 0) {
+            onSelect(index.slice(0, 1));
+          } else {
+            let samePos = -1;
+  
+            for (let i = 0; i < Math.min(index.length, selectedFieldIndex.length); i++) {
+              if (index[i] !== selectedFieldIndex[i]) {
+                break;
               }
-
-              return true;
-            }}>
-            <FieldComponent
-              element={element}
-              index={index}
-              selected={selected}
-            />
-            {element.is_mandatory &&
-              !validation[element.field_name] &&
-              submit && (
-                <Text style={styles.note(colors, fonts)}>
-                  {element.meta.title} field is required.
-                </Text>
-              )}
-          </View>
-        </>
-      )}
-    </View>
-  );
+              samePos = i;
+            }
+  
+            if (Math.min(index.length, selectedFieldIndex.length) - 1 === samePos) {
+              if (index.length > selectedFieldIndex.length) {
+                onSelect(index.slice(0, samePos + 2));
+              } else if (index.length < selectedFieldIndex.length) {
+                onSelect(index.slice(0, samePos + 1));
+              }
+            } else {
+              onSelect(index.slice(0, samePos + 2));
+            }
+          }
+          return true;
+        }}>
+        <FieldComponent
+          element={element}
+          index={index}
+          selected={selected}
+        />
+        {element.is_mandatory &&
+          !validation[element.field_name] &&
+          submit && (
+            <Text style={styles.note(colors, fonts)}>
+              {element.meta.title} field is required.
+            </Text>
+          )}
+      </View>
+    );
+  }
 };
 
 const MemoField = ({element, index, onSelect, selected, isLastField, isFirstField}) => {
@@ -190,10 +184,11 @@ const styles = StyleSheet.create({
     // bottom: -50,
     // zIndex: 999,
   },
-  field: (colors, visibleBorder) => ({
+  field: (colors, visibleBorder, element) => ({
     borderColor: visibleBorder ? '#0087E0' : colors.background,
     borderRadius: 5,
     borderWidth: visibleBorder ? 2 : 0,
+    width: element.meta.field_width.indexOf('%') === -1 ? parseInt(element.meta.field_width, 10) : element.meta.field_width,
     // marginVertical: 3,
     // zIndex: 0,
   }),

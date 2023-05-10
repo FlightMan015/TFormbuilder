@@ -97,6 +97,14 @@ const SchedularSetting = ({element, index, onClick}) => {
         }}
         keyName={'field_width'}
       />
+      <SettingPadding
+        title={i18nValues.t("setting_labels.padding")}
+        top={element.meta.padding.paddingTop}
+        left={element.meta.padding.paddingLeft}
+        bottom={element.meta.padding.paddingBottom}
+        right={element.meta.padding.paddingRight}
+        onChange={onChange}
+      />
       <SettingDuplicate index={index} element={element} />
     </>
   );

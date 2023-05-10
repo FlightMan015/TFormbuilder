@@ -126,7 +126,7 @@ const PieChartSubField = ({element, index, onClickUpdateField}) => {
   };
 
   return (
-    <View style={styles.container} onLayout={onLayout}>
+    <View style={styles.container(element)} onLayout={onLayout}>
       {
         role.view && (
           <>
@@ -176,9 +176,9 @@ const PieChartField = ({element, index, editRole}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   barchart: {
     marginVertical: 8,
     borderRadius: 16,

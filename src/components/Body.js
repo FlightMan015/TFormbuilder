@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo, createContext, useRef} from 'react';
 import {useTheme, IconButton} from 'react-native-paper';
 import {StyleSheet, Dimensions, View, Text} from 'react-native';
 import formStore from '../store/formStore';
@@ -11,6 +11,8 @@ import {ScrollView, FlatList} from 'react-native-gesture-handler';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import PatternBackgroundView from '../common/PatternBackgroundView';
 import {moveDown, moveUp} from '../actions/formdata';
+
+export const ScrollEnabledContext = createContext(null);
 
 const Body = props => {
   const {colors, size} = useTheme();
@@ -34,6 +36,11 @@ const Body = props => {
 
   const navigation = useNavigation();
   const status = useDrawerStatus();
+
+  const ref = useRef(true);
+  const setIsEnabled = (bool) => {
+    ref.current && ref.current.setNativeProps({scrollEnabled: bool});
+  };
 
   useEffect(() => {
     if (openMenu) {
@@ -140,111 +147,114 @@ const Body = props => {
       </View>
       <View
         style={{flex: 1, position: 'absolute', width: '100%', height: '100%'}}>
-        <ScrollView style={styles.container(colors)}>
-          <View style={{paddingBottom: 50}}>
-            {formData.data.map((field, index) => (
-              <View key={index}>
-                {field.component !== componentName.TABSECTION &&
-                field.component !== componentName.GROUP &&
-                field.component !== componentName.GRID &&
-                field.component !== componentName.LISTSECTION ? (
-                  <MemoField
-                    key={index}
-                    onSelect={() => onSelect([index])}
-                    element={field}
-                    index={[index]}
-                    selected={
-                      JSON.stringify([index]) ===
-                      JSON.stringify(selectedFieldIndex)
-                    }
-                    isFirstField={index === 0}
-                    isLastField={index + 1 === formData.data.length}
-                  />
-                ) : (
-                  <MemoGroup
-                    key={index}
-                    onSelect={e => onSelect(e)}
-                    element={field}
-                    index={[index]}
-                    selected={
-                      JSON.stringify([index]) ===
-                      JSON.stringify(selectedFieldIndex)
-                    }
-                    isFirstGroup={index === 0}
-                    isLastGroup={index + 1 === formData.data.length}
-                  />
-                )}
-                {selectedField?.role.find(e => e.name === userRole)?.edit &&
-                  index === selectedFieldIndex[0] && !preview && (
-                  <View style={{...styles.setIcons}}>
-                    {(userRole === 'admin' || userRole === 'builder') && !preview && (
+        <ScrollEnabledContext.Provider value={setIsEnabled}>
+          <ScrollView ref={ref} style={styles.container(colors)}>
+            <View style={{paddingBottom: 50}}>
+              {formData.data.map((field, index) => (
+                <View key={index}>
+                  {field.component !== componentName.TABSECTION &&
+                  field.component !== componentName.GROUP &&
+                  field.component !== componentName.GRID &&
+                  field.component !== componentName.LISTSECTION ? (
+                    <MemoField
+                      key={index}
+                      onSelect={() => onSelect([index])}
+                      element={field}
+                      index={[index]}
+                      selected={
+                        JSON.stringify([index]) ===
+                        JSON.stringify(selectedFieldIndex)
+                      }
+                      isFirstField={index === 0}
+                      isLastField={index + 1 === formData.data.length}
+                    />
+                  ) : (
+                    <MemoGroup
+                      key={index}
+                      onSelect={e => onSelect(e)}
+                      element={field}
+                      index={[index]}
+                      selected={
+                        JSON.stringify([index]) ===
+                        JSON.stringify(selectedFieldIndex)
+                      }
+                      isFirstGroup={index === 0}
+                      isLastGroup={index + 1 === formData.data.length}
+                    />
+                  )}
+                  {selectedField?.role.find(e => e.name === userRole)?.setting &&
+                    index === selectedFieldIndex[0] && !preview && (
+                    <View style={styles.setIcons}>
+                      {(userRole === 'admin' || userRole === 'builder') && !preview && selectedField.component === componentName.GROUP && (
+                        <IconButton
+                          icon="plus"
+                          size={24}
+                          iconColor={colors.card}
+                          style={{margin: 3, backgroundColor: colors.colorButton}}
+                          onPress={() => {
+                            setIndexToAdd([]);
+                            setOpenMenu(!openMenu);
+                          }}
+                        />
+                      )}
+                      {selectedFieldIndex[selectedFieldIndex.length - 1] !== 0  && (
+                        <IconButton
+                          icon="chevron-up"
+                          size={24}
+                          iconColor={'#fff'}
+                          style={{margin: 3, backgroundColor: '#0A1551'}}
+                          onPress={() => {
+                            onClick('moveup');
+                          }}
+                        />
+                      )}
+                      {!checkIfLastField(selectedFieldIndex) && (
+                        <IconButton
+                          icon="chevron-down"
+                          size={24}
+                          iconColor={'#fff'}
+                          style={{margin: 3, backgroundColor: '#0A1551'}}
+                          onPress={() => {
+                            onClick('movedown');
+                          }}
+                        />
+                      )}
                       <IconButton
-                        icon="plus"
-                        size={24}
-                        iconColor={colors.card}
-                        style={{margin: 3, backgroundColor: colors.colorButton}}
-                        onPress={() => {
-                          setIndexToAdd([]);
-                          setOpenMenu(!openMenu);
-                        }}
-                      />
-                    )}
-                    {selectedFieldIndex[selectedFieldIndex.length - 1] !== 0  && (
-                      <IconButton
-                        icon="chevron-up"
+                        icon="account-outline"
                         size={24}
                         iconColor={'#fff'}
                         style={{margin: 3, backgroundColor: '#0A1551'}}
                         onPress={() => {
-                          onClick('moveup');
+                          onClick('role');
                         }}
                       />
-                    )}
-                    {!checkIfLastField(selectedFieldIndex) && (
                       <IconButton
-                        icon="chevron-down"
+                        icon="cog-outline"
                         size={24}
                         iconColor={'#fff'}
-                        style={{margin: 3, backgroundColor: '#0A1551'}}
+                        style={{margin: 3, backgroundColor: '#0086DE'}}
                         onPress={() => {
-                          onClick('movedown');
+                          // onSelect(index);
+                          onClick('setting');
                         }}
                       />
-                    )}
-                    <IconButton
-                      icon="account-outline"
-                      size={24}
-                      iconColor={'#fff'}
-                      style={{margin: 3, backgroundColor: '#0A1551'}}
-                      onPress={() => {
-                        onClick('role');
-                      }}
-                    />
-                    <IconButton
-                      icon="cog-outline"
-                      size={24}
-                      iconColor={'#fff'}
-                      style={{margin: 3, backgroundColor: '#0086DE'}}
-                      onPress={() => {
-                        // onSelect(index);
-                        onClick('setting');
-                      }}
-                    />
-                    <IconButton
-                      icon="delete-outline"
-                      size={24}
-                      iconColor={'#fff'}
-                      style={{margin: 3, backgroundColor: '#FF6150'}}
-                      onPress={() => {
-                        onClick('delete');
-                      }}
-                    />
-                  </View>
-                )}
-              </View>
-            ))}
-          </View>
-        </ScrollView>
+                      <IconButton
+                        icon="delete-outline"
+                        size={24}
+                        iconColor={'#fff'}
+                        style={{margin: 3, backgroundColor: '#FF6150'}}
+                        onPress={() => {
+                          onClick('delete');
+                        }}
+                      />
+                    </View>
+                  )}
+                </View>
+              ))}
+            </View>
+          </ScrollView>
+        </ScrollEnabledContext.Provider>
+        
         {(userRole === 'admin' || userRole === 'builder') && !preview && (
           <IconButton
             icon="plus"
@@ -286,7 +296,6 @@ const Body = props => {
 
 const styles = StyleSheet.create({
   setIcons: {
-    marginTop: 10,
     flexDirection: 'row',
     alignSelf: 'center',
     // position: 'absolute',

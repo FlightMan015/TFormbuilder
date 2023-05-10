@@ -6,6 +6,8 @@ import formStore from '../../store/formStore';
 import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import SettingSwitch from './common/SettingSwitch';
+import SettingSectionWidth from './common/SettingSectionWidth';
+import SettingPadding from './common/SettingPadding';
 
 const FileUploadSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
@@ -53,13 +55,19 @@ const FileUploadSetting = ({element, index, onClick}) => {
         onChange={onChange}
         keyName={'is_mandatory'}
       />
-      <SettingSwitch
-        title={i18nValues.t("setting_labels.small_width")}
-        value={element.meta.field_width === '50%'}
-        onChange={(key, value) => {
-          onChange(key, value ? '50%' : '100%');
-        }}
+      <SettingSectionWidth
+        title={i18nValues.t("setting_labels.width")}
+        value={element.meta.field_width}
+        onChange={onChange}
         keyName={'field_width'}
+      />
+      <SettingPadding
+        title={i18nValues.t("setting_labels.padding")}
+        top={element.meta.padding.paddingTop}
+        left={element.meta.padding.paddingLeft}
+        bottom={element.meta.padding.paddingBottom}
+        right={element.meta.padding.paddingRight}
+        onChange={onChange}
       />
       <SettingSwitch title={i18nValues.t("setting_labels.multiple_selection")} value={element.meta.multi_select} onChange={onChange} keyName={'multi_select'} />
       <SettingDuplicate index={index} element={element} />

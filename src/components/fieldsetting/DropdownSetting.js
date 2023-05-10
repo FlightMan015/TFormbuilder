@@ -7,6 +7,8 @@ import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import SettingDropdownOptions from './common/SettingDropdownOptions';
 import SettingSwitch from './common/SettingSwitch';
+import SettingSectionWidth from './common/SettingSectionWidth';
+import SettingPadding from './common/SettingPadding';
 
 const DropdownSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
@@ -49,15 +51,21 @@ const DropdownSetting = ({element, index, onClick}) => {
         description={i18nValues.t("setting_labels.hide_label_description")}
       />
       <SettingSwitch title={i18nValues.t("setting_labels.is_mandatory")} value={element.is_mandatory} onChange={onChange} keyName={'is_mandatory'} />
-      <SettingSwitch
-        title={i18nValues.t("setting_labels.small_width")}
-        value={element.meta.field_width === '50%'}
-        onChange={(key, value) => {
-          onChange(key, value ? '50%' : '100%');
-        }}
+      <SettingSectionWidth
+        title={i18nValues.t("setting_labels.width")}
+        value={element.meta.field_width}
+        onChange={onChange}
         keyName={'field_width'}
       />
       <SettingDropdownOptions title={i18nValues.t("setting_labels.options")} options={element.meta.options} onChange={onChange} keyName={'options'} />
+      <SettingPadding
+        title={i18nValues.t("setting_labels.padding")}
+        top={element.meta.padding.paddingTop}
+        left={element.meta.padding.paddingLeft}
+        bottom={element.meta.padding.paddingBottom}
+        right={element.meta.padding.paddingRight}
+        onChange={onChange}
+      />
       <SettingDuplicate index={index} element={element} />
     </>
   );

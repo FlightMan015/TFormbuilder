@@ -19,7 +19,7 @@ const RadarChartField = ({element, index}) => {
   const i18nValues = formStore(state => state.i18nValues);
   const [chartWidth, setChartWidth] = useState(0);
   const [visible, setVisible] = useState(false);
-
+  const preview = formStore(state => state.preview);
   const [meta, setMeta] = useState(formValue[element.field_name] ? {...element.meta, data: formValue[element.field_name]} : {...element.meta, data: {datasets: [], lines: [], colors: []}});
 
   useEffect(() => {
@@ -162,7 +162,7 @@ const RadarChartField = ({element, index}) => {
   };
 
   return (
-    <View style={styles.container} onLayout={onLayout}>
+    <View style={styles.container(element)} onLayout={onLayout}>
       <FieldLabel label={element.meta.title || i18nValues.t("field_labels.radar_chart")} visible={!element.meta.hide_title} />
       {
         !(meta.data.datasets?.length > 0) && (
@@ -174,24 +174,28 @@ const RadarChartField = ({element, index}) => {
           <VictoryRadar meta={meta} />
         )
       }
-      <View>
-        <Title
-          name={i18nValues.t("setting_labels.datas")}
-          onPress={() => setVisible(!visible)}
-          visible={visible}
-        />
-      </View>
-      {visible && (
-        <RadarChartDataSection meta={meta} onChangeData={onChangeData} userRole={role} />
+      {(role.edit || preview) && (
+        <>
+          <View>
+            <Title
+              name={i18nValues.t("setting_labels.datas")}
+              onPress={() => setVisible(!visible)}
+              visible={visible}
+            />
+          </View>
+          {visible && (
+            <RadarChartDataSection meta={meta} onChangeData={onChangeData} userRole={role} />
+          )}
+        </>
       )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   noDataText: fonts => ({
     ...fonts.values,
     alignSelf: 'center',

@@ -21,7 +21,7 @@ const NavigationButton = props => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(element)}>
       {
         role.view && (
           <>
@@ -57,9 +57,9 @@ const NavigationButton = props => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   textBox: {
     borderWidth: 1,
     borderRadius: 10,

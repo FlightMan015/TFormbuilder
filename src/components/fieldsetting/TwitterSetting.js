@@ -7,6 +7,7 @@ import formStore from '../../store/formStore';
 import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import SettingSwitch from './common/SettingSwitch';
+import SettingPadding from './common/SettingPadding';
 
 const TwitterSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
@@ -44,6 +45,14 @@ const TwitterSetting = ({element, index, onClick}) => {
           onChange(key, value ? '50%' : '100%');
         }}
         keyName={'field_width'}
+      />
+      <SettingPadding
+        title={i18nValues.t("setting_labels.padding")}
+        top={element.meta.padding.paddingTop}
+        left={element.meta.padding.paddingLeft}
+        bottom={element.meta.padding.paddingBottom}
+        right={element.meta.padding.paddingRight}
+        onChange={onChange}
       />
       <View style={styles.settingView}>
         <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.image_uri")}</Text>

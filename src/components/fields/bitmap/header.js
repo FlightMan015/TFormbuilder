@@ -35,20 +35,19 @@ const BitmapHeader = ({onSave}) => {
     <View style={styles.controlView}>
       <CustomButton
         onPress={undo}
-        style={styles.button1(colors)}
+        style={styles.button(colors)}
         textStyle={{color: color.WHITE}}
         text="Undo"
       />
-
       <CustomButton
         onPress={redo}
-        style={styles.button2(colors)}
+        style={styles.button(colors)}
         textStyle={{color: color.WHITE}}
         text="Redo"
       />
       <CustomButton
         onPress={reset}
-        style={styles.button1(colors)}
+        style={styles.button(colors)}
         textStyle={{color: color.WHITE}}
         text="Reset"
       />
@@ -57,14 +56,7 @@ const BitmapHeader = ({onSave}) => {
 };
 
 const styles = StyleSheet.create({
-  button1: colors => ({
-    width: 65,
-    height: 30,
-    borderRadius: 7,
-    marginRight: 10,
-    backgroundColor: colors.colorButton,
-  }),
-  button2: colors => ({
+  button: colors => ({
     width: 65,
     height: 30,
     borderRadius: 7,

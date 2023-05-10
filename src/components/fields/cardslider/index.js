@@ -38,7 +38,7 @@ const CardSlider = props => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(element)}>
       {
         role.view && (
           <>
@@ -196,9 +196,9 @@ const CardSlider = props => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   carouselTitle: colors => ({
     fontSize: 16,
     padding: 5,

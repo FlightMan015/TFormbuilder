@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {useTheme} from 'react-native-paper';
 import {StyleSheet, View, Text, Platform} from 'react-native';
 import {IconButton, Avatar} from 'react-native-paper';
@@ -30,6 +30,11 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
   const preview = formStore(state => state.preview);
   const userRole = formStore(state => state.userRole);
   const [open, setOpen] = useState(true);
+  const dropdownRef = useRef();
+
+  useEffect(() => {
+    dropdownRef.current.reset();
+  }, [formData.name])
 
   const formNames = formDatas.map((item, index) => {
     return item.name;
@@ -70,19 +75,15 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
                               setFormValue({});
                               break;
                             case menuItems[1].name:
-                              console.log(formData);
                               saveForm(formData);
                               break;
                             case menuItems[2].name:
-                              setVisibleDlg({...visibleDlg, saveForm: true, rename: false, oldName: formData.name});
+                              setVisibleDlg({...visibleDlg, saveForm: true, rename: false, oldName: formData.name, id: formData.id});
                               break;
                             case menuItems[3].name:
-                              setVisibleDlg({...visibleDlg, saveForm: true, rename: true, oldName: formData.name});
+                              setVisibleDlg({...visibleDlg, saveForm: true, rename: true, oldName: formData.name, id: formData.id});
                               break;
                             case menuItems[4].name:
-                              deleteForm(formData.name);
-                              break;
-                            case menuItems[5].name:
                               deleteForm(formData.name);
                               break;
                           }
@@ -205,12 +206,13 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
               <Avatar.Image size={40} style={{marginHorizontal: 5}} source={formData.logo ? {uri: formData.logo} : require('../assets/icon_images/user_avatar.png')} />
             </View>
             <SelectDropdown
+              ref={dropdownRef}
               data={formNames}
-              onSelect={e => {
-                const tempFormData = formDatas.find(data => data.name === e);
+              onSelect={(e, selectedIndex) => {
+                const tempFormData = {...formDatas[selectedIndex]};
                 setFormData(tempFormData);
-                const tempFormValue = formValues.find(data => Object.keys(data)[0] === e);
-                setFormValue(tempFormValue ? tempFormValue[e] : {});
+                const tempFormValue = formValues.find(data => data.id === formDatas[selectedIndex].id);
+                setFormValue(tempFormValue ? tempFormValue.data : {});
               }}
               dropdownStyle={styles.dropdown(colors)}
               rowStyle={styles.rowStyle}

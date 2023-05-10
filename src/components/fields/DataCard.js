@@ -16,7 +16,7 @@ const DataCard = props => {
   const role = element.role.find(e => e.name === userRole);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(element)}>
       {
         role.view && (
           <View>
@@ -50,9 +50,9 @@ const DataCard = props => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   textBox: {
     borderWidth: 1,
     borderRadius: 10,

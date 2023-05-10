@@ -19,6 +19,7 @@ import ColorPicker from '../../common/ColorPicker';
 import FontSetting from '../../common/FontSetting';
 import SettingDropdownOptions from './common/SettingDropdownOptions';
 import SettingImage from './common/SettingImage';
+import SettingPadding from './common/SettingPadding';
 
 const colorStyles = [
   '#0A1551',
@@ -434,6 +435,14 @@ const CardListSetting = props => {
                   onChange={(key, value) => onChangeFont('additionalDatas', key, value)}
                   keyName={'titleValueVerticalAlign'}
                   description={i18nValues.t("setting_labels.vertical_alignment")}
+                />
+                <SettingPadding
+                  title={i18nValues.t("setting_labels.padding")}
+                  top={element.meta.padding.paddingTop}
+                  left={element.meta.padding.paddingLeft}
+                  bottom={element.meta.padding.paddingBottom}
+                  right={element.meta.padding.paddingRight}
+                  onChange={onChange}
                 />
               </>
             )}

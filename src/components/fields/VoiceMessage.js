@@ -111,7 +111,7 @@ const VoiceMessage = ({element}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(element)}>
       {
         role.view && (
           <>
@@ -218,9 +218,9 @@ const VoiceMessage = ({element}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   mainView: (colors) => ({
     flexDirection: 'row',
     alignItems: 'center',

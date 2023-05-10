@@ -7,7 +7,8 @@ import SettingDuplicate from './common/SettingDuplicate';
 import SettingLabel from './common/SettingLabel';
 import SettingTextAlign from './common/SettingTextAlign';
 import FontSetting from '../../common/FontSetting';
-import SettingSwitch from './common/SettingSwitch';
+import SettingSectionWidth from './common/SettingSectionWidth';
+import SettingPadding from './common/SettingPadding';
 
 const HeaderSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
@@ -63,13 +64,19 @@ const HeaderSetting = ({element, index, onClick}) => {
           onChangeFont('font', type, e);
         }}
       />
-      <SettingSwitch
-        title={i18nValues.t('setting_labels.small_width')}
-        value={element.meta.field_width === '50%'}
-        onChange={(key, value) => {
-          onChange(key, value ? '50%' : '100%');
-        }}
+      <SettingSectionWidth
+        title={i18nValues.t("setting_labels.width")}
+        value={element.meta.field_width}
+        onChange={onChange}
         keyName={'field_width'}
+      />
+      <SettingPadding
+        title={i18nValues.t("setting_labels.padding")}
+        top={element.meta.padding.paddingTop}
+        left={element.meta.padding.paddingLeft}
+        bottom={element.meta.padding.paddingBottom}
+        right={element.meta.padding.paddingRight}
+        onChange={onChange}
       />
       <SettingDuplicate index={index} element={element} />
     </>

@@ -114,7 +114,7 @@ const BarChartSubField = ({element, index, onClickUpdateField}) => {
   };
 
   return (
-    <View style={styles.container} onLayout={onLayout}>
+    <View style={styles.container(element)} onLayout={onLayout}>
       {
         role.view && (
           <>
@@ -157,9 +157,9 @@ const BarChartField = ({element, index}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   carouselTitle: colors => ({
     fontSize: 16,
     padding: 5,
@@ -189,7 +189,6 @@ const styles = StyleSheet.create({
 
 BarChartField.propTypes = {
   element: PropTypes.object.isRequired,
-  index: PropTypes.object.isRequired,
 };
 
 export default BarChartField;

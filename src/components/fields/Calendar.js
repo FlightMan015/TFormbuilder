@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
 });
 
 Scheduler.propTypes = {
-  index: PropTypes.object,
+  index: PropTypes.array,
   element: PropTypes.object,
 };
 

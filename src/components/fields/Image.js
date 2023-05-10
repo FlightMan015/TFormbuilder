@@ -22,7 +22,7 @@ const ImageField = ({element}) => {
   const setFormValue = formStore(state => state.setFormValue);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container(element)}>
       {
         role.view && (
           <>
@@ -36,12 +36,12 @@ const ImageField = ({element}) => {
                       maxHeight={parseInt(element.meta.maxWidth, 10)}
                       maxWidth={parseInt(element.meta.maxHeight, 10) === 0 ? null : parseInt(element.meta.maxHeight, 10)}
                     />
-                    {(role.edit || preview) && <IconButton
+                    <IconButton
                       icon="image-edit"
                       size={18}
                       iconColor={colors.background}
                       style={styles.selectIcon(colors, fonts)}
-                      disabled={!(role.edit || preview)}
+                      disabled={!role.edit && !preview}
                       onPress={() =>{
                         DocumentPicker.pick({
                           type: types.images,
@@ -54,14 +54,15 @@ const ImageField = ({element}) => {
                           })
                           .catch({});
                       }}
-                    />}
+                    />
                   </>
                 )
               }
               {
-                !formValue[element.field_name] && (role.edit || preview) && (
+                (!formValue[element.field_name]) && (
                   <TouchableOpacity
                     style={styles.browerBtn(fonts, colors)}
+                    disabled={!role.edit && !preview}
                     onPress={() => {
                       DocumentPicker.pick({
                         type: types.images,
@@ -88,9 +89,9 @@ const ImageField = ({element}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
+  container: element => ({
+    ...element.meta.padding
+  }),
   carouselTitle: colors => ({
     fontSize: 16,
     padding: 5,
