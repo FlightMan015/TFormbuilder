@@ -82,9 +82,26 @@ const MenuContent = () => {
       tempIndexToAdd = [formData.data.length];
     }
 
+    const oldRoles = [...formData.roles];
+    const tempRoles = oldRoles.map(oldRole => {
+      const tempOldRole = {...oldRole};
+      if (oldRole.edit || oldRole.submit) {
+        tempOldRole.fieldRoles = {
+          ...tempOldRole.fieldRoles,
+          [field_name]: {view: true, edit: true}
+        }
+      } else {
+        tempOldRole.fieldRoles = {
+          ...tempOldRole.fieldRoles,
+          [field_name]: {view: true, edit: false}
+        }
+      }
+      return tempOldRole;
+    })
     setFormData({
       ...formData,
       data: addField(component, field_name, formData, tempIndexToAdd),
+      roles: tempRoles
     });
   };
 

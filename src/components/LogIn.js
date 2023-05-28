@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useTheme} from 'react-native-paper';
-import {StyleSheet, View, Text, Alert} from 'react-native';
+import {StyleSheet, View, Text, Alert, TextInput} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import TextButton from '../common/TextButton';
 import formStore from '../store/formStore';
@@ -14,55 +14,53 @@ const roles = [
     'approver'
 ];
 
+const validateEmail = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
+
 const LogIn = ({navigation}) => {
     const {colors, fonts} = useTheme();
     const [open, setOpen] = useState(true);
     const i18nValues = formStore(state => state.i18nValues);
     const setUserRole = formStore(state => state.setUserRole);
     const setPreview = formStore(state => state.setPreview);
+    const setUserEmail = formStore(state => state.setUserEmail);
+    const userEmail = formStore(state => state.userEmail);
     const [selectedUserRole, setSelectedUserRole] = useState(roles[0]);
+    const [userId, setUserId] = useState(userEmail);
 
     return (
         <View style={{flex: 1, alignItems: 'center'}}>
             <Text style={{...fonts.headings, fontSize: 40, position: 'absolute', top: '40%', color: '#4194B3'}}>WELCOME</Text>
             <View style={{position: 'absolute', bottom: '6%'}}>
-                <Text style={{...fonts.values, marginBottom: 5, marginLeft: 15}}>Please select your role.</Text>
-                <SelectDropdown
-                    data={roles}
-                    onSelect={e => {
-                        setSelectedUserRole(e);
-                    }}
-                    dropdownStyle={styles.dropdown(colors)}
-                    rowStyle={styles.rowStyle}
-                    rowTextStyle={styles.rowTextStyle(fonts)}
-                    buttonStyle={styles.buttonStyle(colors)}
-                    buttonTextStyle={{...styles.textStyle(fonts)}}
-                    selectedRowTextStyle={styles.selectedRowTextStyle(fonts)}
-                    renderDropdownIcon={
-                        open
-                        ? () => <Icon name="chevron-down" size={18} color={colors.colorButton} />
-                        : () => <Icon name="chevron-up" size={18} color={colors.colorButton} />
-                    }
-                    dropdownIconPosition="right"
-                    onFocus={() => setOpen(false)}
-                    onBlur={() => setOpen(true)}
-                    defaultButtonText="Select Option"
-                    defaultValue={selectedUserRole}
-                />
-                <TextButton
-                    style={styles.addCardBtn}
-                    text={i18nValues.t(`setting_labels.login`)}
-                    textStyle={styles.addCardText}
-                    onPress={() => {
-                        setUserRole(selectedUserRole);
-                        if (selectedUserRole === 'reviewer' || selectedUserRole === 'approver' || selectedUserRole === 'submitter') {
-                            setPreview(false);
-                        } else {
-                            setPreview(false);
-                        }
-                        navigation.navigate('Home');
-                    }}
-                />
+              <Text style={{...fonts.values, marginBottom: 5, marginLeft: 15}}>Email</Text>
+              <TextInput
+                style={styles.title(colors, fonts)}
+                value={userId}
+                onChangeText={newText => {
+                  setUserId(newText);
+                }}
+              />
+              <TextButton
+                  style={styles.addCardBtn(validateEmail(userId))}
+                  text={i18nValues.t(`setting_labels.login`)}
+                  textStyle={styles.addCardText}
+                  disabled={!validateEmail(userId)}
+                  onPress={() => {
+                      setUserEmail(userId);
+                      setUserRole(selectedUserRole);
+                      if (selectedUserRole === 'reviewer' || selectedUserRole === 'approver' || selectedUserRole === 'submitter') {
+                          setPreview(false);
+                      } else {
+                          setPreview(false);
+                      }
+                      navigation.navigate('Home');
+                  }}
+              />
             </View>
         </View>
     );
@@ -72,6 +70,14 @@ const styles = StyleSheet.create({
     container: {
       padding: 5,
     },
+    title: (colors, fonts) => ({
+      height: 40,
+      color: '#FFFFFF',
+      borderRadius: 50,
+      backgroundColor: colors.card,
+      paddingLeft: 20,
+      ...fonts.values
+    }),
     carouselTitle: colors => ({
       fontSize: 16,
       padding: 5,
@@ -114,13 +120,13 @@ const styles = StyleSheet.create({
       borderBottomColor: 'grey',
       borderBottomWidth: 1,
     },
-    addCardBtn: {
+    addCardBtn: valid => ({
         width: 280,
         padding: 10,
-        backgroundColor: '#4194B3',
+        backgroundColor: valid ? '#4194B3' : '#4194B388',
         borderRadius: 50,
         marginTop: 10,
-    },
+    }),
     addCardText: {
         color: '#ffffff',
         fontSize: 16,

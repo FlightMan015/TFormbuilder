@@ -1,7 +1,7 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import SettingContent from './SettingContent';
-import Body from './Body';
+import FormBuilder from './form_builder';
 
 const Drawer = createDrawerNavigator();
 
@@ -21,7 +21,7 @@ const SettingDrawer = props => {
       }}>
       <Drawer.Screen
         name="Body"
-        component={Body}
+        component={FormBuilder}
         options={{
           drawerLabel: () => null,
           drawerItemStyle: {display: 'none'},

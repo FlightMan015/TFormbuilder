@@ -304,7 +304,20 @@
             "add_marker": "أضف علامة",
             "stroke_color": "حلقه ملونه",
             "fill_color": "لون التعبئة",
-            "draw_text": "النص المراد إظهاره"
+            "draw_text": "النص المراد إظهاره",
+            "inbox": "صندوق الوارد",
+            "forms": "نماذج",
+            "submissions": "التقديمات",
+            "users": "المستخدمون",
+            "browse_files": "تصفح ملفات",
+            "browse_image": "تصفح الصورة",
+            "submit": "يُقدِّم",
+            "check": "يفحص",
+            "approve": "يعتمد",
+            "all_users": "جميع المستخدمين",
+            "go_to_dialog_editing": "انتقل إلى تحرير الحوار",
+            "dialog_view": "عرض الحوار",
+            "no_color": "No color"
         },
         "warnings": {
             "warning": "تحذير",

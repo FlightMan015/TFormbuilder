@@ -150,8 +150,9 @@ const Body = props => {
         <ScrollEnabledContext.Provider value={setIsEnabled}>
           <ScrollView ref={ref} style={styles.container(colors)}>
             <View style={{paddingBottom: 50}}>
-              {formData.data.map((field, index) => (
-                <View key={index}>
+              {formData.data.map((field, index) => {
+                const role = formData.roles.find(e => e.name === userRole.name).fieldRoles[field.field_name];
+                return <View key={index}>
                   {field.component !== componentName.TABSECTION &&
                   field.component !== componentName.GROUP &&
                   field.component !== componentName.GRID &&
@@ -167,6 +168,7 @@ const Body = props => {
                       }
                       isFirstField={index === 0}
                       isLastField={index + 1 === formData.data.length}
+                      role={role}
                     />
                   ) : (
                     <MemoGroup
@@ -180,6 +182,7 @@ const Body = props => {
                       }
                       isFirstGroup={index === 0}
                       isLastGroup={index + 1 === formData.data.length}
+                      role={role}
                     />
                   )}
                   {selectedField?.role.find(e => e.name === userRole)?.setting &&
@@ -249,8 +252,9 @@ const Body = props => {
                       />
                     </View>
                   )}
-                </View>
-              ))}
+                </View>;
+              }
+              )}
             </View>
           </ScrollView>
         </ScrollEnabledContext.Provider>

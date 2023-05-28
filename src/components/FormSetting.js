@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {StyleSheet, Text, View, Animated, TextInput, useColorScheme} from 'react-native';
+import {StyleSheet, Text, View, Animated, TextInput, useColorScheme, Alert} from 'react-native';
 import {Avatar, IconButton, Checkbox, useTheme} from 'react-native-paper';
 import { componentName } from '../constant';
 import DraggableFlatList, {
@@ -7,6 +7,7 @@ import DraggableFlatList, {
 } from 'react-native-draggable-flatlist';
 import {GestureHandlerRootView, ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
+import MatIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import formStore from '../store/formStore';
 import TextButton from '../common/TextButton';
 import ColorPicker from '../common/ColorPicker';
@@ -36,6 +37,12 @@ const FormSetting = () => {
   const [roleDatas, setRoleDatas] = useState([]);
   const opacity = new Animated.Value(1);
   const [selectedTab, setSelectedTab] = useState('general');
+  const [roleName, setRoleName] = useState('');
+  const [newRoles, setNewRoles] = useState({
+    view: true,
+    edit: false,
+    submit: false,
+  });
   const ref = useRef();
 
   useEffect(() => {
@@ -136,16 +143,59 @@ const FormSetting = () => {
             </Animated.View>
             <View style={styles.roleName}>
               <Text style={styles.roleNameText}>{item.name}</Text>
-              <IconButton
-                icon="drag-horizontal"
-                size={20}
-                iconColor="#FFFFFF"
-                onPress={() => {}}
-                onLongPress={drag}
-                style={styles.iconBtn}
-              />
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                {
+                  item.view && (
+                    <MatIcon
+                      name="file-check-outline"
+                      color="#FFFFFF"
+                      size={20}
+                      style={{marginHorizontal: 2}}
+                    />
+                  )
+                }
+                {
+                  item.edit && (
+                    <MatIcon
+                      name="file-search-outline"
+                      color="#FFFFFF"
+                      size={20}
+                      style={{marginHorizontal: 2}}
+                    />
+                  )
+                }
+                {
+                  item.submit && (
+                    <MatIcon
+                      name="file-upload-outline"
+                      color="#FFFFFF"
+                      size={20}
+                      style={{marginHorizontal: 2}}
+                    />
+                  )
+                }
+                <IconButton
+                  icon="delete-outline"
+                  size={14}
+                  iconColor="#FFFFFF"
+                  onPress={() => {
+                    const tempRoles = [...formData.roles];
+                    tempRoles.splice(index - 1, 1);
+                    setFormData({...formData, roles: tempRoles});
+                  }}
+                  style={styles.iconBtn}
+                />
+                <IconButton
+                  icon="drag-horizontal"
+                  size={20}
+                  iconColor="#FFFFFF"
+                  onPress={() => {}}
+                  onLongPress={drag}
+                  style={styles.iconBtn}
+                />
+              </View>
             </View>
-            <Animated.View
+            {/* <Animated.View
               style={{...styles.icon, opacity}}>
               <Checkbox
                 status={item.check ? 'checked' : 'unchecked'}
@@ -155,9 +205,9 @@ const FormSetting = () => {
                   onCheckRole(index - 1);
                 }}
               />
-            </Animated.View>
+            </Animated.View> */}
           </View>
-          {/* {
+          {
             item.check && (
               <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                 <Text>View</Text>
@@ -169,9 +219,7 @@ const FormSetting = () => {
                     onChangeRoleOfFormLevel(
                       item.name,
                       {
-                        view: true,
-                        edit: false,
-                        setting: false
+                        view: !item.view,
                       }
                     );
                   }}
@@ -185,32 +233,14 @@ const FormSetting = () => {
                     onChangeRoleOfFormLevel(
                       item.name,
                       {
-                        view: false,
-                        edit: true,
-                        setting: false
-                      }
-                    );
-                  }}
-                />
-                <Text>Setting</Text>
-                <Checkbox
-                  status={item.setting ? 'checked' : 'unchecked'}
-                  color='#FFFFFF'
-                  uncheckedColor='#303339'
-                  onPress={() => {
-                    onChangeRoleOfFormLevel(
-                      item.name,
-                      {
-                        view: false,
-                        edit: false,
-                        setting: true
+                        edit: !item.edit,
                       }
                     );
                   }}
                 />
               </View>
             )
-          } */}
+          }
         </ScaleDecorator>
       );
   };
@@ -253,7 +283,7 @@ const FormSetting = () => {
         />
       </View>
       {selectedTab === 'general' && (
-        <View style={{flex: 1, flexDirection: 'column-reverse'}}>
+        <View style={{flex: 1}}>
           {/* <View style={styles.settingView}>
             <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.form_title")}</Text>
             <TextInput
@@ -269,26 +299,109 @@ const FormSetting = () => {
             {/* <GestureHandlerRootView style={styles.dragItem}> */}
               <DraggableFlatList
                 ref={ref}
-                data={[{}, ...roleDatas]}
+                data={[{}, ...formData.roles]}
                 onDragBegin={() => {
                   animate1();
                 }}
                 onDragEnd={({data}) => {
-                  const tempCheckedRoles = [];
-                  for(let i=1 ; i < data.length; i++) {
-                    if (data[i].check) {
-                      tempCheckedRoles.push(data[i]);
-                    }
-                  }
-                  setFormData({...formData,  checkedRoles: tempCheckedRoles});
+                  setFormData({...formData,  roles: data.slice(1, data.length)});
                   animate2();
                 }}
                 keyExtractor={(item, i) => i}
                 renderItem={renderItem}
               />
             {/* </GestureHandlerRootView> */}
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              {/* <IconButton
+                icon="plus"
+                size={10}
+                iconColor={colors.card}
+                style={{backgroundColor: colors.colorButton}}
+                onPress={() => {
+                }}
+              /> */}
+              {/* <Icon
+                name="plus"
+                size={18}
+                color={'white'}
+                style={{...styles.itemAvatarText}}
+                onPress={() => {
+                  
+                }}
+              /> */}
+              <IconButton
+                icon="plus"
+                size={14}
+                iconColor="#FFFFFF"
+                onPress={() => {
+                  if (!roleName) {
+                    Alert.alert('Warning', 'Please input the role name.')
+                  } else if (formData.roles.includes(e => e.name === roleName)) {
+                    Alert.alert('Warning','The role already exists. Please choose another.')
+                  } else {
+                    const tempRoles = [...formData.roles, {
+                      name: roleName,
+                      users: [],
+                      ...newRoles
+                    }];
+                    setFormData({...formData, roles: tempRoles});
+                    setRoleName('');
+                  }
+                }}
+                style={styles.iconBtn}
+              />
+              <View style={styles.roleName1}>
+                <View style={{flexDirection: 'row', alignItems: 'center', paddingRight: 5}}>
+                  <MatIcon
+                    name="file-upload-outline"
+                    color={newRoles.submit ? "#FFFFFF" : 'grey'}
+                    size={20}
+                    onPress={() => {
+                      setNewRoles({
+                        view: false,
+                        edit: false,
+                        submit: true,
+                      });
+                    }}
+                    style={{marginHorizontal: 2}}
+                  />
+                  <MatIcon
+                    name="file-search-outline"
+                    color={newRoles.edit ? "#FFFFFF" : 'grey'}
+                    size={20}
+                    onPress={() => {
+                      setNewRoles({
+                        view: false,
+                        edit: true,
+                        submit: false,
+                      });
+                    }}
+                    style={{marginHorizontal: 2}}
+                  />
+                  <MatIcon
+                    name="file-check-outline"
+                    color={newRoles.view ? "#FFFFFF" : 'grey'}
+                    size={20}
+                    onPress={() => {
+                      setNewRoles({
+                        view: true,
+                        edit: false,
+                        submit: false,
+                      });
+                    }}
+                    style={{marginHorizontal: 2}}
+                  />
+                </View>
+                <TextInput
+                  style={styles.roleNameText1}
+                  value={roleName}
+                  onChangeText={e => setRoleName(e)}
+                />
+              </View>
+            </View>
+            
           </View>
-          <ScrollView style={{flex: 1}}>
+          {/* <ScrollView style={{flex: 1}}>
             <SettingImage
               title={i18nValues.t("setting_labels.logo")}
               imageUri={formData.logo}
@@ -297,11 +410,11 @@ const FormSetting = () => {
                 setFormData({...formData, [keyname]: value});
               }}
             />
-          </ScrollView>
+          </ScrollView> */}
         </View>
       )}
       {selectedTab === 'style' && (
-        <>
+        <ScrollView style={{flex: 1}}>
           <SettingSwitch
             title={i18nValues.t("setting_labels.display")}
             value={scheme === 'dark' ? viewMode === 'light' ? true : false : viewMode === 'light' ? false : true}
@@ -420,7 +533,7 @@ const FormSetting = () => {
             fontType={viewMode === 'light' ? formData.lightStyle.buttonTexts.fortFamily : formData.darkStyle.buttonTexts.fortFamily}
             onChange={(type, e) => {onChange('buttonTexts', type, e);}}
           />
-        </>
+        </ScrollView>
       )}
     </View>
   );
@@ -504,8 +617,10 @@ const styles = StyleSheet.create({
   itemAvatarText: {
     alignSelf: 'center',
     borderWidth: 1,
-    fontFamily: 'PublicSans-Regular',
-    fontSize: 14,
+    backgroundColor: '#555F6E',
+    borderColor: '#303339',
+    borderRadius: 10,
+    marginHorizontal: 5
   },
   itemView: {
     marginTop: -10,
@@ -521,7 +636,20 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingLeft: 10,
     paddingRight: 5,
-    width: '75%',
+    width: '88%',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: '#303339',
+    backgroundColor: '#555F6E',
+  },
+  roleName1: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    height: 35,
+    alignSelf: 'center',
+    paddingRight: 10,
+    width: '88%',
     alignItems: 'center',
     borderWidth: 1,
     borderRadius: 5,
@@ -547,6 +675,12 @@ const styles = StyleSheet.create({
   roleNameText: {
     fontSize: 14,
     color: '#FFFFFF',
+  },
+  roleNameText1: {
+    padding: 0,
+    fontSize: 14,
+    color: '#FFFFFF',
+    flex: 1,
   },
   title: {
     height: 40,

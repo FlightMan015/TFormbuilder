@@ -13,8 +13,9 @@ import { menuItems, newFormData, languages } from '../constant';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PatternBackgroundView from '../common/PatternBackgroundView';
 import SelectDropdown from 'react-native-select-dropdown';
+import { updateField } from '../actions/formdata';
 
-const Header = ({deleteForm, renameForm, saveForm}) => {
+const Header = ({deleteForm, renameForm, saveForm, navigation}) => {
   const {colors, size, fonts} = useTheme();
   const setSettingType = formStore(state => state.setSettingType);
   const setOpenSetting = formStore(state => state.setOpenSetting);
@@ -29,14 +30,22 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
   const seti18nValues = formStore(state => state.seti18nValues);
   const preview = formStore(state => state.preview);
   const userRole = formStore(state => state.userRole);
+  const userEmail = formStore(state => state.userEmail);
   const [open, setOpen] = useState(true);
+  const formsIsSet = formStore(state => state.formsIsSet);
+  const tempFormData = formStore(state => state.tempFormData);
+  const setTempFormData = formStore(state => state.setTempFormData);
   const dropdownRef = useRef();
 
   useEffect(() => {
-    dropdownRef.current.reset();
+    setFormData({...formData, makerId: userEmail});
+  }, []);
+
+  useEffect(() => {
+    dropdownRef.current?.reset();
   }, [formData.name])
 
-  const formNames = formDatas.map((item, index) => {
+  const formNames = formsIsSet.map((item, index) => {
     return item.name;
   });
 
@@ -53,10 +62,19 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
       </View>
       <View style={{position: 'absolute', width: '100%', height: '100%'}}>
         <View style={{height: Platform.OS === 'ios' ? 25 : 0}}></View>
-        <View style={styles.titleBar}>
-          {
-            (userRole === 'admin' || userRole === 'builder') && (
+        {
+          tempFormData.type === 'form' && (
+            <View style={styles.titleBar}>
               <View style={styles.subView}>
+                <IconButton
+                  icon="arrow-left"
+                  size={size.s20}
+                  iconColor={fonts.headings.color}
+                  onPress={() => {navigation.goBack();}}
+                />
+              </View>
+              {/* <Text style={styles.title(fonts)}>{formData.title}</Text> */}
+              <View style={{flex: 1, flexDirection: 'row-reverse', alignItems: 'center'}}>
                 <Menu>
                   <MenuTrigger>
                     <IconButton
@@ -75,11 +93,12 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
                               setFormValue({});
                               break;
                             case menuItems[1].name:
-                              saveForm(formData);
-                              break;
-                            case menuItems[2].name:
+                              // saveForm({...formData});
                               setVisibleDlg({...visibleDlg, saveForm: true, rename: false, oldName: formData.name, id: formData.id});
                               break;
+                            // case menuItems[2].name:
+                            //   setVisibleDlg({...visibleDlg, saveForm: true, rename: false, oldName: formData.name, id: formData.id});
+                            //   break;
                             case menuItems[3].name:
                               setVisibleDlg({...visibleDlg, saveForm: true, rename: true, oldName: formData.name, id: formData.id});
                               break;
@@ -103,95 +122,46 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
                     })}
                   </MenuOptions>
                 </Menu>
-              </View>
-            )
-          }
-
-        {
-          !(userRole === 'admin' || userRole === 'builder') && (
-            <Menu>
-              <MenuTrigger>
-                <IconButton
-                  icon="earth"
-                  size={size.s20}
-                  iconColor={fonts.headings.color}
-                />
-              </MenuTrigger>
-              <MenuOptions>
-                {languages.map((item, index) => {
-                  return (
-                    <MenuOption key={index} style={{padding: 0}} onSelect={() => {
-                      const tempValues = {...i18nValues};
-                      tempValues.locale = item.code;
-                      seti18nValues(tempValues);
-                    }}>
-                      <View
-                        key={index}
-                        style={styles.fieldListItem}>
-                        <View style={styles.fieldIcon}>
-                          {
-                            item.code === i18nValues.locale && (
-                              <Icon name="check" size={18} color={'white'} />
-                            )
-                          }
-                        </View>
-                        <View style={styles.fieldText}>
-                          <Text style={styles.fieldNameText}>{item.name}</Text>
-                        </View>
-                      </View>
-                    </MenuOption>
-                  );
-                })}
-              </MenuOptions>
-            </Menu>
-          )
-        }
-          
-          {/* <Text style={styles.title(fonts)}>{formData.title}</Text> */}
-          <View style={{flex: 1, flexDirection: 'row-reverse'}}>
-            <View style={styles.subView}>
-            {
-              (userRole === 'admin' || userRole === 'builder') && (
-                <Menu>
-                  <MenuTrigger>
-                    <IconButton
-                      icon="earth"
-                      size={size.s20}
-                      iconColor={fonts.headings.color}
-                    />
-                  </MenuTrigger>
-                  <MenuOptions>
-                    {languages.map((item, index) => {
-                      return (
-                        <MenuOption key={index} style={{padding: 0}} onSelect={() => {
-                          const tempValues = {...i18nValues};
-                          tempValues.locale = item.code;
-                          seti18nValues(tempValues);
-                        }}>
-                          <View
-                            key={index}
-                            style={styles.fieldListItem}>
-                            <View style={styles.fieldIcon}>
-                              {
-                                item.code === i18nValues.locale && (
-                                  <Icon name="check" size={18} color={'white'} />
-                                )
-                              }
-                            </View>
-                            <View style={styles.fieldText}>
-                              <Text style={styles.fieldNameText}>{item.name}</Text>
-                            </View>
-                          </View>
-                        </MenuOption>
-                      );
-                    })}
-                  </MenuOptions>
-                </Menu>
-              )
-            }
-              
-              {
-                (userRole === 'admin' || userRole === 'builder') && !preview && (
+                <View style={styles.subView}>
+                {/* {
+                  (userRole === 'admin' || userRole === 'builder') && (
+                    <Menu>
+                      <MenuTrigger>
+                        <IconButton
+                          icon="earth"
+                          size={size.s20}
+                          iconColor={fonts.headings.color}
+                        />
+                      </MenuTrigger>
+                      <MenuOptions>
+                        {languages.map((item, index) => {
+                          return (
+                            <MenuOption key={index} style={{padding: 0}} onSelect={() => {
+                              const tempValues = {...i18nValues};
+                              tempValues.locale = item.code;
+                              seti18nValues(tempValues);
+                            }}>
+                              <View
+                                key={index}
+                                style={styles.fieldListItem}>
+                                <View style={styles.fieldIcon}>
+                                  {
+                                    item.code === i18nValues.locale && (
+                                      <Icon name="check" size={18} color={'white'} />
+                                    )
+                                  }
+                                </View>
+                                <View style={styles.fieldText}>
+                                  <Text style={styles.fieldNameText}>{item.name}</Text>
+                                </View>
+                              </View>
+                            </MenuOption>
+                          );
+                        })}
+                      </MenuOptions>
+                    </Menu>
+                  )
+                } */}
                   <IconButton
                     icon="cog-outline"
                     size={size.s20}
@@ -201,38 +171,75 @@ const Header = ({deleteForm, renameForm, saveForm}) => {
                       setOpenSetting(true);
                     }}
                   />
-                )
-              }
-              <Avatar.Image size={40} style={{marginHorizontal: 5}} source={formData.logo ? {uri: formData.logo} : require('../assets/icon_images/user_avatar.png')} />
+                  {/* <Avatar.Image size={40} style={{marginHorizontal: 5}} source={formData.logo ? {uri: formData.logo} : require('../assets/icon_images/user_avatar.png')} /> */}
+                </View>
+                {/* <SelectDropdown
+                  ref={dropdownRef}
+                  data={formNames}
+                  onSelect={(e, selectedIndex) => {
+                    const tempFormData = {...formDatas[selectedIndex]};
+                    setFormData(tempFormData);
+                    const tempFormValue = formValues.find(data => data.id === formDatas[selectedIndex].id);
+                    setFormValue(tempFormValue ? tempFormValue.data : {});
+                  }}
+                  dropdownStyle={styles.dropdown(colors)}
+                  rowStyle={styles.rowStyle}
+                  rowTextStyle={styles.rowTextStyle(fonts)}
+                  buttonStyle={styles.buttonStyle(colors)}
+                  buttonTextStyle={{...styles.textStyle(fonts)}}
+                  selectedRowTextStyle={styles.selectedRowTextStyle(fonts)}
+                  renderDropdownIcon={
+                    open
+                      ? () => <Icon name="chevron-down" size={18} color={fonts.headings.color} />
+                      : () => <Icon name="chevron-up" size={18} color={fonts.headings.color} />
+                  }
+                  dropdownIconPosition="right"
+                  onFocus={() => setOpen(false)}
+                  onBlur={() => setOpen(true)}
+                  defaultButtonText={formData.name || 'New Form'}
+                  defaultValue={formData.name}
+                /> */}
+                <Text style={{...styles.buttonStyle(colors), ...fonts.headings}}>{formData.name}</Text>
+              </View>
             </View>
-            <SelectDropdown
-              ref={dropdownRef}
-              data={formNames}
-              onSelect={(e, selectedIndex) => {
-                const tempFormData = {...formDatas[selectedIndex]};
-                setFormData(tempFormData);
-                const tempFormValue = formValues.find(data => data.id === formDatas[selectedIndex].id);
-                setFormValue(tempFormValue ? tempFormValue.data : {});
+          )
+        }
+        {
+          tempFormData.type === 'dialog' && (
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+            <IconButton
+              icon="arrow-left"
+              size={size.s25}
+              iconColor={fonts.headings.color}
+              onPress={() => {
+                
+                setFormData(tempFormData.data);
+                setTempFormData({...tempFormData, type: 'form', index: [], data: {}, element: {}});
+                setOpenSetting(false);
               }}
-              dropdownStyle={styles.dropdown(colors)}
-              rowStyle={styles.rowStyle}
-              rowTextStyle={styles.rowTextStyle(fonts)}
-              buttonStyle={styles.buttonStyle(colors)}
-              buttonTextStyle={{...styles.textStyle(fonts)}}
-              selectedRowTextStyle={styles.selectedRowTextStyle(fonts)}
-              renderDropdownIcon={
-                open
-                  ? () => <Icon name="chevron-down" size={18} color={fonts.headings.color} />
-                  : () => <Icon name="chevron-up" size={18} color={fonts.headings.color} />
-              }
-              dropdownIconPosition="right"
-              onFocus={() => setOpen(false)}
-              onBlur={() => setOpen(true)}
-              defaultButtonText={formData.name || 'New Form'}
-              defaultValue={formData.name}
+            />
+            <Text style={{...fonts.headings, fontSize: 20}}>{i18nValues.t("setting_labels.dialog_view")}</Text>
+            <IconButton
+              icon="content-save-outline"
+              size={size.s25}
+              iconColor={fonts.headings.color}
+              onPress={() => {
+                const tempMeta = {...tempFormData.element.meta};
+                setFormData({
+                  ...tempFormData.data,
+                  data: updateField(
+                    tempFormData.data,
+                    tempFormData.index,
+                    {...tempFormData.element, meta: {...tempMeta, dialogData: formData.data}},
+                  ),
+                });
+                setTempFormData({...tempFormData, type: 'form', index: [], data: {}, element: {}});
+                setOpenSetting(false);
+              }}
             />
           </View>
-        </View>
+          )
+        }
       </View>
     </View>
   );
@@ -299,6 +306,7 @@ const styles = StyleSheet.create({
   buttonStyle: colors => ({
     flex: 1,
     backgroundColor: colors.background,
+    textAlign: 'center',
   }),
   rowStyle: {
     height: 40,

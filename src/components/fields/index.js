@@ -7,13 +7,11 @@ import {useNavigation} from '@react-navigation/native';
 import {deleteField, moveDown, moveUp} from '../../actions/formdata';
 
 const Field = props => {
-  const {element, index, selected, onClick, onSelect, isLastField, isFirstField} = props;
+  const {element, index, selected, onClick, onSelect, isLastField, isFirstField, role} = props;
   const {colors, fonts} = useTheme();
-  const userRole = formStore(state => state.userRole);
   const preview = formStore(state => state.preview);
   const submit = formStore(state => state.submit);
   const formValue = formStore(state => state.formValue);
-  const role = element.role.find(e => e.name === userRole);
   const FieldComponent = getComponent(element.component);
   const opacity = new Animated.Value(1);
 
@@ -39,22 +37,7 @@ const Field = props => {
     }
   }, [element.is_mandatory, !!formValue[element.field_name]]);
 
-  const fadeOut = () => {
-    Animated.timing(opacity, {
-      toValue: 0,
-      duration: 100,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const fadeIn = () => {
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: 100,
-      useNativeDriver: true,
-    }).start();
-  };
-  if (role.view) {
+  if (role?.view) {
     return (
       <View
         style={styles.field(colors, selected && !preview && role.setting, element)}

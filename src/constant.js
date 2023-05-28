@@ -102,9 +102,10 @@ export const modes = {
   approver: 'approver',
 };
 
-
 export const newFormData = {
   name: 'New TForm',
+  isPublic: false,
+  isShared: [],
   logo: '',
   data: [],
   theme: 'Native',
@@ -124,14 +125,14 @@ export const newFormData = {
       fontFamily: 'PublicSans-SemiBold',
     },
     labels: {
-        fontSize: 16,
-        color: '#080808',
-        fontFamily: 'PublicSans-Regular',
+      fontSize: 16,
+      color: '#080808',
+      fontFamily: 'PublicSans-Regular',
     },
     values: {
-        fontSize: 14,
-        color: '#080808',
-        fontFamily: 'PublicSans-Regular',
+      fontSize: 14,
+      color: '#080808',
+      fontFamily: 'PublicSans-Regular',
     },
   },
   darkStyle: {
@@ -160,6 +161,11 @@ export const newFormData = {
       fontFamily: 'PublicSans-Regular',
     },
   },
+  roles: [
+    {name: 'submitter', view: false, edit: false, submit: true, users: [], fieldRoles: {}},
+    {name: 'reviewer', view: false, edit: true, submit: false, users: [], fieldRoles: {}},
+    {name: 'approver', view: true, edit: false, submit: false, users: [], fieldRoles: {}},
+  ],
   checkedRoles: [],
 };
 
@@ -183,13 +189,6 @@ const newHeaderData = {
       paddingRight: 0
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
 
@@ -205,13 +204,6 @@ const newSpaceData = {
     height: 30,
     backgroundColor: '#FFFF00',
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
   }
@@ -235,13 +227,6 @@ const newInputTextData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onSubmitEditing: '',
@@ -266,13 +251,6 @@ const newInputDateData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChangeDate: '',
@@ -296,13 +274,6 @@ const newDropDownData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onSelect: '',
@@ -324,13 +295,6 @@ const newInputTimeData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChangeTime: '',
@@ -353,13 +317,6 @@ const newFileUploadData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onSelectFile: '',
@@ -401,13 +358,6 @@ const newLineChartData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, editSeries: true, editAxes: true, setting: true},
-    {name: 'builder', view: true, editSeries: true, editAxes: true, setting: true},
-    {name: 'reviewer', view: true, editSeries: false, editAxes: false, setting: false},
-    {name: 'approver', view: true, editSeries: false, editAxes: false, setting: false},
-    {name: 'submitter', view: true, editSeries: true, editAxes: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewSeries: '',
@@ -443,13 +393,6 @@ const newBarChartData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewLabel: '',
@@ -518,13 +461,6 @@ const newPieChartData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewLabel: '',
@@ -558,13 +494,6 @@ const newRadarChartData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, editSeries: true, editAxes: true, setting: true},
-    {name: 'builder', view: true, editSeries: true, editAxes: true, setting: true},
-    {name: 'reviewer', view: true, editSeries: false, editAxes: false, setting: false},
-    {name: 'approver', view: true, editSeries: false, editAxes: false, setting: false},
-    {name: 'submitter', view: true, editSeries: true, editAxes: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewSeries: '',
@@ -596,13 +525,6 @@ const newMapData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewPoint: '',
@@ -630,13 +552,6 @@ const newCalendarData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewSchedule: '',
@@ -681,13 +596,6 @@ const newSchedularData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewSchedule: '',
@@ -726,13 +634,6 @@ const newGroupData = {
     alignItems: 'flex-start',
     backgroundColor: '#F8F8F8',
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   event: {},
 };
 
@@ -753,13 +654,6 @@ const newGridData = {
     cellFields: [],
     verticalAlign: true,
   },
-  role: [
-    {name: 'admin', view: true, edit: true, define: true, setting: true},
-    {name: 'builder', view: true, edit: false, define: true, setting: true},
-    {name: 'reviewer', view: true, edit: false, define: true, setting: false},
-    {name: 'approver', view: true, edit: false, define: true, setting: false},
-    {name: 'submitter', view: true, edit: true, define: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChangeCellData: '',
@@ -781,13 +675,6 @@ const newListSectionData = {
     cellVerticalAlign: false,
     field_width: '100%',
   },
-  role: [
-    {name: 'admin', view: true, edit: true, define: true, setting: true},
-    {name: 'builder', view: true, edit: false, define: true, setting: true},
-    {name: 'reviewer', view: true, edit: false, define: true, setting: false},
-    {name: 'approver', view: true, edit: false, define: true, setting: false},
-    {name: 'submitter', view: true, edit: true, define: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChangeCellData: '',
@@ -831,13 +718,6 @@ const newTabSectionData = {
     ],
     option: false,
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   event: {},
 };
 
@@ -871,13 +751,6 @@ const newBitMapData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewMarker: '',
@@ -917,13 +790,6 @@ const newDataTableData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateNewEntry: '',
@@ -952,13 +818,6 @@ const newRadioButtonData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onSelect: '',
@@ -989,13 +848,6 @@ const newGaugeChartData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChangeValue: '',
@@ -1022,13 +874,6 @@ const newSliderData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChangeValue: '',
@@ -1052,7 +897,7 @@ const newButtonData = {
     isRound: true,
     backgroundColor: '',
     iconPosition: 'left',
-    function: 'formSubmit',
+    function: 'None',
     width: 'fit_content',
     padding: {
       paddingTop: 5,
@@ -1061,13 +906,6 @@ const newButtonData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onPress: '',
@@ -1093,13 +931,6 @@ const newImageData = {
     },
     uri: 'https://www.google.com/imgres?imgurl=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F536%2F218%2Foriginal%2Fflat-modern-family-tree-vector-template.jpg&imgrefurl=https%3A%2F%2Fwww.vecteezy.com%2Ffree-vector%2Ffamily-tree&tbnid=rqs5xnKcthRS5M&vet=12ahUKEwivzIDF0N39AhXSxyoKHURvBQsQMygbegUIARCqAg..i&docid=wkdbsHFvqt9DRM&w=2800&h=2800&q=tree%20image&ved=2ahUKEwivzIDF0N39AhXSxyoKHURvBQsQMygbegUIARCqAg',
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onSelectImage: '',
@@ -1118,13 +949,6 @@ const newCompositeData = {
     spacing: 2,
     data: [],
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateCell: '',
@@ -1180,13 +1004,6 @@ export const newPaymentData = {
     server_url: 'https://parseapi.back4app.com/functions/checkout',
     currency: 'eur',
   },
-  role: [
-    {name: 'admin', view: true, pay: true, setting: true},
-    {name: 'builder', view: true, pay: true, setting: true},
-    {name: 'reviewer', view: true, pay: false, setting: false},
-    {name: 'approver', view: true, pay: false, setting: false},
-    {name: 'submitter', view: true, pay: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onSuccessPayment: '',
@@ -1206,13 +1023,6 @@ export const newPopupData = {
     childs: [],
     option: false,
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onClick: '',
@@ -1234,13 +1044,6 @@ export const newEmbeddedData = {
     useAPIForm: false,
     response: [],
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onClick: '',
@@ -1320,13 +1123,6 @@ export const newCardSlider = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateCard: '',
@@ -1350,13 +1146,6 @@ export const newTwitterData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onClick: '',
@@ -1379,13 +1168,6 @@ export const newVoiceMessage = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onCreateMessage: '',
@@ -1423,13 +1205,6 @@ export const newQuestionAndAnswer = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChecked: '',
@@ -1470,13 +1245,6 @@ export const newContactData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChecked: '',
@@ -1513,13 +1281,6 @@ export const newNavigationButtonData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChecked: '',
@@ -1563,13 +1324,6 @@ export const newNotificationData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChecked: '',
@@ -1601,13 +1355,6 @@ export const newDataCardData = {
       paddingRight: 5
     },
   },
-  role: [
-    {name: 'admin', view: true, edit: true, setting: true},
-    {name: 'builder', view: true, edit: false, setting: true},
-    {name: 'reviewer', view: true, edit: false, setting: false},
-    {name: 'approver', view: true, edit: false, setting: false},
-    {name: 'submitter', view: true, edit: true, setting: false},
-  ],
   action: {create: false, update: false, read: false, delete: false},
   event: {
     onChecked: '',
@@ -1661,7 +1408,6 @@ export const datatypes = {
   editTab: 'editTab',
   deleteTab: 'deleteTab',
   changeInfo: 'changeInfo',
-
   label: 'label',
   mandatory: 'mandatory',
   addLine: 'addLine',
@@ -1932,11 +1678,11 @@ export const fieldMenuData = {
     {
       name: 'featured_widget',
       items: [
-        {
-          name: 'card_slider',
-          key: componentName.CARDSLIDER,
-          icon: 'columns',
-        },
+        // {
+        //   name: 'card_slider',
+        //   key: componentName.CARDSLIDER,
+        //   icon: 'columns',
+        // },
         {
           name: 'voice_message',
           key: componentName.VOICEMESSAGE,
@@ -1975,7 +1721,7 @@ export const icons = [
 export const menuItems = [
   {name: 'new', icon: 'file-plus-outline'},
   {name: 'save', icon: 'content-save-outline'},
-  {name: 'save_as', icon: 'content-save-edit-outline'},
+  // {name: 'save_as', icon: 'content-save-edit-outline'},
   {name: 'rename', icon: 'pencil-outline'},
   {name: 'delete', icon: 'delete-forever-outline'},
 ];

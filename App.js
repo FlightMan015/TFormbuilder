@@ -27,7 +27,11 @@ import FormSaveDlg from './src/dialogs/FormSaveDlg';
 import SchedularDlg from './src/dialogs/SchedularDlg';
 import MapEditDlg from './src/dialogs/MapEditDlg';
 import LogIn from './src/components/LogIn';
+import HomeScreen from './src/components/HomeScreen';
 import BitmapMarkerAddDlg from './src/dialogs/BitmapMarkerAddDlg';
+import InboxScreen from './src/components/InboxScreen';
+import SubmissionScreen from './src/components/SubmissionScreen';
+import FormRender from './src/components/form_render/index';
 
 const Stack = createNativeStackNavigator();
 
@@ -65,7 +69,7 @@ const createData = async () => {
   });
 }
 
-const HomeScreen = (props) => {
+const FormBuilder = ({navigation}) => {
 
   const scheme = useColorScheme();
   const setFormDatas = formStore(state => state.setFormDatas);
@@ -124,42 +128,42 @@ const HomeScreen = (props) => {
       }
     });
 
-    const path2 = path + '/value_data.json';
-    RNFS.exists(path2).then(exist => {
-      if (exist) {
-        RNFS.readFile(path2, 'utf8')
-          .then((readdata) => {
-            const tempValues = JSON.parse(readdata);
-            const index = tempValues.findIndex(e => e.formId === data.id);
-            if (index < 0) {
-              tempValues.push({formId: data.id, value: formValue});
-            } else {
-              tempValues.splice(index, 1, {formId: data.id, value: formValue});
-            }
-            RNFS.writeFile(path2, JSON.stringify(tempValues), 'utf8')
-              .then((success) => {
-                console.log(path2, 'Success Adding');
-                setFormValues(tempValues);
-              })
-              .catch((err) => {
-                console.log(path2, err.message);
-              });
-          })
-          .catch((err) => {
-            console.log(err.message);
-          });
-      } else {
-        const tempValues = [];
-        tempValues.push({formId: data.id, value: formValue});
-        RNFS.writeFile(path2, JSON.stringify(tempValues), 'utf8')
-          .then((success) => {
-            console.log(path2, 'Success Save');
-          })
-          .catch((err) => {
-            console.log(path2, err.message);
-          });
-      }
-    });
+    // const path2 = path + '/value_data.json';
+    // RNFS.exists(path2).then(exist => {
+    //   if (exist) {
+    //     RNFS.readFile(path2, 'utf8')
+    //       .then((readdata) => {
+    //         const tempValues = JSON.parse(readdata);
+    //         const index = tempValues.findIndex(e => e.formId === data.id);
+    //         if (index < 0) {
+    //           tempValues.push({formId: data.id, value: formValue});
+    //         } else {
+    //           tempValues.splice(index, 1, {formId: data.id, value: formValue});
+    //         }
+    //         RNFS.writeFile(path2, JSON.stringify(tempValues), 'utf8')
+    //           .then((success) => {
+    //             console.log(path2, 'Success Adding');
+    //             setFormValues(tempValues);
+    //           })
+    //           .catch((err) => {
+    //             console.log(path2, err.message);
+    //           });
+    //       })
+    //       .catch((err) => {
+    //         console.log(err.message);
+    //       });
+    //   } else {
+    //     const tempValues = [];
+    //     tempValues.push({formId: data.id, value: formValue});
+    //     RNFS.writeFile(path2, JSON.stringify(tempValues), 'utf8')
+    //       .then((success) => {
+    //         console.log(path2, 'Success Save');
+    //       })
+    //       .catch((err) => {
+    //         console.log(path2, err.message);
+    //       });
+    //   }
+    // });
   };
 
   const deleteForm = (formId) => {
@@ -187,29 +191,29 @@ const HomeScreen = (props) => {
       }
     });
 
-    var path2 = `${RNFS.ExternalDirectoryPath}/TForm/value_data.json`;
-    RNFS.exists(path2).then(exist => {
-      if (exist) {
-        RNFS.readFile(path2, 'utf8')
-          .then((readdata) => {
-            const tempformData = JSON.parse(readdata);
-            const deleteIndex = tempformData.findIndex(e => e.formId === formId);
-            tempformData.splice(deleteIndex, 1);
+    // var path2 = `${RNFS.ExternalDirectoryPath}/TForm/value_data.json`;
+    // RNFS.exists(path2).then(exist => {
+    //   if (exist) {
+    //     RNFS.readFile(path2, 'utf8')
+    //       .then((readdata) => {
+    //         const tempformData = JSON.parse(readdata);
+    //         const deleteIndex = tempformData.findIndex(e => e.formId === formId);
+    //         tempformData.splice(deleteIndex, 1);
 
-            RNFS.writeFile(path2, JSON.stringify(tempformData), 'utf8')
-              .then((success) => {
-                console.log(path2, 'Successful Delete');
-                setFormValues(tempformData);
-              })
-              .catch((err) => {
-                console.log(path2, err.message);
-              });
-          })
-          .catch((err) => {
-            console.log(err.message);
-          });
-      }
-    });
+    //         RNFS.writeFile(path2, JSON.stringify(tempformData), 'utf8')
+    //           .then((success) => {
+    //             console.log(path2, 'Successful Delete');
+    //             setFormValues(tempformData);
+    //           })
+    //           .catch((err) => {
+    //             console.log(path2, err.message);
+    //           });
+    //       })
+    //       .catch((err) => {
+    //         console.log(err.message);
+    //       });
+    //   }
+    // });
   };
 
   const renameForm = (data) => {
@@ -246,10 +250,10 @@ const HomeScreen = (props) => {
 
   return (
     <View style={{flex: 1}}>
-      <Header deleteForm={deleteForm} renameForm={renameForm} saveForm={saveData} />
+      <Header deleteForm={deleteForm} renameForm={renameForm} saveForm={saveData} navigation={navigation}/>
       <FieldMenu />
       <BitmapDrawingDlg />
-      <BitmapMarkerAddDlg />
+      {/* <BitmapMarkerAddDlg /> */}
       <BitmapEditLinkDlg />
       <CalendarDlg />
       <FormJsonDlg />
@@ -339,7 +343,11 @@ const App: () => Node = () => {
               headerShown: false
             }}>
             <Stack.Screen name="LogIn" component={LogIn} />
+            <Stack.Screen name="Builder"  component={FormBuilder} />
+            <Stack.Screen name="Render"  component={FormRender} />
             <Stack.Screen name="Home"  component={HomeScreen} />
+            <Stack.Screen name="Inbox"  component={InboxScreen} />
+            <Stack.Screen name='Submission' component={SubmissionScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </MenuProvider>

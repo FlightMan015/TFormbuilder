@@ -304,7 +304,20 @@
             "add_marker": "Add marker",
             "stroke_color": "Stroke color",
             "fill_color": "Fill color",
-            "draw_text": "Text to show"
+            "draw_text": "Text to show",
+            "inbox": "Inbox",
+            "forms": "Forms",
+            "submissions": "Submissions",
+            "users": "Users",
+            "browse_files": "Browse files",
+            "browse_image": "Browse image",
+            "submit": "Submit",
+            "check": "Check",
+            "approve": "Approve",
+            "all_users": "All users",
+            "go_to_dialog_editing": "Go to dialog editing",
+            "dialog_view": "Dialog View",
+            "no_color": "No color"
         },
         "warnings": {
             "warning": "Warning",

@@ -25,14 +25,14 @@ const FieldRole = () => {
   const i18nValues = formStore(state => state.i18nValues);
 
   const onChangeRole = (i, type) => {
-    const tempRoles = JSON.parse(JSON.stringify(element.role));
-    const changedItem = tempRoles[i];
-    tempRoles[i] = {
-      ...changedItem,
-      [type]: !changedItem[type],
-    };
-    const updatedElement = {...element, role: tempRoles};
-    setFormData({...formData, data: updateField(formData, selectedFieldIndex, updatedElement)})
+    // const tempRoles = JSON.parse(JSON.stringify(element.role));
+    // const changedItem = tempRoles[i];
+    // tempRoles[i] = {
+    //   ...changedItem,
+    //   [type]: !changedItem[type],
+    // };
+    // const updatedElement = {...element, role: tempRoles};
+    // setFormData({...formData, data: updateField(formData, selectedFieldIndex, updatedElement)})
   };
 
   return useMemo(() => (
@@ -51,70 +51,18 @@ const FieldRole = () => {
       <DataTable>
         <DataTable.Header style={{borderBottomColor: '#FFFFFF'}}>
           <DataTable.Title>{''}</DataTable.Title>
-          {'view' in element.role[0] && (
             <DataTable.Title>
               <Text style={styles.headerTitle(colors.description)}>
                 {/* {'   View'} */}
                 {'   ' + i18nValues.t("setting_labels.view")}
               </Text>
             </DataTable.Title>
-          )}
-          {'edit' in element.role[0] && (
             <DataTable.Title>
               <Text style={styles.headerTitle(colors.description)}>
                 {/* {'   Edit'} */}
                 {'   ' + i18nValues.t("setting_labels.edit")}
               </Text>
             </DataTable.Title>
-          )}
-          {'define' in element.role[0] && (
-            <DataTable.Title>
-              <Text style={styles.headerTitle(colors.description)}>
-                {/* Define */}
-                {i18nValues.t("setting_labels.define")}
-              </Text>
-            </DataTable.Title>
-          )}
-          {'editAxes' in element.role[0] && (
-            <DataTable.Title>
-              <Text style={styles.headerTitle(colors.description)}>
-                {/* Edit Axis */}
-                {i18nValues.t("setting_labels.edit_axis")}
-              </Text>
-            </DataTable.Title>
-          )}
-          {'editSeries' in element.role[0] && (
-            <DataTable.Title>
-              <Text style={styles.headerTitle(colors.description)}>
-                {/* Edit Series */}
-                {i18nValues.t("setting_labels.edit_series")}
-              </Text>
-            </DataTable.Title>
-          )}
-          {'read' in element.role[0] && (
-            <DataTable.Title>
-              <Text style={styles.headerTitle(colors.description)}>
-                {/* {'   Read'} */}
-                {'   ' + i18nValues.t("setting_labels.read")}
-              </Text>
-            </DataTable.Title>
-          )}
-          {'pay' in element.role[0] && (
-            <DataTable.Title>
-              <Text style={styles.headerTitle(colors.description)}>
-                {/* {'   Pay'} */}
-                {'   ' + i18nValues.t("setting_labels.pay")}
-              </Text>
-            </DataTable.Title>
-          )}
-          {'setting' in element.role[0] && (
-            <DataTable.Title>
-              <Text style={styles.headerTitle(colors.description)}>
-                {/* {'   Setting'} */}
-                {'   ' + i18nValues.t("setting_labels.setting")}
-              </Text>
-            </DataTable.Title>
-          )}
         </DataTable.Header>
 
         {element?.role?.map((e, i) => {
@@ -125,86 +73,22 @@ const FieldRole = () => {
                 <DataTable.Cell>
                   <Text style={styles.roleName(colors.text)}>{e.name}</Text>
                 </DataTable.Cell>
-                {'view' in element.role[0] && (
-                  <DataTable.Cell>
-                    <Checkbox
-                      status={e.view ? 'checked' : 'unchecked'}
-                      onPress={() => onChangeRole(i, roleTypes.view)}
-                      color={'#FFFFFF'}
-                      uncheckedColor='#FFFFFF'
-                    />
-                  </DataTable.Cell>
-                )}
-                {'edit' in element.role[0] && (
-                  <DataTable.Cell>
-                    <Checkbox
-                      status={e.edit ? 'checked' : 'unchecked'}
-                      onPress={() => onChangeRole(i, roleTypes.edit)}
-                      color={'#FFFFFF'}
-                      uncheckedColor='#FFFFFF'
-                    />
-                  </DataTable.Cell>
-                )}
-                {'define' in element.role[0] && (
-                  <DataTable.Cell>
-                    <Checkbox
-                      status={e.define ? 'checked' : 'unchecked'}
-                      onPress={() => onChangeRole(i, roleTypes.define)}
-                      color={'#FFFFFF'}
-                      uncheckedColor='#FFFFFF'
-                    />
-                  </DataTable.Cell>
-                )}
-                {'editAxes' in element.role[0] && (
-                  <DataTable.Cell>
-                    <Checkbox
-                      status={e.editAxes ? 'checked' : 'unchecked'}
-                      onPress={() => onChangeRole(i, roleTypes.editAxes)}
-                      color={'#FFFFFF'}
-                      uncheckedColor='#FFFFFF'
-                    />
-                  </DataTable.Cell>
-                )}
-                {'editSeries' in element.role[0] && (
-                  <DataTable.Cell>
-                    <Checkbox
-                      status={e.editSeries ? 'checked' : 'unchecked'}
-                      onPress={() => onChangeRole(i, roleTypes.editSeries)}
-                      color={'#FFFFFF'}
-                      uncheckedColor='#FFFFFF'
-                    />
-                  </DataTable.Cell>
-                )}
-                {'read' in element.role[0] && (
-                  <DataTable.Cell>
-                    <Checkbox
-                      status={e.read ? 'checked' : 'unchecked'}
-                      onPress={() => onChangeRole(i, roleTypes.read)}
-                      color={'#FFFFFF'}
-                      uncheckedColor='#FFFFFF'
-                    />
-                  </DataTable.Cell>
-                )}
-                {'pay' in element.role[0] && (
-                  <DataTable.Cell>
-                    <Checkbox
-                      status={e.pay ? 'checked' : 'unchecked'}
-                      onPress={() => onChangeRole(i, roleTypes.pay)}
-                      color={'#FFFFFF'}
-                      uncheckedColor='#FFFFFF'
-                    />
-                  </DataTable.Cell>
-                )}
-                {'setting' in element.role[0] && (
-                  <DataTable.Cell>
-                    <Checkbox
-                      status={e.setting ? 'checked' : 'unchecked'}
-                      onPress={() => onChangeRole(i, roleTypes.setting)}
-                      color={'#FFFFFF'}
-                      uncheckedColor='#FFFFFF'
-                    />
-                  </DataTable.Cell>
-                )}
+                <DataTable.Cell>
+                  <Checkbox
+                    status={e.view ? 'checked' : 'unchecked'}
+                    onPress={() => onChangeRole(i, roleTypes.view)}
+                    color={'#FFFFFF'}
+                    uncheckedColor='#FFFFFF'
+                  />
+                </DataTable.Cell>
+                <DataTable.Cell>
+                  <Checkbox
+                    status={e.edit ? 'checked' : 'unchecked'}
+                    onPress={() => onChangeRole(i, roleTypes.edit)}
+                    color={'#FFFFFF'}
+                    uncheckedColor='#FFFFFF'
+                  />
+                </DataTable.Cell>
               </DataTable.Row>
             );
           }

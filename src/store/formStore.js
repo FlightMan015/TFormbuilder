@@ -16,6 +16,8 @@ i18n.defaultLocale = 'en';
 const formStore = create(set => ({
   formData: newFormData,
   setFormData: newFormData => set(() => ({formData: newFormData})),
+  tempFormData: {data: newFormData, type: 'form', element: {}, index: []},
+  setTempFormData: newData => set(() => ({tempFormData: newData})),
   preview: false,
   setPreview: newRenderMode => set(() => ({preview: newRenderMode})),
   selectedFieldIndex: [],
@@ -58,7 +60,7 @@ const formStore = create(set => ({
   setRoles: newRoles => set(() => ({roles: newRoles})),
   viewMode: 'light',
   setViewMode: newViewMode => set(() => ({viewMode: newViewMode})),
-  userRole: 'admin',
+  userRole: {},
   setUserRole: newUserRole => set(() => ({userRole: newUserRole})),
   formValue: {},
   setFormValue: newFormValue => set(() => ({formValue: newFormValue})),
@@ -70,6 +72,14 @@ const formStore = create(set => ({
   setVisibleJsonDlg: newVisible => set(() => ({visibleJsonDlg: newVisible})),
   formDatas: [],
   setFormDatas: newFormDatas => set(() => ({formDatas: newFormDatas})),
+  formsIsSet: [],
+  setFormsIsSet: newFormDatas => set(() => ({formsIsSet: newFormDatas})),
+  formsIsView: [],
+  setFormsIsView: newFormDatas => set(() => ({formsIsView: newFormDatas})),
+  formsIsEdit: [],
+  setFormsIsEdit: newFormDatas => set(() => ({formsIsEdit: newFormDatas})),
+  formsIsEditAndView: [],
+  setFormsIsEditAndView: newFormDatas => set(() => ({formsIsEditAndView: newFormDatas})),
   submit: false,
   setSubmit: newSubmit => set(() => ({submit: newSubmit})),
   validation: {},
@@ -90,6 +100,22 @@ const formStore = create(set => ({
   visibleMarkerAddDlg: false,
   setVisibleMarkerAddDlg: newVisible =>
     set(() => ({visibleMarkerAddDlg: newVisible})),
+  userEmail: '',
+  setUserEmail: newUserEmail => set(() => ({userEmail: newUserEmail})),
+  users: [
+    '111@gmail.com',
+    '222@gmail.com',
+    '333@gmail.com',
+    '444@gmail.com',
+    '555@gmail.com',
+    '666@gmail.com',
+    '777@gmail.com',
+  ],
+  setUsers: users => set(() => ({users: users})),
+  selectedFormValueId: '',
+  setSelectedFormValueId: newSelectedFormValueId => set(() => ({selectedFormValueId: newSelectedFormValueId})),
+  visibleDialogFieldDlg: {visible: false, data: []},
+  setVisibleDialogFieldDlg: newData => set(() => ({visibleDialogFieldDlg: newData}))
 }));
 
 export default formStore;

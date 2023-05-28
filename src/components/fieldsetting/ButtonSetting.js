@@ -15,16 +15,21 @@ import SettingDropdown from './common/SettingDropdown';
 import SettingWidth from './common/SettingWidth';
 import SettingPadding from './common/SettingPadding';
 import SettingSectionWidth from './common/SettingSectionWidth';
+import { Text } from 'react-native';
 
 const buttonFunctions = [
-  'formSubmit',
+  'None',
+  'Dialog',
 ];
 
 const ButtonSetting = ({element, index, onClick}) => {
   const {colors, size} = useTheme();
   const formData = formStore(state => state.formData);
   const setFormData = formStore(state => state.setFormData);
+  const tempFormData = formStore(state => state.tempFormData);
+  const setTempFormData = formStore(state => state.setTempFormData);
   const i18nValues = formStore(state => state.i18nValues);
+  const setOpenSetting = formStore(state => state.setOpenSetting);
 
   const iconPositions = [
     {name: i18nValues.t("setting_labels.left"), value: 'left'},
@@ -52,9 +57,22 @@ const ButtonSetting = ({element, index, onClick}) => {
         title={i18nValues.t("setting_labels.functions")}
         options={buttonFunctions}
         onChange={onChange}
-        keyName={'formSubmit'}
-        defaultValue={'formSubmit'}
+        keyName={'function'}
+        defaultValue={'None'}
       />
+      {
+        element.meta.function === 'Dialog' && (
+          <Text
+            style={{textDecorationLine: 'underline', color: colors.colorButton, marginLeft: 15, marginBottom: 10}}
+            onPress={() => {
+              setTempFormData({...tempFormData, data: formData, type: 'dialog', index: index, element: element});
+              setFormData({...formData, data: element.meta.dialogData || []});
+              setOpenSetting(false);
+            }}>
+            {i18nValues.t("setting_labels.go_to_dialog_editing")}
+          </Text>
+        )
+      }
       <SettingSwitch
         title={i18nValues.t("setting_labels.round")}
         value={element.meta.isRound}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextInput, View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { Switch, useTheme } from 'react-native-paper';
 import TextButton from './TextButton';
 import { ColorPicker } from 'react-native-color-picker';
 import { invertColor } from '../utils';
@@ -32,84 +32,106 @@ const CustomColorPicker = ({color, label, selectColor}) => {
   return (
     <View style={styles.settingView}>
       <Text style={styles.titleLabel}>{label}</Text>
-      <TextButton
-        style={styles.background(color)}
-        text={i18nValues.t("setting_labels.change_color")}
-        textStyle={styles.textButtonText(
-          invertColor(color),
-        )}
-        onPress={() => {
-          setVisibleColors(!visibleColors);
-        }}
-      />
-      {visibleColors && (
-        <View style={styles.colorSetting}>
-          <View style={styles.settingTab}>
+      <View style={{flexDirection: 'row'}}>
+        <Text style={styles.titleLabel}>{i18nValues.t("setting_labels.no_color")}</Text>
+        <Switch
+          value={color.length === 9}
+          onValueChange={() => {
+            if (color.length !== 9) {
+              selectColor(`${color.substring(0, 7)}00`);
+            } else {
+              selectColor(color.substring(0, 7));
+            }
+          }}
+          color={colors.colorButton}
+        />
+      </View>
+
+      {
+        color.length !== 9 && color.substring(7, 9) !== '00' && (
+          <>
             <TextButton
-              style={{
-                ...styles.colortab(colorTab === 'styles'),
-                borderTopLeftRadius: 7,
+              style={styles.background(color)}
+              text={i18nValues.t("setting_labels.change_color")}
+              textStyle={styles.textButtonText(
+                invertColor(color),
+              )}
+              onPress={() => {
+                setVisibleColors(!visibleColors);
               }}
-              text={i18nValues.t("setting_labels.color_styles")}
-              textStyle={styles.tabText(colorTab === 'styles')}
-              onPress={() => setColorTab('styles')}
             />
-            <TextButton
-              style={{
-                ...styles.colortab(colorTab === 'customize'),
-                borderTopRightRadius: 7,
-              }}
-              text={i18nValues.t("setting_labels.customize")}
-              textStyle={styles.tabText(colorTab === 'customize')}
-              onPress={() => setColorTab('customize')}
-            />
-          </View>
-          <View style={styles.colorContainer}>
-            {colorTab === 'styles' && (
-              <>
-                {colorStyles.map((colorstyle, colorindex) => (
+            {visibleColors && (
+              <View style={styles.colorSetting}>
+                <View style={styles.settingTab}>
                   <TextButton
-                    key={colorindex}
-                    style={styles.colorElement}
-                    text={colorstyle}
-                    textStyle={styles.colorElementText(colorstyle)}
-                    onPress={() => {
-                      selectColor(colorstyle);
+                    style={{
+                      ...styles.colortab(colorTab === 'styles'),
+                      borderTopLeftRadius: 7,
                     }}
+                    text={i18nValues.t("setting_labels.color_styles")}
+                    textStyle={styles.tabText(colorTab === 'styles')}
+                    onPress={() => setColorTab('styles')}
                   />
-                ))}
-              </>
-            )}
-            {colorTab === 'customize' && (
-              <View style={styles.buttonCustomStyle}>
-                <View style={styles.customizeBackground}>
-                  <View
-                    style={styles.colorView(color)}
+                  <TextButton
+                    style={{
+                      ...styles.colortab(colorTab === 'customize'),
+                      borderTopRightRadius: 7,
+                    }}
+                    text={i18nValues.t("setting_labels.customize")}
+                    textStyle={styles.tabText(colorTab === 'customize')}
+                    onPress={() => setColorTab('customize')}
                   />
-                  <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
-                    <TextInput
-                      style={styles.colorValue}
-                      value={color}
-                      onFocus={() => setVisibleColorPicker(true)}
-                    />
-                  </TouchableWithoutFeedback>
                 </View>
-                {
-                  visibleColorPicker && (
-                    <ColorPicker
-                      onColorSelected={e => {
-                        selectColor(e);
-                        setVisibleColorPicker(false);
-                      }}
-                      style={{width: '100%', height: 200}}
-                    />
-                  )
-                }
+                <View style={styles.colorContainer}>
+                  {colorTab === 'styles' && (
+                    <>
+                      {colorStyles.map((colorstyle, colorindex) => (
+                        <TextButton
+                          key={colorindex}
+                          style={styles.colorElement}
+                          text={colorstyle}
+                          textStyle={styles.colorElementText(colorstyle)}
+                          onPress={() => {
+                            selectColor(colorstyle);
+                          }}
+                        />
+                      ))}
+                    </>
+                  )}
+                  {colorTab === 'customize' && (
+                    <View style={styles.buttonCustomStyle}>
+                      <View style={styles.customizeBackground}>
+                        <View
+                          style={styles.colorView(color)}
+                        />
+                        <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
+                          <TextInput
+                            style={styles.colorValue}
+                            value={color}
+                            onFocus={() => setVisibleColorPicker(true)}
+                          />
+                        </TouchableWithoutFeedback>
+                      </View>
+                      {
+                        visibleColorPicker && (
+                          <ColorPicker
+                            onColorSelected={e => {
+                              selectColor(e);
+                              setVisibleColorPicker(false);
+                            }}
+                            style={{width: '100%', height: 200}}
+                          />
+                        )
+                      }
+                    </View>
+                  )}
+                </View>
               </View>
             )}
-          </View>
-        </View>
-      )}
+          </>
+        )
+      }
+      
     </View>
   );
 };
